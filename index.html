@@ -21,59 +21,56 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* กำหนดฟอนต์หลักให้เป็น Kanit (ไม่มีหัว) */
+        /* กำหนดฟอนต์หลักให้เป็น Kanit */
         * {
             font-family: 'Kanit', sans-serif;
         }
-        /* กำหนดให้ body และ container หลักครอบคลุมเต็มจอเสมอ */
+
+        /* ----- START: โค้ดที่แก้ไข ----- */
+        /* ทำให้ html และ body สูงเต็มจอและไม่มี margin/padding ที่เบราว์เซอร์ตั้งมา */
         html, body {
             height: 100%;
+            width: 100%;
             margin: 0;
-            /* ปรับปรุงให้ซ่อน Scrollbar แนวตั้งเฉพาะเมื่อไม่จำเป็นและป้องกันการเลื่อนแนวนอน */
-            overflow-x: hidden;
-            overflow-y: auto;
+            padding: 0;
+            overflow-x: hidden; /* ป้องกันการเลื่อนแนวนอน */
         }
+        /* ----- END: โค้ดที่แก้ไข ----- */
+
         /* กำหนดให้ A-Frame scene เต็มพื้นที่ใน modal */
         #aframe-scene-container {
             width: 100%;
-            /* เพิ่มความสูงให้ 3D ดูดีขึ้นใน Modal */
             height: 450px; 
             background-color: #f0f0f0; 
-            /* เปลี่ยนความโค้งมน */
             border-radius: 1.5rem; /* rounded-3xl */
             overflow: hidden;
         }
+
         /* ปรับปรุงความโค้งมนทั่วไปที่ใช้บ่อย */
         .rounded-3xl {
             border-radius: 1.5rem; /* 24px */
         }
     </style>
 </head>
-<body class="bg-gray-100 h-full antialiased flex flex-col">
-
+<body class="bg-gray-100 antialiased flex flex-col min-h-screen">
 <div id="main-content" class="flex flex-col flex-grow">
     <header class="bg-white shadow-xl sticky top-0 z-20 border-b border-indigo-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
-            
             <div class="flex items-center space-x-3">
-                <img src="https://www.srtc.ac.th/2020/images/images.jpg" alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี" class="h-10 w-10 sm:h-12 sm:w-12 rounded-full ring-2 ring-indigo-500 p-[2px]"> <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-wide">SRTC VR Navigation</h1>
+                <img src="https://www.srtc.ac.th/2020/images/images.jpg" alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี" class="h-10 w-10 sm:h-12 sm:w-12 rounded-full ring-2 ring-indigo-500 p-[2px]">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-wide">SRTC VR Navigation</h1>
             </div>
-            
             <nav class="space-x-2 sm:space-x-4 flex items-center">
                 <a href="#home" onclick="showSection('home-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-home">หน้าแรก</a>
-                
                 <a href="#map" onclick="showSection('map-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-map">แผนผัง</a>
-                
                 <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-purple-300">
                     <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm hidden sm:inline">ติดตั้ง PWA</span>
                 </button>
-
                 <button onclick="showModal('install-qr-modal')" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-yellow-300">
                     <i data-lucide="qr-code" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm hidden sm:inline">QR Code</span>
                 </button>
-
                 <button onclick="toggleVRMode()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-indigo-300">
                     <i data-lucide="scan" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm">VR (AR)</span>
@@ -83,8 +80,8 @@
     </header>
     
     <div id="home-section" class="section-content flex-grow flex flex-col">
-        <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden h-[75vh] lg:h-[80vh] min-h-[500px]">
-            <img 
+        <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden h-full">
+        <img 
                 src="https://console.kr-asia.com/wp-content/uploads/2023/06/medium-shot-man-wearing-vr-glasses-scaled.jpg" 
                 alt="Man wearing VR glasses background" 
                 class="absolute inset-0 h-full w-full object-cover blur-sm scale-110" >
@@ -94,14 +91,16 @@
                 <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 leading-snug drop-shadow-lg">ระบบนำทางห้องเรียนอัจฉริยะที่ทันสมัย</h2>
                 <p class="text-lg sm:text-xl text-indigo-200 mb-8">ด้วยระบบเทคโนโลยีเสมือน AR/VR ที่สมจริง</p>
                 
-                <div class="flex rounded-3xl shadow-2xl overflow-hidden max-w-md mx-auto ring-4 ring-indigo-300/50"> <input type="text" placeholder="ค้นหาห้องเรียน เช่น 201, ห้องปฏิบัติการคอมพิวเตอร์" class="w-full py-3 px-6 text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 transition duration-150 text-base sm:text-lg focus:z-10" aria-label="Search">
+                <div class="flex rounded-3xl shadow-2xl overflow-hidden max-w-md mx-auto ring-4 ring-indigo-300/50">
+                    <input type="text" placeholder="ค้นหาห้องเรียน เช่น 201, ห้องปฏิบัติการคอมพิวเตอร์" class="w-full py-3 px-6 text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 transition duration-150 text-base sm:text-lg focus:z-10" aria-label="Search">
                     <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 transition duration-150 flex items-center space-x-2">
                         <i data-lucide="search" class="w-5 h-5"></i>
                         <span class="hidden sm:inline">ค้นหา</span>
                     </button>
                 </div>
                 
-                <button onclick="showSection('map-section')" class="mt-8 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-3xl shadow-xl transition duration-200 transform hover:scale-105 flex items-center justify-center mx-auto space-x-2 ring-2 ring-pink-300/50"> <i data-lucide="map" class="w-5 h-5"></i>
+                <button onclick="showSection('map-section')" class="mt-8 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-3xl shadow-xl transition duration-200 transform hover:scale-105 flex items-center justify-center mx-auto space-x-2 ring-2 ring-pink-300/50">
+                    <i data-lucide="map" class="w-5 h-5"></i>
                     <span>ดูแผนผังอาคารทั้งหมด</span>
                 </button>
             </div>
@@ -110,28 +109,29 @@
 
     <div id="map-section" class="section-content hidden flex-grow p-4 sm:p-8">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-indigo-200 pb-2 flex items-center"> <i data-lucide="layout-grid" class="w-8 h-8 mr-3 text-indigo-600"></i>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-indigo-200 pb-2 flex items-center">
+                <i data-lucide="layout-grid" class="w-8 h-8 mr-3 text-indigo-600"></i>
                 แผนผังและรายละเอียดอาคารทั้งหมด
             </h2>
-
             <p class="text-gray-600 mb-8 max-w-3xl">นี่คือรายการอาคารหลักทั้งหมดของวิทยาลัยเทคนิคสุราษฎร์ธานี คุณสามารถกดที่อาคารเพื่อดูรายละเอียด และเข้าสู่โหมด 3D จำลองเสมือน (ถ้ามี).</p>
-
-            <div id="building-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"> </div>
-            
-            <div class="mt-10 p-6 bg-yellow-50 border-l-8 border-yellow-500 rounded-2xl shadow-md"> <p class="text-yellow-800 font-semibold flex items-start">
+            <div id="building-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div class="mt-10 p-6 bg-yellow-50 border-l-8 border-yellow-500 rounded-2xl shadow-md">
+                <p class="text-yellow-800 font-semibold flex items-start">
                     <i data-lucide="info" class="w-5 h-5 mr-3 mt-1 flex-shrink-0"></i>
                     หมายเหตุ: ข้อมูลอาคารและรูปภาพ 3D เป็นเพียงข้อมูลสมมติเพื่อแสดงฟังก์ชันการทำงาน
                 </p>
             </div>
         </div>
     </div>
+</div>
 
+<footer class="bg-gray-900 text-white py-4 shadow-inner">
+    <div class="text-center text-sm">
+        © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ
+    </div>
+</footer>
 
-    <footer class="bg-gray-900 text-white py-4 mt-auto shadow-inner">
-        <div class="text-center text-sm">
-            © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ
-        </div>
-    </footer>
+</body>
 </div>
 
 <div id="install-qr-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 z-50 flex items-center justify-center p-4">
@@ -643,3 +643,4 @@
 
 </body>
 </html>
+
