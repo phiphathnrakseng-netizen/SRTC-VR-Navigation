@@ -25,11 +25,12 @@
         * {
             font-family: 'Kanit', sans-serif;
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         html, body {
             height: 100%;
-            margin: 0;
-            padding: 0;
+            width: 100%;
             overflow-x: hidden;
             overflow-y: auto;
             background-color: #f3f4f6;
@@ -38,6 +39,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         #aframe-scene-container {
             width: 100%;
@@ -151,8 +153,8 @@
 </head>
 <body class="bg-gray-100 antialiased">
 
-<div id="main-content" class="flex flex-col min-h-screen">
-    <header class="bg-white shadow-xl sticky top-0 z-20 border-b border-indigo-100">
+<div id="main-content" class="flex flex-col min-h-screen w-full">
+    <header class="bg-white shadow-xl sticky top-0 z-20 border-b border-indigo-100 w-full">
         <div class="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
             
             <div class="flex items-center space-x-3">
@@ -183,8 +185,8 @@
         </div>
     </header>
     
-    <div id="home-section" class="section-content flex-grow flex flex-col">
-        <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden min-h-[calc(100vh-120px)]">
+    <div id="home-section" class="section-content flex-grow flex flex-col w-full">
+        <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden min-h-[calc(100vh-120px)] w-full">
             <img 
                 src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
                 alt="วิทยาลัยเทคนิคสุราษฎร์ธานี" 
@@ -211,7 +213,7 @@
         </section>
     </div>
 
-    <div id="map-section" class="section-content hidden flex-grow p-4 sm:p-6 lg:p-8">
+    <div id="map-section" class="section-content hidden flex-grow p-4 sm:p-6 lg:p-8 w-full">
         <div class="w-full max-w-7xl mx-auto">
             <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4 sm:mb-6 border-b-4 border-indigo-200 pb-2 flex items-center"> 
                 <i data-lucide="layout-grid" class="w-6 h-6 sm:w-8 sm:h-8 mr-3 text-indigo-600"></i>
@@ -231,7 +233,7 @@
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-4 mt-auto shadow-inner">
+    <footer class="bg-gray-900 text-white py-4 mt-auto shadow-inner w-full">
         <div class="text-center text-sm">
             © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ
         </div>
