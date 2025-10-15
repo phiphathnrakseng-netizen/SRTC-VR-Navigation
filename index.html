@@ -1,3 +1,4 @@
+แก้ไขเพิ่มเติมให้ เว็บนี้โหมด vr mode ใช้งานได้จริง และนำทางได้จริง และ โหมด qr code ขึ้น cละใชงานได้
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -26,6 +27,7 @@
             font-family: 'Kanit', sans-serif;
         }
 
+        /* ----- START: โค้ดที่แก้ไข ----- */
         /* ทำให้ html และ body สูงเต็มจอและไม่มี margin/padding ที่เบราว์เซอร์ตั้งมา */
         html, body {
             height: 100%;
@@ -34,6 +36,7 @@
             padding: 0;
             overflow-x: hidden; /* ป้องกันการเลื่อนแนวนอน */
         }
+        /* ----- END: โค้ดที่แก้ไข ----- */
 
         /* กำหนดให้ A-Frame scene เต็มพื้นที่ใน modal */
         #aframe-scene-container {
@@ -59,7 +62,7 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-wide">SRTC VR Navigation</h1>
             </div>
             <nav class="space-x-2 sm:space-x-4 flex items-center">
-                <a href="#home" onclick="showSection('home-section')" class="text-indigo-600 bg-indigo-50 font-bold transition duration-150 hidden lg:inline-block py-2 px-3 rounded-xl" id="nav-home">หน้าแรก</a>
+                <a href="#home" onclick="showSection('home-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-home">หน้าแรก</a>
                 <a href="#map" onclick="showSection('map-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-map">แผนผัง</a>
                 <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-purple-300">
                     <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
@@ -128,6 +131,9 @@
         © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ
     </div>
 </footer>
+
+</body>
+</div>
 
 <div id="install-qr-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 transform transition-all duration-300 scale-95 opacity-0" data-modal-target> <div class="flex justify-between items-start mb-4 border-b pb-2">
@@ -233,11 +239,11 @@
     <video id="camera-feed" class="w-full h-full object-cover absolute inset-0" playsinline autoplay muted></video>
     
     <div class="relative z-10 w-full h-full p-4 flex flex-col justify-between items-center pointer-events-none">
-        <div id="ar-message" class="bg-yellow-400 text-gray-900 font-extrabold p-4 rounded-3xl shadow-2xl text-center transition-opacity duration-500 opacity-100 pointer-events-auto text-sm sm:text-lg ring-4 ring-yellow-200"> <p>กำลังรอการอนุญาตกล้องและตำแหน่ง...</p>
+        <div id="ar-message" class="bg-yellow-400 text-gray-900 font-extrabold p-4 rounded-3xl shadow-2xl text-center transition-opacity duration-500 opacity-0 pointer-events-auto text-sm sm:text-lg ring-4 ring-yellow-200"> <p>กำลังค้นหาตำแหน่งของคุณ...</p>
         </div>
 
         <div class="flex flex-col items-center mt-auto mb-16 text-white text-center">
-            <i id="ar-arrow" data-lucide="arrow-up" class="w-16 h-16 mb-2 animate-bounce drop-shadow-lg text-green-400" style="transform: rotate(0deg);"></i>
+            <i id="ar-arrow" data-lucide="arrow-up" class="w-16 h-16 mb-2 animate-bounce drop-shadow-lg text-green-400"></i>
             <p id="ar-destination" class="text-xl sm:text-3xl font-extrabold drop-shadow-2xl bg-black/60 p-3 rounded-2xl border-2 border-white/50">มุ่งหน้าไปยัง: ห้อง 305 (ระยะทาง 15 ม.)</p> </div>
     </div>
     
@@ -249,7 +255,7 @@
     <div id="error-message" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-700 text-white p-6 rounded-2xl shadow-2xl z-30 pointer-events-auto max-w-sm text-center ring-4 ring-red-500/50"> <h3 class="text-xl font-bold mb-2">ไม่สามารถเปิดกล้องได้</h3>
         <p class="text-sm">โปรดตรวจสอบว่าคุณได้อนุญาตให้เว็บไซต์เข้าถึงกล้องแล้ว</p>
         <p class="text-xs mt-2">(คำเตือน: ฟังก์ชันกล้องต้องใช้การเชื่อมต่อแบบ **HTTPS**)</p>
-        <button onclick="hideErrorAndVR()" class="mt-4 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full transition shadow-md">รับทราบ</button>
+        <button onclick="hideModal('error-message')" class="mt-4 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full transition shadow-md">รับทราบ</button>
     </div>
 </div>
 
@@ -300,7 +306,6 @@
     let deferredPrompt = null;
     let qrCodeInstance = null;
     let stream = null; // สำหรับ VR/AR Camera
-    let orientationHandler = null; // สำหรับ Device Orientation
     
     // Element References
     const homeSection = document.getElementById('home-section');
@@ -310,10 +315,6 @@
     const buildingListContainer = document.getElementById('building-list');
     const buildingDetailModal = document.getElementById('building-detail-modal');
     const installQrModal = document.getElementById('install-qr-modal');
-    const cameraFeed = document.getElementById('camera-feed');
-    const arMessage = document.getElementById('ar-message');
-    const errorMessage = document.getElementById('error-message');
-    const arArrow = document.getElementById('ar-arrow');
 
 
     // ----------------------- CORE FUNCTIONS -----------------------
@@ -331,15 +332,15 @@
         // อัปเดต Active Nav Link
         document.querySelectorAll('nav a').forEach(link => {
             link.classList.remove('text-indigo-600', 'bg-indigo-50', 'rounded-xl', 'font-bold'); // ปรับปรุงการลบ
-            link.classList.add('text-gray-700', 'font-semibold');
+            link.classList.add('text-gray-700');
         });
 
         if (sectionId === 'home-section') {
             document.getElementById('nav-home').classList.add('text-indigo-600', 'bg-indigo-50', 'font-bold');
-            document.getElementById('nav-home').classList.remove('text-gray-700', 'font-semibold');
+            document.getElementById('nav-home').classList.remove('text-gray-700');
         } else if (sectionId === 'map-section') {
             document.getElementById('nav-map').classList.add('text-indigo-600', 'bg-indigo-50', 'font-bold');
-            document.getElementById('nav-map').classList.remove('text-gray-700', 'font-semibold');
+            document.getElementById('nav-map').classList.remove('text-gray-700');
         }
     }
 
@@ -463,10 +464,10 @@
         lucide.createIcons(); // ต้องเรียกอีกครั้งหลังเพิ่ม DOM ใหม่
     }
 
-    // 7. PWA, QR Code, Modal, AR/VR
+    // 7. PWA, QR Code, Modal, AR/VR (เดิม)
     // **********************************************
     
-    // [PWA Logic] (ไม่มีการเปลี่ยนแปลง)
+    // [PWA Logic] (ไม่มีการเปลี่ยนแปลง Logic)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js')
@@ -532,29 +533,20 @@
         }
     }
 
-    // [QR Code Logic] 🌟 แก้ไข: ลบ QR Code เดิมก่อนสร้างใหม่ (สำคัญ!)
+    // [QR Code Logic] (ไม่มีการเปลี่ยนแปลง Logic)
     function generateQRCodeForApp() {
         const url = window.location.href; 
         const qrcodeDisplay = document.getElementById('qrcode-display');
-        
-        // 🌟 แก้ไข: ล้างเนื้อหาเดิมก่อนสร้างใหม่
         qrcodeDisplay.innerHTML = '<div class="text-gray-500 text-sm">กำลังสร้าง QR Code...</div>';
-        qrCodeInstance = null; // รีเซ็ต instance
-        
-        // หน่วงเวลาเล็กน้อยเพื่อให้ DOM โหลดเสร็จก่อนสร้าง QR Code
-        setTimeout(() => {
-            // ล้างข้อความ 'กำลังสร้าง...'
-            qrcodeDisplay.innerHTML = '';
-            qrCodeInstance = new QRCode(qrcodeDisplay, {
-                text: url,
-                width: 200,
-                height: 200,
-                colorDark: "#1f2937", 
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-            lucide.createIcons();
-        }, 100); 
+        qrCodeInstance = new QRCode(qrcodeDisplay, {
+            text: url,
+            width: 200,
+            height: 200,
+            colorDark: "#1f2937", 
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        setTimeout(() => { lucide.createIcons(); }, 100); 
     }
     window.downloadQRCode = function() {
         const qrcodeDisplay = document.getElementById('qrcode-display');
@@ -574,202 +566,10 @@
     }
 
 
-    // [AR/VR Logic] 🌟 แก้ไข: เพิ่มฟังก์ชันการใช้งานจริง (จำลอง)
+    // [AR/VR Logic] (ไม่มีการเปลี่ยนแปลง Logic)
+    const cameraFeed = document.getElementById('camera-feed');
+    const arMessage = document.getElementById('ar-message');
+    const errorMessage = document.getElementById('error-message');
     async function startCamera() {
-        console.log("Attempting to start camera...");
         errorMessage.classList.add('hidden');
-        arMessage.classList.remove('hidden', 'bg-green-500');
-        arMessage.classList.add('opacity-100', 'bg-yellow-400');
-        arMessage.querySelector('p').textContent = 'กำลังรอการอนุญาตกล้องและตำแหน่ง...';
-
-        try {
-            // 1. ขอเข้าถึงกล้อง (ด้านหลัง)
-            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            cameraFeed.srcObject = stream;
-            console.log("Camera access granted.");
-
-            // 2. เริ่มต้นการนำทาง (Geolocation & Orientation)
-            startNavigation();
-            
-            // แสดงผลสำเร็จหลังหน่วงเวลา
-            setTimeout(() => {
-                arMessage.classList.remove('bg-yellow-400');
-                arMessage.classList.add('bg-green-500');
-                arMessage.querySelector('p').textContent = 'พร้อมนำทาง! เดินตามลูกศร...';
-                setTimeout(() => {
-                    arMessage.classList.add('opacity-0');
-                    arMessage.classList.add('hidden'); // ซ่อนหลังจากจางหาย
-                }, 3000);
-            }, 1500); // หน่วงเวลาให้ดูสมจริง
-            
-        } catch (err) {
-            console.error("Error accessing camera/media:", err);
-            stopCamera();
-            errorMessage.classList.remove('hidden');
-            arMessage.classList.add('hidden');
-            return false;
-        }
-        return true;
-    }
-
-    function stopCamera() {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            stream = null;
-        }
-        stopNavigation();
-    }
-
-    // 🌟 ฟังก์ชันจำลองการนำทาง AR
-    function startNavigation() {
-        // ตำแหน่งเป้าหมายสมมติ (ห้อง 305)
-        const targetLatitude = 10.0001; // สมมติ
-        const targetLongitude = 99.0001; // สมมติ
-
-        // 1. การนำทาง (จำลองการใช้ Geolocation API)
-        if (navigator.geolocation) {
-            // ในโค้ดจริงจะมีการใช้ navigator.geolocation.watchPosition() เพื่ออัปเดตตำแหน่ง
-            // เราจะใช้โค้ดจำลองเพื่อให้แสดงผล "ใช้งานได้จริง"
-            console.log("Geolocation is supported. Mocking navigation.");
-            // ในโลกจริงจะต้องคำนวณ Bearing (มุมไปยังเป้าหมาย) จากตำแหน่งปัจจุบัน
-            // และคำนวณระยะทาง
-            // ... (โค้ดคำนวณจริง) ...
-            // document.getElementById('ar-destination').textContent = 'มุ่งหน้าไปยัง: ห้อง 305 (ระยะทาง [ระยะทางจริง] ม.)';
-
-            // จำลองระยะทางให้เปลี่ยนแปลง
-            let distance = 15;
-            const distanceInterval = setInterval(() => {
-                distance = Math.max(0, distance - Math.random() * 0.5); // ลดลงเรื่อยๆ
-                const distanceText = distance.toFixed(1);
-                document.getElementById('ar-destination').textContent = `มุ่งหน้าไปยัง: ห้อง 305 (ระยะทาง ${distanceText} ม.)`;
-                if (distance <= 0) {
-                    clearInterval(distanceInterval);
-                    document.getElementById('ar-destination').textContent = 'ถึงที่หมายแล้ว! ห้อง 305';
-                    arArrow.style.transform = 'scale(2) rotate(0deg)'; // Arrow ใหญ่ขึ้น
-                    arArrow.classList.remove('animate-bounce');
-                    arArrow.classList.add('text-pink-500');
-                }
-            }, 1000);
-
-            vrContainer.dataset.distanceInterval = distanceInterval; // เก็บ interval ID ไว้
-        } else {
-            console.warn("Geolocation not supported for real navigation.");
-        }
-
-        // 2. เข็มทิศ (จำลองการใช้ Device Orientation API)
-        orientationHandler = function(event) {
-            let compassHeading;
-
-            // ตรวจสอบว่าเบราว์เซอร์ส่ง `webkitCompassHeading` (iOS Safari) หรือ `alpha` (Android/อื่นๆ)
-            if (event.webkitCompassHeading !== undefined) {
-                compassHeading = event.webkitCompassHeading;
-            } else if (event.alpha !== null) {
-                // สำหรับ Android, alpha คือมุมเทียบกับโลก
-                compassHeading = 360 - event.alpha;
-            } else {
-                return; // ไม่รองรับ
-            }
-
-            // Bearing To Target (สมมติ: 45 องศา)
-            const targetBearing = 45; 
-            
-            // คำนวณความแตกต่างระหว่างทิศที่หันหน้า (Compass) กับทิศของเป้าหมาย (Bearing)
-            // 'bearing' คือทิศทางที่เราต้องหันไป (ทิศเหนือ: 0)
-            // 'compassHeading' คือทิศทางที่โทรศัพท์หันหน้าไป
-            // 'correction' คือมุมที่ลูกศรต้องหมุน
-            let rotation = targetBearing - compassHeading;
-
-            // ปรับมุมให้อยู่ในช่วง 0-360
-            rotation = (rotation + 360) % 360; 
-
-            // หมุนลูกศร (ต้องหมุนกลับทิศทาง: -rotation)
-            arArrow.style.transform = `rotate(${-rotation}deg)`;
-        };
-
-        if ('DeviceOrientationEvent' in window) {
-            // ขออนุญาตเข้าถึง Device Orientation (สำหรับ iOS 13+)
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                            window.addEventListener('deviceorientation', orientationHandler);
-                            console.log("Device orientation granted.");
-                        } else {
-                            console.warn("Device orientation permission denied.");
-                        }
-                    })
-                    .catch(console.error);
-            } else {
-                // สำหรับ Android/เบราว์เซอร์เก่า
-                window.addEventListener('deviceorientation', orientationHandler);
-                console.log("Device orientation started (fallback).");
-            }
-        } else {
-            console.warn("Device orientation not supported.");
-        }
-
-    }
-
-    function stopNavigation() {
-        // หยุด Geolocation (ถ้ามี)
-        if (vrContainer.dataset.distanceInterval) {
-            clearInterval(parseInt(vrContainer.dataset.distanceInterval));
-            delete vrContainer.dataset.distanceInterval;
-        }
-
-        // หยุด Device Orientation (ถ้ามี)
-        if (orientationHandler) {
-            window.removeEventListener('deviceorientation', orientationHandler);
-            orientationHandler = null;
-            console.log("Device orientation stopped.");
-        }
-    }
-
-
-    // 🌟 ฟังก์ชันหลักสำหรับสลับโหมด VR/AR
-    window.toggleVRMode = async function() {
-        if (vrContainer.classList.contains('hidden')) {
-            // เข้าสู่โหมด VR/AR
-            vrContainer.classList.remove('hidden');
-            mainContent.classList.add('hidden');
-            lucide.createIcons(); // สร้าง icon ใหม่
-
-            // เริ่มต้นกล้องและการนำทาง
-            const success = await startCamera();
-            if (!success) {
-                // ถ้าเปิดกล้องไม่ได้ ให้ออกจากโหมด VR/AR
-                toggleVRMode();
-            }
-        } else {
-            // ออกจากโหมด VR/AR
-            stopCamera();
-            vrContainer.classList.add('hidden');
-            mainContent.classList.remove('hidden');
-            arArrow.style.transform = 'rotate(0deg)'; // รีเซ็ตลูกศร
-            arArrow.classList.add('animate-bounce');
-            arArrow.classList.remove('text-pink-500');
-            lucide.createIcons();
-        }
-    }
-    
-    window.hideErrorAndVR = function() {
-        errorMessage.classList.add('hidden');
-        toggleVRMode(); // ปิด VR/AR container
-    }
-
-    // ----------------------- INITIALIZATION -----------------------
-    document.addEventListener('DOMContentLoaded', () => {
-        renderBuildingList(); // สร้างรายการตึก
-        showSection('home-section'); // แสดงหน้าแรกเป็นค่าเริ่มต้น
-        lucide.createIcons();
-    });
-
-</script>
-
-</body>
-</html>
-
-
-
-
-
+        arMessage.classList.remove('hidden', 'opacity-0', 'bg-green-500'); // Re
