@@ -133,6 +133,41 @@
       text-align: center;
       margin-top: auto;
     }
+    
+    /* Glass notification styles */
+    .glass-notification {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      margin: 1rem 0;
+    }
+    
+    /* Registration form styles */
+    .registration-form {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 1rem;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .registration-form {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
 
@@ -191,7 +226,17 @@
       <h2 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
       <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดาย</p>
       
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <!-- Glass Notification -->
+      <div class="glass-notification max-w-2xl">
+        <h3 class="text-xl font-bold mb-2 text-yellow-300">ลงทะเบียนก่อนรับการแจ้งเตือน</h3>
+        <p class="text-gray-200 mb-4">กรุณาลงทะเบียนเพื่อรับการแจ้งเตือนและอัปเดตข้อมูลล่าสุดเกี่ยวกับระบบนำทาง AR/VR</p>
+        <button id="register-btn" onclick="showRegistration()" class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-2 rounded-full font-semibold hover:from-green-600 hover:to-teal-600 transition-all">
+          <i data-lucide="user-plus" class="w-4 h-4 inline mr-2"></i>
+          ลงทะเบียนตอนนี้
+        </button>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
         <button onclick="showMap()" class="cta-button">
           <i data-lucide="map" class="w-5 h-5"></i>
           <span>เปิดดูแผนผังอาคาร 3D</span>
@@ -221,6 +266,89 @@
           <h3 class="text-xl font-bold mb-2">เทคโนโลยี AR</h3>
           <p class="text-gray-200">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Section -->
+  <section id="registration-section" class="py-12 px-4 bg-gray-900 hidden">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8">ลงทะเบียนรับการแจ้งเตือน</h2>
+      <div class="registration-form">
+        <form id="registration-form">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 mb-2" for="student-id">รหัสนักศึกษา</label>
+              <input type="text" id="student-id" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="ระบุรหัสนักศึกษา" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-2" for="fullname">ชื่อ-นามสกุล</label>
+              <input type="text" id="fullname" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="ชื่อ-นามสกุล" required>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2" for="email">อีเมล</label>
+            <input type="email" id="email" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="อีเมล" required>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-gray-700 mb-2" for="department">แผนก/สาขา</label>
+              <select id="department" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+                <option value="">เลือกแผนก/สาขา</option>
+                <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
+                <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
+                <option value="ไฟฟ้า">ไฟฟ้า</option>
+                <option value="ยานยนต์">ยานยนต์</option>
+                <option value="ก่อสร้าง">ก่อสร้าง</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-2" for="phone">เบอร์โทรศัพท์</label>
+              <input type="tel" id="phone" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="เบอร์โทรศัพท์" required>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2" for="interests">ความสนใจ (เลือกได้มากกว่า 1)</label>
+            <div class="flex flex-wrap gap-2">
+              <label class="inline-flex items-center">
+                <input type="checkbox" class="rounded text-indigo-600" value="AR Navigation">
+                <span class="ml-2 text-gray-700">การนำทางด้วย AR</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" class="rounded text-indigo-600" value="3D Maps">
+                <span class="ml-2 text-gray-700">แผนที่ 3 มิติ</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" class="rounded text-indigo-600" value="Campus Events">
+                <span class="ml-2 text-gray-700">กิจกรรมในวิทยาลัย</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" class="rounded text-indigo-600" value="Technology Updates">
+                <span class="ml-2 text-gray-700">อัปเดตเทคโนโลยี</span>
+              </label>
+            </div>
+          </div>
+          
+          <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white py-3 rounded-full font-semibold hover:from-green-600 hover:to-teal-600 transition-all">
+            <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>
+            ส่งแบบฟอร์มลงทะเบียน
+          </button>
+        </form>
+        
+        <p class="text-center text-gray-600 mt-6 text-sm">
+          ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
+        </p>
+      </div>
+      
+      <div class="text-center mt-6">
+        <button onclick="hideRegistration()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-6 py-2 rounded-full transition-all">
+          <i data-lucide="x" class="w-4 h-4 inline mr-2"></i>
+          ปิดหน้าลงทะเบียน
+        </button>
       </div>
     </div>
   </section>
@@ -311,6 +439,12 @@
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
+      
+      // Setup registration form
+      document.getElementById('registration-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        registerUser();
+      });
     };
 
     function showLogin() {
@@ -382,11 +516,55 @@
     // แผนที่ 3D
     function showMap() {
       document.getElementById('map-section').classList.remove('hidden');
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
     }
     
     function hideMap() {
       document.getElementById('map-section').classList.add('hidden');
+    }
+
+    // ลงทะเบียน
+    function showRegistration() {
+      document.getElementById('registration-section').classList.remove('hidden');
+      document.getElementById('register-btn').classList.add('hidden');
+      window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
+    }
+    
+    function hideRegistration() {
+      document.getElementById('registration-section').classList.add('hidden');
+      document.getElementById('register-btn').classList.remove('hidden');
+    }
+    
+    function registerUser() {
+      const studentId = document.getElementById('student-id').value;
+      const fullname = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const department = document.getElementById('department').value;
+      const phone = document.getElementById('phone').value;
+      
+      if (!studentId || !fullname || !email || !department || !phone) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+      
+      // Get selected interests
+      const interests = [];
+      document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+        interests.push(checkbox.value);
+      });
+      
+      const userData = {
+        studentId,
+        fullname,
+        email,
+        department,
+        phone,
+        interests
+      };
+      
+      localStorage.setItem("registrationData", JSON.stringify(userData));
+      alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
+      hideRegistration();
     }
 
     function openNotification() {
