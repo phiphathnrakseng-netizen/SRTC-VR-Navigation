@@ -147,9 +147,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
+      padding: 1.5rem;
       position: relative;
-      min-height: 80vh;
+      min-height: auto;
     }
     .hero-section::before {
       content: '';
@@ -167,7 +167,7 @@
       position: relative;
       z-index: 1;
       text-align: center;
-      max-width: 800px;
+      max-width: 1000px;
       width: 100%;
     }
     
@@ -177,6 +177,8 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-top: 2rem;
+      max-width: 1000px;
+      width: 100%;
     }
     
     /* CTA Button */
@@ -184,7 +186,7 @@
       background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
       color: white;
       font-weight: 600;
-      padding: 0.75rem 2rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 9999px;
       box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
       transition: all 0.3s ease;
@@ -193,6 +195,7 @@
       gap: 0.5rem;
       border: none;
       cursor: pointer;
+      font-size: 0.9rem;
     }
     .cta-button:hover {
       transform: translateY(-2px);
@@ -212,10 +215,10 @@
     .registration-form {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 1.5rem;
-      padding: 2rem;
+      padding: 1.5rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       max-width: 500px;
-      margin: 2rem auto;
+      margin: 1rem auto;
       color: #333;
     }
     
@@ -275,8 +278,8 @@
     
     /* Activity Section */
     .activity-section {
-      margin-top: 3rem;
-      padding: 2rem;
+      margin-top: 2rem;
+      padding: 1.5rem;
       max-width: 1000px;
       width: 100%;
     }
@@ -292,6 +295,10 @@
       padding: 1.5rem;
       cursor: pointer;
       transition: all 0.3s ease;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     
     .activity-detail {
@@ -311,6 +318,7 @@
       }
       .features-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
       }
       .registration-form {
         margin: 1rem;
@@ -318,17 +326,35 @@
       }
       .activity-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .activity-section {
+        padding: 1rem;
+      }
+      .hero-content h2 {
+        font-size: 2rem;
       }
     }
     
     @media (max-width: 480px) {
       .hero-content h2 {
-        font-size: 2rem;
+        font-size: 1.75rem;
       }
       .cta-button {
-        padding: 0.6rem 1.5rem;
-        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
       }
+      .activity-card {
+        padding: 1rem;
+        min-height: 160px;
+      }
+    }
+    
+    /* Compact layout adjustments */
+    .compact-layout {
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
     }
   </style>
 </head>
@@ -388,264 +414,258 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <h2 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
-      <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดาย</p>
-      
-      <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-        <button onclick="showMap()" class="cta-button">
-          <i data-lucide="map" class="w-5 h-5"></i>
-          <span>เปิดดูแผนผังอาคาร 3D</span>
-        </button>
+  <!-- Main Content -->
+  <main class="flex-grow compact-layout px-4 py-6">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
+        <p class="text-lg text-gray-200 mb-6 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดาย</p>
         
-        <button onclick="toggleARMode()" class="cta-button bg-gradient-to-r from-purple-600 to-indigo-600">
-          <i data-lucide="scan" class="w-5 h-5"></i>
-          <span>เปิดโหมด AR/VR</span>
-        </button>
-      </div>
-      
-      <div class="features-grid">
-        <div class="liquid-glass-card p-6 text-center">
-          <i data-lucide="map-pin" class="w-12 h-12 mx-auto mb-4 text-yellow-400"></i>
-          <h3 class="text-xl font-bold mb-2">นำทางแบบเรียลไทม์</h3>
-          <p class="text-gray-200">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
-        </div>
-        
-        <div class="liquid-glass-card p-6 text-center">
-          <i data-lucide="box" class="w-12 h-12 mx-auto mb-4 text-green-400"></i>
-          <h3 class="text-xl font-bold mb-2">ประสบการณ์ 3D</h3>
-          <p class="text-gray-200">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
-        </div>
-        
-        <div class="liquid-glass-card p-6 text-center">
-          <i data-lucide="camera" class="w-12 h-12 mx-auto mb-4 text-blue-400"></i>
-          <h3 class="text-xl font-bold mb-2">เทคโนโลยี AR</h3>
-          <p class="text-gray-200">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
-        </div>
-      </div>
-      
-      <!-- Activities Section (Visible after registration) -->
-      <div id="activities-section" class="activity-section liquid-glass hidden">
-        <h2 class="text-3xl font-bold text-center mb-6">กิจกรรมรับคะแนน</h2>
-        <p class="text-gray-200 text-center mb-8">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
-        
-        <div class="activity-grid">
-          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-1')">
-            <div class="flex items-center mb-4">
-              <i data-lucide="map" class="w-8 h-8 text-yellow-400 mr-3"></i>
-              <h3 class="text-xl font-bold">สำรวจแผนที่ 3D</h3>
-            </div>
-            <p class="text-gray-200 mb-4">สำรวจแผนที่สามมิติของวิทยาลัยเพื่อทำความเข้าใจกับพื้นที่ต่างๆ</p>
-            <div class="flex justify-between items-center">
-              <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">+20 คะแนน</span>
-              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-1"></i>
-            </div>
-            <div class="activity-detail mt-4" id="activity-1">
-              <div class="border-t border-gray-600 pt-4">
-                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
-                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
-                  <li>สำรวจอาคารเรียนทั้งหมด 5 อาคารในแผนที่ 3D</li>
-                  <li>ค้นหาห้องประชุมใหญ่และห้องปฏิบัติการ</li>
-                  <li>ทำความเข้าใจกับเส้นทางเดินระหว่างอาคาร</li>
-                  <li>บันทึกสถานที่สำคัญที่คุณสนใจ</li>
-                </ul>
-                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
-                <p class="text-gray-200 text-sm mb-4">กดปุ่ม "เปิดดูแผนผังอาคาร 3D" และสำรวจพื้นที่ต่างๆ ภายในวิทยาลัยเป็นเวลาไม่น้อยกว่า 5 นาที</p>
-                <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition-all">
-                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
-                  เข้าร่วมกิจกรรม
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-2')">
-            <div class="flex items-center mb-4">
-              <i data-lucide="scan" class="w-8 h-8 text-purple-400 mr-3"></i>
-              <h3 class="text-xl font-bold">ทดลองใช้ AR</h3>
-            </div>
-            <p class="text-gray-200 mb-4">ทดลองใช้งานเทคโนโลยี AR เพื่อดูข้อมูลสถานที่ผ่านกล้องสมาร์ทโฟน</p>
-            <div class="flex justify-between items-center">
-              <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">+30 คะแนน</span>
-              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-2"></i>
-            </div>
-            <div class="activity-detail mt-4" id="activity-2">
-              <div class="border-t border-gray-600 pt-4">
-                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
-                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
-                  <li>ทดลองสแกน Marker เพื่อดูข้อมูลอาคารเรียน</li>
-                  <li>ใช้งานฟังก์ชันนำทางด้วย AR ไปยังสถานที่ต่างๆ</li>
-                  <li>ทดสอบการแสดงผลข้อมูลสถานที่ผ่านกล้อง</li>
-                  <li>บันทึกภาพจากการใช้งาน AR</li>
-                </ul>
-                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
-                <p class="text-gray-200 text-sm mb-4">กดปุ่ม "เปิดโหมด AR/VR" และทดลองใช้งานฟังก์ชัน AR อย่างน้อย 3 ฟังก์ชัน</p>
-                <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg transition-all">
-                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
-                  เข้าร่วมกิจกรรม
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-3')">
-            <div class="flex items-center mb-4">
-              <i data-lucide="share-2" class="w-8 h-8 text-pink-400 mr-3"></i>
-              <h3 class="text-xl font-bold">แชร์ QR Code</h3>
-            </div>
-            <p class="text-gray-200 mb-4">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
-            <div class="flex justify-between items-center">
-              <span class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm">+10 คะแนน</span>
-              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-3"></i>
-            </div>
-            <div class="activity-detail mt-4" id="activity-3">
-              <div class="border-t border-gray-600 pt-4">
-                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
-                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
-                  <li>แชร์ QR Code ผ่านแพลตฟอร์มโซเชียลมีเดีย</li>
-                  <li>ส่งให้เพื่อนๆ ผ่านแอปพลิเคชันแชท</li>
-                  <li>แนะนำระบบนำทางให้กับรุ่นน้อง</li>
-                  <li>บันทึกภาพการแชร์ QR Code</li>
-                </ul>
-                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
-                <p class="text-gray-200 text-sm mb-4">กดปุ่ม QR Code ที่มุมขวาบนของหน้าเว็บ และแชร์ลิงก์ให้กับเพื่อนอย่างน้อย 3 คน</p>
-                <button onclick="completeActivity('แชร์ QR Code', 10)" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg transition-all">
-                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
-                  เข้าร่วมกิจกรรม
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Registration Section -->
-  <section id="registration-section" class="py-12 px-4 bg-gray-900 hidden">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-8">ลงทะเบียนรับการแจ้งเตือน</h2>
-      <div class="registration-form">
-        <form id="registration-form">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="block text-gray-700 mb-2 font-medium" for="student-id">รหัสนักศึกษา</label>
-              <input type="text" id="student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2 font-medium" for="fullname">ชื่อ-นามสกุล</label>
-              <input type="text" id="fullname" class="form-input" placeholder="ชื่อ-นามสกุล" required>
-            </div>
-          </div>
-          
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2 font-medium" for="email">อีเมล</label>
-            <input type="email" id="email" class="form-input" placeholder="อีเมล" required>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="block text-gray-700 mb-2 font-medium" for="department">แผนก/สาขา</label>
-              <select id="department" class="form-input" required>
-                <option value="">เลือกแผนก/สาขา</option>
-                <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
-                <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
-                <option value="ไฟฟ้า">ไฟฟ้า</option>
-                <option value="ยานยนต์">ยานยนต์</option>
-                <option value="ก่อสร้าง">ก่อสร้าง</option>
-                <option value="อื่นๆ">อื่นๆ</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2 font-medium" for="phone">เบอร์โทรศัพท์</label>
-              <input type="tel" id="phone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
-            </div>
-          </div>
-          
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2 font-medium">ความสนใจ (เลือกได้มากกว่า 1)</label>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="rounded text-indigo-600" value="AR Navigation">
-                <span class="ml-2 text-gray-700">การนำทางด้วย AR</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="rounded text-indigo-600" value="3D Maps">
-                <span class="ml-2 text-gray-700">แผนที่ 3 มิติ</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="rounded text-indigo-600" value="Campus Events">
-                <span class="ml-2 text-gray-700">กิจกรรมในวิทยาลัย</span>
-              </label>
-              <label class="inline-flex items-center">
-                <input type="checkbox" class="rounded text-indigo-600" value="Technology Updates">
-                <span class="ml-2 text-gray-700">อัปเดตเทคโนโลยี</span>
-              </label>
-            </div>
-          </div>
-          
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2 font-medium">แนบรูปภาพ (ถ้ามี)</label>
-            <div class="file-upload" id="file-upload-area">
-              <i data-lucide="upload" class="w-8 h-8 file-upload-icon"></i>
-              <p class="text-gray-600 text-sm text-center">คลิกเพื่ออัพโหลดรูปภาพ<br>หรือลากและวางไฟล์ที่นี่</p>
-              <input type="file" id="file-input" class="hidden" accept="image/*">
-            </div>
-            <div id="file-preview" class="hidden mt-2">
-              <img id="preview-image" class="max-h-32 rounded-lg mx-auto">
-              <p id="file-name" class="text-center text-sm text-gray-600 mt-1"></p>
-            </div>
-          </div>
-          
-          <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white py-3 rounded-full font-semibold hover:from-green-600 hover:to-teal-600 transition-all">
-            <i data-lucide="send" class="w-4 h-4 inline mr-2"></i>
-            ส่งแบบฟอร์มลงทะเบียน
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button onclick="showMap()" class="cta-button">
+            <i data-lucide="map" class="w-5 h-5"></i>
+            <span>เปิดดูแผนผังอาคาร 3D</span>
           </button>
-        </form>
+          
+          <button onclick="toggleARMode()" class="cta-button bg-gradient-to-r from-purple-600 to-indigo-600">
+            <i data-lucide="scan" class="w-5 h-5"></i>
+            <span>เปิดโหมด AR/VR</span>
+          </button>
+        </div>
         
-        <p class="text-center text-gray-600 mt-6 text-sm">
-          ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
-        </p>
+        <div class="features-grid">
+          <div class="liquid-glass-card p-5 text-center">
+            <i data-lucide="map-pin" class="w-10 h-10 mx-auto mb-3 text-yellow-400"></i>
+            <h3 class="text-lg font-bold mb-2">นำทางแบบเรียลไทม์</h3>
+            <p class="text-gray-200 text-sm">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+          </div>
+          
+          <div class="liquid-glass-card p-5 text-center">
+            <i data-lucide="box" class="w-10 h-10 mx-auto mb-3 text-green-400"></i>
+            <h3 class="text-lg font-bold mb-2">ประสบการณ์ 3D</h3>
+            <p class="text-gray-200 text-sm">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+          </div>
+          
+          <div class="liquid-glass-card p-5 text-center">
+            <i data-lucide="camera" class="w-10 h-10 mx-auto mb-3 text-blue-400"></i>
+            <h3 class="text-lg font-bold mb-2">เทคโนโลยี AR</h3>
+            <p class="text-gray-200 text-sm">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
+          </div>
+        </div>
+        
+        <!-- Activities Section (Visible after registration) -->
+        <div id="activities-section" class="activity-section liquid-glass hidden">
+          <h2 class="text-2xl font-bold text-center mb-4">กิจกรรมรับคะแนน</h2>
+          <p class="text-gray-200 text-center mb-6">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
+          
+          <div class="activity-grid">
+            <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-1')">
+              <div class="flex items-center mb-3">
+                <i data-lucide="map" class="w-7 h-7 text-yellow-400 mr-3"></i>
+                <h3 class="text-lg font-bold">สำรวจแผนที่ 3D</h3>
+              </div>
+              <p class="text-gray-200 text-sm mb-3">สำรวจแผนที่สามมิติของวิทยาลัยเพื่อทำความเข้าใจกับพื้นที่ต่างๆ</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs">+20 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron" id="chevron-1"></i>
+              </div>
+              <div class="activity-detail mt-3" id="activity-1">
+                <div class="border-t border-gray-600 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-gray-200 text-xs space-y-1 mb-3">
+                    <li>สำรวจอาคารเรียนทั้งหมด 5 อาคารในแผนที่ 3D</li>
+                    <li>ค้นหาห้องประชุมใหญ่และห้องปฏิบัติการ</li>
+                    <li>ทำความเข้าใจกับเส้นทางเดินระหว่างอาคาร</li>
+                  </ul>
+                  <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition-all text-sm">
+                    <i data-lucide="check" class="w-3 h-3 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-2')">
+              <div class="flex items-center mb-3">
+                <i data-lucide="scan" class="w-7 h-7 text-purple-400 mr-3"></i>
+                <h3 class="text-lg font-bold">ทดลองใช้ AR</h3>
+              </div>
+              <p class="text-gray-200 text-sm mb-3">ทดลองใช้งานเทคโนโลยี AR เพื่อดูข้อมูลสถานที่ผ่านกล้องสมาร์ทโฟน</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-purple-500 text-white px-2 py-1 rounded-full text-xs">+30 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron" id="chevron-2"></i>
+              </div>
+              <div class="activity-detail mt-3" id="activity-2">
+                <div class="border-t border-gray-600 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-gray-200 text-xs space-y-1 mb-3">
+                    <li>ทดลองสแกน Marker เพื่อดูข้อมูลอาคารเรียน</li>
+                    <li>ใช้งานฟังก์ชันนำทางด้วย AR ไปยังสถานที่ต่างๆ</li>
+                    <li>ทดสอบการแสดงผลข้อมูลสถานที่ผ่านกล้อง</li>
+                  </ul>
+                  <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg transition-all text-sm">
+                    <i data-lucide="check" class="w-3 h-3 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-3')">
+              <div class="flex items-center mb-3">
+                <i data-lucide="share-2" class="w-7 h-7 text-pink-400 mr-3"></i>
+                <h3 class="text-lg font-bold">แชร์ QR Code</h3>
+              </div>
+              <p class="text-gray-200 text-sm mb-3">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-pink-500 text-white px-2 py-1 rounded-full text-xs">+10 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron" id="chevron-3"></i>
+              </div>
+              <div class="activity-detail mt-3" id="activity-3">
+                <div class="border-t border-gray-600 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-gray-200 text-xs space-y-1 mb-3">
+                    <li>แชร์ QR Code ผ่านแพลตฟอร์มโซเชียลมีเดีย</li>
+                    <li>ส่งให้เพื่อนๆ ผ่านแอปพลิเคชันแชท</li>
+                    <li>แนะนำระบบนำทางให้กับรุ่นน้อง</li>
+                  </ul>
+                  <button onclick="completeActivity('แชร์ QR Code', 10)" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg transition-all text-sm">
+                    <i data-lucide="check" class="w-3 h-3 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div class="text-center mt-6">
-        <button onclick="hideRegistration()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-6 py-2 rounded-full transition-all">
-          <i data-lucide="x" class="w-4 h-4 inline mr-2"></i>
-          ปิดหน้าลงทะเบียน
-        </button>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 3D Map Section -->
-  <section id="map-section" class="py-12 px-4 bg-gray-900 hidden">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-8">แผนผังอาคาร 3D</h2>
-      <div id="aframe-container" class="w-full h-96 rounded-3xl overflow-hidden shadow-xl">
-        <a-scene embedded>
-          <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-          <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-          <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-          <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
-          <a-sky color="#ECECEC"></a-sky>
-        </a-scene>
+    <!-- Registration Section -->
+    <section id="registration-section" class="py-8 bg-gray-900 hidden rounded-2xl mt-6">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-center mb-6">ลงทะเบียนรับการแจ้งเตือน</h2>
+        <div class="registration-form">
+          <form id="registration-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label class="block text-gray-700 mb-2 font-medium text-sm" for="student-id">รหัสนักศึกษา</label>
+                <input type="text" id="student-id" class="form-input text-sm" placeholder="ระบุรหัสนักศึกษา" required>
+              </div>
+              <div>
+                <label class="block text-gray-700 mb-2 font-medium text-sm" for="fullname">ชื่อ-นามสกุล</label>
+                <input type="text" id="fullname" class="form-input text-sm" placeholder="ชื่อ-นามสกุล" required>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="block text-gray-700 mb-2 font-medium text-sm" for="email">อีเมล</label>
+              <input type="email" id="email" class="form-input text-sm" placeholder="อีเมล" required>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label class="block text-gray-700 mb-2 font-medium text-sm" for="department">แผนก/สาขา</label>
+                <select id="department" class="form-input text-sm" required>
+                  <option value="">เลือกแผนก/สาขา</option>
+                  <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
+                  <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
+                  <option value="ไฟฟ้า">ไฟฟ้า</option>
+                  <option value="ยานยนต์">ยานยนต์</option>
+                  <option value="ก่อสร้าง">ก่อสร้าง</option>
+                  <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-gray-700 mb-2 font-medium text-sm" for="phone">เบอร์โทรศัพท์</label>
+                <input type="tel" id="phone" class="form-input text-sm" placeholder="เบอร์โทรศัพท์" required>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2 font-medium text-sm">ความสนใจ (เลือกได้มากกว่า 1)</label>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-indigo-600" value="AR Navigation">
+                  <span class="ml-2 text-gray-700 text-sm">การนำทางด้วย AR</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-indigo-600" value="3D Maps">
+                  <span class="ml-2 text-gray-700 text-sm">แผนที่ 3 มิติ</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-indigo-600" value="Campus Events">
+                  <span class="ml-2 text-gray-700 text-sm">กิจกรรมในวิทยาลัย</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-indigo-600" value="Technology Updates">
+                  <span class="ml-2 text-gray-700 text-sm">อัปเดตเทคโนโลยี</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-gray-700 mb-2 font-medium text-sm">แนบรูปภาพ (ถ้ามี)</label>
+              <div class="file-upload" id="file-upload-area">
+                <i data-lucide="upload" class="w-6 h-6 file-upload-icon"></i>
+                <p class="text-gray-600 text-xs text-center">คลิกเพื่ออัพโหลดรูปภาพ<br>หรือลากและวางไฟล์ที่นี่</p>
+                <input type="file" id="file-input" class="hidden" accept="image/*">
+              </div>
+              <div id="file-preview" class="hidden mt-2">
+                <img id="preview-image" class="max-h-24 rounded-lg mx-auto">
+                <p id="file-name" class="text-center text-xs text-gray-600 mt-1"></p>
+              </div>
+            </div>
+            
+            <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white py-2 rounded-full font-semibold hover:from-green-600 hover:to-teal-600 transition-all text-sm">
+              <i data-lucide="send" class="w-3 h-3 inline mr-1"></i>
+              ส่งแบบฟอร์มลงทะเบียน
+            </button>
+          </form>
+          
+          <p class="text-center text-gray-600 mt-4 text-xs">
+            ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
+          </p>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button onclick="hideRegistration()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-4 py-1 rounded-full transition-all text-sm">
+            <i data-lucide="x" class="w-3 h-3 inline mr-1"></i>
+            ปิดหน้าลงทะเบียน
+          </button>
+        </div>
       </div>
-      <div class="text-center mt-6">
-        <button onclick="hideMap()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-6 py-2 rounded-full transition-all">
-          <i data-lucide="x" class="w-4 h-4 inline mr-2"></i>
-          ปิดแผนที่
-        </button>
+    </section>
+
+    <!-- 3D Map Section -->
+    <section id="map-section" class="py-8 bg-gray-900 hidden rounded-2xl mt-6">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-center mb-6">แผนผังอาคาร 3D</h2>
+        <div id="aframe-container" class="w-full h-64 rounded-2xl overflow-hidden shadow-xl">
+          <a-scene embedded>
+            <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+            <a-sky color="#ECECEC"></a-sky>
+          </a-scene>
+        </div>
+        <div class="text-center mt-4">
+          <button onclick="hideMap()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-4 py-1 rounded-full transition-all text-sm">
+            <i data-lucide="x" class="w-3 h-3 inline mr-1"></i>
+            ปิดแผนที่
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="container mx-auto">
-      <p class="text-indigo-100">© 2025 SRTC Virtual Campus | All rights reserved.</p>
-      <p class="text-sm text-gray-400 mt-2">วิทยาลัยเทคนิคสุราษฎร์ธานี - นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
+      <p class="text-indigo-100 text-sm">© 2025 SRTC Virtual Campus | All rights reserved.</p>
+      <p class="text-xs text-gray-400 mt-1">วิทยาลัยเทคนิคสุราษฎร์ธานี - นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
     </div>
   </footer>
 
