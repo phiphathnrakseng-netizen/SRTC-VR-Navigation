@@ -1,713 +1,575 @@
 <!DOCTYPE html>
-
 <html lang="th">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SRTC VR Virtual | แผนผังและตึก 3D</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4f46e5"> 
+    
+    <link rel="manifest" href="/manifest.json">
+    
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
-    <title>SRTC VR Navigation - AR Camera PWA</title>
-
-    
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <meta name="theme-color" content="#3730A3"> <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
-
-    
-
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <style>
-
-        /* กำหนดฟอนต์หลักและให้องค์ประกอบใช้ขอบมน */
-
-        * {
-
-            font-family: 'Kanit', sans-serif;
-
-        }
-
-        .rounded-xl {
-
-            border-radius: 0.75rem;
-
-        }
-
-        /* แก้ไขเพื่อให้ body และ container หลักครอบคลุมเต็มจอเสมอ */
-
-        html, body {
-
-            height: 100%; /* สำคัญสำหรับการแสดงผลเต็มจอ */
-
-            margin: 0;
-
-            overflow-x: hidden; /* ป้องกันการเลื่อนแนวนอน */
-
-        }
-
-        /* .min-h-screen ถูกแทนที่ด้วย h-full ใน div หลัก */
-
-    </style>
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* กำหนดฟอนต์หลักให้เป็น Kanit (ไม่มีหัว) */
+        * {
+            font-family: 'Kanit', sans-serif;
+        }
+        /* กำหนดให้ body และ container หลักครอบคลุมเต็มจอเสมอ */
+        html, body {
+            height: 100%;
+            margin: 0;
+            /* ปรับปรุงให้ซ่อน Scrollbar แนวตั้งเฉพาะเมื่อไม่จำเป็นและป้องกันการเลื่อนแนวนอน */
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        /* กำหนดให้ A-Frame scene เต็มพื้นที่ใน modal */
+        #aframe-scene-container {
+            width: 100%;
+            /* เพิ่มความสูงให้ 3D ดูดีขึ้นใน Modal */
+            height: 450px; 
+            background-color: #f0f0f0; 
+            /* เปลี่ยนความโค้งมน */
+            border-radius: 1.5rem; /* rounded-3xl */
+            overflow: hidden;
+        }
+        /* ปรับปรุงความโค้งมนทั่วไปที่ใช้บ่อย */
+        .rounded-3xl {
+            border-radius: 1.5rem; /* 24px */
+        }
+    </style>
 </head>
-
-<body class="bg-gray-50 h-full antialiased flex flex-col">
-
-
-
-<div id="home-section" class="flex flex-col flex-grow">
-
-    <header class="bg-indigo-900 shadow-lg sticky top-0 z-10">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-
-            
-
-            <div class="flex items-center space-x-3">
-
-                <img src="https://upload.wikimedia.org/wikipedia/th/a/a2/Suratthani_Technical_College_Logo.png" alt="SRTC Logo" class="h-8 w-8 sm:h-10 sm:w-10">
-
-                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-wide">SRTC VR Navigation</h1>
-
-            </div>
-
-            
-
-            <nav class="space-x-2 sm:space-x-4 flex items-center">
-
-                <a href="#" class="text-white hover:text-indigo-200 transition duration-150 hidden lg:inline-block">หน้าแรก</a>
-
-                <a href="#" class="text-white hover:text-indigo-200 transition duration-150 hidden lg:inline-block">แผนผัง</a>
-
-                
-
-                <button onclick="showModal('install-qr-modal')" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-2 px-3 sm:px-4 rounded-full shadow-md flex items-center space-x-2 transform transition duration-200 hover:scale-105">
-
-                    <i data-lucide="qr-code" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-
-                    <span class="text-xs sm:text-sm hidden sm:inline">QR Code</span>
-
-                </button>
-
-
-
-                <button onclick="showModal('install-qr-modal')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-full shadow-md flex items-center space-x-2 transform transition duration-200 hover:scale-105">
-
-                    <i data-lucide="smartphone" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-
-                    <span class="text-xs sm:text-sm hidden sm:inline">ติดตั้ง App</span>
-
-                </button>
-
-
-
-                <button onclick="toggleVRMode()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-full shadow-md flex items-center space-x-2 transform transition duration-200 hover:scale-105">
-
-                    <i data-lucide="scan" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-
-                    <span class="text-xs sm:text-sm">VR (AR)</span>
-
-                </button>
-
-            </nav>
-
-        </div>
-
-    </header>
-
-
-
-    <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden h-[70vh] lg:h-[80vh] min-h-[400px]">
-
-        <img 
-
-            src="https://console.kr-asia.com/wp-content/uploads/2023/06/medium-shot-man-wearing-vr-glasses-scaled.jpg" 
-
-            alt="Man wearing VR glasses background" 
-
-            class="absolute inset-0 h-full w-full object-cover"
-
-        >
-
-        <div class="absolute inset-0 bg-indigo-900/70"></div>
-
-        
-
-        <div class="relative z-10 max-w-xl p-6">
-
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">ค้นหาและนำทางห้องเรียนอัจฉริยะ</h2>
-
-            <p class="text-xl text-indigo-200 mb-8">สัมผัสประสบการณ์นำทางแบบ AR/VR ที่รวดเร็วและแม่นยำ</p>
-
-            
-
-            <div class="flex rounded-full shadow-2xl overflow-hidden">
-
-                <input type="text" placeholder="ค้นหาห้องเรียน เช่น 201, ห้องปฏิบัติการคอมพิวเตอร์" class="w-full py-3 px-6 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150" aria-label="Search">
-
-                <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 transition duration-150 flex items-center space-x-2">
-
-                    <i data-lucide="search" class="w-5 h-5"></i>
-
-                    <span class="hidden sm:inline">ค้นหา</span>
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <footer class="bg-gray-800 text-white py-4 mt-auto">
-
-        <div class="text-center text-sm">
-
-            © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - ระบบ VR Navigation
-
-        </div>
-
-    </footer>
-
+<body class="bg-gray-100 h-full antialiased flex flex-col">
+
+<div id="main-content" class="flex flex-col flex-grow">
+    <header class="bg-white shadow-xl sticky top-0 z-20 border-b border-indigo-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
+            
+            <div class="flex items-center space-x-3">
+                <img src="https://www.srtc.ac.th/2020/images/images.jpg" alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี" class="h-10 w-10 sm:h-12 sm:w-12 rounded-full ring-2 ring-indigo-500 p-[2px]"> <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-wide">SRTC VR Navigation</h1>
+            </div>
+            
+            <nav class="space-x-2 sm:space-x-4 flex items-center">
+                <a href="#home" onclick="showSection('home-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-home">หน้าแรก</a>
+                
+                <a href="#map" onclick="showSection('map-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-map">แผนผัง</a>
+                
+                <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-purple-300">
+                    <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span class="text-xs sm:text-sm hidden sm:inline">ติดตั้ง PWA</span>
+                </button>
+
+                <button onclick="showModal('install-qr-modal')" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-yellow-300">
+                    <i data-lucide="qr-code" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span class="text-xs sm:text-sm hidden sm:inline">QR Code</span>
+                </button>
+
+                <button onclick="toggleVRMode()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-indigo-300">
+                    <i data-lucide="scan" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span class="text-xs sm:text-sm">VR (AR)</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    
+    <div id="home-section" class="section-content flex-grow flex flex-col">
+        <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden h-[75vh] lg:h-[80vh] min-h-[500px]">
+            <img 
+                src="https://console.kr-asia.com/wp-content/uploads/2023/06/medium-shot-man-wearing-vr-glasses-scaled.jpg" 
+                alt="Man wearing VR glasses background" 
+                class="absolute inset-0 h-full w-full object-cover blur-sm scale-110" >
+            <div class="absolute inset-0 bg-indigo-900/80"></div>
+            
+            <div class="relative z-10 max-w-2xl p-6">
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 leading-snug drop-shadow-lg">ระบบนำทางห้องเรียนอัจฉริยะที่ทันสมัย</h2>
+                <p class="text-lg sm:text-xl text-indigo-200 mb-8">ด้วยระบบเทคโนโลยีเสมือน AR/VR ที่สมจริง</p>
+                
+                <div class="flex rounded-3xl shadow-2xl overflow-hidden max-w-md mx-auto ring-4 ring-indigo-300/50"> <input type="text" placeholder="ค้นหาห้องเรียน เช่น 201, ห้องปฏิบัติการคอมพิวเตอร์" class="w-full py-3 px-6 text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 transition duration-150 text-base sm:text-lg focus:z-10" aria-label="Search">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 transition duration-150 flex items-center space-x-2">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                        <span class="hidden sm:inline">ค้นหา</span>
+                    </button>
+                </div>
+                
+                <button onclick="showSection('map-section')" class="mt-8 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-3xl shadow-xl transition duration-200 transform hover:scale-105 flex items-center justify-center mx-auto space-x-2 ring-2 ring-pink-300/50"> <i data-lucide="map" class="w-5 h-5"></i>
+                    <span>ดูแผนผังอาคารทั้งหมด</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <div id="map-section" class="section-content hidden flex-grow p-4 sm:p-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-indigo-200 pb-2 flex items-center"> <i data-lucide="layout-grid" class="w-8 h-8 mr-3 text-indigo-600"></i>
+                แผนผังและรายละเอียดอาคารทั้งหมด
+            </h2>
+
+            <p class="text-gray-600 mb-8 max-w-3xl">นี่คือรายการอาคารหลักทั้งหมดของวิทยาลัยเทคนิคสุราษฎร์ธานี คุณสามารถกดที่อาคารเพื่อดูรายละเอียด และเข้าสู่โหมด 3D จำลองเสมือน (ถ้ามี).</p>
+
+            <div id="building-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"> </div>
+            
+            <div class="mt-10 p-6 bg-yellow-50 border-l-8 border-yellow-500 rounded-2xl shadow-md"> <p class="text-yellow-800 font-semibold flex items-start">
+                    <i data-lucide="info" class="w-5 h-5 mr-3 mt-1 flex-shrink-0"></i>
+                    หมายเหตุ: ข้อมูลอาคารและรูปภาพ 3D เป็นเพียงข้อมูลสมมติเพื่อแสดงฟังก์ชันการทำงาน
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="bg-gray-900 text-white py-4 mt-auto shadow-inner">
+        <div class="text-center text-sm">
+            © 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ
+        </div>
+    </footer>
 </div>
 
+<div id="install-qr-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 transform transition-all duration-300 scale-95 opacity-0" data-modal-target> <div class="flex justify-between items-start mb-4 border-b pb-2">
+            <h3 class="text-2xl font-bold text-indigo-700 flex items-center">
+                <i data-lucide="download-cloud" class="w-6 h-6 mr-2 text-indigo-500"></i>
+                ติดตั้งแอปพลิเคชัน / สแกน QR Code
+            </h3>
+            <button onclick="hideModal('install-qr-modal')" class="text-gray-500 hover:text-gray-900 transition p-1 rounded-full hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <p class="text-gray-600 mb-6">คุณสามารถติดตั้งแอปพลิเคชันนี้บนมือถือของคุณได้ด้วยวิธีใดวิธีหนึ่งด้านล่างนี้:</p>
 
+        <div class="bg-indigo-50 p-6 rounded-2xl mb-6 flex flex-col items-center border border-indigo-200 shadow-inner"> <h4 class="font-semibold text-xl text-indigo-800 mb-3 flex items-center">
+                <i data-lucide="scan" class="w-5 h-5 mr-2"></i>
+                สแกน QR Code สำหรับลิงก์เว็บไซต์
+            </h4>
+            <div id="qrcode-display" class="my-4 p-4 bg-white rounded-xl shadow-lg inline-block ring-2 ring-indigo-200"> <div class="text-gray-500 text-sm">กำลังสร้าง QR Code...</div>
+            </div>
+            
+            <button id="qr-download-btn" onclick="downloadQRCode()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition duration-150 shadow-md transform hover:scale-105">
+                <i data-lucide="download" class="inline w-5 h-5 mr-1"></i>
+                ดาวน์โหลด QR Code (PNG)
+            </button>
+        </div>
 
-<div id="install-qr-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+        <h4 class="font-semibold text-xl text-indigo-700 mb-4 flex items-center border-b pb-2">
+            <i data-lucide="smartphone" class="w-5 h-5 mr-2"></i>
+            คำแนะนำการติดตั้ง PWA
+        </h4>
+        <div class="space-y-4">
+            <div class="bg-gray-100 p-4 rounded-xl border-l-4 border-indigo-500 shadow-sm"> <h5 class="font-semibold text-lg text-indigo-700 mb-2">สำหรับ iPhone (iOS)</h5>
+                <ol class="list-decimal list-inside text-gray-700 space-y-1 text-sm sm:text-base">
+                    <li>เปิดเว็บไซต์ด้วยเบราว์เซอร์ **Safari**</li>
+                    <li>แตะที่ **ปุ่มแชร์** (<i data-lucide="share" class="inline w-4 h-4 text-indigo-500"></i>) ที่อยู่ด้านล่างของหน้าจอ</li>
+                    <li>เลื่อนลงและเลือก **เพิ่มไปยังหน้าจอโฮม** (Add to Home Screen)</li>
+                </ol>
+            </div>
 
-    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 sm:p-8">
-
-        <div class="flex justify-between items-start mb-4">
-
-            <h3 class="text-2xl font-bold text-indigo-700 flex items-center">
-
-                <i data-lucide="download-cloud" class="w-6 h-6 mr-2"></i>
-
-                ติดตั้งแอปพลิเคชัน / สแกน QR Code
-
-            </h3>
-
-            <button onclick="hideModal('install-qr-modal')" class="text-gray-400 hover:text-gray-600 transition">
-
-                <i data-lucide="x" class="w-6 h-6"></i>
-
-            </button>
-
-        </div>
-
-        
-
-        <p class="text-gray-600 mb-6">คุณสามารถติดตั้งแอปพลิเคชันนี้บนมือถือของคุณได้ด้วยวิธีใดวิธีหนึ่งด้านล่างนี้:</p>
-
-
-
-        <div class="bg-indigo-50 p-6 rounded-lg mb-6 flex flex-col items-center border border-indigo-200">
-
-            <h4 class="font-semibold text-xl text-indigo-800 mb-3 flex items-center">
-
-                <i data-lucide="scan" class="w-5 h-5 mr-2"></i>
-
-                สแกน QR Code สำหรับลิงก์เว็บไซต์
-
-            </h4>
-
-            <div id="qrcode-display" class="my-4 p-4 bg-white rounded-lg shadow-inner inline-block">
-
-                <div class="text-gray-500 text-sm">กำลังสร้าง QR Code...</div>
-
-            </div>
-
-            
-
-            <button id="qr-download-btn" onclick="downloadQRCode()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-full transition duration-150 shadow-md">
-
-                <i data-lucide="download" class="inline w-5 h-5 mr-1"></i>
-
-                ดาวน์โหลด QR Code (PNG)
-
-            </button>
-
-        </div>
-
-
-
-        <h4 class="font-semibold text-xl text-indigo-700 mb-4 flex items-center">
-
-            <i data-lucide="smartphone" class="w-5 h-5 mr-2"></i>
-
-            คำแนะนำการติดตั้ง PWA
-
-        </h4>
-
-        <div class="space-y-4">
-
-            <div class="bg-gray-100 p-4 rounded-lg border-l-4 border-indigo-500">
-
-                <h5 class="font-semibold text-lg text-indigo-700 mb-2">สำหรับ iPhone (iOS)</h5>
-
-                <ol class="list-decimal list-inside text-gray-700 space-y-1">
-
-                    <li>เปิดเว็บไซต์ด้วยเบราว์เซอร์ **Safari**</li>
-
-                    <li>แตะที่ **ปุ่มแชร์** (<i data-lucide="share" class="inline w-4 h-4 text-indigo-500"></i>) ที่อยู่ด้านล่างของหน้าจอ</li>
-
-                    <li>เลื่อนลงและเลือก **เพิ่มไปยังหน้าจอโฮม** (Add to Home Screen)</li>
-
-                </ol>
-
-            </div>
-
-
-
-            <div class="bg-gray-100 p-4 rounded-lg border-l-4 border-green-500">
-
-                <h5 class="font-semibold text-lg text-green-700 mb-2">สำหรับ Android</h5>
-
-                <ol class="list-decimal list-inside text-gray-700 space-y-1">
-
-                    <li>เปิดเว็บไซต์ด้วยเบราว์เซอร์ **Chrome**</li>
-
-                    <li>แตะที่ **ปุ่มเมนู** (จุดสามจุด) ที่มุมขวาบน</li>
-
-                    <li>เลือก **ติดตั้งแอป** หรือ **เพิ่มไปยังหน้าจอหลัก** (Install app / Add to Home screen)</li>
-
-                </ol>
-
-            </div>
-
-        </div>
-
-    </div>
-
+            <div class="bg-gray-100 p-4 rounded-xl border-l-4 border-green-500 shadow-sm"> <h5 class="font-semibold text-lg text-green-700 mb-2">สำหรับ Android</h5>
+                <ol class="list-decimal list-inside text-gray-700 space-y-1 text-sm sm:text-base">
+                    <li>เปิดเว็บไซต์ด้วยเบราว์เซอร์ **Chrome**</li>
+                    <li>แตะที่ **ปุ่มเมนู** (จุดสามจุด) ที่มุมขวาบน</li>
+                    <li>เลือก **ติดตั้งแอป** หรือ **เพิ่มไปยังหน้าจอหลัก** (Install app / Add to Home screen)</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
 
+<div id="building-detail-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform transition-all duration-300 scale-95 opacity-0" data-modal-target> <div class="flex justify-between items-start mb-4 border-b pb-2">
+            <h3 id="building-title" class="text-2xl font-bold text-indigo-700 flex items-center">
+                <i data-lucide="building-2" class="w-6 h-6 mr-2 text-indigo-500"></i>
+                รายละเอียดอาคาร
+            </h3>
+            <button onclick="hideModal('building-detail-modal'); stopAframeScene();" class="text-gray-500 hover:text-gray-900 transition p-1 rounded-full hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <div class="flex space-x-2 mb-6 border-b border-gray-200">
+            <button id="tab-detail" onclick="showBuildingTab('detail')" class="py-2 px-4 text-lg font-semibold text-white bg-indigo-600 rounded-t-xl transition duration-150 flex items-center shadow-md">
+                <i data-lucide="info" class="w-5 h-5 mr-2"></i> ข้อมูลอาคาร
+            </button>
+            <button id="tab-3d" onclick="showBuildingTab('3d')" class="py-2 px-4 text-lg font-semibold text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-t-xl transition duration-150 flex items-center bg-white">
+                <i data-lucide="cube" class="w-5 h-5 mr-2"></i> ดูแบบ 3D/VR
+            </button>
+        </div>
 
+        <div id="building-tab-detail" class="tab-content space-y-4">
+            <div id="building-image-container" class="rounded-2xl overflow-hidden shadow-xl h-60 bg-gray-200 flex items-center justify-center ring-4 ring-indigo-100"> <img id="building-image" src="" alt="รูปภาพอาคาร" class="object-cover w-full h-full">
+            </div>
+            <p id="building-description" class="text-gray-700 p-2 bg-gray-50 rounded-xl"></p>
+            
+            <div class="grid grid-cols-2 gap-4 text-gray-700 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+                <div class="col-span-2 text-indigo-800 font-bold mb-2 border-b border-indigo-200 pb-2">รายละเอียดทางเทคนิค</div>
+                <p><strong>จำนวนชั้น:</strong> <span id="building-floors"></span></p>
+                <p><strong>แผนกที่เกี่ยวข้อง:</strong> <span id="building-departments"></span></p>
+                <p><strong>ห้องเรียน/แล็บหลัก:</strong> <span id="building-rooms"></span></p>
+                <p><strong>ลิงก์แผนที่:</strong> <a id="building-map-link" href="#" target="_blank" class="text-pink-600 hover:underline font-semibold flex items-center space-x-1"><i data-lucide="navigation" class="w-4 h-4"></i><span>นำทางด้วย Google Maps</span></a></p>
+            </div>
+        </div>
+
+        <div id="building-tab-3d" class="tab-content hidden">
+            <div id="aframe-scene-container">
+            </div>
+            <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-xl shadow-md"> <p class="text-blue-800 text-sm flex items-start">
+                    <i data-lucide="vr-glasses" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"></i>
+                    **เคล็ดลับ:** หากใช้มือถือ สามารถกดปุ่ม VR มุมขวาล่างในฉาก 3D เพื่อเข้าสู่โหมด VR/Cardboard
+                </p>
+            </div>
+        </div>
+
+        <button onclick="hideModal('building-detail-modal'); stopAframeScene();" class="mt-8 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-3xl shadow-xl transition duration-150 w-full flex items-center justify-center space-x-2 transform hover:scale-[0.99] ring-2 ring-red-300/50"> <i data-lucide="x" class="w-5 h-5"></i>
+            <span>ปิดรายละเอียด</span>
+        </button>
+    </div>
+</div>
 
 <div id="vr-container" class="hidden fixed inset-0 z-50 bg-black flex flex-col items-center justify-center w-screen h-screen">
+    <video id="camera-feed" class="w-full h-full object-cover absolute inset-0" playsinline autoplay muted></video>
+    
+    <div class="relative z-10 w-full h-full p-4 flex flex-col justify-between items-center pointer-events-none">
+        <div id="ar-message" class="bg-yellow-400 text-gray-900 font-extrabold p-4 rounded-3xl shadow-2xl text-center transition-opacity duration-500 opacity-0 pointer-events-auto text-sm sm:text-lg ring-4 ring-yellow-200"> <p>กำลังค้นหาตำแหน่งของคุณ...</p>
+        </div>
 
-    <video id="camera-feed" class="w-full h-full object-cover absolute inset-0" playsinline autoplay muted></video>
+        <div class="flex flex-col items-center mt-auto mb-16 text-white text-center">
+            <i id="ar-arrow" data-lucide="arrow-up" class="w-16 h-16 mb-2 animate-bounce drop-shadow-lg text-green-400"></i>
+            <p id="ar-destination" class="text-xl sm:text-3xl font-extrabold drop-shadow-2xl bg-black/60 p-3 rounded-2xl border-2 border-white/50">มุ่งหน้าไปยัง: ห้อง 305 (ระยะทาง 15 ม.)</p> </div>
+    </div>
+    
+    <button onclick="toggleVRMode()" class="absolute top-4 right-4 z-20 bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-full shadow-lg flex items-center space-x-2 pointer-events-auto transition transform hover:scale-110 ring-2 ring-red-300/50">
+        <i data-lucide="x" class="w-6 h-6"></i>
+        <span class="text-sm hidden sm:inline">ปิด AR Mode</span>
+    </button>
 
-    
-
-    <div class="relative z-10 w-full h-full p-4 flex flex-col justify-between items-center pointer-events-none">
-
-        <div id="ar-message" class="bg-yellow-400 text-gray-900 font-bold p-3 rounded-xl shadow-xl text-center transition-opacity duration-500 opacity-0 pointer-events-auto">
-
-            <p>กำลังค้นหาตำแหน่งของคุณ...</p>
-
-        </div>
-
-
-
-        <div class="flex flex-col items-center mt-auto mb-16 text-white text-center">
-
-            <i id="ar-arrow" data-lucide="arrow-up" class="w-16 h-16 mb-2 animate-bounce drop-shadow-lg text-green-400"></i>
-
-            <p id="ar-destination" class="text-3xl font-extrabold drop-shadow-lg bg-black/50 p-2 rounded-lg">มุ่งหน้าไปยัง: ห้อง 305 (ระยะทาง 15 ม.)</p>
-
-        </div>
-
-    </div>
-
-    
-
-    <button onclick="toggleVRMode()" class="absolute top-4 right-4 z-20 bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-full shadow-lg flex items-center space-x-2 pointer-events-auto transition transform hover:scale-110">
-
-        <i data-lucide="x" class="w-6 h-6"></i>
-
-        <span class="text-sm hidden sm:inline">ปิด AR Mode</span>
-
-    </button>
-
-
-
-    <div id="error-message" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-800 text-white p-6 rounded-xl shadow-2xl z-30 pointer-events-auto">
-
-        <h3 class="text-xl font-bold mb-2">ไม่สามารถเปิดกล้องได้</h3>
-
-        <p>โปรดตรวจสอบว่าคุณได้อนุญาตให้เว็บไซต์เข้าถึงกล้องแล้ว</p>
-
-        <p class="text-sm mt-2">(คำเตือน: ฟังก์ชันกล้องต้องใช้การเชื่อมต่อแบบ **HTTPS**)</p>
-
-        <button onclick="hideModal('error-message')" class="mt-4 bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded transition">รับทราบ</button>
-
-    </div>
-
+    <div id="error-message" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-700 text-white p-6 rounded-2xl shadow-2xl z-30 pointer-events-auto max-w-sm text-center ring-4 ring-red-500/50"> <h3 class="text-xl font-bold mb-2">ไม่สามารถเปิดกล้องได้</h3>
+        <p class="text-sm">โปรดตรวจสอบว่าคุณได้อนุญาตให้เว็บไซต์เข้าถึงกล้องแล้ว</p>
+        <p class="text-xs mt-2">(คำเตือน: ฟังก์ชันกล้องต้องใช้การเชื่อมต่อแบบ **HTTPS**)</p>
+        <button onclick="hideModal('error-message')" class="mt-4 bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full transition shadow-md">รับทราบ</button>
+    </div>
 </div>
-
-
-
 
 
 <script>
-
-    // Initial load for icons
-
-    lucide.createIcons(); 
-
-
-
-    const homeSection = document.getElementById('home-section');
-
-    const vrContainer = document.getElementById('vr-container');
-
-    const cameraFeed = document.getElementById('camera-feed');
-
-    const arMessage = document.getElementById('ar-message');
-
-    const errorMessage = document.getElementById('error-message');
-
-    let stream = null; // เก็บ stream ของกล้องไว้สำหรับหยุดการทำงาน
-
-    let qrCodeInstance = null; // เก็บ instance ของ QRCode
-
-
-
-    // ฟังก์ชันเปิด Modal
-
-    window.showModal = function(id) {
-
-        document.getElementById(id).classList.remove('hidden');
-
-        lucide.createIcons(); // อัปเดตไอคอนใน Modal
-
-        
-
-        // ตรวจสอบว่า Modal ที่เปิดคือ Modal ติดตั้ง/QR
-
-        if (id === 'install-qr-modal') {
-
-            generateQRCodeForApp();
-
-        }
-
-    }
-
-
-
-    // ฟังก์ชันปิด Modal
-
-    window.hideModal = function(id) {
-
-        document.getElementById(id).classList.add('hidden');
-
-    }
-
-
-
-    // ฟังก์ชันหลักในการสร้าง QR Code
-
-    function generateQRCodeForApp() {
-
-        // ใช้ URL ปัจจุบันของหน้าเว็บ (เมื่อนำไปโฮสต์จริง ลิงก์นี้จะถูกต้อง)
-
-        const url = window.location.href; 
-
-        const qrcodeDisplay = document.getElementById('qrcode-display');
-
-
-
-        // ถ้ามี instance เก่าอยู่ ให้เคลียร์ก่อนสร้างใหม่
-
-        if (qrcodeDisplay.firstChild && qrcodeDisplay.firstChild.tagName === 'CANVAS') {
-
-            qrcodeDisplay.removeChild(qrcodeDisplay.firstChild);
-
-        }
-
-        if (qrcodeDisplay.firstChild && qrcodeDisplay.firstChild.tagName === 'IMG') {
-
-            qrcodeDisplay.removeChild(qrcodeDisplay.firstChild);
-
-        }
-
-        
-
-        // สร้าง instance ใหม่ทุกครั้งเพื่อให้แน่ใจว่า QR Code ถูกสร้างอย่างถูกต้อง
-
-        qrCodeInstance = new QRCode(qrcodeDisplay, {
-
-            text: url,
-
-            width: 200,
-
-            height: 200,
-
-            colorDark: "#3730A3", // Indigo 800
-
-            colorLight: "#ffffff",
-
-            correctLevel: QRCode.CorrectLevel.H
-
-        });
-
-        
-
-        // อัปเดตไอคอนภายใน Modal ที่เพิ่งเปิด
-
-        lucide.createIcons();
-
-    }
-
-
-
-    // ฟังก์ชันสำหรับดาวน์โหลด QR Code เป็นไฟล์ PNG
-
-    window.downloadQRCode = function() {
-
-        const qrcodeDisplay = document.getElementById('qrcode-display');
-
-        
-
-        // QR Code สร้างด้วย qrcode.js จะเป็น <canvas> หรือ <img>
-
-        const canvas = qrcodeDisplay.querySelector('canvas');
-
-        const img = qrcodeDisplay.querySelector('img');
-
-        
-
-        let dataUrl;
-
-        
-
-        if (canvas) {
-
-            dataUrl = canvas.toDataURL("image/png");
-
-        } else if (img) {
-
-            // ในบางเบราว์เซอร์ qrcode.js อาจสร้างเป็น <img>
-
-            dataUrl = img.src; 
-
-        }
-
-
-
-        if (dataUrl) {
-
-            const link = document.createElement('a');
-
-            link.href = dataUrl;
-
-            link.download = `srtc_vr_navigation_qrcode.png`;
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-        } else {
-
-            console.error("QR Code image not found.");
-
-            // ใช้กล่องข้อความแทน alert()
-
-            document.getElementById('ar-message').innerHTML = '<p>เกิดข้อผิดพลาดในการดาวน์โหลด QR Code</p>';
-
-            document.getElementById('ar-message').classList.remove('hidden', 'bg-green-500');
-
-            document.getElementById('ar-message').classList.add('opacity-100', 'bg-red-500');
-
-            setTimeout(() => {
-
-                document.getElementById('ar-message').classList.add('hidden', 'opacity-0');
-
-            }, 3000);
-
-        }
-
-    }
-
-
-
-
-
-    // ฟังก์ชันสำหรับเริ่มต้นการทำงานของกล้อง
-
-    async function startCamera() {
-
-        // ซ่อนข้อความข้อผิดพลาดและแสดงข้อความสถานะ
-
-        errorMessage.classList.add('hidden');
-
-        arMessage.classList.remove('hidden');
-
-        arMessage.classList.add('opacity-100');
-
-        arMessage.classList.remove('bg-green-500');
-
-        arMessage.classList.add('bg-yellow-400');
-
-        arMessage.innerHTML = '<p>กำลังรอการอนุญาตเข้าถึงกล้อง...</p>';
-
-
-
-        // เพิ่ม playsinline สำหรับ iOS เพื่อให้วิดีโอเล่นได้ในหน้าต่าง
-
-        cameraFeed.setAttribute('playsinline', true);
-
-
-
-        // กำหนดให้ใช้กล้องหลัง (environment) หากมี
-
-        const constraints = { video: { facingMode: 'environment' } };
-
-
-
-        try {
-
-            // ขออนุญาตเข้าถึงกล้อง
-
-            stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-            cameraFeed.srcObject = stream;
-
-            // ต้องเรียก play() หลังจากตั้งค่า srcObject
-
-            cameraFeed.play();
-
-            
-
-            // แสดงข้อความสถานะ AR เมื่อกล้องพร้อม
-
-            setTimeout(() => {
-
-                arMessage.innerHTML = '<p>ตำแหน่งถูกล็อค! พร้อมนำทาง</p>';
-
-                arMessage.classList.remove('bg-yellow-400');
-
-                arMessage.classList.add('bg-green-500'); 
-
-            }, 1500);
-
-            
-
-        } catch (err) {
-
-            console.error("Error accessing camera: ", err);
-
-            
-
-            // ซ่อน AR Message และแสดง Error Modal
-
-            arMessage.classList.add('hidden', 'opacity-0');
-
-            errorMessage.classList.remove('hidden');
-
-            
-
-            // หยุดการทำงานของกล้องหากมีการเริ่มแล้ว
-
-            stopCamera();
-
-        }
-
-    }
-
-
-
-    // ฟังก์ชันสำหรับหยุดการทำงานของกล้อง
-
-    function stopCamera() {
-
-        if (stream) {
-
-            stream.getTracks().forEach(track => track.stop());
-
-            stream = null;
-
-            cameraFeed.srcObject = null;
-
-        }
-
-        arMessage.classList.add('opacity-0');
-
-        arMessage.classList.remove('bg-green-500');
-
-        arMessage.classList.add('hidden');
-
-    }
-
-
-
-    // ฟังก์ชันสำหรับสลับโหมด VR/AR
-
-    window.toggleVRMode = function() {
-
-        const isVRActive = vrContainer.classList.contains('hidden');
-
-
-
-        if (isVRActive) {
-
-            // เปิด VR/AR Mode
-
-            homeSection.classList.add('hidden');
-
-            vrContainer.classList.remove('hidden');
-
-            startCamera();
-
-        } else {
-
-            // กลับสู่ Home Mode
-
-            stopCamera();
-
-            homeSection.classList.remove('hidden');
-
-            vrContainer.classList.add('hidden');
-
-        }
-
-        
-
-        // อัปเดตไอคอนอีกครั้ง
-
-        lucide.createIcons();
-
-    }
-
-    
-
-    // ตั้งค่า AR Element ให้หมุนตามเวลาเพื่อจำลองการแสดงผล (เพื่อความสวยงามเท่านั้น)
-
-    const arArrow = document.getElementById('ar-arrow');
-
-    setInterval(() => {
-
-        if (vrContainer && !vrContainer.classList.contains('hidden')) {
-
-             // ตัวอย่างการหมุนจำลอง
-
-             const randomRotation = Math.floor(Math.random() * 20) - 10;
-
-             arArrow.style.transform = `rotate(${randomRotation}deg)`;
-
-        }
-
-    }, 2000);
-
-
-
-</script>
-
-
-
-</body>
-
-</html>
+    // ----------------------- DATA: ข้อมูลอาคารทั้งหมด (ไม่มีการเปลี่ยนแปลง) -----------------------
+    const buildingsData = [
+        {
+            id: 'b1',
+            name: 'อาคารอำนวยการและสำนักงาน',
+            short_name: 'อาคาร 1',
+            image_url: 'https://cdn.pixabay.com/photo/2015/12/08/00/31/office-1081079_1280.jpg',
+            description: 'ศูนย์กลางการบริหารงานของวิทยาลัยฯ ประกอบด้วยห้องผู้อำนวยการ ห้องประชุมใหญ่ และงานทะเบียน/การเงิน',
+            floors: 3,
+            departments: 'สำนักงาน, ทะเบียน',
+            rooms: 'ห้องประชุมธนากร',
+            map_link: 'https://maps.app.goo.gl/SRtCEGpxE38W4V1F6',
+            model_url: 'https://cdn.aframe.io/examples/showcase/asset-portal-building.gltf' // โมเดล GLTF สมมติ
+        },
+        {
+            id: 'b2',
+            name: 'อาคารเทคโนโลยีสารสนเทศ (IT)',
+            short_name: 'อาคาร 2',
+            image_url: 'https://cdn.pixabay.com/photo/2017/08/07/21/28/students-2607675_1280.jpg',
+            description: 'ที่ตั้งของแผนกวิชาเทคโนโลยีสารสนเทศ และห้องปฏิบัติการคอมพิวเตอร์ที่ทันสมัยหลายห้อง',
+            floors: 5,
+            departments: 'เทคโนโลยีสารสนเทศ, คอมพิวเตอร์ธุรกิจ',
+            rooms: 'ห้องปฏิบัติการ 201-205, ห้องเรียนรวม',
+            map_link: 'https://maps.app.goo.gl/SRtCEGpxE38W4V1F6',
+            model_url: 'https://cdn.aframe.io/examples/boilerplate/models/wvr_head.gltf' // โมเดล GLTF สมมติ
+        },
+        {
+            id: 'b3',
+            name: 'อาคารช่างอุตสาหกรรม (ไฟฟ้า/อิเล็กทรอนิกส์)',
+            short_name: 'อาคาร 3',
+            image_url: 'https://cdn.pixabay.com/photo/2016/09/22/20/09/factory-1687317_1280.jpg',
+            description: 'เป็นแหล่งเรียนรู้และปฏิบัติงานด้านช่างไฟฟ้ากำลัง ช่างอิเล็กทรอนิกส์ และเครื่องมือวัดทางอุตสาหกรรม',
+            floors: 4,
+            departments: 'ไฟฟ้ากำลัง, อิเล็กทรอนิกส์',
+            rooms: 'ห้องปฏิบัติการวงจร, ห้องทดลองมอเตอร์',
+            map_link: 'https://maps.app.goo.gl/SRtCEGpxE38W4V1F6',
+            model_url: 'https://cdn.aframe.io/examples/boilerplate/models/aframe.gltf' // โมเดล GLTF สมมติ
+        }
+        // ... สามารถเพิ่มอาคารอื่นๆ ได้
+    ];
+
+    // ----------------------- GLOBAL VARIABLES & INIT -----------------------
+    let deferredPrompt = null;
+    let qrCodeInstance = null;
+    let stream = null; // สำหรับ VR/AR Camera
+    
+    // Element References
+    const homeSection = document.getElementById('home-section');
+    const mapSection = document.getElementById('map-section');
+    const mainContent = document.getElementById('main-content');
+    const vrContainer = document.getElementById('vr-container');
+    const buildingListContainer = document.getElementById('building-list');
+    const buildingDetailModal = document.getElementById('building-detail-modal');
+    const installQrModal = document.getElementById('install-qr-modal');
+
+
+    // ----------------------- CORE FUNCTIONS -----------------------
+
+    // 1. จัดการการแสดงผล Section (Home/Map)
+    window.showSection = function(sectionId) {
+        // ซ่อนทุก Section ก่อน
+        document.querySelectorAll('.section-content').forEach(section => {
+            section.classList.add('hidden');
+        });
+
+        // แสดง Section ที่เลือก
+        document.getElementById(sectionId).classList.remove('hidden');
+
+        // อัปเดต Active Nav Link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.classList.remove('text-indigo-600', 'bg-indigo-50', 'rounded-xl', 'font-bold'); // ปรับปรุงการลบ
+            link.classList.add('text-gray-700');
+        });
+
+        if (sectionId === 'home-section') {
+            document.getElementById('nav-home').classList.add('text-indigo-600', 'bg-indigo-50', 'font-bold');
+            document.getElementById('nav-home').classList.remove('text-gray-700');
+        } else if (sectionId === 'map-section') {
+            document.getElementById('nav-map').classList.add('text-indigo-600', 'bg-indigo-50', 'font-bold');
+            document.getElementById('nav-map').classList.remove('text-gray-700');
+        }
+    }
+
+    // 2. ฟังก์ชันแสดงรายละเอียดตึกและ 3D
+    window.showBuildingDetail = function(buildingId) {
+        const building = buildingsData.find(b => b.id === buildingId);
+        if (!building) return;
+
+        // อัปเดตข้อมูลรายละเอียด
+        document.getElementById('building-title').innerHTML = `<i data-lucide="building-2" class="w-6 h-6 mr-2 text-indigo-500"></i> ${building.name} (${building.short_name})`;
+        document.getElementById('building-image').src = building.image_url;
+        document.getElementById('building-image').alt = `รูปภาพอาคาร ${building.name}`;
+        document.getElementById('building-description').textContent = building.description;
+        document.getElementById('building-floors').textContent = building.floors;
+        document.getElementById('building-departments').textContent = building.departments;
+        document.getElementById('building-rooms').textContent = building.rooms;
+        document.getElementById('building-map-link').href = building.map_link;
+
+        // แสดง Modal และ Tab รายละเอียดเริ่มต้น
+        showModal('building-detail-modal');
+        showBuildingTab('detail', building);
+        lucide.createIcons();
+    }
+
+    // 3. จัดการการสลับ Tab ใน Building Detail Modal
+    window.showBuildingTab = function(tabName, building = null) {
+        // ซ่อนทุก Tab Content
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+        
+        // รีเซ็ตปุ่ม Tab
+        document.querySelectorAll('button[id^="tab-"]').forEach(btn => {
+            btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+            btn.classList.add('text-gray-600', 'hover:text-indigo-600', 'bg-white', 'hover:bg-indigo-50');
+        });
+
+        // แสดง Tab ที่เลือก
+        document.getElementById(`building-tab-${tabName}`).classList.remove('hidden');
+        document.getElementById(`tab-${tabName}`).classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+        document.getElementById(`tab-${tabName}`).classList.remove('text-gray-600', 'hover:text-indigo-600', 'bg-white', 'hover:bg-indigo-50');
+        
+        // หากเลือก Tab 3D
+        if (tabName === '3d' && building) {
+            loadAframeScene(building.model_url);
+        } else if (tabName === 'detail') {
+            stopAframeScene(); // หยุด 3D เมื่อสลับไปดูรายละเอียด
+        }
+    }
+
+    // 4. โหลด A-Frame Scene สำหรับแสดงผล 3D (ไม่มีการเปลี่ยนแปลง Logic)
+    function loadAframeScene(modelUrl) {
+        const sceneContainer = document.getElementById('aframe-scene-container');
+        // ล้าง scene เก่าถ้ามี
+        sceneContainer.innerHTML = '';
+        
+        // สร้าง A-Frame Scene ใหม่
+        const aframeScene = document.createElement('a-scene');
+        aframeScene.setAttribute('embedded', '');
+        aframeScene.setAttribute('style', 'width: 100%; height: 100%;');
+        
+        // เพิ่ม Environment (เช่น พื้นหลัง, แสงสว่าง)
+        aframeScene.innerHTML += `
+            <a-entity environment="preset: default; dressing: trees; ground: hills; playArea: 1.0"></a-entity>
+        `;
+        
+        // เพิ่มโมเดล 3D (GLTF)
+        aframeScene.innerHTML += `
+            <a-entity 
+                gltf-model="${modelUrl}" 
+                position="0 1 -3" 
+                rotation="0 0 0" 
+                scale="1 1 1"
+            ></a-entity>
+        `;
+
+        // เพิ่มกล้องและควบคุม
+        aframeScene.innerHTML += `
+            <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
+        `;
+        
+        // เพิ่มแสงสว่าง
+        aframeScene.innerHTML += `
+            <a-light type="directional" color="#fff" intensity="0.5" position="-1 1 1"></a-light>
+            <a-light type="ambient" color="#fff" intensity="0.5"></a-light>
+        `;
+
+        sceneContainer.appendChild(aframeScene);
+        // A-Frame จะทำการเริ่มต้นเอง
+    }
+
+    // 5. หยุด A-Frame Scene (ไม่มีการเปลี่ยนแปลง Logic)
+    window.stopAframeScene = function() {
+        const sceneContainer = document.getElementById('aframe-scene-container');
+        const aframeScene = sceneContainer.querySelector('a-scene');
+        if (aframeScene) {
+            // ลบองค์ประกอบ A-Frame ออกจาก DOM
+            aframeScene.parentNode.removeChild(aframeScene);
+            // เพื่อให้ A-Frame ถูกเคลียร์อย่างสมบูรณ์ ควรตรวจสอบด้วยว่ามีการเรียกใช้ A-Frame.js อย่างถูกต้อง
+        }
+    }
+
+
+    // 6. สร้างรายการตึกใน Map Section (ปรับปรุง Card Style)
+    function renderBuildingList() {
+        buildingListContainer.innerHTML = buildingsData.map(building => `
+            <div class="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden border border-gray-200 flex flex-col transform hover:scale-[1.02] ring-2 ring-transparent hover:ring-indigo-300"> <div class="h-44 bg-gray-200 overflow-hidden"> <img src="${building.image_url}" alt="${building.name}" class="w-full h-full object-cover transition duration-300 hover:opacity-90">
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h4 class="text-xl font-extrabold text-indigo-700 mb-1 border-b pb-1">${building.name}</h4> <p class="text-sm font-semibold text-gray-500 mb-3">(${building.short_name} | ${building.floors} ชั้น)</p>
+                    <p class="text-gray-600 text-sm flex-grow mb-4">${building.description.substring(0, 100)}...</p>
+                    
+                    <button 
+                        onclick="showBuildingDetail('${building.id}')" 
+                        class="mt-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-full shadow-lg transition duration-150 flex items-center justify-center space-x-2 transform hover:scale-[1.02] ring-2 ring-indigo-300/50" >
+                        <i data-lucide="eye" class="w-5 h-5"></i>
+                        <span>ดูรายละเอียด & 3D</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        lucide.createIcons(); // ต้องเรียกอีกครั้งหลังเพิ่ม DOM ใหม่
+    }
+
+    // 7. PWA, QR Code, Modal, AR/VR (เดิม)
+    // **********************************************
+    
+    // [PWA Logic] (ไม่มีการเปลี่ยนแปลง Logic)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => { console.log('SW registered: ', registration); })
+                .catch(registrationError => { console.log('SW registration failed: ', registrationError); });
+        });
+    }
+    window.addEventListener('beforeinstallprompt', (e) => { 
+        e.preventDefault(); 
+        deferredPrompt = e;
+        document.getElementById('pwa-install-button').classList.remove('hidden');
+    });
+    window.promptPWAInstall = function() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') { console.log('User accepted the install prompt'); } 
+                else { console.log('User dismissed the install prompt'); }
+                deferredPrompt = null;
+                document.getElementById('pwa-install-button').classList.add('hidden'); 
+            });
+        }
+    }
+
+
+    // [Modal Logic] (เพิ่ม Animation)
+    window.showModal = function(id) {
+        const modal = document.getElementById(id);
+        const modalTarget = modal.querySelector('[data-modal-target]');
+
+        modal.classList.remove('hidden');
+        // Force reflow/repaint to ensure transition works
+        modal.offsetHeight; 
+        
+        if(modalTarget) {
+            modalTarget.classList.remove('scale-95', 'opacity-0');
+            modalTarget.classList.add('scale-100', 'opacity-100');
+        }
+
+        mainContent.classList.add('pointer-events-none', 'blur-sm'); // เพิ่มเอฟเฟกต์เบลอ
+        lucide.createIcons(); 
+        if (id === 'install-qr-modal') {
+            generateQRCodeForApp();
+        }
+    }
+    window.hideModal = function(id) {
+        const modal = document.getElementById(id);
+        const modalTarget = modal.querySelector('[data-modal-target]');
+        
+        if(modalTarget) {
+             modalTarget.classList.add('scale-95', 'opacity-0');
+             modalTarget.classList.remove('scale-100', 'opacity-100');
+             
+             // Wait for the transition to finish before hiding (approx 300ms)
+             setTimeout(() => {
+                 modal.classList.add('hidden');
+                 mainContent.classList.remove('pointer-events-none', 'blur-sm');
+             }, 300);
+
+        } else {
+             modal.classList.add('hidden');
+             mainContent.classList.remove('pointer-events-none', 'blur-sm');
+        }
+    }
+
+    // [QR Code Logic] (ไม่มีการเปลี่ยนแปลง Logic)
+    function generateQRCodeForApp() {
+        const url = window.location.href; 
+        const qrcodeDisplay = document.getElementById('qrcode-display');
+        qrcodeDisplay.innerHTML = '<div class="text-gray-500 text-sm">กำลังสร้าง QR Code...</div>';
+        qrCodeInstance = new QRCode(qrcodeDisplay, {
+            text: url,
+            width: 200,
+            height: 200,
+            colorDark: "#1f2937", 
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        setTimeout(() => { lucide.createIcons(); }, 100); 
+    }
+    window.downloadQRCode = function() {
+        const qrcodeDisplay = document.getElementById('qrcode-display');
+        const canvas = qrcodeDisplay.querySelector('canvas');
+        const img = qrcodeDisplay.querySelector('img');
+        let dataUrl;
+        if (canvas) { dataUrl = canvas.toDataURL("image/png"); } 
+        else if (img) { dataUrl = img.src; }
+        if (dataUrl) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = `srtc_vr_navigation_qrcode.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else { console.error("QR Code image not found."); }
+    }
+
+
+    // [AR/VR Logic] (ไม่มีการเปลี่ยนแปลง Logic)
+    const cameraFeed = document.getElementById('camera-feed');
+    const arMessage = document.getElementById('ar-message');
+    const errorMessage = document.getElementById('error-message');
+    async function startCamera() {
+        errorMessage.classList.add('hidden');
+        arMessage.classList.remove('hidden', 'opacity-0', 'bg-green-500'); // Reset colors
+        arMessage.classList.add('opacity-100', 'bg-yellow-400'); // Se
