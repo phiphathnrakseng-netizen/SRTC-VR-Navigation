@@ -147,12 +147,51 @@
     
     /* Registration form styles */
     .registration-form {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 1.5rem;
       padding: 2rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       max-width: 500px;
       margin: 2rem auto;
+      color: #333;
+    }
+    
+    /* Form input styles */
+    .form-input {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      color: #1f2937;
+      background-color: white;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    
+    /* File upload styles */
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #d1d5db;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .file-upload:hover {
+      border-color: #4f46e5;
+      background-color: rgba(79, 70, 229, 0.05);
+    }
+    .file-upload-icon {
+      color: #6b7280;
+      margin-bottom: 0.5rem;
     }
     
     /* Responsive adjustments */
@@ -194,8 +233,8 @@
           <span id="notif-badge" class="badge">3</span>
         </button>
 
-        <button id="login-btn" onclick="showLogin()" class="bg-green-600 hover:bg-green-700 icon-button" title="เข้าสู่ระบบ">
-          <i data-lucide="log-in" class="w-5 h-5"></i>
+        <button id="login-btn" onclick="showRegistration()" class="bg-green-600 hover:bg-green-700 icon-button" title="ลงทะเบียน">
+          <i data-lucide="user-plus" class="w-5 h-5"></i>
         </button>
 
         <button onclick="openPoints()" class="bg-gray-700 hover:bg-gray-800 icon-button" title="แต้มสะสม">
@@ -225,16 +264,6 @@
     <div class="hero-content">
       <h2 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
       <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดาย</p>
-      
-      <!-- Glass Notification -->
-      <div class="glass-notification max-w-2xl">
-        <h3 class="text-xl font-bold mb-2 text-yellow-300">ลงทะเบียนก่อนรับการแจ้งเตือน</h3>
-        <p class="text-gray-200 mb-4">กรุณาลงทะเบียนเพื่อรับการแจ้งเตือนและอัปเดตข้อมูลล่าสุดเกี่ยวกับระบบนำทาง AR/VR</p>
-        <button id="register-btn" onclick="showRegistration()" class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-2 rounded-full font-semibold hover:from-green-600 hover:to-teal-600 transition-all">
-          <i data-lucide="user-plus" class="w-4 h-4 inline mr-2"></i>
-          ลงทะเบียนตอนนี้
-        </button>
-      </div>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
         <button onclick="showMap()" class="cta-button">
@@ -278,24 +307,24 @@
         <form id="registration-form">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-gray-700 mb-2" for="student-id">รหัสนักศึกษา</label>
-              <input type="text" id="student-id" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="ระบุรหัสนักศึกษา" required>
+              <label class="block text-gray-700 mb-2 font-medium" for="student-id">รหัสนักศึกษา</label>
+              <input type="text" id="student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
             </div>
             <div>
-              <label class="block text-gray-700 mb-2" for="fullname">ชื่อ-นามสกุล</label>
-              <input type="text" id="fullname" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="ชื่อ-นามสกุล" required>
+              <label class="block text-gray-700 mb-2 font-medium" for="fullname">ชื่อ-นามสกุล</label>
+              <input type="text" id="fullname" class="form-input" placeholder="ชื่อ-นามสกุล" required>
             </div>
           </div>
           
           <div class="mb-4">
-            <label class="block text-gray-700 mb-2" for="email">อีเมล</label>
-            <input type="email" id="email" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="อีเมล" required>
+            <label class="block text-gray-700 mb-2 font-medium" for="email">อีเมล</label>
+            <input type="email" id="email" class="form-input" placeholder="อีเมล" required>
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-gray-700 mb-2" for="department">แผนก/สาขา</label>
-              <select id="department" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" required>
+              <label class="block text-gray-700 mb-2 font-medium" for="department">แผนก/สาขา</label>
+              <select id="department" class="form-input" required>
                 <option value="">เลือกแผนก/สาขา</option>
                 <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
                 <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
@@ -306,14 +335,14 @@
               </select>
             </div>
             <div>
-              <label class="block text-gray-700 mb-2" for="phone">เบอร์โทรศัพท์</label>
-              <input type="tel" id="phone" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="เบอร์โทรศัพท์" required>
+              <label class="block text-gray-700 mb-2 font-medium" for="phone">เบอร์โทรศัพท์</label>
+              <input type="tel" id="phone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
             </div>
           </div>
           
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2" for="interests">ความสนใจ (เลือกได้มากกว่า 1)</label>
-            <div class="flex flex-wrap gap-2">
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-2 font-medium">ความสนใจ (เลือกได้มากกว่า 1)</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
               <label class="inline-flex items-center">
                 <input type="checkbox" class="rounded text-indigo-600" value="AR Navigation">
                 <span class="ml-2 text-gray-700">การนำทางด้วย AR</span>
@@ -330,6 +359,19 @@
                 <input type="checkbox" class="rounded text-indigo-600" value="Technology Updates">
                 <span class="ml-2 text-gray-700">อัปเดตเทคโนโลยี</span>
               </label>
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2 font-medium">แนบรูปภาพ (ถ้ามี)</label>
+            <div class="file-upload" id="file-upload-area">
+              <i data-lucide="upload" class="w-8 h-8 file-upload-icon"></i>
+              <p class="text-gray-600 text-sm text-center">คลิกเพื่ออัพโหลดรูปภาพ<br>หรือลากและวางไฟล์ที่นี่</p>
+              <input type="file" id="file-input" class="hidden" accept="image/*">
+            </div>
+            <div id="file-preview" class="hidden mt-2">
+              <img id="preview-image" class="max-h-32 rounded-lg mx-auto">
+              <p id="file-name" class="text-center text-sm text-gray-600 mt-1"></p>
             </div>
           </div>
           
@@ -383,22 +425,6 @@
     </div>
   </footer>
 
-  <!-- Modal Login -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <button onclick="closeLogin()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-xl mb-4">เข้าสู่ระบบ / สมัครสมาชิก</h3>
-      <input id="fullname" type="text" placeholder="ชื่อ - นามสกุล" class="w-full border rounded-lg p-2 mb-2" />
-      <input id="email" type="email" placeholder="อีเมล" class="w-full border rounded-lg p-2 mb-2" />
-      <input id="branch" type="text" placeholder="แผนก / สาขา" class="w-full border rounded-lg p-2 mb-2" />
-      <input id="phone" type="tel" placeholder="เบอร์โทรศัพท์" class="w-full border rounded-lg p-2 mb-2" />
-      <input id="password" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg p-2 mb-3" />
-      <button onclick="loginUser()" class="bg-green-600 text-white px-6 py-2 w-full rounded-full hover:bg-green-700">เข้าสู่ระบบ</button>
-    </div>
-  </div>
-
   <!-- QR Code Modal -->
   <div id="qr-modal" class="modal">
     <div class="modal-content max-w-xs">
@@ -445,38 +471,68 @@
         e.preventDefault();
         registerUser();
       });
+      
+      // Setup file upload
+      const fileInput = document.getElementById('file-input');
+      const fileUploadArea = document.getElementById('file-upload-area');
+      const filePreview = document.getElementById('file-preview');
+      const previewImage = document.getElementById('preview-image');
+      const fileName = document.getElementById('file-name');
+      
+      fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#4f46e5';
+        fileUploadArea.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+      });
+      
+      fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+      });
+      
+      fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+      
+      function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            fileName.textContent = file.name;
+            filePreview.classList.remove('hidden');
+          };
+          
+          reader.readAsDataURL(file);
+        } else {
+          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        }
+      }
     };
-
-    function showLogin() {
-      document.getElementById('login-modal').classList.add('show');
-    }
-    function closeLogin() {
-      document.getElementById('login-modal').classList.remove('show');
-    }
 
     function openQRModal() {
       document.getElementById('qr-modal').classList.add('show');
     }
     function closeQRModal() {
       document.getElementById('qr-modal').classList.remove('show');
-    }
-
-    function loginUser() {
-      const user = {
-        fullname: document.getElementById('fullname').value,
-        email: document.getElementById('email').value,
-        branch: document.getElementById('branch').value,
-        phone: document.getElementById('phone').value,
-        password: document.getElementById('password').value
-      };
-      if (!user.fullname || !user.email) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-        return;
-      }
-      localStorage.setItem("userData", JSON.stringify(user));
-      showUserInfo(user);
-      closeLogin();
-      alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ " + user.fullname);
     }
 
     function showUserInfo(user) {
@@ -526,13 +582,11 @@
     // ลงทะเบียน
     function showRegistration() {
       document.getElementById('registration-section').classList.remove('hidden');
-      document.getElementById('register-btn').classList.add('hidden');
       window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
     }
     
     function hideRegistration() {
       document.getElementById('registration-section').classList.add('hidden');
-      document.getElementById('register-btn').classList.remove('hidden');
     }
     
     function registerUser() {
@@ -553,13 +607,31 @@
         interests.push(checkbox.value);
       });
       
+      // Get uploaded file
+      const fileInput = document.getElementById('file-input');
+      let imageData = null;
+      
+      if (fileInput.files.length) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imageData = e.target.result;
+          saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveRegistrationData(studentId, fullname, email, department, phone, interests, null);
+      }
+    }
+    
+    function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
       const userData = {
         studentId,
         fullname,
         email,
         department,
         phone,
-        interests
+        interests,
+        imageData
       };
       
       localStorage.setItem("registrationData", JSON.stringify(userData));
