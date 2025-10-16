@@ -16,17 +16,25 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode.js/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Kanit', sans-serif; }
         html, body { height: 100%; margin: 0; overflow-x: hidden; overflow-y: auto; }
         #aframe-scene-container { width: 100%; height: 450px; background-color: #f0f0f0; border-radius: 1.5rem; overflow: hidden; }
         .rounded-3xl { border-radius: 1.5rem; }
+        .user-profile-button { /* สไตล์สำหรับปุ่ม/ข้อมูลผู้ใช้เมื่อล็อกอินแล้ว */
+            background-color: #3b82f6; /* blue-500 */
+            border-radius: 3rem; /* กลมมากขึ้น */
+            padding: 0.5rem; /* เพิ่ม padding */
+            transition: transform 0.2s;
+        }
+        .user-profile-button:hover {
+            transform: scale(1.05);
+            background-color: #2563eb; /* blue-600 */
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-full antialiased flex flex-col">
-
 <div id="main-content" class="flex flex-col flex-grow">
     <header class="bg-white shadow-xl sticky top-0 z-20 border-b border-indigo-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
@@ -37,35 +45,38 @@
             <nav class="space-x-2 sm:space-x-4 flex items-center">
                 <a href="#home" onclick="showSection('home-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-home">หน้าแรก</a>
                 <a href="#map" onclick="showSection('map-section')" class="text-gray-700 hover:text-indigo-600 transition duration-150 hidden lg:inline-block font-semibold py-2 px-3 rounded-xl" id="nav-map">แผนผัง</a>
-
+                
                 <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-purple-300">
                     <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm hidden sm:inline">ติดตั้ง PWA</span>
                 </button>
-
                 <button onclick="showModal('install-qr-modal')" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-yellow-300">
                     <i data-lucide="qr-code" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm hidden sm:inline">QR Code</span>
                 </button>
-
                 <button onclick="toggleVRMode()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-indigo-300">
                     <i data-lucide="scan" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm">VR/AR Mode</span>
                 </button>
-
-                <button onclick="showLogin()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transition transform hover:scale-105 ring-1 ring-green-300">
-                    <i data-lucide="log-in" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    <span class="text-xs sm:text-sm">Log in</span>
-                </button>
-
                 <button onclick="showNotification()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transition transform hover:scale-105 ring-1 ring-orange-300">
                     <i data-lucide="bell" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     <span class="text-xs sm:text-sm">Notification</span>
                 </button>
+                
+                <button id="login-button-ui" onclick="showLogin()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transition transform hover:scale-105 ring-1 ring-green-300">
+                    <i data-lucide="log-in" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <span class="text-xs sm:text-sm">Log in</span>
+                </button>
+
+                <button id="profile-button-ui" onclick="userLogout()" class="user-profile-button hidden text-white shadow-lg flex items-center space-x-2 transform transition duration-200 ring-1 ring-blue-300/50">
+                    <img id="profile-pic" src="" alt="Profile" class="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover ring-2 ring-white p-[1px]">
+                    <span id="username-display" class="text-sm font-semibold hidden sm:inline-block pr-2"></span>
+                    <i data-lucide="log-out" class="w-4 h-4 sm:w-5 sm:h-5 mr-1 hidden sm:inline-block"></i>
+                    <span class="sr-only">Log out</span>
+                </button>
             </nav>
         </div>
     </header>
-
     <div id="home-section" class="section-content flex-grow flex flex-col">
         <section class="relative flex-grow flex items-center justify-center text-center overflow-hidden h-[75vh] lg:h-[80vh] min-h-[500px]">
             <img 
@@ -93,7 +104,6 @@
             </div>
         </section>
     </div>
-
     <div id="map-section" class="section-content hidden flex-grow p-4 sm:p-8">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 border-b-4 border-indigo-200 pb-2 flex items-center">
@@ -113,50 +123,109 @@
         </div>
     </div>
 </div>
-
-<!-- MODAL LOGIN -->
 <div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-3xl p-8 max-w-sm w-full relative">
         <button onclick="closeLogin()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900">
             <i data-lucide="x" class="w-5 h-5"></i>
         </button>
         <h3 class="text-xl font-bold mb-4">เข้าสู่ระบบ</h3>
-        <input type="email" placeholder="Email" class="w-full p-3 rounded-xl border mb-4">
-        <input type="password" placeholder="Password" class="w-full p-3 rounded-xl border mb-4">
-        <button class="w-full bg-indigo-600 text-white py-3 rounded-3xl font-bold hover:bg-indigo-700 transition">Log in</button>
+        <input type="email" id="login-email" placeholder="Email" class="w-full p-3 rounded-xl border mb-4">
+        <input type="password" id="login-password" placeholder="Password" class="w-full p-3 rounded-xl border mb-4">
+        <button onclick="userLogin()" class="w-full bg-indigo-600 text-white py-3 rounded-3xl font-bold hover:bg-indigo-700 transition">Log in</button>
     </div>
 </div>
-
 <script>
+// ข้อมูลผู้ใช้จำลอง
+const MOCK_USER = {
+    username: "SRTC User",
+    profilePic: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fit=crop&w=80&h=80&q=80", // รูปโปรไฟล์จำลอง
+    isLoggedIn: false
+};
+
+// ฟังก์ชันสำหรับเปลี่ยนสถานะ UI ตามการล็อกอิน
+function updateLoginUI() {
+    const loginButton = document.getElementById('login-button-ui');
+    const profileButton = document.getElementById('profile-button-ui');
+    const profilePic = document.getElementById('profile-pic');
+    const usernameDisplay = document.getElementById('username-display');
+
+    if (MOCK_USER.isLoggedIn) {
+        // แสดงปุ่ม/ข้อมูลผู้ใช้ (Logout)
+        loginButton.classList.add('hidden');
+        profileButton.classList.remove('hidden', 'user-profile-button');
+        profileButton.classList.add('user-profile-button'); // เพิ่ม class สไตล์
+        profilePic.src = MOCK_USER.profilePic;
+        profilePic.alt = `${MOCK_USER.username} Profile`;
+        usernameDisplay.textContent = MOCK_USER.username;
+        // เปลี่ยนปุ่มจาก Login เป็น Log out โดยใช้ปุ่ม Profile/Pic แทน
+    } else {
+        // แสดงปุ่ม Log in
+        loginButton.classList.remove('hidden');
+        profileButton.classList.add('hidden');
+    }
+    // อัปเดตไอคอน lucide
+    lucide.replace(); 
+}
+
+// ฟังก์ชันเข้าสู่ระบบ (จำลอง)
+function userLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    // การตรวจสอบจำลอง: ตรวจสอบว่าไม่ได้ว่างเปล่า
+    if (email && password) {
+        // ในระบบจริง จะมีการส่งข้อมูลไปตรวจสอบกับ Server
+        MOCK_USER.username = email.split('@')[0]; // ใช้ส่วนแรกของอีเมลเป็นชื่อผู้ใช้จำลอง
+        MOCK_USER.profilePic = "https://images.unsplash.com/photo-1560250097-0b94458c5737?fit=crop&w=80&h=80&q=80"; // เปลี่ยนรูปโปรไฟล์จำลอง
+        MOCK_USER.isLoggedIn = true;
+        
+        closeLogin();
+        alert(`เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ${MOCK_USER.username}`);
+        updateLoginUI();
+    } else {
+        alert('กรุณากรอก Email และ Password');
+    }
+}
+
+// ฟังก์ชันออกจากระบบ
+function userLogout() {
+    // ในระบบจริง จะต้องมีการทำลาย Session/Token
+    MOCK_USER.isLoggedIn = false;
+    MOCK_USER.username = "SRTC User";
+    MOCK_USER.profilePic = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fit=crop&w=80&h=80&q=80"; // กลับไปใช้รูปเริ่มต้น
+    alert('ออกจากระบบเรียบร้อย');
+    updateLoginUI();
+}
+
+// --- ฟังก์ชันที่มีอยู่เดิม ---
+
 function showSection(id){
     document.querySelectorAll('.section-content').forEach(s=>s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
-
 function toggleVRMode(){
     alert('เปิดโหมด VR/AR เรียบร้อย! (ต้องรันบนอุปกรณ์ที่รองรับ)');
 }
-
 function showLogin(){
+    // ล้างค่าฟอร์มก่อนแสดง
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
     document.getElementById('login-modal').classList.remove('hidden');
 }
-
 function closeLogin(){
     document.getElementById('login-modal').classList.add('hidden');
 }
-
 function showNotification(){
     alert('คุณมี Notification ใหม่!');
 }
 
-// ตัวอย่าง PWA Install Prompt
+// ตัวอย่าง PWA Install Prompt (คงเดิม)
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e)=>{
     e.preventDefault();
     deferredPrompt = e;
     document.getElementById('pwa-install-button').classList.remove('hidden');
 });
-
 function promptPWAInstall(){
     if(deferredPrompt){
         deferredPrompt.prompt();
@@ -167,11 +236,12 @@ function promptPWAInstall(){
         });
     }
 }
-</script>
 
+// เรียกใช้เมื่อโหลดหน้าเว็บครั้งแรก
+document.addEventListener('DOMContentLoaded', updateLoginUI);
+</script>
 <script>
     lucide.replace()
 </script>
-
 </body>
 </html>
