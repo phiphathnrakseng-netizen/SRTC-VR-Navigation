@@ -18,8 +18,10 @@
     * { font-family: 'Kanit', sans-serif; }
     body {
       overflow-x: hidden;
-      background: url('/mnt/data/7ccb5717-3161-4206-9541-92cbb295f890.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 50%, #7c3aed 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     .icon-button {
       position: relative; padding: 0.6rem; border-radius: 9999px;
@@ -29,7 +31,7 @@
     }
     .icon-button:hover { transform: scale(1.1); filter: brightness(1.1); }
     .glass-header {
-      background: rgba(0,0,0,0.6);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.15);
       box-shadow: 0 5px 20px rgba(0,0,0,0.25);
@@ -41,13 +43,14 @@
       border-radius: 9999px; font-weight: bold;
     }
     .user-profile-button {
-      background-color: #3b82f6;
+      background-color: rgba(59, 130, 246, 0.7);
       border-radius: 2rem;
       padding: 0.25rem 0.6rem 0.25rem 0.25rem;
       display: flex; align-items: center; color: white;
       transition: all 0.25s;
+      backdrop-filter: blur(5px);
     }
-    .user-profile-button:hover { transform: scale(1.05); background-color: #2563eb; }
+    .user-profile-button:hover { transform: scale(1.05); background-color: rgba(37, 99, 235, 0.8); }
     .modal {
       position: fixed; inset: 0; background: rgba(0,0,0,0.55);
       display: none; align-items: center; justify-content: center; z-index: 50;
@@ -60,10 +63,80 @@
     }
     @keyframes fadeIn { from {opacity:0;transform:translateY(15px);} to {opacity:1;transform:translateY(0);} }
     #ar-view { position: fixed; inset: 0; z-index: 9999; display: none; background: black; }
+    
+    /* Custom styles for the new design */
+    .hero-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      background: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(79, 70, 229, 0.7) 50%, rgba(124, 58, 237, 0.6) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .cta-button {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+    }
+    .footer {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      padding: 1rem;
+      text-align: center;
+      margin-top: auto;
+    }
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen text-white">
+<body class="text-white">
   <!-- Header -->
   <header class="glass-header sticky top-0 z-20">
     <div class="flex justify-between items-center px-4 sm:px-6 py-3">
@@ -112,29 +185,74 @@
     </div>
   </header>
 
-  <!-- Main -->
-  <main class="flex-grow flex flex-col items-center justify-center p-6 text-center bg-black/50 rounded-lg">
-    <h2 class="text-4xl sm:text-5xl font-bold text-indigo-300 mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
-    <p class="text-gray-200 mb-8">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-    <button onclick="showMap()" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-full shadow-md transition-all flex items-center space-x-2">
-      <i data-lucide="map" class="w-5 h-5"></i>
-      <span>เปิดดูแผนผังอาคาร 3D</span>
-    </button>
-
-    <div id="aframe-container" class="w-full max-w-4xl mt-10 hidden rounded-3xl overflow-hidden shadow-xl">
-      <a-scene embedded>
-        <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
-        <a-sky color="#ECECEC"></a-sky>
-      </a-scene>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h2 class="text-4xl sm:text-6xl font-bold mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
+      <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดาย</p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="showMap()" class="cta-button">
+          <i data-lucide="map" class="w-5 h-5"></i>
+          <span>เปิดดูแผนผังอาคาร 3D</span>
+        </button>
+        
+        <button onclick="toggleARMode()" class="cta-button bg-gradient-to-r from-purple-600 to-indigo-600">
+          <i data-lucide="scan" class="w-5 h-5"></i>
+          <span>เปิดโหมด AR/VR</span>
+        </button>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <i data-lucide="map-pin" class="w-12 h-12 mx-auto mb-4 text-yellow-400"></i>
+          <h3 class="text-xl font-bold mb-2">นำทางแบบเรียลไทม์</h3>
+          <p class="text-gray-200">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+        </div>
+        
+        <div class="feature-card">
+          <i data-lucide="box" class="w-12 h-12 mx-auto mb-4 text-green-400"></i>
+          <h3 class="text-xl font-bold mb-2">ประสบการณ์ 3D</h3>
+          <p class="text-gray-200">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+        </div>
+        
+        <div class="feature-card">
+          <i data-lucide="camera" class="w-12 h-12 mx-auto mb-4 text-blue-400"></i>
+          <h3 class="text-xl font-bold mb-2">เทคโนโลยี AR</h3>
+          <p class="text-gray-200">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
+        </div>
+      </div>
     </div>
-  </main>
+  </section>
+
+  <!-- 3D Map Section -->
+  <section id="map-section" class="py-12 px-4 bg-gray-900 hidden">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8">แผนผังอาคาร 3D</h2>
+      <div id="aframe-container" class="w-full h-96 rounded-3xl overflow-hidden shadow-xl">
+        <a-scene embedded>
+          <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+          <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+          <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+          <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+          <a-sky color="#ECECEC"></a-sky>
+        </a-scene>
+      </div>
+      <div class="text-center mt-6">
+        <button onclick="hideMap()" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-6 py-2 rounded-full transition-all">
+          <i data-lucide="x" class="w-4 h-4 inline mr-2"></i>
+          ปิดแผนที่
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
-  <footer class="bg-black/70 text-indigo-100 text-center py-3 text-sm">
-    © 2025 SRTC Virtual Campus | All rights reserved.
+  <footer class="footer">
+    <div class="container mx-auto">
+      <p class="text-indigo-100">© 2025 SRTC Virtual Campus | All rights reserved.</p>
+      <p class="text-sm text-gray-400 mt-2">วิทยาลัยเทคนิคสุราษฎร์ธานี - นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
+    </div>
   </footer>
 
   <!-- Modal Login -->
@@ -150,6 +268,18 @@
       <input id="phone" type="tel" placeholder="เบอร์โทรศัพท์" class="w-full border rounded-lg p-2 mb-2" />
       <input id="password" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg p-2 mb-3" />
       <button onclick="loginUser()" class="bg-green-600 text-white px-6 py-2 w-full rounded-full hover:bg-green-700">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="modal">
+    <div class="modal-content max-w-xs">
+      <button onclick="closeQRModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-xl mb-4">QR Code</h3>
+      <div id="qrcode" class="mx-auto mb-4"></div>
+      <p class="text-sm text-gray-600">สแกนเพื่อเข้าถึงระบบนำทาง AR/VR</p>
     </div>
   </div>
 
@@ -171,6 +301,16 @@
     window.onload = () => {
       const user = JSON.parse(localStorage.getItem("userData"));
       if (user) showUserInfo(user);
+      
+      // Generate QR Code
+      const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
     };
 
     function showLogin() {
@@ -178,6 +318,13 @@
     }
     function closeLogin() {
       document.getElementById('login-modal').classList.remove('show');
+    }
+
+    function openQRModal() {
+      document.getElementById('qr-modal').classList.add('show');
+    }
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.remove('show');
     }
 
     function loginUser() {
@@ -234,8 +381,20 @@
 
     // แผนที่ 3D
     function showMap() {
-      document.getElementById('aframe-container').classList.toggle('hidden');
+      document.getElementById('map-section').classList.remove('hidden');
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+    
+    function hideMap() {
+      document.getElementById('map-section').classList.add('hidden');
+    }
+
+    function openNotification() {
+      alert("คุณมี 3 การแจ้งเตือนใหม่");
+    }
+
+    function openPoints() {
+      alert("คุณมี 120 แต้มสะสม");
     }
   </script>
 </body>
