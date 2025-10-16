@@ -9,45 +9,33 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-  <!-- ✅ เพิ่ม A-Frame และ AR.js -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
     * { font-family: 'Kanit', sans-serif; }
     body { background: #f8fafc; overflow-x: hidden; }
-
     .icon-button {
-      position: relative;
-      padding: 0.6rem;
-      border-radius: 9999px;
+      position: relative; padding: 0.6rem; border-radius: 9999px;
       display: flex; align-items: center; justify-content: center;
-      color: white;
-      transition: all 0.25s;
+      color: white; transition: all 0.25s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .icon-button:hover { transform: scale(1.1); filter: brightness(1.1); }
-
     .glass-header {
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.25);
       box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     }
-
     .badge {
-      position: absolute;
-      top: -4px; right: -4px;
-      background: #ef4444;
-      color: white;
-      font-size: 0.65rem;
-      padding: 2px 5px;
-      border-radius: 9999px;
-      font-weight: bold;
+      position: absolute; top: -4px; right: -4px;
+      background: #ef4444; color: white;
+      font-size: 0.65rem; padding: 2px 5px;
+      border-radius: 9999px; font-weight: bold;
     }
-
     .user-profile-button {
       background-color: #3b82f6;
       border-radius: 2rem;
@@ -56,43 +44,22 @@
       transition: all 0.25s;
     }
     .user-profile-button:hover { transform: scale(1.05); background-color: #2563eb; }
-
     .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      display: none; align-items: center; justify-content: center; z-index: 50;
     }
     .modal.show { display: flex; }
     .modal-content {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      text-align: center;
-      position: relative;
-      animation: fadeIn 0.3s ease;
+      background: white; border-radius: 1.5rem; padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center;
+      position: relative; animation: fadeIn 0.3s ease;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ✅ หน้าจอ AR เต็มจอ */
-    #ar-view {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: black;
-      display: none;
-    }
+    @keyframes fadeIn { from {opacity:0;transform:translateY(15px);} to {opacity:1;transform:translateY(0);} }
+    #ar-view { position: fixed; inset: 0; z-index: 9999; background: black; display: none; }
   </style>
 </head>
-<body class="flex flex-col min-h-screen">
 
+<body class="flex flex-col min-h-screen">
   <!-- Header -->
   <header class="glass-header sticky top-0 z-20">
     <div class="flex justify-between items-center px-4 sm:px-6 py-3">
@@ -124,10 +91,20 @@
           <span id="points-badge" class="badge bg-gray-500">120</span>
         </button>
 
-        <button id="profile-btn" onclick="userLogout()" class="user-profile-button hidden">
+        <button id="profile-btn" onclick="toggleProfileMenu()" class="user-profile-button hidden relative">
           <img id="profile-pic" class="h-8 w-8 rounded-full ring-2 ring-white" />
           <span id="username" class="mx-2 text-sm font-semibold"></span>
-          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <i data-lucide="chevron-down" class="w-4 h-4"></i>
+
+          <!-- เมนูเล็กหลังล็อกอิน -->
+          <div id="profile-menu" class="absolute right-0 top-10 bg-white text-gray-700 rounded-xl shadow-lg hidden">
+            <div class="p-2 text-sm">
+              <p id="user-email"></p>
+              <p id="user-branch"></p>
+              <p id="user-phone"></p>
+            </div>
+            <button onclick="userLogout()" class="w-full bg-red-500 text-white rounded-b-xl py-1 mt-1 hover:bg-red-600">ออกจากระบบ</button>
+          </div>
         </button>
       </nav>
     </div>
@@ -137,7 +114,6 @@
   <main class="flex-grow flex flex-col items-center justify-center p-6 text-center">
     <h2 class="text-4xl sm:text-5xl font-bold text-indigo-700 mb-4">ระบบนำทางเสมือนจริง (AR/VR)</h2>
     <p class="text-gray-600 mb-8">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-
     <button onclick="showMap()" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-full shadow-md transition-all flex items-center space-x-2">
       <i data-lucide="map" class="w-5 h-5"></i>
       <span>เปิดดูแผนผังอาคาร 3D</span>
@@ -159,10 +135,25 @@
     © 2025 SRTC Virtual Campus | All rights reserved.
   </footer>
 
-  <!-- ✅ โหมด AR เต็มจอ -->
+  <!-- Modal Login -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content max-w-xs">
+      <button onclick="closeLogin()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-xl mb-4">เข้าสู่ระบบ / สมัครสมาชิก</h3>
+      <input id="fullname" type="text" placeholder="ชื่อ - นามสกุล" class="w-full border rounded-lg p-2 mb-2" />
+      <input id="email" type="email" placeholder="อีเมล" class="w-full border rounded-lg p-2 mb-2" />
+      <input id="branch" type="text" placeholder="แผนก / สาขา" class="w-full border rounded-lg p-2 mb-2" />
+      <input id="phone" type="tel" placeholder="เบอร์โทรศัพท์" class="w-full border rounded-lg p-2 mb-2" />
+      <input id="password" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg p-2 mb-3" />
+      <button onclick="loginUser()" class="bg-green-600 text-white px-6 py-2 w-full rounded-full hover:bg-green-700">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+
+  <!-- ✅ โหมด AR -->
   <div id="ar-view">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <!-- ใช้ marker "hiro" มาตรฐาน -->
       <a-marker preset="hiro">
         <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
         <a-text value="อาคารเรียน SRTC" position="-0.8 1 0" rotation="-90 0 0" color="#fff"></a-text>
@@ -172,114 +163,72 @@
     <button onclick="closeAR()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow-md z-[99999]">ปิด AR</button>
   </div>
 
-  <!-- Modal QR -->
-  <div id="qr-modal" class="modal">
-    <div class="modal-content w-[320px]">
-      <h3 class="font-bold text-lg mb-2">QR Code ระบบนำทาง</h3>
-      <div id="qrcode" class="mx-auto my-4"></div>
-      <button onclick="closeQRModal()" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700">ปิด</button>
-    </div>
-  </div>
-
-  <!-- Modal Notification -->
-  <div id="notif-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <h3 class="font-bold text-lg mb-3">แจ้งเตือนใหม่</h3>
-      <ul class="text-left text-gray-700">
-        <li>📢 ประกาศ: หยุดเรียนวันที่ 20 ต.ค.</li>
-        <li>🏫 อาคารใหม่เปิดให้ทดลอง VR แล้ว</li>
-        <li>🎯 แต้มสะสมของคุณถึง 120 แล้ว!</li>
-      </ul>
-      <button onclick="closeNotification()" class="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700">ตกลง</button>
-    </div>
-  </div>
-
-  <!-- Modal Points -->
-  <div id="points-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <h3 class="font-bold text-lg mb-3">แต้มสะสมของคุณ 🎯</h3>
-      <p class="text-gray-700 text-lg mb-4"><strong>120 แต้ม</strong></p>
-      <button onclick="closePoints()" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700">ตกลง</button>
-    </div>
-  </div>
-
-  <!-- Modal Login -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <button onclick="closeLogin()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-xl mb-4">เข้าสู่ระบบ</h3>
-      <input id="email" type="email" placeholder="อีเมล" class="w-full border rounded-lg p-2 mb-3" />
-      <input id="password" type="password" placeholder="รหัสผ่าน" class="w-full border rounded-lg p-2 mb-4" />
-      <button onclick="loginUser()" class="bg-green-600 text-white px-6 py-2 w-full rounded-full hover:bg-green-700">เข้าสู่ระบบ</button>
-    </div>
-  </div>
-
   <script>
     lucide.createIcons();
 
-    // QR Modal
-    function openQRModal() {
-      document.getElementById('qr-modal').classList.add('show');
-      new QRCode(document.getElementById("qrcode"), "https://srtc-vr-virtual.com");
-    }
-    function closeQRModal() {
-      document.getElementById('qr-modal').classList.remove('show');
-      document.getElementById('qrcode').innerHTML = "";
-    }
+    // โหลดสถานะผู้ใช้จาก localStorage
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem("userData"));
+      if (user) showUserInfo(user);
+    };
 
-    // Notification
-    function openNotification() {
-      document.getElementById('notif-modal').classList.add('show');
-      document.getElementById('notif-badge').textContent = "";
-    }
-    function closeNotification() {
-      document.getElementById('notif-modal').classList.remove('show');
-    }
-
-    // Points
-    function openPoints() {
-      document.getElementById('points-modal').classList.add('show');
-    }
-    function closePoints() {
-      document.getElementById('points-modal').classList.remove('show');
-    }
-
-    // Login
     function showLogin() {
       document.getElementById('login-modal').classList.add('show');
     }
     function closeLogin() {
       document.getElementById('login-modal').classList.remove('show');
     }
+
     function loginUser() {
-      const name = document.getElementById('email').value.split('@')[0];
-      document.getElementById('login-btn').classList.add('hidden');
-      const profileBtn = document.getElementById('profile-btn');
-      profileBtn.classList.remove('hidden');
-      document.getElementById('username').textContent = name;
-      document.getElementById('profile-pic').src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fit=crop&w=80&h=80";
+      const user = {
+        fullname: document.getElementById('fullname').value,
+        email: document.getElementById('email').value,
+        branch: document.getElementById('branch').value,
+        phone: document.getElementById('phone').value,
+        password: document.getElementById('password').value
+      };
+      if (!user.fullname || !user.email) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+      localStorage.setItem("userData", JSON.stringify(user));
+      showUserInfo(user);
       closeLogin();
-      alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ " + name);
+      alert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ " + user.fullname);
     }
+
+    function showUserInfo(user) {
+      document.getElementById('login-btn').classList.add('hidden');
+      const btn = document.getElementById('profile-btn');
+      btn.classList.remove('hidden');
+      document.getElementById('username').textContent = user.fullname.split(" ")[0];
+      document.getElementById('user-email').textContent = "📧 " + user.email;
+      document.getElementById('user-branch').textContent = "🏫 " + user.branch;
+      document.getElementById('user-phone').textContent = "📞 " + user.phone;
+      document.getElementById('profile-pic').src = "https://i.pravatar.cc/80?u=" + user.email;
+    }
+
+    function toggleProfileMenu() {
+      document.getElementById('profile-menu').classList.toggle('hidden');
+    }
+
     function userLogout() {
+      localStorage.removeItem("userData");
       document.getElementById('profile-btn').classList.add('hidden');
       document.getElementById('login-btn').classList.remove('hidden');
       alert("ออกจากระบบแล้ว");
     }
 
-    // ✅ ปุ่ม VR/AR เปิดกล้อง AR.js จริง
+    // ✅ ปุ่ม AR Mode
     function toggleARMode() {
       document.getElementById('ar-view').style.display = 'block';
-      alert("เปิดโหมด AR สำเร็จ! นำกล้องส่องที่ marker 'Hiro'");
+      alert("เปิดโหมด AR สำเร็จ! ส่องกล้องที่ marker 'Hiro'");
     }
-
     function closeAR() {
       document.getElementById('ar-view').style.display = 'none';
     }
 
-    // Show 3D Map
+    // แผนที่ 3D
     function showMap() {
       document.getElementById('aframe-container').classList.toggle('hidden');
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
