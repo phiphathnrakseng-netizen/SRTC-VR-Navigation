@@ -134,17 +134,6 @@
       margin-top: auto;
     }
     
-    /* Glass notification styles */
-    .glass-notification {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      margin: 1rem 0;
-    }
-    
     /* Registration form styles */
     .registration-form {
       background: rgba(255, 255, 255, 0.95);
@@ -194,6 +183,22 @@
       margin-bottom: 0.5rem;
     }
     
+    /* Points modal styles */
+    .points-modal {
+      max-width: 600px;
+      width: 90%;
+    }
+    .points-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .points-item:last-child {
+      border-bottom: none;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .hero-section {
@@ -230,29 +235,35 @@
 
         <button onclick="openNotification()" class="bg-red-500 hover:bg-red-600 icon-button" title="แจ้งเตือน">
           <i data-lucide="bell" class="w-5 h-5"></i>
-          <span id="notif-badge" class="badge">3</span>
+          <span id="notif-badge" class="badge hidden"></span>
         </button>
 
         <button id="login-btn" onclick="showRegistration()" class="bg-green-600 hover:bg-green-700 icon-button" title="ลงทะเบียน">
           <i data-lucide="user-plus" class="w-5 h-5"></i>
         </button>
 
-        <button onclick="openPoints()" class="bg-gray-700 hover:bg-gray-800 icon-button" title="แต้มสะสม">
+        <button onclick="openPointsModal()" class="bg-gray-700 hover:bg-gray-800 icon-button" title="แต้มสะสม">
           <i data-lucide="coins" class="w-5 h-5"></i>
-          <span id="points-badge" class="badge bg-gray-500">120</span>
+          <span id="points-badge" class="badge bg-yellow-500 hidden">0</span>
         </button>
 
         <button id="profile-btn" onclick="toggleProfileMenu()" class="user-profile-button hidden relative">
           <img id="profile-pic" class="h-8 w-8 rounded-full ring-2 ring-white" />
           <span id="username" class="mx-2 text-sm font-semibold"></span>
           <i data-lucide="chevron-down" class="w-4 h-4"></i>
-          <div id="profile-menu" class="absolute right-0 top-10 bg-white text-gray-700 rounded-xl shadow-lg hidden">
-            <div class="p-2 text-sm">
-              <p id="user-email"></p>
-              <p id="user-branch"></p>
-              <p id="user-phone"></p>
+          <div id="profile-menu" class="absolute right-0 top-10 bg-white text-gray-700 rounded-xl shadow-lg hidden w-48">
+            <div class="p-3 border-b">
+              <p class="font-semibold text-sm" id="profile-name"></p>
+              <p class="text-xs text-gray-500" id="profile-email"></p>
             </div>
-            <button onclick="userLogout()" class="w-full bg-red-500 text-white rounded-b-xl py-1 mt-1 hover:bg-red-600">ออกจากระบบ</button>
+            <button onclick="editProfile()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center">
+              <i data-lucide="edit" class="w-4 h-4 mr-2"></i>
+              แก้ไขบัญชี
+            </button>
+            <button onclick="userLogout()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 rounded-b-xl flex items-center text-red-500">
+              <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+              ออกจากระบบ
+            </button>
           </div>
         </button>
       </nav>
@@ -437,6 +448,25 @@
     </div>
   </div>
 
+  <!-- Points Modal -->
+  <div id="points-modal" class="modal">
+    <div class="modal-content points-modal">
+      <button onclick="closePointsModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-xl mb-4">คะแนนสะสม</h3>
+      <div id="points-list">
+        <!-- Points will be dynamically added here -->
+      </div>
+      <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="flex justify-between items-center">
+          <span class="font-semibold">คะแนนรวมทั้งหมด</span>
+          <span id="total-points" class="font-bold text-lg text-indigo-600">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ✅ โหมด AR -->
   <div id="ar-view">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
@@ -446,15 +476,34 @@
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
-    <button onclick="closeAR()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow-md z-[99999]">ปิด AR</button>
+    <button onclick="closeAR()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow-md z-[99999] flex items-center">
+      <i data-lucide="x" class="w-4 h-4 mr-1"></i>
+      ปิด AR
+    </button>
+    <div id="camera-error" class="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center hidden">
+      <i data-lucide="alert-triangle" class="w-16 h-16 text-yellow-500 mb-4"></i>
+      <h3 class="text-xl font-bold text-white mb-2">ไม่สามารถเข้าถึงกล้องได้</h3>
+      <p class="text-gray-300 text-center max-w-md">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
+      <button onclick="closeAR()" class="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full">
+        ปิดโหมด AR
+      </button>
+    </div>
   </div>
 
   <script>
     lucide.createIcons();
 
+    // Initialize user data
+    let userData = JSON.parse(localStorage.getItem("userData")) || null;
+    let userPoints = JSON.parse(localStorage.getItem("userPoints")) || {
+      total: 0,
+      activities: []
+    };
+
     window.onload = () => {
-      const user = JSON.parse(localStorage.getItem("userData"));
-      if (user) showUserInfo(user);
+      if (userData) {
+        showUserInfo(userData);
+      }
       
       // Generate QR Code
       const qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -526,6 +575,9 @@
           alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
         }
       }
+      
+      // Update points badge
+      updatePointsBadge();
     };
 
     function openQRModal() {
@@ -540,14 +592,24 @@
       const btn = document.getElementById('profile-btn');
       btn.classList.remove('hidden');
       document.getElementById('username').textContent = user.fullname.split(" ")[0];
-      document.getElementById('user-email').textContent = "📧 " + user.email;
-      document.getElementById('user-branch').textContent = "🏫 " + user.branch;
-      document.getElementById('user-phone').textContent = "📞 " + user.phone;
-      document.getElementById('profile-pic').src = "https://i.pravatar.cc/80?u=" + user.email;
+      document.getElementById('profile-name').textContent = user.fullname;
+      document.getElementById('profile-email').textContent = user.email;
+      
+      // Use uploaded image if available, otherwise use default avatar
+      if (user.imageData) {
+        document.getElementById('profile-pic').src = user.imageData;
+      } else {
+        document.getElementById('profile-pic').src = "https://i.pravatar.cc/80?u=" + user.email;
+      }
     }
 
     function toggleProfileMenu() {
       document.getElementById('profile-menu').classList.toggle('hidden');
+    }
+
+    function editProfile() {
+      alert("กำลังพัฒนา: ฟังก์ชันแก้ไขบัญชีผู้ใช้");
+      document.getElementById('profile-menu').classList.add('hidden');
     }
 
     function userLogout() {
@@ -555,18 +617,31 @@
       document.getElementById('profile-btn').classList.add('hidden');
       document.getElementById('login-btn').classList.remove('hidden');
       alert("ออกจากระบบแล้ว");
+      document.getElementById('profile-menu').classList.add('hidden');
     }
 
     // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
     function toggleARMode() {
       const arView = document.getElementById('ar-view');
       arView.style.display = 'block';
-      alert("เปิดโหมด AR แล้ว — อนุญาตกล้องเพื่อใช้งาน");
+      
+      // Check camera access
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+          // Camera access granted
+          document.getElementById('camera-error').classList.add('hidden');
+          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
+        })
+        .catch(function(err) {
+          // Camera access denied
+          console.error("Camera error:", err);
+          document.getElementById('camera-error').classList.remove('hidden');
+        });
     }
+    
     function closeAR() {
       const arView = document.getElementById('ar-view');
       arView.style.display = 'none';
-      alert("ปิดโหมด AR แล้ว");
     }
 
     // แผนที่ 3D
@@ -634,18 +709,147 @@
         imageData
       };
       
-      localStorage.setItem("registrationData", JSON.stringify(userData));
+      localStorage.setItem("userData", JSON.stringify(userData));
+      
+      // Add registration points
+      addPoints("ลงทะเบียนใช้งานระบบ", 50);
+      
+      // Show notification
+      showNotification("ลงทะเบียนสำเร็จ! คุณได้รับ 50 คะแนน");
+      
       alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
       hideRegistration();
+      showUserInfo(userData);
+    }
+
+    // Notification system
+    function showNotification(message) {
+      const notifBadge = document.getElementById('notif-badge');
+      notifBadge.textContent = "1";
+      notifBadge.classList.remove('hidden');
+      
+      // Store notification
+      let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      notifications.push({
+        message: message,
+        timestamp: new Date().toISOString(),
+        read: false
+      });
+      localStorage.setItem("notifications", JSON.stringify(notifications));
     }
 
     function openNotification() {
-      alert("คุณมี 3 การแจ้งเตือนใหม่");
+      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      if (notifications.length === 0) {
+        alert("ไม่มีแจ้งเตือนใหม่");
+      } else {
+        let message = "การแจ้งเตือนล่าสุด:\n\n";
+        notifications.forEach((notif, index) => {
+          const date = new Date(notif.timestamp).toLocaleDateString('th-TH');
+          message += `${index + 1}. ${notif.message} (${date})\n`;
+        });
+        alert(message);
+        
+        // Mark as read and hide badge
+        document.getElementById('notif-badge').classList.add('hidden');
+        notifications.forEach(notif => notif.read = true);
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+      }
     }
 
-    function openPoints() {
-      alert("คุณมี 120 แต้มสะสม");
+    // Points system
+    function addPoints(activity, points) {
+      userPoints.total += points;
+      userPoints.activities.push({
+        activity: activity,
+        points: points,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem("userPoints", JSON.stringify(userPoints));
+      updatePointsBadge();
     }
+
+    function updatePointsBadge() {
+      const pointsBadge = document.getElementById('points-badge');
+      if (userPoints.total > 0) {
+        pointsBadge.textContent = userPoints.total;
+        pointsBadge.classList.remove('hidden');
+      } else {
+        pointsBadge.classList.add('hidden');
+      }
+    }
+
+    function openPointsModal() {
+      const pointsList = document.getElementById('points-list');
+      const totalPoints = document.getElementById('total-points');
+      
+      // Clear previous content
+      pointsList.innerHTML = '';
+      
+      // Add points activities
+      if (userPoints.activities.length === 0) {
+        pointsList.innerHTML = '<p class="text-gray-500 text-center py-4">ยังไม่มีกิจกรรมที่ได้รับคะแนน</p>';
+      } else {
+        userPoints.activities.forEach(activity => {
+          const date = new Date(activity.timestamp).toLocaleDateString('th-TH');
+          const pointsItem = document.createElement('div');
+          pointsItem.className = 'points-item';
+          pointsItem.innerHTML = `
+            <div>
+              <p class="font-medium">${activity.activity}</p>
+              <p class="text-xs text-gray-500">${date}</p>
+            </div>
+            <span class="text-green-600 font-semibold">+${activity.points}</span>
+          `;
+          pointsList.appendChild(pointsItem);
+        });
+      }
+      
+      // Update total points
+      totalPoints.textContent = userPoints.total;
+      
+      // Show modal
+      document.getElementById('points-modal').classList.add('show');
+    }
+
+    function closePointsModal() {
+      document.getElementById('points-modal').classList.remove('show');
+    }
+
+    // Simulate earning points for activities
+    function completeActivity(activityName, points) {
+      if (!userData) {
+        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
+        return;
+      }
+      
+      addPoints(activityName, points);
+      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
+    }
+
+    // Add some sample activities to the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add activity buttons to the hero section
+      const heroContent = document.querySelector('.hero-content');
+      const activitySection = document.createElement('div');
+      activitySection.className = 'mt-12 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20';
+      activitySection.innerHTML = `
+        <h3 class="text-xl font-bold mb-4 text-center">กิจกรรมรับคะแนน</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-full transition-all">
+            สำรวจแผนที่ 3D
+          </button>
+          <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-full transition-all">
+            ทดลองใช้ AR
+          </button>
+          <button onclick="completeActivity('แชร์ QR Code', 10)" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full transition-all">
+            แชร์ QR Code
+          </button>
+        </div>
+      `;
+      heroContent.appendChild(activitySection);
+    });
   </script>
 </body>
 </html>
