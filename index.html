@@ -15,7 +15,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * { font-family: 'Kanit', sans-serif; }
+    * { 
+      font-family: 'Kanit', sans-serif;
+      box-sizing: border-box;
+    }
     body {
       overflow-x: hidden;
       background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 50%, #7c3aed 100%);
@@ -24,12 +27,20 @@
       flex-direction: column;
     }
     .icon-button {
-      position: relative; padding: 0.6rem; border-radius: 9999px;
-      display: flex; align-items: center; justify-content: center;
-      color: white; transition: all 0.25s;
+      position: relative; 
+      padding: 0.6rem; 
+      border-radius: 9999px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      color: white; 
+      transition: all 0.25s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    .icon-button:hover { transform: scale(1.1); filter: brightness(1.1); }
+    .icon-button:hover { 
+      transform: scale(1.1); 
+      filter: brightness(1.1); 
+    }
     .glass-header {
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
@@ -37,34 +48,99 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.25);
     }
     .badge {
-      position: absolute; top: -4px; right: -4px;
-      background: #ef4444; color: white;
-      font-size: 0.65rem; padding: 2px 5px;
-      border-radius: 9999px; font-weight: bold;
+      position: absolute; 
+      top: -4px; 
+      right: -4px;
+      background: #ef4444; 
+      color: white;
+      font-size: 0.65rem; 
+      padding: 2px 5px;
+      border-radius: 9999px; 
+      font-weight: bold;
     }
     .user-profile-button {
       background-color: rgba(59, 130, 246, 0.7);
       border-radius: 2rem;
       padding: 0.25rem 0.6rem 0.25rem 0.25rem;
-      display: flex; align-items: center; color: white;
+      display: flex; 
+      align-items: center; 
+      color: white;
       transition: all 0.25s;
       backdrop-filter: blur(5px);
     }
-    .user-profile-button:hover { transform: scale(1.05); background-color: rgba(37, 99, 235, 0.8); }
+    .user-profile-button:hover { 
+      transform: scale(1.05); 
+      background-color: rgba(37, 99, 235, 0.8); 
+    }
     .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-      display: none; align-items: center; justify-content: center; z-index: 50;
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.55);
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 50;
     }
-    .modal.show { display: flex; }
+    .modal.show { 
+      display: flex; 
+    }
     .modal-content {
-      background: white; border-radius: 1.5rem; padding: 1.5rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center;
-      position: relative; animation: fadeIn 0.3s ease;
+      background: white; 
+      border-radius: 1.5rem; 
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+      text-align: center;
+      position: relative; 
+      animation: fadeIn 0.3s ease;
     }
-    @keyframes fadeIn { from {opacity:0;transform:translateY(15px);} to {opacity:1;transform:translateY(0);} }
-    #ar-view { position: fixed; inset: 0; z-index: 9999; display: none; background: black; }
+    @keyframes fadeIn { 
+      from {
+        opacity:0;
+        transform:translateY(15px);
+      } 
+      to {
+        opacity:1;
+        transform:translateY(0);
+      } 
+    }
+    #ar-view { 
+      position: fixed; 
+      inset: 0; 
+      z-index: 9999; 
+      display: none; 
+      background: black; 
+    }
     
-    /* Custom styles for the new design */
+    /* Liquid Glass Design */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .liquid-glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .liquid-glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    
+    /* Hero Section */
     .hero-section {
       flex-grow: 1;
       display: flex;
@@ -72,9 +148,8 @@
       justify-content: center;
       align-items: center;
       padding: 2rem;
-      background: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80') no-repeat center center;
-      background-size: cover;
       position: relative;
+      min-height: 80vh;
     }
     .hero-section::before {
       content: '';
@@ -83,33 +158,28 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.8) 0%, rgba(79, 70, 229, 0.7) 50%, rgba(124, 58, 237, 0.6) 100%);
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
     }
     .hero-content {
       position: relative;
       z-index: 1;
       text-align: center;
       max-width: 800px;
+      width: 100%;
     }
-    .feature-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      margin: 1rem;
-      text-align: center;
-      transition: transform 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .feature-card:hover {
-      transform: translateY(-5px);
-    }
+    
+    /* Features Grid */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-top: 2rem;
     }
+    
+    /* CTA Button */
     .cta-button {
       background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
       color: white;
@@ -121,11 +191,15 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      border: none;
+      cursor: pointer;
     }
     .cta-button:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
     }
+    
+    /* Footer */
     .footer {
       background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(5px);
@@ -199,6 +273,37 @@
       border-bottom: none;
     }
     
+    /* Activity Section */
+    .activity-section {
+      margin-top: 3rem;
+      padding: 2rem;
+      max-width: 1000px;
+      width: 100%;
+    }
+    
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .activity-card {
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .activity-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    
+    .activity-detail.expanded {
+      max-height: 500px;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .hero-section {
@@ -210,6 +315,19 @@
       .registration-form {
         margin: 1rem;
         padding: 1.5rem;
+      }
+      .activity-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-content h2 {
+        font-size: 2rem;
+      }
+      .cta-button {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -289,22 +407,117 @@
       </div>
       
       <div class="features-grid">
-        <div class="feature-card">
+        <div class="liquid-glass-card p-6 text-center">
           <i data-lucide="map-pin" class="w-12 h-12 mx-auto mb-4 text-yellow-400"></i>
           <h3 class="text-xl font-bold mb-2">นำทางแบบเรียลไทม์</h3>
           <p class="text-gray-200">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
         </div>
         
-        <div class="feature-card">
+        <div class="liquid-glass-card p-6 text-center">
           <i data-lucide="box" class="w-12 h-12 mx-auto mb-4 text-green-400"></i>
           <h3 class="text-xl font-bold mb-2">ประสบการณ์ 3D</h3>
           <p class="text-gray-200">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
         </div>
         
-        <div class="feature-card">
+        <div class="liquid-glass-card p-6 text-center">
           <i data-lucide="camera" class="w-12 h-12 mx-auto mb-4 text-blue-400"></i>
           <h3 class="text-xl font-bold mb-2">เทคโนโลยี AR</h3>
           <p class="text-gray-200">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
+        </div>
+      </div>
+      
+      <!-- Activities Section (Visible after registration) -->
+      <div id="activities-section" class="activity-section liquid-glass hidden">
+        <h2 class="text-3xl font-bold text-center mb-6">กิจกรรมรับคะแนน</h2>
+        <p class="text-gray-200 text-center mb-8">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
+        
+        <div class="activity-grid">
+          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-1')">
+            <div class="flex items-center mb-4">
+              <i data-lucide="map" class="w-8 h-8 text-yellow-400 mr-3"></i>
+              <h3 class="text-xl font-bold">สำรวจแผนที่ 3D</h3>
+            </div>
+            <p class="text-gray-200 mb-4">สำรวจแผนที่สามมิติของวิทยาลัยเพื่อทำความเข้าใจกับพื้นที่ต่างๆ</p>
+            <div class="flex justify-between items-center">
+              <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm">+20 คะแนน</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-1"></i>
+            </div>
+            <div class="activity-detail mt-4" id="activity-1">
+              <div class="border-t border-gray-600 pt-4">
+                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
+                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
+                  <li>สำรวจอาคารเรียนทั้งหมด 5 อาคารในแผนที่ 3D</li>
+                  <li>ค้นหาห้องประชุมใหญ่และห้องปฏิบัติการ</li>
+                  <li>ทำความเข้าใจกับเส้นทางเดินระหว่างอาคาร</li>
+                  <li>บันทึกสถานที่สำคัญที่คุณสนใจ</li>
+                </ul>
+                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
+                <p class="text-gray-200 text-sm mb-4">กดปุ่ม "เปิดดูแผนผังอาคาร 3D" และสำรวจพื้นที่ต่างๆ ภายในวิทยาลัยเป็นเวลาไม่น้อยกว่า 5 นาที</p>
+                <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition-all">
+                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
+                  เข้าร่วมกิจกรรม
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-2')">
+            <div class="flex items-center mb-4">
+              <i data-lucide="scan" class="w-8 h-8 text-purple-400 mr-3"></i>
+              <h3 class="text-xl font-bold">ทดลองใช้ AR</h3>
+            </div>
+            <p class="text-gray-200 mb-4">ทดลองใช้งานเทคโนโลยี AR เพื่อดูข้อมูลสถานที่ผ่านกล้องสมาร์ทโฟน</p>
+            <div class="flex justify-between items-center">
+              <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm">+30 คะแนน</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-2"></i>
+            </div>
+            <div class="activity-detail mt-4" id="activity-2">
+              <div class="border-t border-gray-600 pt-4">
+                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
+                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
+                  <li>ทดลองสแกน Marker เพื่อดูข้อมูลอาคารเรียน</li>
+                  <li>ใช้งานฟังก์ชันนำทางด้วย AR ไปยังสถานที่ต่างๆ</li>
+                  <li>ทดสอบการแสดงผลข้อมูลสถานที่ผ่านกล้อง</li>
+                  <li>บันทึกภาพจากการใช้งาน AR</li>
+                </ul>
+                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
+                <p class="text-gray-200 text-sm mb-4">กดปุ่ม "เปิดโหมด AR/VR" และทดลองใช้งานฟังก์ชัน AR อย่างน้อย 3 ฟังก์ชัน</p>
+                <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg transition-all">
+                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
+                  เข้าร่วมกิจกรรม
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="liquid-glass-card activity-card" onclick="toggleActivityDetail('activity-3')">
+            <div class="flex items-center mb-4">
+              <i data-lucide="share-2" class="w-8 h-8 text-pink-400 mr-3"></i>
+              <h3 class="text-xl font-bold">แชร์ QR Code</h3>
+            </div>
+            <p class="text-gray-200 mb-4">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
+            <div class="flex justify-between items-center">
+              <span class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm">+10 คะแนน</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 activity-chevron" id="chevron-3"></i>
+            </div>
+            <div class="activity-detail mt-4" id="activity-3">
+              <div class="border-t border-gray-600 pt-4">
+                <h4 class="font-bold mb-2">รายละเอียดกิจกรรม:</h4>
+                <ul class="list-disc list-inside text-gray-200 text-sm space-y-1 mb-4">
+                  <li>แชร์ QR Code ผ่านแพลตฟอร์มโซเชียลมีเดีย</li>
+                  <li>ส่งให้เพื่อนๆ ผ่านแอปพลิเคชันแชท</li>
+                  <li>แนะนำระบบนำทางให้กับรุ่นน้อง</li>
+                  <li>บันทึกภาพการแชร์ QR Code</li>
+                </ul>
+                <h4 class="font-bold mb-2">วิธีการเข้าร่วม:</h4>
+                <p class="text-gray-200 text-sm mb-4">กดปุ่ม QR Code ที่มุมขวาบนของหน้าเว็บ และแชร์ลิงก์ให้กับเพื่อนอย่างน้อย 3 คน</p>
+                <button onclick="completeActivity('แชร์ QR Code', 10)" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg transition-all">
+                  <i data-lucide="check" class="w-4 h-4 inline mr-2"></i>
+                  เข้าร่วมกิจกรรม
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -503,6 +716,7 @@
     window.onload = () => {
       if (userData) {
         showUserInfo(userData);
+        showActivitiesSection();
       }
       
       // Generate QR Code
@@ -603,6 +817,10 @@
       }
     }
 
+    function showActivitiesSection() {
+      document.getElementById('activities-section').classList.remove('hidden');
+    }
+
     function toggleProfileMenu() {
       document.getElementById('profile-menu').classList.toggle('hidden');
     }
@@ -616,8 +834,32 @@
       localStorage.removeItem("userData");
       document.getElementById('profile-btn').classList.add('hidden');
       document.getElementById('login-btn').classList.remove('hidden');
+      document.getElementById('activities-section').classList.add('hidden');
       alert("ออกจากระบบแล้ว");
       document.getElementById('profile-menu').classList.add('hidden');
+    }
+
+    // Toggle activity details
+    function toggleActivityDetail(activityId) {
+      const activityDetail = document.getElementById(activityId);
+      const chevron = document.getElementById('chevron-' + activityId.split('-')[1]);
+      
+      if (activityDetail.classList.contains('expanded')) {
+        activityDetail.classList.remove('expanded');
+        chevron.style.transform = 'rotate(0deg)';
+      } else {
+        // Close other open activities
+        document.querySelectorAll('.activity-detail.expanded').forEach(detail => {
+          if (detail.id !== activityId) {
+            detail.classList.remove('expanded');
+            const otherChevron = document.getElementById('chevron-' + detail.id.split('-')[1]);
+            if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+          }
+        });
+        
+        activityDetail.classList.add('expanded');
+        chevron.style.transform = 'rotate(180deg)';
+      }
     }
 
     // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
@@ -720,6 +962,7 @@
       alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
       hideRegistration();
       showUserInfo(userData);
+      showActivitiesSection();
     }
 
     // Notification system
@@ -780,6 +1023,27 @@
       }
     }
 
+    function completeActivity(activityName, points) {
+      if (!userData) {
+        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
+        return;
+      }
+      
+      addPoints(activityName, points);
+      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
+      
+      // Close the activity detail
+      const activityCards = document.querySelectorAll('.activity-card');
+      activityCards.forEach(card => {
+        const detail = card.querySelector('.activity-detail');
+        if (detail && detail.classList.contains('expanded')) {
+          detail.classList.remove('expanded');
+          const chevron = card.querySelector('.activity-chevron');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+
     function openPointsModal() {
       const pointsList = document.getElementById('points-list');
       const totalPoints = document.getElementById('total-points');
@@ -816,40 +1080,6 @@
     function closePointsModal() {
       document.getElementById('points-modal').classList.remove('show');
     }
-
-    // Simulate earning points for activities
-    function completeActivity(activityName, points) {
-      if (!userData) {
-        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
-        return;
-      }
-      
-      addPoints(activityName, points);
-      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
-    }
-
-    // Add some sample activities to the page
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add activity buttons to the hero section
-      const heroContent = document.querySelector('.hero-content');
-      const activitySection = document.createElement('div');
-      activitySection.className = 'mt-12 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20';
-      activitySection.innerHTML = `
-        <h3 class="text-xl font-bold mb-4 text-center">กิจกรรมรับคะแนน</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-full transition-all">
-            สำรวจแผนที่ 3D
-          </button>
-          <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-full transition-all">
-            ทดลองใช้ AR
-          </button>
-          <button onclick="completeActivity('แชร์ QR Code', 10)" class="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full transition-all">
-            แชร์ QR Code
-          </button>
-        </div>
-      `;
-      heroContent.appendChild(activitySection);
-    });
   </script>
 </body>
 </html>
