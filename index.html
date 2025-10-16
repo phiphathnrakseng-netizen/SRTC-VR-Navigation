@@ -2,19 +2,23 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SRTC VR Virtual | แผนผังและตึก 3D</title>
 
   <meta name="theme-color" content="#4f46e5">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+  <!-- ✅ เพิ่ม A-Frame และ AR.js -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Kanit', sans-serif; }
     body { background: #f8fafc; overflow-x: hidden; }
+
     .icon-button {
       position: relative;
       padding: 0.6rem;
@@ -25,12 +29,14 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .icon-button:hover { transform: scale(1.1); filter: brightness(1.1); }
+
     .glass-header {
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.25);
       box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     }
+
     .badge {
       position: absolute;
       top: -4px; right: -4px;
@@ -41,6 +47,7 @@
       border-radius: 9999px;
       font-weight: bold;
     }
+
     .user-profile-button {
       background-color: #3b82f6;
       border-radius: 2rem;
@@ -49,6 +56,7 @@
       transition: all 0.25s;
     }
     .user-profile-button:hover { transform: scale(1.05); background-color: #2563eb; }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -72,6 +80,15 @@
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ✅ หน้าจอ AR เต็มจอ */
+    #ar-view {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: black;
+      display: none;
+    }
   </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -84,13 +101,12 @@
         <h1 class="text-lg sm:text-2xl font-bold text-gray-900">SRTC VR Navigation</h1>
       </div>
 
-      <!-- Navigation Buttons -->
       <nav class="flex items-center space-x-3 sm:space-x-4">
         <button onclick="openQRModal()" class="bg-yellow-500 hover:bg-yellow-600 icon-button" title="QR Code">
           <i data-lucide="qr-code" class="w-5 h-5"></i>
         </button>
 
-        <button onclick="toggleVRMode()" class="bg-purple-600 hover:bg-purple-700 icon-button" title="VR/AR Mode">
+        <button onclick="toggleARMode()" class="bg-purple-600 hover:bg-purple-700 icon-button" title="เปิดโหมด AR/VR">
           <i data-lucide="scan" class="w-5 h-5"></i>
         </button>
 
@@ -120,7 +136,8 @@
   <!-- Main -->
   <main class="flex-grow flex flex-col items-center justify-center p-6 text-center">
     <h2 class="text-4xl sm:text-5xl font-bold text-indigo-700 mb-4">ระบบนำทางเสมือนจริง (AR/VR)</h2>
-    <p class="text-gray-600 mb-8">สัมผัสประสบการณ์นำทางแบบ 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+    <p class="text-gray-600 mb-8">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+
     <button onclick="showMap()" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-full shadow-md transition-all flex items-center space-x-2">
       <i data-lucide="map" class="w-5 h-5"></i>
       <span>เปิดดูแผนผังอาคาร 3D</span>
@@ -141,6 +158,19 @@
   <footer class="bg-indigo-900 text-indigo-100 text-center py-3 text-sm">
     © 2025 SRTC Virtual Campus | All rights reserved.
   </footer>
+
+  <!-- ✅ โหมด AR เต็มจอ -->
+  <div id="ar-view">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <!-- ใช้ marker "hiro" มาตรฐาน -->
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
+        <a-text value="อาคารเรียน SRTC" position="-0.8 1 0" rotation="-90 0 0" color="#fff"></a-text>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+    <button onclick="closeAR()" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow-md z-[99999]">ปิด AR</button>
+  </div>
 
   <!-- Modal QR -->
   <div id="qr-modal" class="modal">
@@ -188,7 +218,6 @@
 
   <script>
     lucide.createIcons();
-    let loggedIn = false;
 
     // QR Modal
     function openQRModal() {
@@ -200,7 +229,7 @@
       document.getElementById('qrcode').innerHTML = "";
     }
 
-    // Notification Modal
+    // Notification
     function openNotification() {
       document.getElementById('notif-modal').classList.add('show');
       document.getElementById('notif-badge').textContent = "";
@@ -209,7 +238,7 @@
       document.getElementById('notif-modal').classList.remove('show');
     }
 
-    // Points Modal
+    // Points
     function openPoints() {
       document.getElementById('points-modal').classList.add('show');
     }
@@ -240,12 +269,17 @@
       alert("ออกจากระบบแล้ว");
     }
 
-    // VR Mode
-    function toggleVRMode() {
-      alert("เปิดโหมด VR/AR สำเร็จ 🎮");
+    // ✅ ปุ่ม VR/AR เปิดกล้อง AR.js จริง
+    function toggleARMode() {
+      document.getElementById('ar-view').style.display = 'block';
+      alert("เปิดโหมด AR สำเร็จ! นำกล้องส่องที่ marker 'Hiro'");
     }
 
-    // Show map
+    function closeAR() {
+      document.getElementById('ar-view').style.display = 'none';
+    }
+
+    // Show 3D Map
     function showMap() {
       document.getElementById('aframe-container').classList.toggle('hidden');
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
