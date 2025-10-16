@@ -68,8 +68,8 @@
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
             
             <div class="flex items-center space-x-3">
-                <button onclick="history.back()" class="text-white bg-gray-500/50 hover:bg-gray-500/70 icon-button mr-2 lg:hidden">
-                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <button onclick="history.back()" class="text-gray-500 hover:text-gray-700 bg-white/50 hover:bg-white/70 icon-button mr-2">
+                     <i data-lucide="arrow-left" class="w-5 h-5 text-gray-800"></i>
                 </button>
                 <img src="https://www.srtc.ac.th/2020/images/images.jpg" alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี" class="h-10 w-10 sm:h-12 sm:w-12 rounded-full ring-2 ring-indigo-500 p-[2px]"> 
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-wide hidden sm:block">SRTC VR Navigation</h1>
@@ -79,8 +79,8 @@
                 <a href="#home" onclick="showSection('home-section')" class="text-gray-900 hover:text-indigo-700 transition duration-150 font-semibold py-2 px-3 rounded-xl hidden md:inline-block" id="nav-home">หน้าแรก</a>
                 <a href="#map" onclick="showSection('map-section')" class="text-gray-900 hover:text-indigo-700 transition duration-150 font-semibold py-2 px-3 rounded-xl hidden md:inline-block" id="nav-map">แผนผัง</a>
                 
-                <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 sm:px-4 rounded-3xl shadow-lg flex items-center space-x-2 transform transition duration-200 hover:scale-105 ring-1 ring-purple-300">
-                    <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                <button id="pwa-install-button" onclick="promptPWAInstall()" class="hidden bg-purple-600 hover:bg-purple-700 icon-button">
+                    <i data-lucide="download" class="w-5 h-5"></i>
                 </button>
                 
                 <button onclick="showModal('install-qr-modal')" class="bg-yellow-500 hover:bg-yellow-600 icon-button">
@@ -88,12 +88,17 @@
                     <span class="sr-only">QR Code</span>
                 </button>
 
-                <button onclick="toggleVRMode()" class="bg-indigo-600 hover:bg-indigo-700 icon-button">
-                    <i data-lucide="scan" class="w-5 h-5"></i>
+                <button onclick="toggleVRMode()" class="bg-purple-600 hover:bg-purple-700 icon-button">
+                    <i data-lucide="vr-headset" class="w-5 h-5"></i>
                     <span class="sr-only">VR/AR Mode</span>
                 </button>
+                
+                <button onclick="showPoints()" class="bg-gray-500 hover:bg-gray-600 icon-button">
+                    <i data-lucide="gem" class="w-5 h-5"></i>
+                    <span class="sr-only">สะสมแต้ม</span>
+                </button>
 
-                <button onclick="showNotification()" class="bg-orange-500 hover:bg-orange-600 icon-button">
+                <button onclick="showNotification()" class="bg-red-600 hover:bg-red-700 icon-button">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <span class="sr-only">Notification</span>
                 </button>
@@ -110,8 +115,8 @@
                     <span class="sr-only">Log out</span>
                 </button>
                 
-                <button onclick="history.forward()" class="text-white bg-gray-500/50 hover:bg-gray-500/70 icon-button ml-2">
-                     <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                <button onclick="history.forward()" class="text-gray-500 hover:text-gray-700 bg-white/50 hover:bg-white/70 icon-button ml-2">
+                     <i data-lucide="arrow-right" class="w-5 h-5 text-gray-800"></i>
                      <span class="sr-only">Next Page</span>
                 </button>
             </nav>
@@ -176,14 +181,14 @@
     </div>
 </div>
 <script>
-// ข้อมูลผู้ใช้จำลอง
+// ข้อมูลผู้ใช้จำลอง (คงเดิม)
 const MOCK_USER = {
     username: "นักเรียน SRTC",
     profilePic: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fit=crop&w=80&h=80&q=80", // รูปโปรไฟล์เริ่มต้น
     isLoggedIn: false
 };
 
-// ฟังก์ชันสำหรับเปลี่ยนสถานะ UI ตามการล็อกอิน
+// ฟังก์ชันสำหรับเปลี่ยนสถานะ UI ตามการล็อกอิน (คงเดิม)
 function updateLoginUI() {
     const loginButton = document.getElementById('login-button-ui');
     const profileButton = document.getElementById('profile-button-ui');
@@ -191,34 +196,27 @@ function updateLoginUI() {
     const usernameDisplay = document.getElementById('username-display');
 
     if (MOCK_USER.isLoggedIn) {
-        // แสดงปุ่ม/ข้อมูลผู้ใช้ (Logout)
         loginButton.classList.add('hidden');
         profileButton.classList.remove('hidden');
         profilePic.src = MOCK_USER.profilePic;
         profilePic.alt = `${MOCK_USER.username} Profile`;
         usernameDisplay.textContent = MOCK_USER.username;
-        // ต้องเรียกใช้ lucide.replace() เพื่อให้ไอคอน Log out แสดงผล
         lucide.replace(); 
     } else {
-        // แสดงปุ่ม Log in
         loginButton.classList.remove('hidden');
         profileButton.classList.add('hidden');
         lucide.replace();
     }
 }
 
-// ฟังก์ชันเข้าสู่ระบบ (จำลอง)
+// ฟังก์ชันเข้าสู่ระบบ (จำลอง) (คงเดิม)
 function userLogin() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
-
-    // การตรวจสอบจำลอง
     if (email && password) {
-        MOCK_USER.username = email.split('@')[0]; // ใช้ส่วนแรกของอีเมลเป็นชื่อผู้ใช้จำลอง
-        // เปลี่ยนรูปโปรไฟล์เมื่อล็อกอิน
+        MOCK_USER.username = email.split('@')[0];
         MOCK_USER.profilePic = "https://images.unsplash.com/photo-1560250097-0b94458c5737?fit=crop&w=80&h=80&q=80"; 
         MOCK_USER.isLoggedIn = true;
-        
         closeLogin();
         alert(`เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ${MOCK_USER.username}`);
         updateLoginUI();
@@ -227,7 +225,7 @@ function userLogin() {
     }
 }
 
-// ฟังก์ชันออกจากระบบ
+// ฟังก์ชันออกจากระบบ (คงเดิม)
 function userLogout() {
     MOCK_USER.isLoggedIn = false;
     MOCK_USER.username = "นักเรียน SRTC";
@@ -236,7 +234,7 @@ function userLogout() {
     updateLoginUI();
 }
 
-// --- ฟังก์ชันที่มีอยู่เดิม ---
+// --- ฟังก์ชันอื่นๆ ---
 
 function showSection(id){
     document.querySelectorAll('.section-content').forEach(s=>s.classList.add('hidden'));
@@ -246,8 +244,6 @@ function toggleVRMode(){
     alert('เปิดโหมด VR/AR เรียบร้อย! (ต้องรันบนอุปกรณ์ที่รองรับ)');
 }
 function showLogin(){
-    document.getElementById('login-email').value = '';
-    document.getElementById('login-password').value = '';
     document.getElementById('login-modal').classList.remove('hidden');
 }
 function closeLogin(){
@@ -256,9 +252,14 @@ function closeLogin(){
 function showNotification(){
     alert('คุณมี Notification ใหม่!');
 }
-function showModal(id){
-    alert('แสดง QR Code Modal'); // ต้องเพิ่ม Modal สำหรับ QR Code ในโค้ดจริง
+function showPoints(){
+    alert('แสดงหน้าคะแนนสะสม (Points)!');
 }
+function showModal(id){
+    // ฟังก์ชันสำหรับ Modal อื่นๆ เช่น QR Code
+    alert('แสดง Modal สำหรับ: ' + id);
+}
+
 // ตัวอย่าง PWA Install Prompt (คงเดิม)
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e)=>{
@@ -277,7 +278,6 @@ function promptPWAInstall(){
     }
 }
 
-// เรียกใช้เมื่อโหลดหน้าเว็บครั้งแรก
 document.addEventListener('DOMContentLoaded', updateLoginUI);
 </script>
 <script>
