@@ -1,4 +1,3 @@
-แกไขให้โค้ดนี้ สามารถใช้งานได้ทุกปุ่มและมีรายละเอียดมากๆสำคัญชัดเจน และเพิ่มฟีเจอรที่สำคัญ และใช้งานได้จริง
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -17,7 +16,11 @@
 
   <style>
     * { font-family: 'Kanit', sans-serif; }
-    body { background: #f8fafc; overflow-x: hidden; }
+    body {
+      overflow-x: hidden;
+      background: url('/mnt/data/7ccb5717-3161-4206-9541-92cbb295f890.png') no-repeat center center fixed;
+      background-size: cover;
+    }
     .icon-button {
       position: relative; padding: 0.6rem; border-radius: 9999px;
       display: flex; align-items: center; justify-content: center;
@@ -26,10 +29,10 @@
     }
     .icon-button:hover { transform: scale(1.1); filter: brightness(1.1); }
     .glass-header {
-      background: rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.6);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.25);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
     }
     .badge {
       position: absolute; top: -4px; right: -4px;
@@ -56,17 +59,17 @@
       position: relative; animation: fadeIn 0.3s ease;
     }
     @keyframes fadeIn { from {opacity:0;transform:translateY(15px);} to {opacity:1;transform:translateY(0);} }
-    #ar-view { position: fixed; inset: 0; z-index: 9999; background: black; display: none; }
+    #ar-view { position: fixed; inset: 0; z-index: 9999; display: none; background: black; }
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen text-white">
   <!-- Header -->
   <header class="glass-header sticky top-0 z-20">
     <div class="flex justify-between items-center px-4 sm:px-6 py-3">
       <div class="flex items-center space-x-3">
-        <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-full ring-2 ring-indigo-500" />
-        <h1 class="text-lg sm:text-2xl font-bold text-gray-900">SRTC VR Navigation</h1>
+        <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-full ring-2 ring-indigo-400" />
+        <h1 class="text-lg sm:text-2xl font-bold text-white">SRTC VR Navigation</h1>
       </div>
 
       <nav class="flex items-center space-x-3 sm:space-x-4">
@@ -96,8 +99,6 @@
           <img id="profile-pic" class="h-8 w-8 rounded-full ring-2 ring-white" />
           <span id="username" class="mx-2 text-sm font-semibold"></span>
           <i data-lucide="chevron-down" class="w-4 h-4"></i>
-
-          <!-- เมนูเล็กหลังล็อกอิน -->
           <div id="profile-menu" class="absolute right-0 top-10 bg-white text-gray-700 rounded-xl shadow-lg hidden">
             <div class="p-2 text-sm">
               <p id="user-email"></p>
@@ -112,9 +113,9 @@
   </header>
 
   <!-- Main -->
-  <main class="flex-grow flex flex-col items-center justify-center p-6 text-center">
-    <h2 class="text-4xl sm:text-5xl font-bold text-indigo-700 mb-4">ระบบนำทางเสมือนจริง (AR/VR)</h2>
-    <p class="text-gray-600 mb-8">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+  <main class="flex-grow flex flex-col items-center justify-center p-6 text-center bg-black/50 rounded-lg">
+    <h2 class="text-4xl sm:text-5xl font-bold text-indigo-300 mb-4 drop-shadow-lg">ระบบนำทางเสมือนจริง (AR/VR)</h2>
+    <p class="text-gray-200 mb-8">สัมผัสประสบการณ์นำทาง 3 มิติ ภายในวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
     <button onclick="showMap()" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-full shadow-md transition-all flex items-center space-x-2">
       <i data-lucide="map" class="w-5 h-5"></i>
       <span>เปิดดูแผนผังอาคาร 3D</span>
@@ -132,7 +133,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-indigo-900 text-indigo-100 text-center py-3 text-sm">
+  <footer class="bg-black/70 text-indigo-100 text-center py-3 text-sm">
     © 2025 SRTC Virtual Campus | All rights reserved.
   </footer>
 
@@ -167,7 +168,6 @@
   <script>
     lucide.createIcons();
 
-    // โหลดสถานะผู้ใช้จาก localStorage
     window.onload = () => {
       const user = JSON.parse(localStorage.getItem("userData"));
       if (user) showUserInfo(user);
@@ -220,13 +220,16 @@
       alert("ออกจากระบบแล้ว");
     }
 
-    // ✅ ปุ่ม AR Mode
+    // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
     function toggleARMode() {
-      document.getElementById('ar-view').style.display = 'block';
-      alert("เปิดโหมด AR สำเร็จ! ส่องกล้องที่ marker 'Hiro'");
+      const arView = document.getElementById('ar-view');
+      arView.style.display = 'block';
+      alert("เปิดโหมด AR แล้ว — อนุญาตกล้องเพื่อใช้งาน");
     }
     function closeAR() {
-      document.getElementById('ar-view').style.display = 'none';
+      const arView = document.getElementById('ar-view');
+      arView.style.display = 'none';
+      alert("ปิดโหมด AR แล้ว");
     }
 
     // แผนที่ 3D
