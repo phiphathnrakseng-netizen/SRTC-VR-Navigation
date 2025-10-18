@@ -489,6 +489,66 @@
       font-weight: 600;
       margin-right: 0.25rem;
     }
+    
+    /* User Dropdown Menu */
+    .user-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 0.5rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      min-width: 180px;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-content.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: #000000;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 0.85rem;
+    }
+    
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .dropdown-item i {
+      width: 16px;
+      height: 16px;
+      margin-right: 0.5rem;
+    }
+    
+    .dropdown-item.logout {
+      color: #e53e3e;
+    }
+    
+    .dropdown-item.logout:hover {
+      background-color: rgba(229, 62, 62, 0.1);
+    }
   </style>
 </head>
 
@@ -521,16 +581,34 @@
         </button>
 
         <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
-        <button id="registration-btn" onclick="handleRegistrationClick()" class="registration-button">
-          <div id="registration-default" class="flex items-center">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span class="ml-1 text-xs font-medium hidden sm:inline">ลงทะเบียน</span>
+        <div class="user-dropdown">
+          <button id="registration-btn" onclick="toggleUserDropdown()" class="registration-button">
+            <div id="registration-default" class="flex items-center">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              <span class="ml-1 text-xs font-medium hidden sm:inline">ลงทะเบียน</span>
+            </div>
+            <div id="registration-user" class="user-info hidden">
+              <img id="user-avatar" class="user-avatar" />
+              <span id="user-name" class="user-name"></span>
+            </div>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div id="user-dropdown-menu" class="dropdown-content">
+            <a href="#" class="dropdown-item" onclick="editProfile()">
+              <i data-lucide="edit" class="w-4 h-4"></i>
+              <span>แก้ไขข้อมูล</span>
+            </a>
+            <a href="#" class="dropdown-item" onclick="managePhotos()">
+              <i data-lucide="image" class="w-4 h-4"></i>
+              <span>รูปภาพ</span>
+            </a>
+            <a href="#" class="dropdown-item logout" onclick="logout()">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span>ออกจากระบบ</span>
+            </a>
           </div>
-          <div id="registration-user" class="user-info hidden">
-            <img id="user-avatar" class="user-avatar" />
-            <span id="user-name" class="user-name"></span>
-          </div>
-        </button>
+        </div>
       </nav>
     </div>
   </header>
@@ -894,13 +972,63 @@
     // Handle registration button click
     function handleRegistrationClick() {
       if (userData) {
-        // If user is logged in, do nothing or show a simple message
-        // You can add any action here if needed
-        console.log("User is already registered:", userData.fullname);
+        // If user is logged in, toggle dropdown
+        toggleUserDropdown();
       } else {
         // If user is not logged in, show registration form
         showRegistration();
       }
+    }
+
+    // Toggle user dropdown menu
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      const button = document.getElementById('registration-btn');
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // User dropdown menu functions
+    function editProfile() {
+      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้');
+      // ในอนาคตสามารถเพิ่มฟังก์ชันแก้ไขข้อมูลได้ที่นี่
+      closeUserDropdown();
+    }
+
+    function managePhotos() {
+      alert('เปิดฟังก์ชันจัดการรูปภาพ');
+      // ในอนาคตสามารถเพิ่มฟังก์ชันจัดการรูปภาพได้ที่นี่
+      closeUserDropdown();
+    }
+
+    function logout() {
+      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+        // Clear user data
+        localStorage.removeItem("userData");
+        userData = null;
+        
+        // Reset UI
+        document.getElementById('registration-default').classList.remove('hidden');
+        document.getElementById('registration-user').classList.add('hidden');
+        document.getElementById('activities-section').classList.add('hidden');
+        
+        // Show notification
+        showNotification("คุณได้ออกจากระบบแล้ว");
+        
+        closeUserDropdown();
+      }
+    }
+
+    function closeUserDropdown() {
+      document.getElementById('user-dropdown-menu').classList.remove('show');
     }
 
     window.onload = () => {
