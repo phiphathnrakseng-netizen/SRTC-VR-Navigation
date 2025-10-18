@@ -489,66 +489,6 @@
       font-weight: 600;
       margin-right: 0.25rem;
     }
-    
-    .registration-menu {
-      position: absolute;
-      right: 0;
-      top: 2.5rem;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 1rem;
-      padding: 0.5rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      min-width: 180px;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      display: none;
-    }
-    
-    .registration-menu.show {
-      display: block;
-      animation: fadeIn 0.2s ease;
-    }
-    
-    .registration-menu .user-details {
-      padding: 0.5rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      margin-bottom: 0.25rem;
-    }
-    
-    .registration-menu .user-details .name {
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-    
-    .registration-menu .user-details .email {
-      font-size: 0.7rem;
-      color: #4a5568;
-    }
-    
-    .registration-menu button {
-      width: 100%;
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 0.75rem;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .registration-menu button:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-    
-    .registration-menu .logout-btn {
-      color: #dc2626;
-    }
-    
-    .registration-menu .logout-btn:hover {
-      background: rgba(220, 38, 38, 0.1);
-    }
   </style>
 </head>
 
@@ -581,7 +521,7 @@
         </button>
 
         <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
-        <button id="registration-btn" onclick="toggleRegistrationMenu()" class="registration-button relative">
+        <button id="registration-btn" onclick="handleRegistrationClick()" class="registration-button">
           <div id="registration-default" class="flex items-center">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             <span class="ml-1 text-xs font-medium hidden sm:inline">ลงทะเบียน</span>
@@ -589,23 +529,6 @@
           <div id="registration-user" class="user-info hidden">
             <img id="user-avatar" class="user-avatar" />
             <span id="user-name" class="user-name"></span>
-            <i data-lucide="chevron-down" class="w-3 h-3"></i>
-          </div>
-          
-          <!-- เมนูผู้ใช้ -->
-          <div id="registration-menu" class="registration-menu">
-            <div class="user-details">
-              <div id="menu-user-name" class="name"></div>
-              <div id="menu-user-email" class="email"></div>
-            </div>
-            <button onclick="editProfile()" class="w-full text-left flex items-center">
-              <i data-lucide="edit" class="w-3 h-3"></i>
-              <span>แก้ไขโปรไฟล์</span>
-            </button>
-            <button onclick="userLogout()" class="logout-btn w-full text-left flex items-center">
-              <i data-lucide="log-out" class="w-3 h-3"></i>
-              <span>ออกจากระบบ</span>
-            </button>
           </div>
         </button>
       </nav>
@@ -968,27 +891,17 @@
       document.getElementById('webcam-error').classList.remove('show');
     }
 
-    // Toggle registration menu
-    function toggleRegistrationMenu() {
-      const menu = document.getElementById('registration-menu');
+    // Handle registration button click
+    function handleRegistrationClick() {
       if (userData) {
-        // If user is logged in, toggle the menu
-        menu.classList.toggle('show');
+        // If user is logged in, do nothing or show a simple message
+        // You can add any action here if needed
+        console.log("User is already registered:", userData.fullname);
       } else {
         // If user is not logged in, show registration form
         showRegistration();
       }
     }
-
-    // Close registration menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const registrationBtn = document.getElementById('registration-btn');
-      const registrationMenu = document.getElementById('registration-menu');
-      
-      if (!registrationBtn.contains(event.target) && !registrationMenu.contains(event.target)) {
-        registrationMenu.classList.remove('show');
-      }
-    });
 
     window.onload = () => {
       if (userData) {
@@ -1085,8 +998,6 @@
       
       // Set user information
       document.getElementById('user-name').textContent = user.fullname.split(" ")[0];
-      document.getElementById('menu-user-name').textContent = user.fullname;
-      document.getElementById('menu-user-email').textContent = user.email;
       
       // Use uploaded image if available, otherwise use default avatar
       if (user.imageData) {
@@ -1098,23 +1009,6 @@
 
     function showActivitiesSection() {
       document.getElementById('activities-section').classList.remove('hidden');
-    }
-
-    function editProfile() {
-      alert("กำลังพัฒนา: ฟังก์ชันแก้ไขบัญชีผู้ใช้");
-      document.getElementById('registration-menu').classList.remove('show');
-    }
-
-    function userLogout() {
-      localStorage.removeItem("userData");
-      
-      // Reset UI to registration state
-      document.getElementById('registration-default').classList.remove('hidden');
-      document.getElementById('registration-user').classList.add('hidden');
-      document.getElementById('activities-section').classList.add('hidden');
-      document.getElementById('registration-menu').classList.remove('show');
-      
-      alert("ออกจากระบบแล้ว");
     }
 
     // Toggle activity details
