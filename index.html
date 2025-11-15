@@ -585,7 +585,8 @@
 </head>
 
 <body>
-    <header class="glass-header sticky top-0 z-20">
+  <!-- Header -->
+  <header class="glass-header sticky top-0 z-20">
     <div class="flex justify-between items-center px-4 sm:px-6 py-3">
       <div class="flex items-center space-x-3">
         <div class="p-2 bg-white rounded-xl shadow-md">
@@ -616,7 +617,8 @@
           <span id="points-badge" class="badge hidden">0</span>
         </button>
 
-                <div class="user-dropdown">
+        <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
+        <div class="user-dropdown">
           <button id="registration-btn" onclick="handleRegistrationClick()" class="user-profile-button">
             <div id="registration-default" class="flex items-center">
               <div class="p-1.5 bg-primary/10 rounded-lg mr-2">
@@ -631,7 +633,8 @@
             </div>
           </button>
           
-                    <div id="user-dropdown-menu" class="dropdown-content">
+          <!-- Dropdown Menu -->
+          <div id="user-dropdown-menu" class="dropdown-content">
             <a href="#" class="dropdown-item" onclick="editProfile()">
               <i data-lucide="user" class="w-4 h-4"></i>
               <span>โปรไฟล์ของฉัน</span>
@@ -654,8 +657,10 @@
     </div>
   </header>
 
-    <main class="flex-grow compact-layout px-4 py-6">
-        <section class="hero-section">
+  <!-- Main Content -->
+  <main class="flex-grow compact-layout px-4 py-6">
+    <!-- Hero Section -->
+    <section class="hero-section">
       <div class="hero-content">
         <div class="floating-element mb-6">
           <div class="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-md mb-4">
@@ -683,7 +688,7 @@
           <div class="modern-card p-5 text-center">
             <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
               <i data-lucide="map-pin" class="w-6 h-6 text-primary"></i>
-              </div>
+            </div>
             <h3 class="text-lg font-bold mb-2">นำทางแบบเรียลไทม์</h3>
             <p class="text-muted text-sm">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
           </div>
@@ -705,7 +710,8 @@
           </div>
         </div>
         
-                <div id="activities-section" class="activity-section modern-card hidden">
+        <!-- Activities Section (Visible after registration) -->
+        <div id="activities-section" class="activity-section modern-card hidden">
           <h2 class="section-title text-xl font-bold text-center">กิจกรรมรับคะแนน</h2>
           <p class="text-muted text-center mb-6">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
           
@@ -772,12 +778,12 @@
                   <i data-lucide="share-2" class="w-5 h-5 text-primary"></i>
                 </div>
                 <h3 class="text-lg font-bold">แชร์ QR Code</h3>
-                </div>
+              </div>
               <p class="text-muted text-sm mb-3">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
               <div class="flex justify-between items-center">
                 <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+10 คะแนน</span>
                 <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-3"></i>
-            </div>
+              </div>
               <div class="activity-detail mt-3" id="activity-3">
                 <div class="border-t border-gray-200 pt-3">
                   <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
@@ -790,6 +796,7 @@
                     <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
                     เข้าร่วมกิจกรรม
                   </button>
+                </div>
               </div>
             </div>
           </div>
@@ -797,12 +804,13 @@
       </div>
     </section>
 
-        <section id="registration-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
+    <!-- Registration Section -->
+    <section id="registration-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
       <div class="max-w-4xl mx-auto px-4">
         <h2 class="section-title text-2xl font-bold text-center mb-2">ลงทะเบียนรับการแจ้งเตือน</h2>
         <p class="text-muted text-center mb-6">กรอกข้อมูลเพื่อรับการแจ้งเตือนและอัปเดตข้อมูลล่าสุดจากระบบ</p>
         
-        <div id="registration-form-container" class="registration-form">
+        <div class="registration-form">
           <form id="registration-form">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -874,7 +882,7 @@
               </div>
             </div>
             
-            <button type="submit" id="submit-registration-btn" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center">
+            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center">
               <i data-lucide="send" class="w-4 h-4 mr-2"></i>
               ส่งแบบฟอร์มลงทะเบียน
             </button>
@@ -883,11 +891,6 @@
           <p class="text-center text-muted mt-4 text-sm">
             ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
           </p>
-          
-                    <button id="login-after-register-btn" onclick="loginAfterRegistration()" class="w-full bg-white hover:bg-gray-50 text-primary py-3 rounded-xl font-semibold border border-primary mt-4 transition-all text-sm shadow-sm hidden flex items-center justify-center">
-            <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
-            เข้าสู่ระบบ (ดำเนินการต่อ)
-          </button>
         </div>
         
         <div class="text-center mt-5">
@@ -899,7 +902,8 @@
       </div>
     </section>
 
-        <section id="map-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
+    <!-- 3D Map Section -->
+    <section id="map-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
       <div class="max-w-4xl mx-auto px-4">
         <h2 class="section-title text-2xl font-bold text-center mb-2">แผนผังอาคาร 3D</h2>
         <p class="text-muted text-center mb-6">สำรวจอาคารเรียนและสถานที่ต่างๆ ในวิทยาลัยผ่านแผนที่สามมิติ</p>
@@ -939,7 +943,8 @@
     </section>
   </main>
 
-    <footer class="footer">
+  <!-- Footer -->
+  <footer class="footer">
     <div class="container mx-auto">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
@@ -960,7 +965,8 @@
     </div>
   </footer>
 
-    <div id="qr-modal" class="modal">
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="modal">
     <div class="modal-content max-w-xs">
       <button onclick="closeQRModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -971,14 +977,16 @@
     </div>
   </div>
 
-    <div id="points-modal" class="modal">
+  <!-- Points Modal -->
+  <div id="points-modal" class="modal">
     <div class="modal-content points-modal">
       <button onclick="closePointsModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       <h3 class="font-bold text-lg mb-4">คะแนนสะสม</h3>
       <div id="points-list">
-              </div>
+        <!-- Points will be dynamically added here -->
+      </div>
       <div class="mt-4 pt-4 border-t border-gray-200">
         <div class="flex justify-between items-center">
           <span class="font-semibold">คะแนนรวมทั้งหมด</span>
@@ -988,7 +996,8 @@
     </div>
   </div>
 
-    <div id="webcam-error" class="webcam-error">
+  <!-- Webcam Error Modal -->
+  <div id="webcam-error" class="webcam-error">
     <div class="webcam-error-content">
       <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-3"></i>
       <h3 class="font-bold text-lg mb-2">ไม่สามารถเข้าถึงกล้องได้</h3>
@@ -1006,7 +1015,8 @@
     </div>
   </div>
 
-    <div id="ar-view">
+  <!-- โหมด AR -->
+  <div id="ar-view">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <a-marker preset="hiro">
         <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
@@ -1032,20 +1042,23 @@
     // Initialize Lucide icons
     lucide.createIcons();
 
-    // Initialize user data from localStorage
+    // Initialize user data
     let userData = JSON.parse(localStorage.getItem("userData")) || null;
     let userPoints = JSON.parse(localStorage.getItem("userPoints")) || {
       total: 0,
       activities: []
     };
 
-    // Utility Functions
-    
-    // Show/Hide Webcam Error Modal
+    // Webcam error handling
     function handleWebcamError(error) {
       console.error("Webcam Error:", error);
+      // Hide the default error message
       document.getElementById('camera-error').classList.add('hidden');
+      
+      // Show our custom error modal
       document.getElementById('webcam-error').classList.add('show');
+      
+      // Close AR view
       document.getElementById('ar-view').style.display = 'none';
     }
 
@@ -1053,8 +1066,156 @@
       document.getElementById('webcam-error').classList.remove('show');
     }
 
-    // User & Registration UI Functions
-    
+    // Handle registration button click
+    function handleRegistrationClick() {
+      if (userData) {
+        // If user is logged in, toggle dropdown
+        toggleUserDropdown();
+      } else {
+        // If user is not logged in, show registration form
+        showRegistration();
+      }
+    }
+
+    // Toggle user dropdown menu
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      const button = document.getElementById('registration-btn');
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // User dropdown menu functions
+    function editProfile() {
+      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้');
+      // ในอนาคตสามารถเพิ่มฟังก์ชันแก้ไขข้อมูลได้ที่นี่
+      closeUserDropdown();
+    }
+
+    function managePhotos() {
+      alert('เปิดฟังก์ชันจัดการรูปภาพ');
+      // ในอนาคตสามารถเพิ่มฟังก์ชันจัดการรูปภาพได้ที่นี่
+      closeUserDropdown();
+    }
+
+    function logout() {
+      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+        // Clear user data
+        localStorage.removeItem("userData");
+        userData = null;
+        
+        // Reset UI
+        document.getElementById('registration-default').classList.remove('hidden');
+        document.getElementById('registration-user').classList.add('hidden');
+        document.getElementById('activities-section').classList.add('hidden');
+        
+        // Show notification
+        showNotification("คุณได้ออกจากระบบแล้ว");
+        
+        closeUserDropdown();
+      }
+    }
+
+    function closeUserDropdown() {
+      document.getElementById('user-dropdown-menu').classList.remove('show');
+    }
+
+    window.onload = () => {
+      if (userData) {
+        showUserInfo(userData);
+        showActivitiesSection();
+      }
+      
+      // Generate QR Code
+      const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 160,
+        height: 160,
+        colorDark: "#1a56db",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      
+      // Setup registration form
+      document.getElementById('registration-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        registerUser();
+      });
+      
+      // Setup file upload
+      const fileInput = document.getElementById('file-input');
+      const fileUploadArea = document.getElementById('file-upload-area');
+      const filePreview = document.getElementById('file-preview');
+      const previewImage = document.getElementById('preview-image');
+      const fileName = document.getElementById('file-name');
+      
+      fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#1a56db';
+        fileUploadArea.style.backgroundColor = 'rgba(26, 86, 219, 0.05)';
+      });
+      
+      fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+      });
+      
+      fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+      
+      function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            fileName.textContent = file.name;
+            filePreview.classList.remove('hidden');
+          };
+          
+          reader.readAsDataURL(file);
+        } else {
+          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        }
+      }
+      
+      // Update points badge
+      updatePointsBadge();
+    };
+
+    function openQRModal() {
+      document.getElementById('qr-modal').classList.add('show');
+    }
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.remove('show');
+    }
+
     function showUserInfo(user) {
       // Hide default registration UI and show user info
       document.getElementById('registration-default').classList.add('hidden');
@@ -1067,7 +1228,6 @@
       if (user.imageData) {
         document.getElementById('user-avatar').src = user.imageData;
       } else {
-        // Use a deterministic placeholder avatar for consistency
         document.getElementById('user-avatar').src = "https://i.pravatar.cc/80?u=" + user.email;
       }
     }
@@ -1075,326 +1235,8 @@
     function showActivitiesSection() {
       document.getElementById('activities-section').classList.remove('hidden');
     }
-    
-    function showRegistration() {
-      document.getElementById('registration-section').classList.remove('hidden');
-      window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
-      
-      // Show login button if user data exists but they are "logged out" (userData cleared but localstorage still has data)
-      const localData = localStorage.getItem("tempUserData"); // Using a temp key to check if data was saved before log out
-      if (localData && !userData) {
-        document.getElementById('login-after-register-btn').classList.remove('hidden');
-        document.getElementById('registration-form').classList.add('hidden');
-      } else {
-        document.getElementById('login-after-register-btn').classList.add('hidden');
-        document.getElementById('registration-form').classList.remove('hidden');
-      }
-    }
-    
-    function hideRegistration() {
-      document.getElementById('registration-section').classList.add('hidden');
-    }
 
-    function handleRegistrationClick() {
-      if (userData) {
-        // If user is logged in, toggle dropdown
-        toggleUserDropdown();
-      } else {
-        // If user is not logged in, show registration form
-        showRegistration();
-      }
-    }
-    
-    function loginAfterRegistration() {
-      const tempUser = JSON.parse(localStorage.getItem("tempUserData"));
-      if (tempUser) {
-        userData = tempUser;
-        localStorage.setItem("userData", JSON.stringify(userData));
-        showUserInfo(userData);
-        showActivitiesSection();
-        hideRegistration();
-        showNotification("เข้าสู่ระบบสำเร็จ!");
-      } else {
-        alert("ไม่พบข้อมูลผู้ใช้สำหรับการเข้าสู่ระบบ กรุณาลงทะเบียนใหม่");
-        document.getElementById('login-after-register-btn').classList.add('hidden');
-        document.getElementById('registration-form').classList.remove('hidden');
-      }
-    }
-
-    // User Dropdown Functions
-    
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      dropdown.classList.toggle('show');
-    }
-
-    function closeUserDropdown() {
-      document.getElementById('user-dropdown-menu').classList.remove('show');
-    }
-
-    function editProfile() {
-      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้ (ในโลกจริง)');
-      closeUserDropdown();
-    }
-
-    function managePhotos() {
-      alert('เปิดฟังก์ชันจัดการรูปภาพ (ในโลกจริง)');
-      closeUserDropdown();
-    }
-
-    function logout() {
-      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
-        // Keep a copy of data to allow "re-login"
-        localStorage.setItem("tempUserData", JSON.stringify(userData));
-        localStorage.removeItem("userData");
-        userData = null;
-        
-        // Reset UI
-        document.getElementById('registration-default').classList.remove('hidden');
-        document.getElementById('registration-user').classList.add('hidden');
-        document.getElementById('activities-section').classList.add('hidden');
-        
-        showNotification("คุณได้ออกจากระบบแล้ว");
-        closeUserDropdown();
-      }
-    }
-    
-    // Points System Functions
-    
-    function addPoints(activity, points) {
-      // Check if the activity has already been completed, only registration is restricted to once
-      if (activity === "ลงทะเบียนใช้งานระบบ" && userPoints.activities.some(a => a.activity === activity)) {
-        console.log("Registration points already granted.");
-        return;
-      }
-      
-      userPoints.total += points;
-      userPoints.activities.push({
-        activity: activity,
-        points: points,
-        timestamp: new Date().toISOString()
-      });
-      
-      localStorage.setItem("userPoints", JSON.stringify(userPoints));
-      updatePointsBadge();
-      
-      if (activity !== "ลงทะเบียนใช้งานระบบ") {
-        showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activity}`);
-      }
-    }
-
-    function updatePointsBadge() {
-      const pointsBadge = document.getElementById('points-badge');
-      if (userPoints.total > 0) {
-        pointsBadge.textContent = userPoints.total;
-        pointsBadge.classList.remove('hidden');
-      } else {
-        pointsBadge.classList.add('hidden');
-      }
-    }
-
-    function openPointsModal() {
-      const pointsList = document.getElementById('points-list');
-      const totalPoints = document.getElementById('total-points');
-      
-      pointsList.innerHTML = '';
-      
-      if (userPoints.activities.length === 0) {
-        pointsList.innerHTML = '<p class="text-gray-500 text-center py-4 text-sm">ยังไม่มีกิจกรรมที่ได้รับคะแนน</p>';
-      } else {
-        // Display activities in reverse chronological order
-        [...userPoints.activities].reverse().forEach(activity => {
-          const date = new Date(activity.timestamp).toLocaleDateString('th-TH');
-          const pointsItem = document.createElement('div');
-          pointsItem.className = 'points-item';
-          pointsItem.innerHTML = `
-            <div>
-              <p class="font-medium text-sm">${activity.activity}</p>
-              <p class="text-xs text-muted">${date}</p>
-            </div>
-            <span class="text-green-600 font-semibold text-sm">+${activity.points}</span>
-          `;
-          pointsList.appendChild(pointsItem);
-        });
-      }
-      
-      totalPoints.textContent = userPoints.total;
-      document.getElementById('points-modal').classList.add('show');
-    }
-
-    function closePointsModal() {
-      document.getElementById('points-modal').classList.remove('show');
-    }
-    
-    function completeActivity(activityName, points) {
-      if (!userData) {
-        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
-        return;
-      }
-      
-      // Check if activity (other than registration) has been completed
-      if (userPoints.activities.some(a => a.activity === activityName && a.points === points)) {
-        alert(`คุณได้ทำกิจกรรม "${activityName}" นี้ไปแล้ว`);
-        return;
-      }
-      
-      addPoints(activityName, points);
-      alert(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}!`);
-      
-      // Close the activity detail
-      const activityCards = document.querySelectorAll('.activity-card');
-      activityCards.forEach(card => {
-        const detail = card.querySelector('.activity-detail');
-        if (detail && detail.classList.contains('expanded')) {
-          detail.classList.remove('expanded');
-          const chevron = card.querySelector('.activity-chevron');
-          if (chevron) chevron.style.transform = 'rotate(0deg)';
-        }
-      });
-    }
-
-    // Registration Logic
-    
-    function registerUser() {
-      const studentId = document.getElementById('student-id').value;
-      const fullname = document.getElementById('fullname').value;
-      const email = document.getElementById('email').value;
-      const department = document.getElementById('department').value;
-      const phone = document.getElementById('phone').value;
-      
-      if (!studentId || !fullname || !email || !department || !phone) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-        return;
-      }
-      
-      const interests = [];
-      document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-        interests.push(checkbox.value);
-      });
-      
-      const fileInput = document.getElementById('file-input');
-      
-      // Use Promise to handle file reading asynchronously
-      const readerPromise = new Promise(resolve => {
-        if (fileInput.files.length) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            resolve(e.target.result);
-          };
-          reader.readAsDataURL(fileInput.files[0]);
-        } else {
-          resolve(null);
-        }
-      });
-      
-      readerPromise.then(imageData => {
-        saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
-      });
-    }
-    
-    function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
-      const newUserData = {
-        studentId,
-        fullname,
-        email,
-        department,
-        phone,
-        interests,
-        imageData
-      };
-      
-      // Save user data and "log in"
-      localStorage.setItem("userData", JSON.stringify(newUserData));
-      localStorage.setItem("tempUserData", JSON.stringify(newUserData)); // Save a temp copy for re-login
-      userData = newUserData;
-      
-      // Add registration points only once (checked in addPoints function)
-      addPoints("ลงทะเบียนใช้งานระบบ", 50);
-      
-      // Show UI updates
-      showUserInfo(userData);
-      showActivitiesSection();
-      hideRegistration();
-      
-      // Alert user
-      alert(`ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด และได้รับ ${userPoints.activities.some(a => a.activity === "ลงทะเบียนใช้งานระบบ") ? 0 : 50} คะแนน (เฉพาะการลงทะเบียนครั้งแรก)`);
-    }
-
-    // Media Control Functions
-    
-    function toggleARMode() {
-      const arView = document.getElementById('ar-view');
-      arView.style.display = 'block';
-      
-      // Check camera access
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function(stream) {
-          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
-          document.getElementById('camera-error').classList.add('hidden');
-        })
-        .catch(function(err) {
-          console.error("Camera error:", err);
-          handleWebcamError(err);
-        });
-    }
-    
-    function closeAR() {
-      document.getElementById('ar-view').style.display = 'none';
-    }
-    
-    function showMap() {
-      document.getElementById('map-section').classList.remove('hidden');
-      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
-    }
-    
-    function hideMap() {
-      document.getElementById('map-section').classList.add('hidden');
-    }
-
-    // Other UI Functions
-    
-    function openQRModal() {
-      document.getElementById('qr-modal').classList.add('show');
-    }
-    function closeQRModal() {
-      document.getElementById('qr-modal').classList.remove('show');
-    }
-    
-    function openNotification() {
-      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-      if (notifications.length === 0) {
-        alert("ไม่มีแจ้งเตือนใหม่");
-      } else {
-        let message = "การแจ้งเตือนล่าสุด:\n\n";
-        // Display in reverse chronological order
-        [...notifications].reverse().forEach((notif, index) => {
-          const date = new Date(notif.timestamp).toLocaleDateString('th-TH');
-          message += `${index + 1}. ${notif.message} (${date})\n`;
-        });
-        alert(message);
-        
-        // Mark as read and hide badge (simple logic)
-        document.getElementById('notif-badge').classList.add('hidden');
-        notifications.forEach(notif => notif.read = true);
-        localStorage.setItem("notifications", JSON.stringify(notifications));
-      }
-    }
-    
-    function showNotification(message) {
-      const notifBadge = document.getElementById('notif-badge');
-      // Simple unread count (always 1 for new message)
-      notifBadge.textContent = (parseInt(notifBadge.textContent) || 0) + 1;
-      notifBadge.classList.remove('hidden');
-      
-      let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-      notifications.push({
-        message: message,
-        timestamp: new Date().toISOString(),
-        read: false
-      });
-      localStorage.setItem("notifications", JSON.stringify(notifications));
-    }
-
+    // Toggle activity details
     function toggleActivityDetail(activityId) {
       const activityDetail = document.getElementById(activityId);
       const chevron = document.getElementById('chevron-' + activityId.split('-')[1]);
@@ -1417,97 +1259,225 @@
       }
     }
 
-    // Initialization on Load
-    window.onload = () => {
-      // Initial UI setup based on localStorage
-      if (userData) {
-        showUserInfo(userData);
-        showActivitiesSection();
-      }
+    // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
+    function toggleARMode() {
+      const arView = document.getElementById('ar-view');
+      arView.style.display = 'block';
       
-      // Initialize QR Code
-      new QRCode(document.getElementById("qrcode"), {
-        text: window.location.href,
-        width: 160,
-        height: 160,
-        colorDark: "#1a56db",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-      });
-      
-      // Setup registration form submit handler
-      document.getElementById('registration-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        registerUser();
-      });
-      
-      // Setup file upload listeners (Drag & Drop)
-      const fileInput = document.getElementById('file-input');
-      const fileUploadArea = document.getElementById('file-upload-area');
-      const filePreview = document.getElementById('file-preview');
-      const previewImage = document.getElementById('preview-image');
-      const fileName = document.getElementById('file-name');
-      
-      fileUploadArea.addEventListener('click', () => { fileInput.click(); });
-      fileUploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileUploadArea.style.borderColor = '#1a56db';
-        fileUploadArea.style.backgroundColor = 'rgba(26, 86, 219, 0.05)';
-      });
-      fileUploadArea.addEventListener('dragleave', () => {
-        fileUploadArea.style.borderColor = '#d1d5db';
-        fileUploadArea.style.backgroundColor = '';
-      });
-      fileUploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileUploadArea.style.borderColor = '#d1d5db';
-        fileUploadArea.style.backgroundColor = '';
-        if (e.dataTransfer.files.length) {
-          fileInput.files = e.dataTransfer.files;
-          handleFileSelect(e.dataTransfer.files[0]);
-        }
-      });
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-          handleFileSelect(e.target.files[0]);
-        }
-      });
-      
-      function handleFileSelect(file) {
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            fileName.textContent = file.name;
-            filePreview.classList.remove('hidden');
-          };
-          reader.readAsDataURL(file);
-        } else {
-          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-        }
-      }
-      
-      // Update points badge
-      updatePointsBadge();
-      
-      // Simple notification count update on load
-      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-      const unreadCount = notifications.filter(n => !n.read).length;
-      if (unreadCount > 0) {
-        document.getElementById('notif-badge').textContent = unreadCount;
-        document.getElementById('notif-badge').classList.remove('hidden');
-      }
-    };
+      // Check camera access
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+          // Camera access granted
+          document.getElementById('camera-error').classList.add('hidden');
+          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
+        })
+        .catch(function(err) {
+          // Camera access denied
+          console.error("Camera error:", err);
+          handleWebcamError(err);
+        });
+    }
+    
+    function closeAR() {
+      const arView = document.getElementById('ar-view');
+      arView.style.display = 'none';
+    }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      const button = document.getElementById('registration-btn');
+    // แผนที่ 3D
+    function showMap() {
+      document.getElementById('map-section').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
+    }
+    
+    function hideMap() {
+      document.getElementById('map-section').classList.add('hidden');
+    }
+
+    // ลงทะเบียน
+    function showRegistration() {
+      document.getElementById('registration-section').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
+    }
+    
+    function hideRegistration() {
+      document.getElementById('registration-section').classList.add('hidden');
+    }
+    
+    function registerUser() {
+      const studentId = document.getElementById('student-id').value;
+      const fullname = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const department = document.getElementById('department').value;
+      const phone = document.getElementById('phone').value;
       
-      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
+      if (!studentId || !fullname || !email || !department || !phone) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
       }
-    });
+      
+      // Get selected interests
+      const interests = [];
+      document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+        interests.push(checkbox.value);
+      });
+      
+      // Get uploaded file
+      const fileInput = document.getElementById('file-input');
+      let imageData = null;
+      
+      if (fileInput.files.length) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imageData = e.target.result;
+          saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveRegistrationData(studentId, fullname, email, department, phone, interests, null);
+      }
+    }
+    
+    function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
+      const userData = {
+        studentId,
+        fullname,
+        email,
+        department,
+        phone,
+        interests,
+        imageData
+      };
+      
+      localStorage.setItem("userData", JSON.stringify(userData));
+      
+      // Add registration points
+      addPoints("ลงทะเบียนใช้งานระบบ", 50);
+      
+      // Show notification
+      showNotification("ลงทะเบียนสำเร็จ! คุณได้รับ 50 คะแนน");
+      
+      alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
+      hideRegistration();
+      showUserInfo(userData);
+      showActivitiesSection();
+    }
+
+    // Notification system
+    function showNotification(message) {
+      const notifBadge = document.getElementById('notif-badge');
+      notifBadge.textContent = "1";
+      notifBadge.classList.remove('hidden');
+      
+      // Store notification
+      let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      notifications.push({
+        message: message,
+        timestamp: new Date().toISOString(),
+        read: false
+      });
+      localStorage.setItem("notifications", JSON.stringify(notifications));
+    }
+
+    function openNotification() {
+      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      if (notifications.length === 0) {
+        alert("ไม่มีแจ้งเตือนใหม่");
+      } else {
+        let message = "การแจ้งเตือนล่าสุด:\n\n";
+        notifications.forEach((notif, index) => {
+          const date = new Date(notif.timestamp).toLocaleDateString('th-TH');
+          message += `${index + 1}. ${notif.message} (${date})\n`;
+        });
+        alert(message);
+        
+        // Mark as read and hide badge
+        document.getElementById('notif-badge').classList.add('hidden');
+        notifications.forEach(notif => notif.read = true);
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+      }
+    }
+
+    // Points system
+    function addPoints(activity, points) {
+      userPoints.total += points;
+      userPoints.activities.push({
+        activity: activity,
+        points: points,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem("userPoints", JSON.stringify(userPoints));
+      updatePointsBadge();
+    }
+
+    function updatePointsBadge() {
+      const pointsBadge = document.getElementById('points-badge');
+      if (userPoints.total > 0) {
+        pointsBadge.textContent = userPoints.total;
+        pointsBadge.classList.remove('hidden');
+      } else {
+        pointsBadge.classList.add('hidden');
+      }
+    }
+
+    function completeActivity(activityName, points) {
+      if (!userData) {
+        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
+        return;
+      }
+      
+      addPoints(activityName, points);
+      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
+      
+      // Close the activity detail
+      const activityCards = document.querySelectorAll('.activity-card');
+      activityCards.forEach(card => {
+        const detail = card.querySelector('.activity-detail');
+        if (detail && detail.classList.contains('expanded')) {
+          detail.classList.remove('expanded');
+          const chevron = card.querySelector('.activity-chevron');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+
+    function openPointsModal() {
+      const pointsList = document.getElementById('points-list');
+      const totalPoints = document.getElementById('total-points');
+      
+      // Clear previous content
+      pointsList.innerHTML = '';
+      
+      // Add points activities
+      if (userPoints.activities.length === 0) {
+        pointsList.innerHTML = '<p class="text-gray-500 text-center py-4 text-sm">ยังไม่มีกิจกรรมที่ได้รับคะแนน</p>';
+      } else {
+        userPoints.activities.forEach(activity => {
+          const date = new Date(activity.timestamp).toLocaleDateString('th-TH');
+          const pointsItem = document.createElement('div');
+          pointsItem.className = 'points-item';
+          pointsItem.innerHTML = `
+            <div>
+              <p class="font-medium text-sm">${activity.activity}</p>
+              <p class="text-xs text-muted">${date}</p>
+            </div>
+            <span class="text-green-600 font-semibold text-sm">+${activity.points}</span>
+          `;
+          pointsList.appendChild(pointsItem);
+        });
+      }
+      
+      // Update total points
+      totalPoints.textContent = userPoints.total;
+      
+      // Show modal
+      document.getElementById('points-modal').classList.add('show');
+    }
+
+    function closePointsModal() {
+      document.getElementById('points-modal').classList.remove('show');
+    }
   </script>
 </body>
 </html>
+
