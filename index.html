@@ -1,1482 +1,1513 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SRTC VR Virtual | แผนผังและตึก 3D</title>
-  <meta name="theme-color" content="#1a56db">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SRTC VR Virtual | แผนผังและตึก 3D</title>
+  <meta name="theme-color" content="#1a56db">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    * { 
-      font-family: 'Kanit', sans-serif;
-      box-sizing: border-box;
-    }
-    
-    :root {
-      --primary-color: #1a56db;
-      --primary-light: #3f75ea;
-      --primary-dark: #0e3a9c;
-      --accent-color: #ff6b35;
-      --text-dark: #1f2937;
-      --text-light: #6b7280;
-      --bg-light: #f8fafc;
-      --bg-white: #ffffff;
-      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    
-    body {
-      overflow-x: hidden;
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: var(--text-dark);
-    }
-    
-    /* Header Styles */
-    .glass-header {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      box-shadow: var(--shadow-light);
-    }
-    
-    /* Button Styles */
-    .icon-button {
-      position: relative; 
-      padding: 0.6rem; 
-      border-radius: 12px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      color: var(--text-dark); 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-light);
-      background: var(--bg-white);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .icon-button:hover { 
-      transform: translateY(-2px); 
-      box-shadow: var(--shadow-medium);
-      color: var(--primary-color);
-    }
-    
-    .badge {
-      position: absolute; 
-      top: -6px; 
-      right: -6px;
-      background: var(--accent-color); 
-      color: white;
-      font-size: 0.65rem; 
-      padding: 2px 6px;
-      border-radius: 9999px; 
-      font-weight: bold;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    
-    /* User Profile Button */
-    .user-profile-button {
-      background-color: var(--bg-white);
-      border-radius: 12px;
-      padding: 0.4rem 0.8rem 0.4rem 0.4rem;
-      display: flex; 
-      align-items: center; 
-      color: var(--text-dark);
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .user-profile-button:hover { 
-      transform: translateY(-2px); 
-      box-shadow: var(--shadow-medium);
-    }
-    
-    /* Modal Styles */
-    .modal {
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.5);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      z-index: 50;
-      backdrop-filter: blur(5px);
-    }
-    
-    .modal.show { 
-      display: flex; 
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .modal-content {
-      background: var(--bg-white);
-      border-radius: 1.5rem; 
-      padding: 1.5rem;
-      box-shadow: var(--shadow-large); 
-      text-align: center;
-      position: relative; 
-      animation: modalSlideIn 0.3s ease;
-      max-width: 90%;
-      max-height: 90%;
-      overflow-y: auto;
-    }
-    
-    @keyframes fadeIn { 
-      from { opacity:0; } 
-      to { opacity:1; } 
-    }
-    
-    @keyframes modalSlideIn {
-      from {
-        opacity:0;
-        transform:translateY(20px) scale(0.95);
-      } 
-      to {
-        opacity:1;
-        transform:translateY(0) scale(1);
-      } 
-    }
-    
-    /* AR View */
-    #ar-view { 
-      position: fixed; 
-      inset: 0; 
-      z-index: 9999; 
-      display: none; 
-      background: black; 
-    }
-    
-    /* Modern Card Design */
-    .modern-card {
-      background: var(--bg-white);
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow-light);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-    
-    .modern-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-medium);
-    }
-    
-    /* Gradient Card */
-    .gradient-card {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: white;
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow-medium);
-      transition: all 0.3s ease;
-    }
-    
-    .gradient-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-large);
-    }
-    
-    /* Hero Section */
-    .hero-section {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-      position: relative;
-      min-height: auto;
-      overflow: hidden;
-    }
-    
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(26, 86, 219, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(26, 86, 219, 0.03) 0%, transparent 50%);
-      z-index: -1;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 900px;
-      width: 100%;
-    }
-    
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-      max-width: 900px;
-      width: 100%;
-    }
-    
-    /* CTA Button */
-    .cta-button {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: white;
-      font-weight: 600;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      box-shadow: var(--shadow-medium);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-large);
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-    }
-    
-    .cta-button.secondary {
-      background: var(--bg-white);
-      color: var(--primary-color);
-      border: 1px solid rgba(26, 86, 219, 0.2);
-    }
-    
-    .cta-button.secondary:hover {
-      background: rgba(26, 86, 219, 0.05);
-    }
-    
-    /* Footer */
-    .footer {
-      background: var(--bg-white);
-      padding: 1rem;
-      text-align: center;
-      margin-top: auto;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Registration form styles */
-    .registration-form {
-      background: var(--bg-white);
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-large);
-      max-width: 500px;
-      margin: 1rem auto;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Form input styles */
-    .form-input {
-      width: 100%;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      color: var(--text-dark);
-      background-color: var(--bg-white);
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
-    }
-    
-    /* File upload styles */
-    .file-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border: 2px dashed #d1d5db;
-      border-radius: 0.75rem;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: var(--bg-light);
-    }
-    
-    .file-upload:hover {
-      border-color: var(--primary-color);
-      background-color: rgba(26, 86, 219, 0.05);
-    }
-    
-    .file-upload-icon {
-      color: var(--text-light);
-      margin-bottom: 0.5rem;
-    }
-    
-    /* Points modal styles */
-    .points-modal {
-      max-width: 500px;
-      width: 90%;
-    }
-    
-    .points-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    
-    .points-item:last-child {
-      border-bottom: none;
-    }
-    
-    /* Activity Section */
-    .activity-section {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      max-width: 900px;
-      width: 100%;
-    }
-    
-    .activity-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    
-    .activity-card {
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      min-height: 160px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    
-    .activity-detail {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-    }
-    
-    .activity-detail.expanded {
-      max-height: 400px;
-    }
-    
-    /* Floating Elements */
-    .floating-element {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .hero-section {
-        padding: 1.5rem 1rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .registration-form {
-        margin: 1rem;
-        padding: 1.25rem;
-      }
-      
-      .activity-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .activity-section {
-        padding: 1.25rem;
-      }
-      
-      .hero-content h2 {
-        font-size: 1.75rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .hero-content h2 {
-        font-size: 1.5rem;
-      }
-      
-      .cta-button {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.85rem;
-      }
-      
-      .activity-card {
-        padding: 1.25rem;
-        min-height: 150px;
-      }
-    }
-    
-    /* Compact layout adjustments */
-    .compact-layout {
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    
-    /* Text styles */
-    .text-primary {
-      color: var(--primary-color);
-    }
-    
-    .text-muted {
-      color: var(--text-light);
-    }
-    
-    /* Webcam Error Handling */
-    .webcam-error {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .webcam-error.show {
-      display: flex;
-    }
-    
-    .webcam-error-content {
-      background: var(--bg-white);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
-      color: var(--text-dark);
-      box-shadow: var(--shadow-large);
-    }
-    
-    /* User Dropdown Menu */
-    .user-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      margin-top: 0.5rem;
-      background: var(--bg-white);
-      min-width: 200px;
-      border-radius: 1rem;
-      box-shadow: var(--shadow-large);
-      z-index: 100;
-      overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      animation: fadeIn 0.2s ease;
-    }
-    
-    .dropdown-content.show {
-      display: block;
-    }
-    
-    .dropdown-item {
-      display: flex;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      color: var(--text-dark);
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      font-size: 0.9rem;
-    }
-    
-    .dropdown-item:last-child {
-      border-bottom: none;
-    }
-    
-    .dropdown-item:hover {
-      background-color: rgba(26, 86, 219, 0.05);
-      color: var(--primary-color);
-    }
-    
-    .dropdown-item i {
-      width: 18px;
-      height: 18px;
-      margin-right: 0.75rem;
-    }
-    
-    .dropdown-item.logout {
-      color: #e53e3e;
-    }
-    
-    .dropdown-item.logout:hover {
-      background-color: rgba(229, 62, 62, 0.1);
-    }
-    
-    /* Section Title */
-    .section-title {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 1.5rem;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 50%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-      border-radius: 2px;
-    }
-    
-    /* Progress Bar */
-    .progress-bar {
-      height: 6px;
-      background-color: #e5e7eb;
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 0.5rem;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-      border-radius: 3px;
-      transition: width 0.5s ease;
-    }
-  </style>
+  <style>
+    * { 
+      font-family: 'Kanit', sans-serif;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary-color: #1a56db;
+      --primary-light: #3f75ea;
+      --primary-dark: #0e3a9c;
+      --accent-color: #ff6b35;
+      --text-dark: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f8fafc;
+      --bg-white: #ffffff;
+      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    body {
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: var(--text-dark);
+    }
+    
+    /* Header Styles */
+    .glass-header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-light);
+    }
+    
+    /* Button Styles */
+    .icon-button {
+      position: relative; 
+      padding: 0.6rem; 
+      border-radius: 12px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      color: var(--text-dark); 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-light);
+      background: var(--bg-white);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .icon-button:hover { 
+      transform: translateY(-2px); 
+      box-shadow: var(--shadow-medium);
+      color: var(--primary-color);
+    }
+    
+    .badge {
+      position: absolute; 
+      top: -6px; 
+      right: -6px;
+      background: var(--accent-color); 
+      color: white;
+      font-size: 0.65rem; 
+      padding: 2px 6px;
+      border-radius: 9999px; 
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    /* User Profile Button */
+    .user-profile-button {
+      background-color: var(--bg-white);
+      border-radius: 12px;
+      padding: 0.4rem 0.8rem 0.4rem 0.4rem;
+      display: flex; 
+      align-items: center; 
+      color: var(--text-dark);
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .user-profile-button:hover { 
+      transform: translateY(-2px); 
+      box-shadow: var(--shadow-medium);
+    }
+    
+    /* Modal Styles */
+    .modal {
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.5);
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 50;
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal.show { 
+      display: flex; 
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modal-content {
+      background: var(--bg-white);
+      border-radius: 1.5rem; 
+      padding: 1.5rem;
+      box-shadow: var(--shadow-large); 
+      text-align: center;
+      position: relative; 
+      animation: modalSlideIn 0.3s ease;
+      max-width: 90%;
+      max-height: 90%;
+      overflow-y: auto;
+    }
+    
+    @keyframes fadeIn { 
+      from { opacity:0; } 
+      to { opacity:1; } 
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity:0;
+        transform:translateY(20px) scale(0.95);
+      } 
+      to {
+        opacity:1;
+        transform:translateY(0) scale(1);
+      } 
+    }
+    
+    /* AR View */
+    #ar-view { 
+      position: fixed; 
+      inset: 0; 
+      z-index: 9999; 
+      display: none; 
+      background: black; 
+    }
+    
+    /* Modern Card Design */
+    .modern-card {
+      background: var(--bg-white);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    
+    .modern-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    /* Gradient Card */
+    .gradient-card {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s ease;
+    }
+    
+    .gradient-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-large);
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      position: relative;
+      min-height: auto;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(26, 86, 219, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(26, 86, 219, 0.03) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+    
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      max-width: 900px;
+      width: 100%;
+    }
+    
+    /* CTA Button */
+    .cta-button {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-large);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    }
+    
+    .cta-button.secondary {
+      background: var(--bg-white);
+      color: var(--primary-color);
+      border: 1px solid rgba(26, 86, 219, 0.2);
+    }
+    
+    .cta-button.secondary:hover {
+      background: rgba(26, 86, 219, 0.05);
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--bg-white);
+      padding: 1rem;
+      text-align: center;
+      margin-top: auto;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Registration form styles */
+    .registration-form {
+      background: var(--bg-white);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-large);
+      max-width: 500px;
+      margin: 1rem auto;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Form input styles */
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      background-color: var(--bg-white);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    }
+    
+    /* File upload styles */
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #d1d5db;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-light);
+    }
+    
+    .file-upload:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(26, 86, 219, 0.05);
+    }
+    
+    .file-upload-icon {
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Points modal styles */
+    .points-modal {
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .points-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .points-item:last-child {
+      border-bottom: none;
+    }
+    
+    /* Activity Section */
+    .activity-section {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      max-width: 900px;
+      width: 100%;
+    }
+    
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .activity-card {
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .activity-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    
+    .activity-detail.expanded {
+      max-height: 400px;
+    }
+    
+    /* Floating Elements */
+    .floating-element {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 1.5rem 1rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .registration-form {
+        margin: 1rem;
+        padding: 1.25rem;
+      }
+      
+      .activity-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .activity-section {
+        padding: 1.25rem;
+      }
+      
+      .hero-content h2 {
+        font-size: 1.75rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-content h2 {
+        font-size: 1.5rem;
+      }
+      
+      .cta-button {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.85rem;
+      }
+      
+      .activity-card {
+        padding: 1.25rem;
+        min-height: 150px;
+      }
+    }
+    
+    /* Compact layout adjustments */
+    .compact-layout {
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Text styles */
+    .text-primary {
+      color: var(--primary-color);
+    }
+    
+    .text-muted {
+      color: var(--text-light);
+    }
+    
+    /* Webcam Error Handling */
+    .webcam-error {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .webcam-error.show {
+      display: flex;
+    }
+    
+    .webcam-error-content {
+      background: var(--bg-white);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-large);
+    }
+    
+    /* User Dropdown Menu */
+    .user-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 0.5rem;
+      background: var(--bg-white);
+      min-width: 200px;
+      border-radius: 1rem;
+      box-shadow: var(--shadow-large);
+      z-index: 100;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .dropdown-content.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 0.9rem;
+    }
+    
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+      background-color: rgba(26, 86, 219, 0.05);
+      color: var(--primary-color);
+    }
+    
+    .dropdown-item i {
+      width: 18px;
+      height: 18px;
+      margin-right: 0.75rem;
+    }
+    
+    .dropdown-item.logout {
+      color: #e53e3e;
+    }
+    
+    .dropdown-item.logout:hover {
+      background-color: rgba(229, 62, 62, 0.1);
+    }
+    
+    /* Section Title */
+    .section-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+    
+    /* Progress Bar */
+    .progress-bar {
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header class="glass-header sticky top-0 z-20">
-    <div class="flex justify-between items-center px-4 sm:px-6 py-3">
-      <div class="flex items-center space-x-3">
-        <div class="p-2 bg-white rounded-xl shadow-md">
-          <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg" />
-        </div>
-        <div>
-          <h1 class="text-lg sm:text-xl font-bold text-primary">SRTC VR Navigation</h1>
-          <p class="text-xs text-muted hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-        </div>
-      </div>
+    <header class="glass-header sticky top-0 z-20">
+    <div class="flex justify-between items-center px-4 sm:px-6 py-3">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 bg-white rounded-xl shadow-md">
+          <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg" />
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold text-primary">SRTC VR Navigation</h1>
+          <p class="text-xs text-muted hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+        </div>
+      </div>
 
-      <nav class="flex items-center space-x-2 sm:space-x-3">
-        <button onclick="openQRModal()" class="icon-button" title="QR Code">
-          <i data-lucide="qr-code" class="w-5 h-5"></i>
-        </button>
+      <nav class="flex items-center space-x-2 sm:space-x-3">
+        <button onclick="openQRModal()" class="icon-button" title="QR Code">
+          <i data-lucide="qr-code" class="w-5 h-5"></i>
+        </button>
 
-        <button onclick="toggleARMode()" class="icon-button" title="เปิดโหมด AR/VR">
-          <i data-lucide="scan" class="w-5 h-5"></i>
-        </button>
+        <button onclick="toggleARMode()" class="icon-button" title="เปิดโหมด AR/VR">
+          <i data-lucide="scan" class="w-5 h-5"></i>
+        </button>
 
-        <button onclick="openNotification()" class="icon-button" title="แจ้งเตือน">
-          <i data-lucide="bell" class="w-5 h-5"></i>
-          <span id="notif-badge" class="badge hidden"></span>
-        </button>
+        <button onclick="openNotification()" class="icon-button" title="แจ้งเตือน">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span id="notif-badge" class="badge hidden"></span>
+        </button>
 
-        <button onclick="openPointsModal()" class="icon-button" title="แต้มสะสม">
-          <i data-lucide="award" class="w-5 h-5"></i>
-          <span id="points-badge" class="badge hidden">0</span>
-        </button>
+        <button onclick="openPointsModal()" class="icon-button" title="แต้มสะสม">
+          <i data-lucide="award" class="w-5 h-5"></i>
+          <span id="points-badge" class="badge hidden">0</span>
+        </button>
 
-        <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
-        <div class="user-dropdown">
-          <button id="registration-btn" onclick="handleRegistrationClick()" class="user-profile-button">
-            <div id="registration-default" class="flex items-center">
-              <div class="p-1.5 bg-primary/10 rounded-lg mr-2">
-                <i data-lucide="user-plus" class="w-4 h-4 text-primary"></i>
-              </div>
-              <span class="text-sm font-medium hidden sm:inline">ลงทะเบียน</span>
-            </div>
-            <div id="registration-user" class="user-info hidden">
-              <img id="user-avatar" class="w-6 h-6 rounded-full object-cover mr-2 border border-primary/20" />
-              <span id="user-name" class="text-sm font-medium"></span>
-              <i data-lucide="chevron-down" class="w-4 h-4 ml-1 text-muted"></i>
-            </div>
-          </button>
-          
-          <!-- Dropdown Menu -->
-          <div id="user-dropdown-menu" class="dropdown-content">
-            <a href="#" class="dropdown-item" onclick="editProfile()">
-              <i data-lucide="user" class="w-4 h-4"></i>
-              <span>โปรไฟล์ของฉัน</span>
-            </a>
-            <a href="#" class="dropdown-item" onclick="managePhotos()">
-              <i data-lucide="image" class="w-4 h-4"></i>
-              <span>รูปภาพของฉัน</span>
-            </a>
-            <a href="#" class="dropdown-item" onclick="openPointsModal()">
-              <i data-lucide="award" class="w-4 h-4"></i>
-              <span>คะแนนสะสม</span>
-            </a>
-            <a href="#" class="dropdown-item logout" onclick="logout()">
-              <i data-lucide="log-out" class="w-4 h-4"></i>
-              <span>ออกจากระบบ</span>
-            </a>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>
+                <div class="user-dropdown">
+          <button id="registration-btn" onclick="handleRegistrationClick()" class="user-profile-button">
+            <div id="registration-default" class="flex items-center">
+              <div class="p-1.5 bg-primary/10 rounded-lg mr-2">
+                <i data-lucide="user-plus" class="w-4 h-4 text-primary"></i>
+              </div>
+              <span class="text-sm font-medium hidden sm:inline">ลงทะเบียน</span>
+            </div>
+            <div id="registration-user" class="user-info hidden">
+              <img id="user-avatar" class="w-6 h-6 rounded-full object-cover mr-2 border border-primary/20" />
+              <span id="user-name" class="text-sm font-medium"></span>
+              <i data-lucide="chevron-down" class="w-4 h-4 ml-1 text-muted"></i>
+            </div>
+          </button>
+          
+                    <div id="user-dropdown-menu" class="dropdown-content">
+            <a href="#" class="dropdown-item" onclick="editProfile()">
+              <i data-lucide="user" class="w-4 h-4"></i>
+              <span>โปรไฟล์ของฉัน</span>
+            </a>
+            <a href="#" class="dropdown-item" onclick="managePhotos()">
+              <i data-lucide="image" class="w-4 h-4"></i>
+              <span>รูปภาพของฉัน</span>
+            </a>
+            <a href="#" class="dropdown-item" onclick="openPointsModal()">
+              <i data-lucide="award" class="w-4 h-4"></i>
+              <span>คะแนนสะสม</span>
+            </a>
+            <a href="#" class="dropdown-item logout" onclick="logout()">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span>ออกจากระบบ</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow compact-layout px-4 py-6">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <div class="floating-element mb-6">
-          <div class="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-md mb-4">
-            <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
-            <span class="text-sm font-medium text-primary">ระบบนำทางเสมือนจริง (AR/VR)</span>
-          </div>
-        </div>
-        
-        <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-primary">สำรวจวิทยาลัยในรูปแบบใหม่</h2>
-        <p class="text-lg text-muted mb-6 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
-        
-        <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-          <button onclick="showMap()" class="cta-button">
-            <i data-lucide="map" class="w-5 h-5"></i>
-            <span>เปิดดูแผนผังอาคาร 3D</span>
-          </button>
-          
-          <button onclick="toggleARMode()" class="cta-button secondary">
-            <i data-lucide="scan" class="w-5 h-5"></i>
-            <span>เปิดโหมด AR/VR</span>
-          </button>
-        </div>
-        
-        <div class="features-grid">
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="map-pin" class="w-6 h-6 text-primary"></i>
-            </div>
-            <h3 class="text-lg font-bold mb-2">นำทางแบบเรียลไทม์</h3>
-            <p class="text-muted text-sm">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
-          </div>
-          
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="box" class="w-6 h-6 text-primary"></i>
-            </div>
-            <h3 class="text-lg font-bold mb-2">ประสบการณ์ 3D</h3>
-            <p class="text-muted text-sm">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
-          </div>
-          
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="camera" class="w-6 h-6 text-primary"></i>
-            </div>
-            <h3 class="text-lg font-bold mb-2">เทคโนโลยี AR</h3>
-            <p class="text-muted text-sm">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
-          </div>
-        </div>
-        
-        <!-- Activities Section (Visible after registration) -->
-        <div id="activities-section" class="activity-section modern-card hidden">
-          <h2 class="section-title text-xl font-bold text-center">กิจกรรมรับคะแนน</h2>
-          <p class="text-muted text-center mb-6">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
-          
-          <div class="activity-grid">
-            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-1')">
-              <div class="flex items-center mb-3">
-                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
-                  <i data-lucide="map" class="w-5 h-5 text-primary"></i>
-                </div>
-                <h3 class="text-lg font-bold">สำรวจแผนที่ 3D</h3>
-              </div>
-              <p class="text-muted text-sm mb-3">สำรวจแผนที่สามมิติของวิทยาลัยเพื่อทำความเข้าใจกับพื้นที่ต่างๆ</p>
-              <div class="flex justify-between items-center">
-                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+20 คะแนน</span>
-                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-1"></i>
-              </div>
-              <div class="activity-detail mt-3" id="activity-1">
-                <div class="border-t border-gray-200 pt-3">
-                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
-                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
-                    <li>สำรวจอาคารเรียนทั้งหมด 5 อาคารในแผนที่ 3D</li>
-                    <li>ค้นหาห้องประชุมใหญ่และห้องปฏิบัติการ</li>
-                    <li>ทำความเข้าใจกับเส้นทางเดินระหว่างอาคาร</li>
-                  </ul>
-                  <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
-                    เข้าร่วมกิจกรรม
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-2')">
-              <div class="flex items-center mb-3">
-                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
-                  <i data-lucide="scan" class="w-5 h-5 text-primary"></i>
-                </div>
-                <h3 class="text-lg font-bold">ทดลองใช้ AR</h3>
-              </div>
-              <p class="text-muted text-sm mb-3">ทดลองใช้งานเทคโนโลยี AR เพื่อดูข้อมูลสถานที่ผ่านกล้องสมาร์ทโฟน</p>
-              <div class="flex justify-between items-center">
-                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+30 คะแนน</span>
-                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-2"></i>
-              </div>
-              <div class="activity-detail mt-3" id="activity-2">
-                <div class="border-t border-gray-200 pt-3">
-                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
-                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
-                    <li>ทดลองสแกน Marker เพื่อดูข้อมูลอาคารเรียน</li>
-                    <li>ใช้งานฟังก์ชันนำทางด้วย AR ไปยังสถานที่ต่างๆ</li>
-                    <li>ทดสอบการแสดงผลข้อมูลสถานที่ผ่านกล้อง</li>
-                  </ul>
-                  <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
-                    เข้าร่วมกิจกรรม
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-3')">
-              <div class="flex items-center mb-3">
-                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
-                  <i data-lucide="share-2" class="w-5 h-5 text-primary"></i>
-                </div>
-                <h3 class="text-lg font-bold">แชร์ QR Code</h3>
-              </div>
-              <p class="text-muted text-sm mb-3">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
-              <div class="flex justify-between items-center">
-                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+10 คะแนน</span>
-                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-3"></i>
-              </div>
-              <div class="activity-detail mt-3" id="activity-3">
-                <div class="border-t border-gray-200 pt-3">
-                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
-                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
-                    <li>แชร์ QR Code ผ่านแพลตฟอร์มโซเชียลมีเดีย</li>
-                    <li>ส่งให้เพื่อนๆ ผ่านแอปพลิเคชันแชท</li>
-                    <li>แนะนำระบบนำทางให้กับรุ่นน้อง</li>
-                  </ul>
-                  <button onclick="completeActivity('แชร์ QR Code', 10)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
-                    เข้าร่วมกิจกรรม
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <main class="flex-grow compact-layout px-4 py-6">
+        <section class="hero-section">
+      <div class="hero-content">
+        <div class="floating-element mb-6">
+          <div class="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-md mb-4">
+            <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+            <span class="text-sm font-medium text-primary">ระบบนำทางเสมือนจริง (AR/VR)</span>
+          </div>
+        </div>
+        
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-primary">สำรวจวิทยาลัยในรูปแบบใหม่</h2>
+        <p class="text-lg text-muted mb-6 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
+        
+        <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+          <button onclick="showMap()" class="cta-button">
+            <i data-lucide="map" class="w-5 h-5"></i>
+            <span>เปิดดูแผนผังอาคาร 3D</span>
+          </button>
+          
+          <button onclick="toggleARMode()" class="cta-button secondary">
+            <i data-lucide="scan" class="w-5 h-5"></i>
+            <span>เปิดโหมด AR/VR</span>
+          </button>
+        </div>
+        
+        <div class="features-grid">
+          <div class="modern-card p-5 text-center">
+            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="map-pin" class="w-6 h-6 text-primary"></i>
+              </div>
+            <h3 class="text-lg font-bold mb-2">นำทางแบบเรียลไทม์</h3>
+            <p class="text-muted text-sm">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+          </div>
+          
+          <div class="modern-card p-5 text-center">
+            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="box" class="w-6 h-6 text-primary"></i>
+            </div>
+            <h3 class="text-lg font-bold mb-2">ประสบการณ์ 3D</h3>
+            <p class="text-muted text-sm">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+          </div>
+          
+          <div class="modern-card p-5 text-center">
+            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="camera" class="w-6 h-6 text-primary"></i>
+            </div>
+            <h3 class="text-lg font-bold mb-2">เทคโนโลยี AR</h3>
+            <p class="text-muted text-sm">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
+          </div>
+        </div>
+        
+                <div id="activities-section" class="activity-section modern-card hidden">
+          <h2 class="section-title text-xl font-bold text-center">กิจกรรมรับคะแนน</h2>
+          <p class="text-muted text-center mb-6">ร่วมทำกิจกรรมและสะสมคะแนนเพื่อรับสิทธิพิเศษต่างๆ</p>
+          
+          <div class="activity-grid">
+            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-1')">
+              <div class="flex items-center mb-3">
+                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                  <i data-lucide="map" class="w-5 h-5 text-primary"></i>
+                </div>
+                <h3 class="text-lg font-bold">สำรวจแผนที่ 3D</h3>
+              </div>
+              <p class="text-muted text-sm mb-3">สำรวจแผนที่สามมิติของวิทยาลัยเพื่อทำความเข้าใจกับพื้นที่ต่างๆ</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+20 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-1"></i>
+              </div>
+              <div class="activity-detail mt-3" id="activity-1">
+                <div class="border-t border-gray-200 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
+                    <li>สำรวจอาคารเรียนทั้งหมด 5 อาคารในแผนที่ 3D</li>
+                    <li>ค้นหาห้องประชุมใหญ่และห้องปฏิบัติการ</li>
+                    <li>ทำความเข้าใจกับเส้นทางเดินระหว่างอาคาร</li>
+                  </ul>
+                  <button onclick="completeActivity('สำรวจแผนที่ 3D', 20)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-2')">
+              <div class="flex items-center mb-3">
+                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                  <i data-lucide="scan" class="w-5 h-5 text-primary"></i>
+                </div>
+                <h3 class="text-lg font-bold">ทดลองใช้ AR</h3>
+              </div>
+              <p class="text-muted text-sm mb-3">ทดลองใช้งานเทคโนโลยี AR เพื่อดูข้อมูลสถานที่ผ่านกล้องสมาร์ทโฟน</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+30 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-2"></i>
+              </div>
+              <div class="activity-detail mt-3" id="activity-2">
+                <div class="border-t border-gray-200 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
+                    <li>ทดลองสแกน Marker เพื่อดูข้อมูลอาคารเรียน</li>
+                    <li>ใช้งานฟังก์ชันนำทางด้วย AR ไปยังสถานที่ต่างๆ</li>
+                    <li>ทดสอบการแสดงผลข้อมูลสถานที่ผ่านกล้อง</li>
+                  </ul>
+                  <button onclick="completeActivity('ทดลองใช้ AR', 30)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="modern-card activity-card" onclick="toggleActivityDetail('activity-3')">
+              <div class="flex items-center mb-3">
+                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                  <i data-lucide="share-2" class="w-5 h-5 text-primary"></i>
+                </div>
+                <h3 class="text-lg font-bold">แชร์ QR Code</h3>
+                </div>
+              <p class="text-muted text-sm mb-3">แชร์ QR Code ของระบบนำทางให้เพื่อนๆ ในวิทยาลัย</p>
+              <div class="flex justify-between items-center">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">+10 คะแนน</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 activity-chevron text-muted" id="chevron-3"></i>
+            </div>
+              <div class="activity-detail mt-3" id="activity-3">
+                <div class="border-t border-gray-200 pt-3">
+                  <h4 class="font-bold mb-2 text-sm">รายละเอียดกิจกรรม:</h4>
+                  <ul class="list-disc list-inside text-muted text-sm space-y-1 mb-3">
+                    <li>แชร์ QR Code ผ่านแพลตฟอร์มโซเชียลมีเดีย</li>
+                    <li>ส่งให้เพื่อนๆ ผ่านแอปพลิเคชันแชท</li>
+                    <li>แนะนำระบบนำทางให้กับรุ่นน้อง</li>
+                  </ul>
+                  <button onclick="completeActivity('แชร์ QR Code', 10)" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
+                    เข้าร่วมกิจกรรม
+                  </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Registration Section -->
-    <section id="registration-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
-      <div class="max-w-4xl mx-auto px-4">
-        <h2 class="section-title text-2xl font-bold text-center mb-2">ลงทะเบียนรับการแจ้งเตือน</h2>
-        <p class="text-muted text-center mb-6">กรอกข้อมูลเพื่อรับการแจ้งเตือนและอัปเดตข้อมูลล่าสุดจากระบบ</p>
-        
-        <div class="registration-form">
-          <form id="registration-form">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="block text-dark mb-2 font-medium text-sm" for="student-id">รหัสนักศึกษา</label>
-                <input type="text" id="student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
-              </div>
-              <div>
-                <label class="block text-dark mb-2 font-medium text-sm" for="fullname">ชื่อ-นามสกุล</label>
-                <input type="text" id="fullname" class="form-input" placeholder="ชื่อ-นามสกุล" required>
-              </div>
-            </div>
-            
-            <div class="mb-4">
-              <label class="block text-dark mb-2 font-medium text-sm" for="email">อีเมล</label>
-              <input type="email" id="email" class="form-input" placeholder="อีเมล" required>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="block text-dark mb-2 font-medium text-sm" for="department">แผนก/สาขา</label>
-                <select id="department" class="form-input" required>
-                  <option value="">เลือกแผนก/สาขา</option>
-                  <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
-                  <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
-                  <option value="ไฟฟ้า">ไฟฟ้า</option>
-                  <option value="ยานยนต์">ยานยนต์</option>
-                  <option value="ก่อสร้าง">ก่อสร้าง</option>
-                  <option value="อื่นๆ">อื่นๆ</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-dark mb-2 font-medium text-sm" for="phone">เบอร์โทรศัพท์</label>
-                <input type="tel" id="phone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
-              </div>
-            </div>
-            
-            <div class="mb-5">
-              <label class="block text-dark mb-2 font-medium text-sm">ความสนใจ (เลือกได้มากกว่า 1)</label>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <label class="inline-flex items-center">
-                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="AR Navigation">
-                  <span class="ml-2 text-dark text-sm">การนำทางด้วย AR</span>
-                </label>
-                <label class="inline-flex items-center">
-                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="3D Maps">
-                  <span class="ml-2 text-dark text-sm">แผนที่ 3 มิติ</span>
-                </label>
-                <label class="inline-flex items-center">
-                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="Campus Events">
-                  <span class="ml-2 text-dark text-sm">กิจกรรมในวิทยาลัย</span>
-                </label>
-                <label class="inline-flex items-center">
-                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="Technology Updates">
-                  <span class="ml-2 text-dark text-sm">อัปเดตเทคโนโลยี</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="mb-5">
-              <label class="block text-dark mb-2 font-medium text-sm">แนบรูปภาพ (ถ้ามี)</label>
-              <div class="file-upload" id="file-upload-area">
-                <i data-lucide="upload" class="w-6 h-6 file-upload-icon"></i>
-                <p class="text-muted text-sm text-center">คลิกเพื่ออัพโหลดรูปภาพ<br>หรือลากและวางไฟล์ที่นี่</p>
-                <input type="file" id="file-input" class="hidden" accept="image/*">
-              </div>
-              <div id="file-preview" class="hidden mt-2">
-                <img id="preview-image" class="max-h-24 rounded-lg mx-auto">
-                <p id="file-name" class="text-center text-sm text-muted mt-1"></p>
-              </div>
-            </div>
-            
-            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center">
-              <i data-lucide="send" class="w-4 h-4 mr-2"></i>
-              ส่งแบบฟอร์มลงทะเบียน
-            </button>
-          </form>
-          
-          <p class="text-center text-muted mt-4 text-sm">
-            ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
-          </p>
-        </div>
-        
-        <div class="text-center mt-5">
-          <button onclick="hideRegistration()" class="bg-white hover:bg-gray-50 text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
-            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
-            ปิดหน้าลงทะเบียน
-          </button>
-        </div>
-      </div>
-    </section>
+        <section id="registration-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="section-title text-2xl font-bold text-center mb-2">ลงทะเบียนรับการแจ้งเตือน</h2>
+        <p class="text-muted text-center mb-6">กรอกข้อมูลเพื่อรับการแจ้งเตือนและอัปเดตข้อมูลล่าสุดจากระบบ</p>
+        
+        <div id="registration-form-container" class="registration-form">
+          <form id="registration-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-dark mb-2 font-medium text-sm" for="student-id">รหัสนักศึกษา</label>
+                <input type="text" id="student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
+              </div>
+              <div>
+                <label class="block text-dark mb-2 font-medium text-sm" for="fullname">ชื่อ-นามสกุล</label>
+                <input type="text" id="fullname" class="form-input" placeholder="ชื่อ-นามสกุล" required>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-dark mb-2 font-medium text-sm" for="email">อีเมล</label>
+              <input type="email" id="email" class="form-input" placeholder="อีเมล" required>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-dark mb-2 font-medium text-sm" for="department">แผนก/สาขา</label>
+                <select id="department" class="form-input" required>
+                  <option value="">เลือกแผนก/สาขา</option>
+                  <option value="คอมพิวเตอร์ธุรกิจ">คอมพิวเตอร์ธุรกิจ</option>
+                  <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
+                  <option value="ไฟฟ้า">ไฟฟ้า</option>
+                  <option value="ยานยนต์">ยานยนต์</option>
+                  <option value="ก่อสร้าง">ก่อสร้าง</option>
+                  <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-dark mb-2 font-medium text-sm" for="phone">เบอร์โทรศัพท์</label>
+                <input type="tel" id="phone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
+              </div>
+            </div>
+            
+            <div class="mb-5">
+              <label class="block text-dark mb-2 font-medium text-sm">ความสนใจ (เลือกได้มากกว่า 1)</label>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="AR Navigation">
+                  <span class="ml-2 text-dark text-sm">การนำทางด้วย AR</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="3D Maps">
+                  <span class="ml-2 text-dark text-sm">แผนที่ 3 มิติ</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="Campus Events">
+                  <span class="ml-2 text-dark text-sm">กิจกรรมในวิทยาลัย</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="rounded text-primary focus:ring-primary" value="Technology Updates">
+                  <span class="ml-2 text-dark text-sm">อัปเดตเทคโนโลยี</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="mb-5">
+              <label class="block text-dark mb-2 font-medium text-sm">แนบรูปภาพ (ถ้ามี)</label>
+              <div class="file-upload" id="file-upload-area">
+                <i data-lucide="upload" class="w-6 h-6 file-upload-icon"></i>
+                <p class="text-muted text-sm text-center">คลิกเพื่ออัพโหลดรูปภาพ<br>หรือลากและวางไฟล์ที่นี่</p>
+                <input type="file" id="file-input" class="hidden" accept="image/*">
+              </div>
+              <div id="file-preview" class="hidden mt-2">
+                <img id="preview-image" class="max-h-24 rounded-lg mx-auto">
+                <p id="file-name" class="text-center text-sm text-muted mt-1"></p>
+              </div>
+            </div>
+            
+            <button type="submit" id="submit-registration-btn" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center">
+              <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+              ส่งแบบฟอร์มลงทะเบียน
+            </button>
+          </form>
+          
+          <p class="text-center text-muted mt-4 text-sm">
+            ลงทะเบียนด้วยรหัสนักศึกษา วิทยาลัยเทคนิคสุราษฎร์ธานี
+          </p>
+          
+                    <button id="login-after-register-btn" onclick="loginAfterRegistration()" class="w-full bg-white hover:bg-gray-50 text-primary py-3 rounded-xl font-semibold border border-primary mt-4 transition-all text-sm shadow-sm hidden flex items-center justify-center">
+            <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+            เข้าสู่ระบบ (ดำเนินการต่อ)
+          </button>
+        </div>
+        
+        <div class="text-center mt-5">
+          <button onclick="hideRegistration()" class="bg-white hover:bg-gray-50 text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
+            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
+            ปิดหน้าลงทะเบียน
+          </button>
+        </div>
+      </div>
+    </section>
 
-    <!-- 3D Map Section -->
-    <section id="map-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
-      <div class="max-w-4xl mx-auto px-4">
-        <h2 class="section-title text-2xl font-bold text-center mb-2">แผนผังอาคาร 3D</h2>
-        <p class="text-muted text-center mb-6">สำรวจอาคารเรียนและสถานที่ต่างๆ ในวิทยาลัยผ่านแผนที่สามมิติ</p>
-        
-        <div id="aframe-container" class="w-full h-80 rounded-xl overflow-hidden shadow-xl">
-          <a-scene embedded>
-            <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-            <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-            <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 justify-center mt-6">
-          <button class="cta-button secondary">
-            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-            <span>หมุนมุมมอง</span>
-          </button>
-          <button class="cta-button secondary">
-            <i data-lucide="zoom-in" class="w-4 h-4"></i>
-            <span>ขยาย</span>
-          </button>
-          <button class="cta-button secondary">
-            <i data-lucide="navigation" class="w-4 h-4"></i>
-            <span>นำทาง</span>
-          </button>
-        </div>
-        
-        <div class="text-center mt-6">
-          <button onclick="hideMap()" class="bg-white hover:bg-gray-50 text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
-            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
-            ปิดแผนที่
-          </button>
-        </div>
-      </div>
-    </section>
-  </main>
+        <section id="map-section" class="py-8 bg-white hidden rounded-2xl mt-6 shadow-md">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="section-title text-2xl font-bold text-center mb-2">แผนผังอาคาร 3D</h2>
+        <p class="text-muted text-center mb-6">สำรวจอาคารเรียนและสถานที่ต่างๆ ในวิทยาลัยผ่านแผนที่สามมิติ</p>
+        
+        <div id="aframe-container" class="w-full h-80 rounded-xl overflow-hidden shadow-xl">
+          <a-scene embedded>
+            <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+            <a-sky color="#ECECEC"></a-sky>
+          </a-scene>
+        </div>
+        
+        <div class="flex flex-wrap gap-3 justify-center mt-6">
+          <button class="cta-button secondary">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <span>หมุนมุมมอง</span>
+          </button>
+          <button class="cta-button secondary">
+            <i data-lucide="zoom-in" class="w-4 h-4"></i>
+            <span>ขยาย</span>
+          </button>
+          <button class="cta-button secondary">
+            <i data-lucide="navigation" class="w-4 h-4"></i>
+            <span>นำทาง</span>
+          </button>
+        </div>
+        
+        <div class="text-center mt-6">
+          <button onclick="hideMap()" class="bg-white hover:bg-gray-50 text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
+            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
+            ปิดแผนที่
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container mx-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <div class="flex items-center">
-            <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg mr-2" />
-            <div>
-              <p class="text-dark font-medium">SRTC Virtual Campus</p>
-              <p class="text-xs text-muted">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="text-center md:text-right">
-          <p class="text-dark text-sm">© 2025 SRTC Virtual Campus | All rights reserved.</p>
-          <p class="text-xs text-muted mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+    <footer class="footer">
+    <div class="container mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center">
+            <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg mr-2" />
+            <div>
+              <p class="text-dark font-medium">SRTC Virtual Campus</p>
+              <p class="text-xs text-muted">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center md:text-right">
+          <p class="text-dark text-sm">© 2025 SRTC Virtual Campus | All rights reserved.</p>
+          <p class="text-xs text-muted mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-  <!-- QR Code Modal -->
-  <div id="qr-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <button onclick="closeQRModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-lg mb-4">QR Code</h3>
-      <div id="qrcode" class="mx-auto mb-4"></div>
-      <p class="text-sm text-muted">สแกนเพื่อเข้าถึงระบบนำทาง AR/VR</p>
-    </div>
-  </div>
+    <div id="qr-modal" class="modal">
+    <div class="modal-content max-w-xs">
+      <button onclick="closeQRModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-lg mb-4">QR Code</h3>
+      <div id="qrcode" class="mx-auto mb-4"></div>
+      <p class="text-sm text-muted">สแกนเพื่อเข้าถึงระบบนำทาง AR/VR</p>
+    </div>
+  </div>
 
-  <!-- Points Modal -->
-  <div id="points-modal" class="modal">
-    <div class="modal-content points-modal">
-      <button onclick="closePointsModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-lg mb-4">คะแนนสะสม</h3>
-      <div id="points-list">
-        <!-- Points will be dynamically added here -->
-      </div>
-      <div class="mt-4 pt-4 border-t border-gray-200">
-        <div class="flex justify-between items-center">
-          <span class="font-semibold">คะแนนรวมทั้งหมด</span>
-          <span id="total-points" class="font-bold text-lg text-primary">0</span>
-        </div>
-      </div>
-    </div>
-  </div>
+    <div id="points-modal" class="modal">
+    <div class="modal-content points-modal">
+      <button onclick="closePointsModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-lg mb-4">คะแนนสะสม</h3>
+      <div id="points-list">
+              </div>
+      <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="flex justify-between items-center">
+          <span class="font-semibold">คะแนนรวมทั้งหมด</span>
+          <span id="total-points" class="font-bold text-lg text-primary">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- Webcam Error Modal -->
-  <div id="webcam-error" class="webcam-error">
-    <div class="webcam-error-content">
-      <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-3"></i>
-      <h3 class="font-bold text-lg mb-2">ไม่สามารถเข้าถึงกล้องได้</h3>
-      <p class="text-muted mb-4">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
-      <div class="flex flex-col gap-2">
-        <button onclick="closeWebcamError()" class="bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-          <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
-          ปิดข้อความ
-        </button>
-        <button onclick="window.location.reload()" class="bg-white hover:bg-gray-50 text-dark py-2 rounded-lg transition-all text-sm border border-gray-200">
-          <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-1"></i>
-          รีเฟรชหน้าเว็บ
-        </button>
-      </div>
-    </div>
-  </div>
+    <div id="webcam-error" class="webcam-error">
+    <div class="webcam-error-content">
+      <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-3"></i>
+      <h3 class="font-bold text-lg mb-2">ไม่สามารถเข้าถึงกล้องได้</h3>
+      <p class="text-muted mb-4">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
+      <div class="flex flex-col gap-2">
+        <button onclick="closeWebcamError()" class="bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
+          <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
+          ปิดข้อความ
+        </button>
+        <button onclick="window.location.reload()" class="bg-white hover:bg-gray-50 text-dark py-2 rounded-lg transition-all text-sm border border-gray-200">
+          <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-1"></i>
+          รีเฟรชหน้าเว็บ
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <!-- โหมด AR -->
-  <div id="ar-view">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-marker preset="hiro">
-        <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
-        <a-text value="อาคารเรียน SRTC" position="-0.8 1 0" rotation="-90 0 0" color="#fff"></a-text>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-    <button onclick="closeAR()" class="absolute top-4 right-4 bg-black/70 hover:bg-black/80 text-white px-4 py-2 rounded-full shadow-md z-[99999] flex items-center text-sm backdrop-blur-sm">
-      <i data-lucide="x" class="w-4 h-4 mr-1"></i>
-      ปิด AR
-    </button>
-    <div id="camera-error" class="absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center hidden">
-      <i data-lucide="alert-triangle" class="w-12 h-12 text-white mb-3"></i>
-      <h3 class="text-lg font-bold text-white mb-1">ไม่สามารถเข้าถึงกล้องได้</h3>
-      <p class="text-gray-300 text-center max-w-md text-sm">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
-      <button onclick="closeAR()" class="mt-3 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">
-        ปิดโหมด AR
-      </button>
-    </div>
-  </div>
+    <div id="ar-view">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
+        <a-text value="อาคารเรียน SRTC" position="-0.8 1 0" rotation="-90 0 0" color="#fff"></a-text>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+    <button onclick="closeAR()" class="absolute top-4 right-4 bg-black/70 hover:bg-black/80 text-white px-4 py-2 rounded-full shadow-md z-[99999] flex items-center text-sm backdrop-blur-sm">
+      <i data-lucide="x" class="w-4 h-4 mr-1"></i>
+      ปิด AR
+    </button>
+    <div id="camera-error" class="absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center hidden">
+      <i data-lucide="alert-triangle" class="w-12 h-12 text-white mb-3"></i>
+      <h3 class="text-lg font-bold text-white mb-1">ไม่สามารถเข้าถึงกล้องได้</h3>
+      <p class="text-gray-300 text-center max-w-md text-sm">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
+      <button onclick="closeAR()" class="mt-3 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">
+        ปิดโหมด AR
+      </button>
+    </div>
+  </div>
 
-  <script>
-    // Initialize Lucide icons
-    lucide.createIcons();
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
 
-    // Initialize user data
-    let userData = JSON.parse(localStorage.getItem("userData")) || null;
-    let userPoints = JSON.parse(localStorage.getItem("userPoints")) || {
-      total: 0,
-      activities: []
-    };
+    // Initialize user data from localStorage
+    let userData = JSON.parse(localStorage.getItem("userData")) || null;
+    let userPoints = JSON.parse(localStorage.getItem("userPoints")) || {
+      total: 0,
+      activities: []
+    };
 
-    // Webcam error handling
-    function handleWebcamError(error) {
-      console.error("Webcam Error:", error);
-      // Hide the default error message
-      document.getElementById('camera-error').classList.add('hidden');
-      
-      // Show our custom error modal
-      document.getElementById('webcam-error').classList.add('show');
-      
-      // Close AR view
-      document.getElementById('ar-view').style.display = 'none';
-    }
+    // Utility Functions
+    
+    // Show/Hide Webcam Error Modal
+    function handleWebcamError(error) {
+      console.error("Webcam Error:", error);
+      document.getElementById('camera-error').classList.add('hidden');
+      document.getElementById('webcam-error').classList.add('show');
+      document.getElementById('ar-view').style.display = 'none';
+    }
 
-    function closeWebcamError() {
-      document.getElementById('webcam-error').classList.remove('show');
-    }
+    function closeWebcamError() {
+      document.getElementById('webcam-error').classList.remove('show');
+    }
 
-    // Handle registration button click
-    function handleRegistrationClick() {
-      if (userData) {
-        // If user is logged in, toggle dropdown
-        toggleUserDropdown();
-      } else {
-        // If user is not logged in, show registration form
-        showRegistration();
-      }
-    }
+    // User & Registration UI Functions
+    
+    function showUserInfo(user) {
+      // Hide default registration UI and show user info
+      document.getElementById('registration-default').classList.add('hidden');
+      document.getElementById('registration-user').classList.remove('hidden');
+      
+      // Set user information
+      document.getElementById('user-name').textContent = user.fullname.split(" ")[0];
+      
+      // Use uploaded image if available, otherwise use default avatar
+      if (user.imageData) {
+        document.getElementById('user-avatar').src = user.imageData;
+      } else {
+        // Use a deterministic placeholder avatar for consistency
+        document.getElementById('user-avatar').src = "https://i.pravatar.cc/80?u=" + user.email;
+      }
+    }
 
-    // Toggle user dropdown menu
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      dropdown.classList.toggle('show');
-    }
+    function showActivitiesSection() {
+      document.getElementById('activities-section').classList.remove('hidden');
+    }
+    
+    function showRegistration() {
+      document.getElementById('registration-section').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
+      
+      // Show login button if user data exists but they are "logged out" (userData cleared but localstorage still has data)
+      const localData = localStorage.getItem("tempUserData"); // Using a temp key to check if data was saved before log out
+      if (localData && !userData) {
+        document.getElementById('login-after-register-btn').classList.remove('hidden');
+        document.getElementById('registration-form').classList.add('hidden');
+      } else {
+        document.getElementById('login-after-register-btn').classList.add('hidden');
+        document.getElementById('registration-form').classList.remove('hidden');
+      }
+    }
+    
+    function hideRegistration() {
+      document.getElementById('registration-section').classList.add('hidden');
+    }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      const button = document.getElementById('registration-btn');
-      
-      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
-      }
-    });
+    function handleRegistrationClick() {
+      if (userData) {
+        // If user is logged in, toggle dropdown
+        toggleUserDropdown();
+      } else {
+        // If user is not logged in, show registration form
+        showRegistration();
+      }
+    }
+    
+    function loginAfterRegistration() {
+      const tempUser = JSON.parse(localStorage.getItem("tempUserData"));
+      if (tempUser) {
+        userData = tempUser;
+        localStorage.setItem("userData", JSON.stringify(userData));
+        showUserInfo(userData);
+        showActivitiesSection();
+        hideRegistration();
+        showNotification("เข้าสู่ระบบสำเร็จ!");
+      } else {
+        alert("ไม่พบข้อมูลผู้ใช้สำหรับการเข้าสู่ระบบ กรุณาลงทะเบียนใหม่");
+        document.getElementById('login-after-register-btn').classList.add('hidden');
+        document.getElementById('registration-form').classList.remove('hidden');
+      }
+    }
 
-    // User dropdown menu functions
-    function editProfile() {
-      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้');
-      // ในอนาคตสามารถเพิ่มฟังก์ชันแก้ไขข้อมูลได้ที่นี่
-      closeUserDropdown();
-    }
+    // User Dropdown Functions
+    
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      dropdown.classList.toggle('show');
+    }
 
-    function managePhotos() {
-      alert('เปิดฟังก์ชันจัดการรูปภาพ');
-      // ในอนาคตสามารถเพิ่มฟังก์ชันจัดการรูปภาพได้ที่นี่
-      closeUserDropdown();
-    }
+    function closeUserDropdown() {
+      document.getElementById('user-dropdown-menu').classList.remove('show');
+    }
 
-    function logout() {
-      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
-        // Clear user data
-        localStorage.removeItem("userData");
-        userData = null;
-        
-        // Reset UI
-        document.getElementById('registration-default').classList.remove('hidden');
-        document.getElementById('registration-user').classList.add('hidden');
-        document.getElementById('activities-section').classList.add('hidden');
-        
-        // Show notification
-        showNotification("คุณได้ออกจากระบบแล้ว");
-        
-        closeUserDropdown();
-      }
-    }
+    function editProfile() {
+      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้ (ในโลกจริง)');
+      closeUserDropdown();
+    }
 
-    function closeUserDropdown() {
-      document.getElementById('user-dropdown-menu').classList.remove('show');
-    }
+    function managePhotos() {
+      alert('เปิดฟังก์ชันจัดการรูปภาพ (ในโลกจริง)');
+      closeUserDropdown();
+    }
 
-    window.onload = () => {
-      if (userData) {
-        showUserInfo(userData);
-        showActivitiesSection();
-      }
-      
-      // Generate QR Code
-      const qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: window.location.href,
-        width: 160,
-        height: 160,
-        colorDark: "#1a56db",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-      });
-      
-      // Setup registration form
-      document.getElementById('registration-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        registerUser();
-      });
-      
-      // Setup file upload
-      const fileInput = document.getElementById('file-input');
-      const fileUploadArea = document.getElementById('file-upload-area');
-      const filePreview = document.getElementById('file-preview');
-      const previewImage = document.getElementById('preview-image');
-      const fileName = document.getElementById('file-name');
-      
-      fileUploadArea.addEventListener('click', () => {
-        fileInput.click();
-      });
-      
-      fileUploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileUploadArea.style.borderColor = '#1a56db';
-        fileUploadArea.style.backgroundColor = 'rgba(26, 86, 219, 0.05)';
-      });
-      
-      fileUploadArea.addEventListener('dragleave', () => {
-        fileUploadArea.style.borderColor = '#d1d5db';
-        fileUploadArea.style.backgroundColor = '';
-      });
-      
-      fileUploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileUploadArea.style.borderColor = '#d1d5db';
-        fileUploadArea.style.backgroundColor = '';
-        
-        if (e.dataTransfer.files.length) {
-          fileInput.files = e.dataTransfer.files;
-          handleFileSelect(e.dataTransfer.files[0]);
-        }
-      });
-      
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length) {
-          handleFileSelect(e.target.files[0]);
-        }
-      });
-      
-      function handleFileSelect(file) {
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          
-          reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            fileName.textContent = file.name;
-            filePreview.classList.remove('hidden');
-          };
-          
-          reader.readAsDataURL(file);
-        } else {
-          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-        }
-      }
-      
-      // Update points badge
-      updatePointsBadge();
-    };
+    function logout() {
+      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+        // Keep a copy of data to allow "re-login"
+        localStorage.setItem("tempUserData", JSON.stringify(userData));
+        localStorage.removeItem("userData");
+        userData = null;
+        
+        // Reset UI
+        document.getElementById('registration-default').classList.remove('hidden');
+        document.getElementById('registration-user').classList.add('hidden');
+        document.getElementById('activities-section').classList.add('hidden');
+        
+        showNotification("คุณได้ออกจากระบบแล้ว");
+        closeUserDropdown();
+      }
+    }
+    
+    // Points System Functions
+    
+    function addPoints(activity, points) {
+      // Check if the activity has already been completed, only registration is restricted to once
+      if (activity === "ลงทะเบียนใช้งานระบบ" && userPoints.activities.some(a => a.activity === activity)) {
+        console.log("Registration points already granted.");
+        return;
+      }
+      
+      userPoints.total += points;
+      userPoints.activities.push({
+        activity: activity,
+        points: points,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem("userPoints", JSON.stringify(userPoints));
+      updatePointsBadge();
+      
+      if (activity !== "ลงทะเบียนใช้งานระบบ") {
+        showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activity}`);
+      }
+    }
 
-    function openQRModal() {
-      document.getElementById('qr-modal').classList.add('show');
-    }
-    function closeQRModal() {
-      document.getElementById('qr-modal').classList.remove('show');
-    }
+    function updatePointsBadge() {
+      const pointsBadge = document.getElementById('points-badge');
+      if (userPoints.total > 0) {
+        pointsBadge.textContent = userPoints.total;
+        pointsBadge.classList.remove('hidden');
+      } else {
+        pointsBadge.classList.add('hidden');
+      }
+    }
 
-    function showUserInfo(user) {
-      // Hide default registration UI and show user info
-      document.getElementById('registration-default').classList.add('hidden');
-      document.getElementById('registration-user').classList.remove('hidden');
-      
-      // Set user information
-      document.getElementById('user-name').textContent = user.fullname.split(" ")[0];
-      
-      // Use uploaded image if available, otherwise use default avatar
-      if (user.imageData) {
-        document.getElementById('user-avatar').src = user.imageData;
-      } else {
-        document.getElementById('user-avatar').src = "https://i.pravatar.cc/80?u=" + user.email;
-      }
-    }
+    function openPointsModal() {
+      const pointsList = document.getElementById('points-list');
+      const totalPoints = document.getElementById('total-points');
+      
+      pointsList.innerHTML = '';
+      
+      if (userPoints.activities.length === 0) {
+        pointsList.innerHTML = '<p class="text-gray-500 text-center py-4 text-sm">ยังไม่มีกิจกรรมที่ได้รับคะแนน</p>';
+      } else {
+        // Display activities in reverse chronological order
+        [...userPoints.activities].reverse().forEach(activity => {
+          const date = new Date(activity.timestamp).toLocaleDateString('th-TH');
+          const pointsItem = document.createElement('div');
+          pointsItem.className = 'points-item';
+          pointsItem.innerHTML = `
+            <div>
+              <p class="font-medium text-sm">${activity.activity}</p>
+              <p class="text-xs text-muted">${date}</p>
+            </div>
+            <span class="text-green-600 font-semibold text-sm">+${activity.points}</span>
+          `;
+          pointsList.appendChild(pointsItem);
+        });
+      }
+      
+      totalPoints.textContent = userPoints.total;
+      document.getElementById('points-modal').classList.add('show');
+    }
 
-    function showActivitiesSection() {
-      document.getElementById('activities-section').classList.remove('hidden');
-    }
+    function closePointsModal() {
+      document.getElementById('points-modal').classList.remove('show');
+    }
+    
+    function completeActivity(activityName, points) {
+      if (!userData) {
+        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
+        return;
+      }
+      
+      // Check if activity (other than registration) has been completed
+      if (userPoints.activities.some(a => a.activity === activityName && a.points === points)) {
+        alert(`คุณได้ทำกิจกรรม "${activityName}" นี้ไปแล้ว`);
+        return;
+      }
+      
+      addPoints(activityName, points);
+      alert(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}!`);
+      
+      // Close the activity detail
+      const activityCards = document.querySelectorAll('.activity-card');
+      activityCards.forEach(card => {
+        const detail = card.querySelector('.activity-detail');
+        if (detail && detail.classList.contains('expanded')) {
+          detail.classList.remove('expanded');
+          const chevron = card.querySelector('.activity-chevron');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
 
-    // Toggle activity details
-    function toggleActivityDetail(activityId) {
-      const activityDetail = document.getElementById(activityId);
-      const chevron = document.getElementById('chevron-' + activityId.split('-')[1]);
-      
-      if (activityDetail.classList.contains('expanded')) {
-        activityDetail.classList.remove('expanded');
-        chevron.style.transform = 'rotate(0deg)';
-      } else {
-        // Close other open activities
-        document.querySelectorAll('.activity-detail.expanded').forEach(detail => {
-          if (detail.id !== activityId) {
-            detail.classList.remove('expanded');
-            const otherChevron = document.getElementById('chevron-' + detail.id.split('-')[1]);
-            if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
-          }
-        });
-        
-        activityDetail.classList.add('expanded');
-        chevron.style.transform = 'rotate(180deg)';
-      }
-    }
+    // Registration Logic
+    
+    function registerUser() {
+      const studentId = document.getElementById('student-id').value;
+      const fullname = document.getElementById('fullname').value;
+      const email = document.getElementById('email').value;
+      const department = document.getElementById('department').value;
+      const phone = document.getElementById('phone').value;
+      
+      if (!studentId || !fullname || !email || !department || !phone) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+      
+      const interests = [];
+      document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+        interests.push(checkbox.value);
+      });
+      
+      const fileInput = document.getElementById('file-input');
+      
+      // Use Promise to handle file reading asynchronously
+      const readerPromise = new Promise(resolve => {
+        if (fileInput.files.length) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            resolve(e.target.result);
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          resolve(null);
+        }
+      });
+      
+      readerPromise.then(imageData => {
+        saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
+      });
+    }
+    
+    function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
+      const newUserData = {
+        studentId,
+        fullname,
+        email,
+        department,
+        phone,
+        interests,
+        imageData
+      };
+      
+      // Save user data and "log in"
+      localStorage.setItem("userData", JSON.stringify(newUserData));
+      localStorage.setItem("tempUserData", JSON.stringify(newUserData)); // Save a temp copy for re-login
+      userData = newUserData;
+      
+      // Add registration points only once (checked in addPoints function)
+      addPoints("ลงทะเบียนใช้งานระบบ", 50);
+      
+      // Show UI updates
+      showUserInfo(userData);
+      showActivitiesSection();
+      hideRegistration();
+      
+      // Alert user
+      alert(`ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด และได้รับ ${userPoints.activities.some(a => a.activity === "ลงทะเบียนใช้งานระบบ") ? 0 : 50} คะแนน (เฉพาะการลงทะเบียนครั้งแรก)`);
+    }
 
-    // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
-    function toggleARMode() {
-      const arView = document.getElementById('ar-view');
-      arView.style.display = 'block';
-      
-      // Check camera access
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function(stream) {
-          // Camera access granted
-          document.getElementById('camera-error').classList.add('hidden');
-          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
-        })
-        .catch(function(err) {
-          // Camera access denied
-          console.error("Camera error:", err);
-          handleWebcamError(err);
-        });
-    }
-    
-    function closeAR() {
-      const arView = document.getElementById('ar-view');
-      arView.style.display = 'none';
-    }
+    // Media Control Functions
+    
+    function toggleARMode() {
+      const arView = document.getElementById('ar-view');
+      arView.style.display = 'block';
+      
+      // Check camera access
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
+          document.getElementById('camera-error').classList.add('hidden');
+        })
+        .catch(function(err) {
+          console.error("Camera error:", err);
+          handleWebcamError(err);
+        });
+    }
+    
+    function closeAR() {
+      document.getElementById('ar-view').style.display = 'none';
+    }
+    
+    function showMap() {
+      document.getElementById('map-section').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
+    }
+    
+    function hideMap() {
+      document.getElementById('map-section').classList.add('hidden');
+    }
 
-    // แผนที่ 3D
-    function showMap() {
-      document.getElementById('map-section').classList.remove('hidden');
-      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
-    }
-    
-    function hideMap() {
-      document.getElementById('map-section').classList.add('hidden');
-    }
+    // Other UI Functions
+    
+    function openQRModal() {
+      document.getElementById('qr-modal').classList.add('show');
+    }
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.remove('show');
+    }
+    
+    function openNotification() {
+      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      if (notifications.length === 0) {
+        alert("ไม่มีแจ้งเตือนใหม่");
+      } else {
+        let message = "การแจ้งเตือนล่าสุด:\n\n";
+        // Display in reverse chronological order
+        [...notifications].reverse().forEach((notif, index) => {
+          const date = new Date(notif.timestamp).toLocaleDateString('th-TH');
+          message += `${index + 1}. ${notif.message} (${date})\n`;
+        });
+        alert(message);
+        
+        // Mark as read and hide badge (simple logic)
+        document.getElementById('notif-badge').classList.add('hidden');
+        notifications.forEach(notif => notif.read = true);
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+      }
+    }
+    
+    function showNotification(message) {
+      const notifBadge = document.getElementById('notif-badge');
+      // Simple unread count (always 1 for new message)
+      notifBadge.textContent = (parseInt(notifBadge.textContent) || 0) + 1;
+      notifBadge.classList.remove('hidden');
+      
+      let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      notifications.push({
+        message: message,
+        timestamp: new Date().toISOString(),
+        read: false
+      });
+      localStorage.setItem("notifications", JSON.stringify(notifications));
+    }
 
-    // ลงทะเบียน
-    function showRegistration() {
-      document.getElementById('registration-section').classList.remove('hidden');
-      window.scrollTo({ top: document.getElementById('registration-section').offsetTop, behavior: "smooth" });
-    }
-    
-    function hideRegistration() {
-      document.getElementById('registration-section').classList.add('hidden');
-    }
-    
-    function registerUser() {
-      const studentId = document.getElementById('student-id').value;
-      const fullname = document.getElementById('fullname').value;
-      const email = document.getElementById('email').value;
-      const department = document.getElementById('department').value;
-      const phone = document.getElementById('phone').value;
-      
-      if (!studentId || !fullname || !email || !department || !phone) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-        return;
-      }
-      
-      // Get selected interests
-      const interests = [];
-      document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-        interests.push(checkbox.value);
-      });
-      
-      // Get uploaded file
-      const fileInput = document.getElementById('file-input');
-      let imageData = null;
-      
-      if (fileInput.files.length) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          imageData = e.target.result;
-          saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        saveRegistrationData(studentId, fullname, email, department, phone, interests, null);
-      }
-    }
-    
-    function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
-      const userData = {
-        studentId,
-        fullname,
-        email,
-        department,
-        phone,
-        interests,
-        imageData
-      };
-      
-      localStorage.setItem("userData", JSON.stringify(userData));
-      
-      // Add registration points
-      addPoints("ลงทะเบียนใช้งานระบบ", 50);
-      
-      // Show notification
-      showNotification("ลงทะเบียนสำเร็จ! คุณได้รับ 50 คะแนน");
-      
-      alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
-      hideRegistration();
-      showUserInfo(userData);
-      showActivitiesSection();
-    }
+    function toggleActivityDetail(activityId) {
+      const activityDetail = document.getElementById(activityId);
+      const chevron = document.getElementById('chevron-' + activityId.split('-')[1]);
+      
+      if (activityDetail.classList.contains('expanded')) {
+        activityDetail.classList.remove('expanded');
+        chevron.style.transform = 'rotate(0deg)';
+      } else {
+        // Close other open activities
+        document.querySelectorAll('.activity-detail.expanded').forEach(detail => {
+          if (detail.id !== activityId) {
+            detail.classList.remove('expanded');
+            const otherChevron = document.getElementById('chevron-' + detail.id.split('-')[1]);
+            if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+          }
+        });
+        
+        activityDetail.classList.add('expanded');
+        chevron.style.transform = 'rotate(180deg)';
+      }
+    }
 
-    // Notification system
-    function showNotification(message) {
-      const notifBadge = document.getElementById('notif-badge');
-      notifBadge.textContent = "1";
-      notifBadge.classList.remove('hidden');
-      
-      // Store notification
-      let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-      notifications.push({
-        message: message,
-        timestamp: new Date().toISOString(),
-        read: false
-      });
-      localStorage.setItem("notifications", JSON.stringify(notifications));
-    }
+    // Initialization on Load
+    window.onload = () => {
+      // Initial UI setup based on localStorage
+      if (userData) {
+        showUserInfo(userData);
+        showActivitiesSection();
+      }
+      
+      // Initialize QR Code
+      new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 160,
+        height: 160,
+        colorDark: "#1a56db",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      
+      // Setup registration form submit handler
+      document.getElementById('registration-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        registerUser();
+      });
+      
+      // Setup file upload listeners (Drag & Drop)
+      const fileInput = document.getElementById('file-input');
+      const fileUploadArea = document.getElementById('file-upload-area');
+      const filePreview = document.getElementById('file-preview');
+      const previewImage = document.getElementById('preview-image');
+      const fileName = document.getElementById('file-name');
+      
+      fileUploadArea.addEventListener('click', () => { fileInput.click(); });
+      fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#1a56db';
+        fileUploadArea.style.backgroundColor = 'rgba(26, 86, 219, 0.05)';
+      });
+      fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+      });
+      fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.borderColor = '#d1d5db';
+        fileUploadArea.style.backgroundColor = '';
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleFileSelect(e.target.files[0]);
+        }
+      });
+      
+      function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            fileName.textContent = file.name;
+            filePreview.classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        }
+      }
+      
+      // Update points badge
+      updatePointsBadge();
+      
+      // Simple notification count update on load
+      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      const unreadCount = notifications.filter(n => !n.read).length;
+      if (unreadCount > 0) {
+        document.getElementById('notif-badge').textContent = unreadCount;
+        document.getElementById('notif-badge').classList.remove('hidden');
+      }
+    };
 
-    function openNotification() {
-      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-      if (notifications.length === 0) {
-        alert("ไม่มีแจ้งเตือนใหม่");
-      } else {
-        let message = "การแจ้งเตือนล่าสุด:\n\n";
-        notifications.forEach((notif, index) => {
-          const date = new Date(notif.timestamp).toLocaleDateString('th-TH');
-          message += `${index + 1}. ${notif.message} (${date})\n`;
-        });
-        alert(message);
-        
-        // Mark as read and hide badge
-        document.getElementById('notif-badge').classList.add('hidden');
-        notifications.forEach(notif => notif.read = true);
-        localStorage.setItem("notifications", JSON.stringify(notifications));
-      }
-    }
-
-    // Points system
-    function addPoints(activity, points) {
-      userPoints.total += points;
-      userPoints.activities.push({
-        activity: activity,
-        points: points,
-        timestamp: new Date().toISOString()
-      });
-      
-      localStorage.setItem("userPoints", JSON.stringify(userPoints));
-      updatePointsBadge();
-    }
-
-    function updatePointsBadge() {
-      const pointsBadge = document.getElementById('points-badge');
-      if (userPoints.total > 0) {
-        pointsBadge.textContent = userPoints.total;
-        pointsBadge.classList.remove('hidden');
-      } else {
-        pointsBadge.classList.add('hidden');
-      }
-    }
-
-    function completeActivity(activityName, points) {
-      if (!userData) {
-        alert("กรุณาลงทะเบียนก่อนทำกิจกรรม");
-        return;
-      }
-      
-      addPoints(activityName, points);
-      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
-      
-      // Close the activity detail
-      const activityCards = document.querySelectorAll('.activity-card');
-      activityCards.forEach(card => {
-        const detail = card.querySelector('.activity-detail');
-        if (detail && detail.classList.contains('expanded')) {
-          detail.classList.remove('expanded');
-          const chevron = card.querySelector('.activity-chevron');
-          if (chevron) chevron.style.transform = 'rotate(0deg)';
-        }
-      });
-    }
-
-    function openPointsModal() {
-      const pointsList = document.getElementById('points-list');
-      const totalPoints = document.getElementById('total-points');
-      
-      // Clear previous content
-      pointsList.innerHTML = '';
-      
-      // Add points activities
-      if (userPoints.activities.length === 0) {
-        pointsList.innerHTML = '<p class="text-gray-500 text-center py-4 text-sm">ยังไม่มีกิจกรรมที่ได้รับคะแนน</p>';
-      } else {
-        userPoints.activities.forEach(activity => {
-          const date = new Date(activity.timestamp).toLocaleDateString('th-TH');
-          const pointsItem = document.createElement('div');
-          pointsItem.className = 'points-item';
-          pointsItem.innerHTML = `
-            <div>
-              <p class="font-medium text-sm">${activity.activity}</p>
-              <p class="text-xs text-muted">${date}</p>
-            </div>
-            <span class="text-green-600 font-semibold text-sm">+${activity.points}</span>
-          `;
-          pointsList.appendChild(pointsItem);
-        });
-      }
-      
-      // Update total points
-      totalPoints.textContent = userPoints.total;
-      
-      // Show modal
-      document.getElementById('points-modal').classList.add('show');
-    }
-
-    function closePointsModal() {
-      document.getElementById('points-modal').classList.remove('show');
-    }
-  </script>
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      const button = document.getElementById('registration-btn');
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>
