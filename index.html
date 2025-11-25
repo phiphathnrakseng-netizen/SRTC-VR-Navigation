@@ -290,6 +290,97 @@
       -webkit-text-fill-color: transparent;
     }
     
+    /* Navigation AR View */
+    #navigation-ar-view {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: none;
+      background: black;
+      flex-direction: column;
+    }
+    
+    .navigation-info {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      z-index: 10001;
+    }
+    
+    .navigation-path {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    
+    .path-line {
+      position: absolute;
+      background: linear-gradient(to right, transparent, #4ade80, transparent);
+      height: 6px;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #4ade80;
+      transform-origin: left center;
+    }
+    
+    .path-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #4ade80;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #4ade80;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .navigation-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      z-index: 10001;
+    }
+    
+    /* Form input styles */
+    .form-input {
+      width: 100%;
+      border: 1px solid var(--glass-border);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      background-color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .hero-section {
@@ -480,7 +571,7 @@
             <i data-lucide="zoom-in" class="w-4 h-4"></i>
             <span>ขยาย</span>
           </button>
-          <button class="cta-button secondary" onclick="navigateMap()">
+          <button class="cta-button secondary" onclick="openNavigationModal()">
             <i data-lucide="navigation" class="w-4 h-4"></i>
             <span>นำทาง</span>
           </button>
@@ -530,6 +621,43 @@
     </div>
   </div>
 
+  <!-- Navigation Destination Modal -->
+  <div id="navigation-modal" class="modal">
+    <div class="modal-content max-w-sm">
+      <button onclick="closeNavigationModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-lg mb-4">เลือกจุดหมายปลายทาง</h3>
+      <form id="navigation-form">
+        <div class="mb-4">
+          <label class="block text-dark mb-2 font-medium text-sm" for="destination-building">เลือกอาคาร</label>
+          <select id="destination-building" class="form-input" required>
+            <option value="">เลือกอาคาร</option>
+            <option value="อาคาร 1">อาคาร 1 (อาคารอำนวยการ)</option>
+            <option value="อาคาร 2">อาคาร 2 (อาคารเรียนวิทยาศาสตร์)</option>
+            <option value="อาคาร 3">อาคาร 3 (อาคารเรียนคอมพิวเตอร์)</option>
+            <option value="อาคาร 4">อาคาร 4 (อาคารปฏิบัติการ)</option>
+            <option value="อาคาร 5">อาคาร 5 (อาคารเรียนวิศวกรรม)</option>
+          </select>
+        </div>
+        
+        <div class="mb-5">
+          <label class="block text-dark mb-2 font-medium text-sm" for="destination-room">หมายเลขห้อง</label>
+          <input type="text" id="destination-room" class="form-input" placeholder="เช่น 101, 201, Lab1" required>
+        </div>
+        
+        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
+          <i data-lucide="navigation" class="w-4 h-4 mr-2"></i>
+          เริ่มนำทาง
+        </button>
+      </form>
+      
+      <p class="text-center text-muted mt-4 text-sm">
+        ระบบจะเปิดกล้องหลังและแสดงเส้นทางนำทาง
+      </p>
+    </div>
+  </div>
+
   <!-- Webcam Error Modal -->
   <div id="webcam-error" class="webcam-error">
     <div class="webcam-error-content">
@@ -568,7 +696,7 @@
     </div>
   </div>
 
-  <!-- โหมด AR -->
+  <!-- AR View -->
   <div id="ar-view">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <a-marker preset="hiro">
@@ -591,21 +719,54 @@
     </div>
   </div>
 
+  <!-- Navigation AR View -->
+  <div id="navigation-ar-view">
+    <video id="navigation-video" autoplay playsinline class="w-full h-full object-cover"></video>
+    <canvas id="navigation-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    
+    <div class="navigation-info">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="font-bold text-white text-lg">นำทางไปยัง</h3>
+        <span id="distance-indicator" class="bg-green-500 text-white px-2 py-1 rounded-full text-sm font-medium">150m</span>
+      </div>
+      <p id="destination-info" class="text-white text-sm">อาคาร 3 ห้อง 201</p>
+      <div class="flex items-center mt-2">
+        <i data-lucide="clock" class="w-4 h-4 text-white mr-1"></i>
+        <span id="time-indicator" class="text-white text-sm">ประมาณ 3 นาที</span>
+      </div>
+    </div>
+    
+    <div class="navigation-path" id="navigation-path">
+      <!-- Path elements will be added here dynamically -->
+    </div>
+    
+    <div class="navigation-controls">
+      <button onclick="closeNavigationAR()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full shadow-md flex items-center text-sm font-medium">
+        <i data-lucide="x" class="w-4 h-4 mr-1"></i>
+        หยุดนำทาง
+      </button>
+      <button onclick="toggleNavigationInstructions()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full shadow-md flex items-center text-sm font-medium">
+        <i data-lucide="info" class="w-4 h-4 mr-1"></i>
+        คำแนะนำ
+      </button>
+    </div>
+  </div>
+
   <script>
     // Initialize Lucide icons
     lucide.createIcons();
 
+    // Navigation state
+    let navigationActive = false;
+    let currentDestination = null;
+
     // Webcam error handling
     function handleWebcamError(error) {
       console.error("Webcam Error:", error);
-      // Hide the default error message
       document.getElementById('camera-error').classList.add('hidden');
-      
-      // Show our custom error modal
       document.getElementById('webcam-error').classList.add('show');
-      
-      // Close AR view
       document.getElementById('ar-view').style.display = 'none';
+      document.getElementById('navigation-ar-view').style.display = 'none';
     }
 
     function closeWebcamError() {
@@ -622,6 +783,12 @@
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
+      
+      // Setup navigation form
+      document.getElementById('navigation-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        startNavigation();
+      });
     };
 
     function openQRModal() {
@@ -632,7 +799,188 @@
       document.getElementById('qr-modal').classList.remove('show');
     }
 
-    // ✅ ปุ่มเปิดกล้องเฉพาะตอนกด VR/AR
+    // Navigation modal functions
+    function openNavigationModal() {
+      document.getElementById('navigation-modal').classList.add('show');
+    }
+    
+    function closeNavigationModal() {
+      document.getElementById('navigation-modal').classList.remove('show');
+    }
+
+    // Start navigation with AR
+    function startNavigation() {
+      const building = document.getElementById('destination-building').value;
+      const room = document.getElementById('destination-room').value;
+      
+      if (!building || !room) {
+        alert("กรุณาเลือกอาคารและระบุหมายเลขห้อง");
+        return;
+      }
+      
+      currentDestination = {
+        building: building,
+        room: room,
+        fullName: `${building} ห้อง ${room}`
+      };
+      
+      closeNavigationModal();
+      
+      // Show loading message
+      showSuccess("กำลังเริ่มนำทาง", `นำทางไปยัง ${currentDestination.fullName}`);
+      
+      // Start AR navigation after a short delay
+      setTimeout(() => {
+        startARNavigation();
+      }, 2000);
+    }
+
+    // Start AR Navigation with back camera
+    function startARNavigation() {
+      const navView = document.getElementById('navigation-ar-view');
+      const video = document.getElementById('navigation-video');
+      const canvas = document.getElementById('navigation-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas size
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      // Update destination info
+      document.getElementById('destination-info').textContent = currentDestination.fullName;
+      
+      // Try to access back camera
+      const constraints = {
+        video: {
+          facingMode: 'environment', // Use back camera
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      };
+      
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(stream) {
+          video.srcObject = stream;
+          navView.style.display = 'flex';
+          navigationActive = true;
+          
+          // Start drawing navigation path
+          drawNavigationPath();
+          
+          // Start simulation of navigation updates
+          simulateNavigationUpdates();
+        })
+        .catch(function(err) {
+          console.error("Camera error:", err);
+          handleWebcamError(err);
+        });
+    }
+
+    // Draw navigation path on canvas
+    function drawNavigationPath() {
+      if (!navigationActive) return;
+      
+      const canvas = document.getElementById('navigation-canvas');
+      const ctx = canvas.getContext('2d');
+      const pathContainer = document.getElementById('navigation-path');
+      
+      // Clear previous path
+      pathContainer.innerHTML = '';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Create a curved path from bottom to top (simulating a path ahead)
+      const startX = canvas.width / 2;
+      const startY = canvas.height - 100;
+      const endX = canvas.width / 2;
+      const endY = 200;
+      
+      // Draw path line
+      const pathLine = document.createElement('div');
+      pathLine.className = 'path-line';
+      pathLine.style.width = '300px';
+      pathLine.style.height = '6px';
+      pathLine.style.left = (startX - 150) + 'px';
+      pathLine.style.top = (startY - 3) + 'px';
+      pathLine.style.transform = 'rotate(-5deg)';
+      pathContainer.appendChild(pathLine);
+      
+      // Draw path dots
+      for (let i = 0; i < 5; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'path-dot';
+        dot.style.left = (startX - 6 + Math.sin(i) * 20) + 'px';
+        dot.style.top = (startY - 100 - i * 80) + 'px';
+        pathContainer.appendChild(dot);
+      }
+      
+      // Draw arrow at the end
+      const arrow = document.createElement('div');
+      arrow.innerHTML = '<i data-lucide="arrow-up" class="w-8 h-8 text-green-400"></i>';
+      arrow.style.position = 'absolute';
+      arrow.style.left = (endX - 16) + 'px';
+      arrow.style.top = (endY - 16) + 'px';
+      arrow.style.filter = 'drop-shadow(0 0 8px #4ade80)';
+      pathContainer.appendChild(arrow);
+      
+      // Refresh icons
+      lucide.createIcons();
+      
+      // Continue animation
+      requestAnimationFrame(drawNavigationPath);
+    }
+
+    // Simulate navigation updates (distance and time)
+    function simulateNavigationUpdates() {
+      if (!navigationActive) return;
+      
+      // Simulate decreasing distance
+      let distance = 150;
+      let time = 3; // minutes
+      
+      const updateInterval = setInterval(() => {
+        if (!navigationActive) {
+          clearInterval(updateInterval);
+          return;
+        }
+        
+        distance -= 5;
+        time = Math.max(1, Math.round(distance / 50));
+        
+        document.getElementById('distance-indicator').textContent = `${distance}m`;
+        document.getElementById('time-indicator').textContent = `ประมาณ ${time} นาที`;
+        
+        if (distance <= 10) {
+          // Destination reached
+          clearInterval(updateInterval);
+          showSuccess("ถึงจุดหมายแล้ว", `คุณได้มาถึง ${currentDestination.fullName} แล้ว`);
+          setTimeout(() => {
+            closeNavigationAR();
+          }, 3000);
+        }
+      }, 2000);
+    }
+
+    // Close navigation AR view
+    function closeNavigationAR() {
+      const navView = document.getElementById('navigation-ar-view');
+      const video = document.getElementById('navigation-video');
+      
+      // Stop video stream
+      if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+      }
+      
+      navView.style.display = 'none';
+      navigationActive = false;
+      currentDestination = null;
+    }
+
+    // Toggle navigation instructions
+    function toggleNavigationInstructions() {
+      showSuccess("คำแนะนำการใช้งาน", "เดินตามเส้นทางสีเขียวที่ปรากฏบนหน้าจอ จนกว่าจะถึงจุดหมายปลายทาง");
+    }
+
+    // AR Mode
     function toggleARMode() {
       const arView = document.getElementById('ar-view');
       arView.style.display = 'block';
@@ -640,12 +988,10 @@
       // Check camera access
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(function(stream) {
-          // Camera access granted
           document.getElementById('camera-error').classList.add('hidden');
-          stream.getTracks().forEach(track => track.stop()); // Stop the stream as A-Frame will handle it
+          stream.getTracks().forEach(track => track.stop());
         })
         .catch(function(err) {
-          // Camera access denied
           console.error("Camera error:", err);
           handleWebcamError(err);
         });
@@ -656,7 +1002,7 @@
       arView.style.display = 'none';
     }
 
-    // แผนที่ 3D
+    // 3D Map
     function showMap() {
       document.getElementById('map-section').classList.remove('hidden');
       window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
@@ -673,10 +1019,6 @@
     
     function zoomMap() {
       showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์");
-    }
-    
-    function navigateMap() {
-      showSuccess("ระบบนำทาง", "ระบบนำทางจะช่วยแนะนำเส้นทางไปยังสถานที่ต่างๆ ในวิทยาลัย");
     }
 
     // Success Modal
