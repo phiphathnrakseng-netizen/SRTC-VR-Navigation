@@ -775,16 +775,16 @@
           <span id="points-badge" class="badge hidden">0</span>
         </button>
 
-        <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
+        <!-- ปุ่มเข้าสู่ระบบ/ผู้ใช้ -->
         <div class="user-dropdown">
-          <button id="registration-btn" onclick="handleRegistrationClick()" class="user-profile-button">
-            <div id="registration-default" class="flex items-center">
+          <button id="login-btn" onclick="handleLoginClick()" class="user-profile-button">
+            <div id="login-default" class="flex items-center">
               <div class="p-1.5 bg-primary/10 rounded-lg mr-2">
-                <i data-lucide="user-plus" class="w-4 h-4 text-primary"></i>
+                <i data-lucide="log-in" class="w-4 h-4 text-primary"></i>
               </div>
-              <span class="text-sm font-medium hidden sm:inline">ลงทะเบียน</span>
+              <span class="text-sm font-medium hidden sm:inline">เข้าสู่ระบบ</span>
             </div>
-            <div id="registration-user" class="user-info hidden">
+            <div id="login-user" class="user-info hidden">
               <img id="user-avatar" class="w-6 h-6 rounded-full object-cover mr-2 border border-primary/20" />
               <span id="user-name" class="text-sm font-medium"></span>
               <i data-lucide="chevron-down" class="w-4 h-4 ml-1 text-muted"></i>
@@ -845,6 +845,12 @@
           <button onclick="showRegistration()" class="cta-button secondary">
             <i data-lucide="user-plus" class="w-5 h-5"></i>
             <span>ลงทะเบียน</span>
+          </button>
+          
+          <!-- ปุ่มเข้าสู่ระบบเพิ่มใน Hero Section -->
+          <button onclick="showLogin()" class="cta-button secondary">
+            <i data-lucide="log-in" class="w-5 h-5"></i>
+            <span>เข้าสู่ระบบ</span>
           </button>
         </div>
         
@@ -1066,6 +1072,39 @@
       </div>
     </section>
 
+    <!-- Login Section -->
+    <section id="login-section" class="py-8 bg-white/80 backdrop-blur-sm hidden rounded-2xl mt-6 shadow-md">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="section-title text-2xl font-bold text-center mb-2">เข้าสู่ระบบ</h2>
+        <p class="text-muted text-center mb-6">กรอกรหัสนักศึกษาเพื่อเข้าสู่ระบบ</p>
+        
+        <div class="registration-form">
+          <form id="login-form">
+            <div class="mb-4">
+              <label class="block text-dark mb-2 font-medium text-sm" for="login-student-id">รหัสนักศึกษา</label>
+              <input type="text" id="login-student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
+            </div>
+            
+            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
+              <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+              เข้าสู่ระบบ
+            </button>
+          </form>
+          
+          <p class="text-center text-muted mt-4 text-sm">
+            ยังไม่มีบัญชี? <a href="#" onclick="showRegistrationFromLogin()" class="text-primary hover:underline">ลงทะเบียนที่นี่</a>
+          </p>
+        </div>
+        
+        <div class="text-center mt-5">
+          <button onclick="hideLogin()" class="bg-white/80 backdrop-blur-sm hover:bg-white text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
+            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
+            ปิดหน้าเข้าสู่ระบบ
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- 3D Map Section -->
     <section id="map-section" class="py-8 bg-white/80 backdrop-blur-sm hidden rounded-2xl mt-6 shadow-md">
       <div class="max-w-4xl mx-auto px-4">
@@ -1268,6 +1307,12 @@
         registerUser();
       });
       
+      // Setup login form
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        loginUser();
+      });
+      
       // Setup file upload
       const fileInput = document.getElementById('file-input');
       const fileUploadArea = document.getElementById('file-upload-area');
@@ -1347,14 +1392,14 @@
       document.getElementById('webcam-error').classList.remove('show');
     }
 
-    // Handle registration button click
-    function handleRegistrationClick() {
+    // Handle login button click
+    function handleLoginClick() {
       if (userData) {
         // If user is logged in, toggle dropdown
         toggleUserDropdown();
       } else {
-        // If user is not logged in, show registration form
-        showRegistration();
+        // If user is not logged in, show login form
+        showLogin();
       }
     }
 
@@ -1367,7 +1412,7 @@
     // Close dropdown when clicking outside
     document.addEventListener('click', function(event) {
       const dropdown = document.getElementById('user-dropdown-menu');
-      const button = document.getElementById('registration-btn');
+      const button = document.getElementById('login-btn');
       
       if (!button.contains(event.target) && !dropdown.contains(event.target)) {
         dropdown.classList.remove('show');
@@ -1392,8 +1437,8 @@
         userData = null;
         
         // Reset UI
-        document.getElementById('registration-default').classList.remove('hidden');
-        document.getElementById('registration-user').classList.add('hidden');
+        document.getElementById('login-default').classList.remove('hidden');
+        document.getElementById('login-user').classList.add('hidden');
         document.getElementById('activities-section').classList.add('hidden');
         
         // Show notification
@@ -1416,9 +1461,9 @@
     }
 
     function showUserInfo(user) {
-      // Hide default registration UI and show user info
-      document.getElementById('registration-default').classList.add('hidden');
-      document.getElementById('registration-user').classList.remove('hidden');
+      // Hide default login UI and show user info
+      document.getElementById('login-default').classList.add('hidden');
+      document.getElementById('login-user').classList.remove('hidden');
       
       // Set user information
       document.getElementById('user-name').textContent = user.fullname.split(" ")[0];
@@ -1579,6 +1624,61 @@
       hideRegistration();
       showUserInfo(userData);
       showActivitiesSection();
+    }
+
+    // เข้าสู่ระบบ
+    function showLogin() {
+      document.getElementById('login-section').classList.remove('hidden');
+      window.scrollTo({ top: document.getElementById('login-section').offsetTop, behavior: "smooth" });
+    }
+    
+    function hideLogin() {
+      document.getElementById('login-section').classList.add('hidden');
+    }
+    
+    function showRegistrationFromLogin() {
+      hideLogin();
+      showRegistration();
+    }
+    
+    function loginUser() {
+      const studentId = document.getElementById('login-student-id').value;
+      
+      if (!studentId) {
+        alert("กรุณากรอกรหัสนักศึกษา");
+        return;
+      }
+      
+      // Show loading
+      showLoading();
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        // Check if user exists in localStorage
+        const storedUserData = localStorage.getItem("userData");
+        
+        if (storedUserData) {
+          const userData = JSON.parse(storedUserData);
+          
+          if (userData.studentId === studentId) {
+            // Login successful
+            hideLoading();
+            showSuccess("เข้าสู่ระบบสำเร็จ", "ยินดีต้อนรับ " + userData.fullname);
+            
+            hideLogin();
+            showUserInfo(userData);
+            showActivitiesSection();
+          } else {
+            // Student ID not found
+            hideLoading();
+            alert("ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาลงทะเบียนก่อน");
+          }
+        } else {
+          // No user data found
+          hideLoading();
+          alert("ไม่พบข้อมูลผู้ใช้ กรุณาลงทะเบียนก่อน");
+        }
+      }, 1000);
     }
 
     // Notification system
