@@ -457,6 +457,82 @@
       border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
     
+    /* Floor Tabs */
+    .floor-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .floor-tab {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-white);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .floor-tab:hover {
+      background: rgba(30, 64, 175, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .floor-tab.active {
+      background: rgba(30, 64, 175, 0.5);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.3);
+    }
+    
+    /* Floor Content */
+    .floor-content {
+      display: none;
+    }
+    
+    .floor-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    /* Room Options */
+    .room-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .room-option {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-light);
+      color: var(--text-white);
+    }
+    
+    .room-option:hover {
+      background: rgba(30, 64, 175, 0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .room-option.selected {
+      background: rgba(30, 64, 175, 0.4);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.5);
+    }
+    
     /* Responsive */
     @media (max-width: 1024px) {
       .section-title {
@@ -497,6 +573,16 @@
       .modal-content {
         padding: 2rem;
       }
+      
+      .floor-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .floor-tab {
+        width: 100%;
+        justify-content: center;
+      }
     }
     
     @media (max-width: 480px) {
@@ -511,6 +597,10 @@
       
       .modern-card {
         padding: 1.5rem;
+      }
+      
+      .room-options {
+        grid-template-columns: 1fr;
       }
     }
     
@@ -579,38 +669,6 @@
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
       background-color: rgba(0, 0, 0, 0.6);
-    }
-    
-    /* Room Options */
-    .room-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .room-option {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 1rem;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      color: var(--text-white);
-    }
-    
-    .room-option:hover {
-      background: rgba(30, 64, 175, 0.3);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-    
-    .room-option.selected {
-      background: rgba(30, 64, 175, 0.4);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.5);
     }
     
     /* Logo Styles */
@@ -790,7 +848,7 @@
 
   <!-- Navigation Destination Modal -->
   <div id="navigation-modal" class="modal">
-    <div class="modal-content max-w-2xl w-full">
+    <div class="modal-content max-w-4xl w-full">
       <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -799,7 +857,7 @@
         <div class="mb-5">
           <label class="block text-gray-200 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
           <div class="custom-select">
-            <select id="destination-building" required onchange="updateRoomOptions()">
+            <select id="destination-building" required onchange="updateFloorTabs()">
               <option value="">เลือกอาคาร</option>
               <option value="อาคาร 6">อาคาร 6 (แผนกเทคโนโลยีสารสนเทศ)</option>
             </select>
@@ -807,10 +865,18 @@
         </div>
         
         <div class="mb-6">
-          <label class="block text-gray-200 mb-3 font-medium">เลือกห้องหรือสถานที่</label>
-          <div class="room-options" id="room-options">
-            <!-- Room options will be dynamically populated here -->
+          <label class="block text-gray-200 mb-3 font-medium">เลือกชั้นและห้อง</label>
+          
+          <!-- Floor Tabs -->
+          <div class="floor-tabs" id="floor-tabs">
+            <!-- Floor tabs will be dynamically populated here -->
           </div>
+          
+          <!-- Floor Contents -->
+          <div id="floor-contents">
+            <!-- Floor contents will be dynamically populated here -->
+          </div>
+          
           <input type="hidden" id="selected-room" required>
         </div>
         
@@ -936,15 +1002,31 @@
     let cameraStream = null;
 
     // Room data for Building 6
-    const building6Rooms = [
-      { id: 'laan-drug-free', name: 'ลานต่อต้านยาเสพติด', type: 'ลานกิจกรรม' },
-      { id: 'room-101', name: 'ห้องเรียนสามัญสัมพันธ์', floor: 'ชั้น 1', type: 'ห้องเรียน' },
-      { id: 'club-to-be-number-one', name: 'ห้องชมรม To be number one', floor: 'ชั้น 1', type: 'ห้องชมรม' },
-      { id: 'lab-computer-1', name: 'ห้องปฏิบัติการคอมพิวเตอร์ 1', floor: 'ชั้น 2', type: 'ห้องปฏิบัติการ' },
-      { id: 'lab-computer-2', name: 'ห้องปฏิบัติการคอมพิวเตอร์ 2', floor: 'ชั้น 2', type: 'ห้องปฏิบัติการ' },
-      { id: 'teacher-office', name: 'ห้องพักครูแผนกเทคโนโลยีสารสนเทศ', floor: 'ชั้น 3', type: 'ห้องพักครู' },
-      { id: 'meeting-room', name: 'ห้องประชุมแผนกเทคโนโลยีสารสนเทศ', floor: 'ชั้น 3', type: 'ห้องประชุม' }
-    ];
+    const building6Rooms = {
+      "ลานกีฬา": [
+        { id: 'laan-sport-drug-free', name: 'ลานกีฬาต้านยาเสพติด', type: 'ลานกิจกรรม' }
+      ],
+      "ชั้น 1": [
+        { id: 'room-polymer', name: 'ห้องแผนกวิชาการยางและพอลิเมอร์', type: 'ห้องเรียนแผนกวิชา' }
+      ],
+      "ชั้น 2": [
+        { id: 'room-samun-samphan', name: 'ห้องเรียนแผนกวิชาสามัญสัมพันธ์', type: 'ห้องเรียนแผนกวิชา' }
+      ],
+      "ชั้น 3": [
+        { id: 'room-631', name: 'ห้องเรียน 631', type: 'ห้องเรียน' },
+        { id: 'room-632', name: 'ห้องเรียน 632', type: 'ห้องเรียน' },
+        { id: 'room-633', name: 'ห้องเรียน 633', type: 'ห้องเรียน' },
+        { id: 'room-634', name: 'ห้องเรียน 634', type: 'ห้องเรียน' },
+        { id: 'room-653', name: 'ห้องเรียน 653', type: 'ห้องเรียน' }
+      ],
+      "ชั้น 4": [
+        { id: 'teacher-office', name: 'ห้องพักครู', type: 'ห้องพักครู' },
+        { id: 'lecture-room', name: 'ห้อง Lecture', type: 'ห้องบรรยาย' },
+        { id: 'lab-1', name: 'ห้อง Lab 1', type: 'ห้องปฏิบัติการ' },
+        { id: 'lab-2', name: 'ห้อง Lab 2', type: 'ห้องปฏิบัติการ' },
+        { id: 'lab-3', name: 'ห้อง Lab 3', type: 'ห้องปฏิบัติการ' }
+      ]
+    };
 
     // Initialize the application
     window.onload = () => {
@@ -967,39 +1049,104 @@
       // Add some 3D building elements to the hero section for visual effect
       addFloatingBuildings();
       
-      // Initialize room options
-      updateRoomOptions();
+      // Initialize floor tabs
+      updateFloorTabs();
     };
 
-    // Update room options based on selected building
-    function updateRoomOptions() {
+    // Update floor tabs based on selected building
+    function updateFloorTabs() {
       const buildingSelect = document.getElementById('destination-building');
-      const roomOptionsContainer = document.getElementById('room-options');
+      const floorTabsContainer = document.getElementById('floor-tabs');
+      const floorContentsContainer = document.getElementById('floor-contents');
       const selectedBuilding = buildingSelect.value;
       
-      roomOptionsContainer.innerHTML = '';
+      floorTabsContainer.innerHTML = '';
+      floorContentsContainer.innerHTML = '';
       
       if (selectedBuilding === 'อาคาร 6') {
-        building6Rooms.forEach(room => {
-          const roomElement = document.createElement('div');
-          roomElement.className = 'room-option';
-          roomElement.innerHTML = `
-            <div class="font-medium text-white">${room.name}</div>
-            ${room.floor ? `<div class="text-sm text-gray-300 mt-1">${room.floor}</div>` : ''}
-            <div class="text-xs text-gray-400 mt-1">${room.type}</div>
+        // Create floor tabs
+        const floors = Object.keys(building6Rooms);
+        floors.forEach((floor, index) => {
+          // Create tab
+          const tab = document.createElement('div');
+          tab.className = `floor-tab ${index === 0 ? 'active' : ''}`;
+          tab.dataset.floor = floor;
+          tab.innerHTML = `
+            <i data-lucide="${getFloorIcon(floor)}" class="w-4 h-4"></i>
+            <span>${floor}</span>
           `;
-          roomElement.addEventListener('click', () => {
-            // Remove selected class from all options
-            document.querySelectorAll('.room-option').forEach(opt => {
-              opt.classList.remove('selected');
+          tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            document.querySelectorAll('.floor-tab').forEach(t => {
+              t.classList.remove('active');
             });
-            // Add selected class to clicked option
-            roomElement.classList.add('selected');
-            // Set the selected room value
-            document.getElementById('selected-room').value = room.id;
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            // Show corresponding floor content
+            showFloorContent(floor);
           });
-          roomOptionsContainer.appendChild(roomElement);
+          floorTabsContainer.appendChild(tab);
+          
+          // Create floor content
+          const floorContent = document.createElement('div');
+          floorContent.className = `floor-content ${index === 0 ? 'active' : ''}`;
+          floorContent.id = `floor-${floor.replace(/\s+/g, '-')}`;
+          
+          const roomOptions = document.createElement('div');
+          roomOptions.className = 'room-options';
+          
+          building6Rooms[floor].forEach(room => {
+            const roomElement = document.createElement('div');
+            roomElement.className = 'room-option';
+            roomElement.innerHTML = `
+              <div class="font-medium text-white">${room.name}</div>
+              <div class="text-xs text-gray-400 mt-1">${room.type}</div>
+            `;
+            roomElement.addEventListener('click', () => {
+              // Remove selected class from all options
+              document.querySelectorAll('.room-option').forEach(opt => {
+                opt.classList.remove('selected');
+              });
+              // Add selected class to clicked option
+              roomElement.classList.add('selected');
+              // Set the selected room value
+              document.getElementById('selected-room').value = room.id;
+            });
+            roomOptions.appendChild(roomElement);
+          });
+          
+          floorContent.appendChild(roomOptions);
+          floorContentsContainer.appendChild(floorContent);
         });
+        
+        // Refresh icons
+        lucide.createIcons();
+      }
+    }
+
+    // Show floor content based on selected tab
+    function showFloorContent(floor) {
+      // Hide all floor contents
+      document.querySelectorAll('.floor-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Show selected floor content
+      const floorContent = document.getElementById(`floor-${floor.replace(/\s+/g, '-')}`);
+      if (floorContent) {
+        floorContent.classList.add('active');
+      }
+    }
+
+    // Get appropriate icon for each floor
+    function getFloorIcon(floor) {
+      switch(floor) {
+        case 'ลานกีฬา': return 'activity';
+        case 'ชั้น 1': return 'building';
+        case 'ชั้น 2': return 'building';
+        case 'ชั้น 3': return 'building';
+        case 'ชั้น 4': return 'building';
+        default: return 'map-pin';
       }
     }
 
@@ -1056,7 +1203,11 @@
       }
       
       // Find the selected room
-      const selectedRoom = building6Rooms.find(room => room.id === roomId);
+      let selectedRoom = null;
+      for (const floor in building6Rooms) {
+        selectedRoom = building6Rooms[floor].find(room => room.id === roomId);
+        if (selectedRoom) break;
+      }
       
       if (!selectedRoom) {
         alert("ไม่พบข้อมูลห้องที่เลือก");
@@ -1066,8 +1217,7 @@
       currentDestination = {
         building: building,
         room: selectedRoom.name,
-        floor: selectedRoom.floor || '',
-        fullName: `${building} - ${selectedRoom.name}${selectedRoom.floor ? ` (${selectedRoom.floor})` : ''}`
+        fullName: `${building} - ${selectedRoom.name}`
       };
       
       closeNavigationModal();
