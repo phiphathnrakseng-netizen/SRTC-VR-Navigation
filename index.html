@@ -840,6 +840,12 @@
             <i data-lucide="scan" class="w-5 h-5"></i>
             <span>เปิดโหมด AR/VR</span>
           </button>
+          
+          <!-- ปุ่มลงทะเบียนเพิ่มใน Hero Section -->
+          <button onclick="showRegistration()" class="cta-button secondary">
+            <i data-lucide="user-plus" class="w-5 h-5"></i>
+            <span>ลงทะเบียน</span>
+          </button>
         </div>
         
         <div class="features-grid">
@@ -1238,84 +1244,9 @@
     // Initialize completed activities
     let completedActivities = JSON.parse(localStorage.getItem("completedActivities")) || [];
 
-    // Webcam error handling
-    function handleWebcamError(error) {
-      console.error("Webcam Error:", error);
-      // Hide the default error message
-      document.getElementById('camera-error').classList.add('hidden');
-      
-      // Show our custom error modal
-      document.getElementById('webcam-error').classList.add('show');
-      
-      // Close AR view
-      document.getElementById('ar-view').style.display = 'none';
-    }
-
-    function closeWebcamError() {
-      document.getElementById('webcam-error').classList.remove('show');
-    }
-
-    // Handle registration button click
-    function handleRegistrationClick() {
-      if (userData) {
-        // If user is logged in, toggle dropdown
-        toggleUserDropdown();
-      } else {
-        // If user is not logged in, show registration form
-        showRegistration();
-      }
-    }
-
-    // Toggle user dropdown menu
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      dropdown.classList.toggle('show');
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('user-dropdown-menu');
-      const button = document.getElementById('registration-btn');
-      
-      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
-      }
-    });
-
-    // User dropdown menu functions
-    function editProfile() {
-      showRegistration();
-      closeUserDropdown();
-    }
-
-    function managePhotos() {
-      alert('ระบบจัดการรูปภาพกำลังอยู่ในระหว่างการพัฒนา');
-      closeUserDropdown();
-    }
-
-    function logout() {
-      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
-        // Clear user data
-        localStorage.removeItem("userData");
-        userData = null;
-        
-        // Reset UI
-        document.getElementById('registration-default').classList.remove('hidden');
-        document.getElementById('registration-user').classList.add('hidden');
-        document.getElementById('activities-section').classList.add('hidden');
-        
-        // Show notification
-        showNotification("คุณได้ออกจากระบบแล้ว");
-        
-        closeUserDropdown();
-      }
-    }
-
-    function closeUserDropdown() {
-      document.getElementById('user-dropdown-menu').classList.remove('show');
-    }
-
+    // Load user data on page load
     window.onload = () => {
+      // Load user data if exists
       if (userData) {
         showUserInfo(userData);
         showActivitiesSection();
@@ -1398,6 +1329,83 @@
       // Update activity buttons based on completion status
       updateActivityButtons();
     };
+
+    // Webcam error handling
+    function handleWebcamError(error) {
+      console.error("Webcam Error:", error);
+      // Hide the default error message
+      document.getElementById('camera-error').classList.add('hidden');
+      
+      // Show our custom error modal
+      document.getElementById('webcam-error').classList.add('show');
+      
+      // Close AR view
+      document.getElementById('ar-view').style.display = 'none';
+    }
+
+    function closeWebcamError() {
+      document.getElementById('webcam-error').classList.remove('show');
+    }
+
+    // Handle registration button click
+    function handleRegistrationClick() {
+      if (userData) {
+        // If user is logged in, toggle dropdown
+        toggleUserDropdown();
+      } else {
+        // If user is not logged in, show registration form
+        showRegistration();
+      }
+    }
+
+    // Toggle user dropdown menu
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('user-dropdown-menu');
+      const button = document.getElementById('registration-btn');
+      
+      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // User dropdown menu functions
+    function editProfile() {
+      showRegistration();
+      closeUserDropdown();
+    }
+
+    function managePhotos() {
+      alert('ระบบจัดการรูปภาพกำลังอยู่ในระหว่างการพัฒนา');
+      closeUserDropdown();
+    }
+
+    function logout() {
+      if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+        // Clear user data
+        localStorage.removeItem("userData");
+        userData = null;
+        
+        // Reset UI
+        document.getElementById('registration-default').classList.remove('hidden');
+        document.getElementById('registration-user').classList.add('hidden');
+        document.getElementById('activities-section').classList.add('hidden');
+        
+        // Show notification
+        showNotification("คุณได้ออกจากระบบแล้ว");
+        
+        closeUserDropdown();
+      }
+    }
+
+    function closeUserDropdown() {
+      document.getElementById('user-dropdown-menu').classList.remove('show');
+    }
 
     function openQRModal() {
       document.getElementById('qr-modal').classList.add('show');
