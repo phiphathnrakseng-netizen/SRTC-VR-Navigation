@@ -108,6 +108,31 @@
       background: rgba(255, 255, 255, 0.4);
     }
     
+    /* Login Button */
+    .login-btn {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-light);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    }
+    
     /* Modal Styles */
     .modal {
       position: fixed; 
@@ -775,6 +800,12 @@
           <span id="points-badge" class="badge hidden">0</span>
         </button>
 
+        <!-- ปุ่มเข้าสู่ระบบ (ใหม่) -->
+        <button id="login-btn" class="login-btn hidden">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">เข้าสู่ระบบ</span>
+        </button>
+
         <!-- ปุ่มลงทะเบียน/ผู้ใช้ -->
         <div class="user-dropdown">
           <button id="registration-btn" onclick="handleRegistrationClick()" class="user-profile-button">
@@ -1040,10 +1071,18 @@
               </div>
             </div>
             
-            <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
-              <i data-lucide="send" class="w-4 h-4 mr-2"></i>
-              ส่งแบบฟอร์มลงทะเบียน
-            </button>
+            <div class="flex gap-3">
+              <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
+                <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                ส่งแบบฟอร์มลงทะเบียน
+              </button>
+              
+              <!-- ปุ่มเข้าสู่ระบบในฟอร์ม -->
+              <button type="button" id="login-form-btn" class="flex-1 bg-white/80 backdrop-blur-sm hover:bg-white text-dark font-medium py-3 rounded-xl transition-all text-sm border border-gray-200 shadow-sm flex items-center justify-center">
+                <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+                เข้าสู่ระบบ
+              </button>
+            </div>
           </form>
           
           <p class="text-center text-muted mt-4 text-sm">
@@ -1151,6 +1190,36 @@
           <span id="total-points" class="font-bold text-lg text-primary">0</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content max-w-sm">
+      <button onclick="closeLoginModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <h3 class="font-bold text-lg mb-4">เข้าสู่ระบบ</h3>
+      <form id="login-form">
+        <div class="mb-4">
+          <label class="block text-dark mb-2 font-medium text-sm" for="login-student-id">รหัสนักศึกษา</label>
+          <input type="text" id="login-student-id" class="form-input" placeholder="ระบุรหัสนักศึกษา" required>
+        </div>
+        
+        <div class="mb-5">
+          <label class="block text-dark mb-2 font-medium text-sm" for="login-phone">เบอร์โทรศัพท์</label>
+          <input type="tel" id="login-phone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
+        </div>
+        
+        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
+          <i data-lucide="log-in" class="w-4 h-4 mr-2"></i>
+          เข้าสู่ระบบ
+        </button>
+      </form>
+      
+      <p class="text-center text-muted mt-4 text-sm">
+        ยังไม่มีบัญชี? <a href="#" onclick="showRegistrationFromLogin()" class="text-primary hover:underline">ลงทะเบียนที่นี่</a>
+      </p>
     </div>
   </div>
 
@@ -1303,6 +1372,7 @@
         document.getElementById('registration-default').classList.remove('hidden');
         document.getElementById('registration-user').classList.add('hidden');
         document.getElementById('activities-section').classList.add('hidden');
+        updateLoginButton();
         
         // Show notification
         showNotification("คุณได้ออกจากระบบแล้ว");
@@ -1315,10 +1385,74 @@
       document.getElementById('user-dropdown-menu').classList.remove('show');
     }
 
+    // ฟังก์ชันเปิด modal เข้าสู่ระบบ
+    function openLoginModal() {
+      document.getElementById('login-modal').classList.add('show');
+    }
+
+    // ฟังก์ชันปิด modal เข้าสู่ระบบ
+    function closeLoginModal() {
+      document.getElementById('login-modal').classList.remove('show');
+    }
+
+    // ฟังก์ชันแสดงฟอร์มลงทะเบียนจาก modal เข้าสู่ระบบ
+    function showRegistrationFromLogin() {
+      closeLoginModal();
+      showRegistration();
+    }
+
+    // ฟังก์ชันเข้าสู่ระบบ
+    function loginUser() {
+      const studentId = document.getElementById('login-student-id').value;
+      const phone = document.getElementById('login-phone').value;
+      
+      if (!studentId || !phone) {
+        alert("กรุณากรอกรหัสนักศึกษาและเบอร์โทรศัพท์");
+        return;
+      }
+      
+      // ตรวจสอบว่ามีผู้ใช้ลงทะเบียนแล้วหรือไม่
+      const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+      const user = registeredUsers.find(u => u.studentId === studentId && u.phone === phone);
+      
+      if (user) {
+        // บันทึกข้อมูลผู้ใช้ที่เข้าสู่ระบบ
+        localStorage.setItem("userData", JSON.stringify(user));
+        userData = user;
+        
+        // อัพเดท UI
+        showUserInfo(user);
+        showActivitiesSection();
+        updateLoginButton();
+        
+        // ปิด modal
+        closeLoginModal();
+        
+        // แสดงข้อความสำเร็จ
+        showSuccess("เข้าสู่ระบบสำเร็จ", `ยินดีต้อนรับ ${user.fullname}`);
+      } else {
+        alert("ไม่พบข้อมูลผู้ใช้ กรุณาตรวจสอบรหัสนักศึกษาและเบอร์โทรศัพท์ หรือลงทะเบียนใหม่");
+      }
+    }
+
+    // ฟังก์ชันอัพเดทปุ่มเข้าสู่ระบบ
+    function updateLoginButton() {
+      const loginBtn = document.getElementById('login-btn');
+      if (userData) {
+        // ถ้ามีผู้ใช้เข้าสู่ระบบแล้ว ให้ซ่อนปุ่มเข้าสู่ระบบ
+        loginBtn.classList.add('hidden');
+      } else {
+        // ถ้าไม่มีผู้ใช้เข้าสู่ระบบ ให้แสดงปุ่มเข้าสู่ระบบ
+        loginBtn.classList.remove('hidden');
+      }
+    }
+
     window.onload = () => {
+      // ตรวจสอบว่ามีผู้ใช้เข้าสู่ระบบอยู่แล้วหรือไม่
       if (userData) {
         showUserInfo(userData);
         showActivitiesSection();
+        updateLoginButton();
       }
       
       // Generate QR Code
@@ -1335,6 +1469,12 @@
       document.getElementById('registration-form').addEventListener('submit', function(e) {
         e.preventDefault();
         registerUser();
+      });
+      
+      // Setup login form
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        loginUser();
       });
       
       // Setup file upload
@@ -1391,6 +1531,16 @@
           alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
         }
       }
+      
+      // เพิ่มการจัดการปุ่มเข้าสู่ระบบในฟอร์ม
+      document.getElementById('login-form-btn').addEventListener('click', function() {
+        openLoginModal();
+      });
+      
+      // เพิ่มการจัดการปุ่มเข้าสู่ระบบใน header
+      document.getElementById('login-btn').addEventListener('click', function() {
+        openLoginModal();
+      });
       
       // Update points badge
       updatePointsBadge();
@@ -1559,7 +1709,22 @@
         registeredAt: new Date().toISOString()
       };
       
+      // บันทึกข้อมูลผู้ใช้ที่ลงทะเบียน
+      const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+      // ตรวจสอบว่ามีผู้ใช้อยู่แล้วหรือไม่
+      const existingUserIndex = registeredUsers.findIndex(u => u.studentId === studentId);
+      if (existingUserIndex !== -1) {
+        // อัพเดทข้อมูลผู้ใช้ที่มีอยู่
+        registeredUsers[existingUserIndex] = userData;
+      } else {
+        // เพิ่มผู้ใช้ใหม่
+        registeredUsers.push(userData);
+      }
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+      
+      // บันทึกข้อมูลผู้ใช้ที่เข้าสู่ระบบ
       localStorage.setItem("userData", JSON.stringify(userData));
+      userData = userData;
       
       // Add registration points
       addPoints("ลงทะเบียนใช้งานระบบ", 50);
@@ -1571,6 +1736,7 @@
       hideRegistration();
       showUserInfo(userData);
       showActivitiesSection();
+      updateLoginButton();
     }
 
     // Notification system
@@ -1748,4 +1914,3 @@
   </script>
 </body>
 </html>
-แก้ไขให้ หน้าลงทะเบียน มีปุ่ม กดลงทะเบียน และ แสดงที่แถบด้านบน พวก ชื่อ รูป รายละเอียด และ เมื่อกด f5 แล้วไม่หาย
