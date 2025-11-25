@@ -532,6 +532,79 @@
       0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateY(0); }
       50% { transform: rotateX(60deg) rotateZ(45deg) translateY(-8px); }
     }
+
+    /* Custom Select Styles */
+    .custom-select {
+      position: relative;
+      width: 100%;
+    }
+    
+    .custom-select select {
+      appearance: none;
+      width: 100%;
+      border: 1px solid rgba(30, 64, 175, 0.3);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+      background-color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-light);
+      cursor: pointer;
+    }
+    
+    .custom-select::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 1.25rem;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--primary-color);
+      pointer-events: none;
+    }
+    
+    .custom-select select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+    
+    /* Room Options */
+    .room-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .room-option {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(30, 64, 175, 0.2);
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .room-option:hover {
+      background: rgba(30, 64, 175, 0.1);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .room-option.selected {
+      background: rgba(30, 64, 175, 0.2);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.3);
+    }
   </style>
 </head>
 
@@ -541,7 +614,7 @@
     <div class="flex justify-between items-center px-5 sm:px-8 py-4">
       <div class="flex items-center space-x-4">
         <div class="p-3 bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg glow">
-          <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-xl" />
+          <i data-lucide="compass" class="w-10 h-10 text-white"></i>
         </div>
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-white">SRTC Navigation</h1>
@@ -623,7 +696,9 @@
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
           <div class="flex items-center">
-            <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-xl mr-3" />
+            <div class="p-2 bg-white/20 rounded-xl mr-3">
+              <i data-lucide="compass" class="w-8 h-8 text-white"></i>
+            </div>
             <div>
               <p class="text-white font-semibold text-lg">SRTC Navigation</p>
               <p class="text-white/70 text-sm">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
@@ -653,7 +728,7 @@
 
   <!-- Navigation Destination Modal -->
   <div id="navigation-modal" class="modal">
-    <div class="modal-content max-w-md">
+    <div class="modal-content max-w-2xl w-full">
       <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -661,19 +736,20 @@
       <form id="navigation-form">
         <div class="mb-5">
           <label class="block text-gray-700 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
-          <select id="destination-building" class="form-input" required>
-            <option value="">เลือกอาคาร</option>
-            <option value="อาคาร 1">อาคาร 1 (อาคารอำนวยการ)</option>
-            <option value="อาคาร 2">อาคาร 2 (อาคารเรียนวิทยาศาสตร์)</option>
-            <option value="อาคาร 3">อาคาร 3 (อาคารเรียนคอมพิวเตอร์)</option>
-            <option value="อาคาร 4">อาคาร 4 (อาคารปฏิบัติการ)</option>
-            <option value="อาคาร 5">อาคาร 5 (อาคารเรียนวิศวกรรม)</option>
-          </select>
+          <div class="custom-select">
+            <select id="destination-building" required onchange="updateRoomOptions()">
+              <option value="">เลือกอาคาร</option>
+              <option value="อาคาร 6">อาคาร 6 (แผนกเทคโนโลยีสารสนเทศ)</option>
+            </select>
+          </div>
         </div>
         
         <div class="mb-6">
-          <label class="block text-gray-700 mb-3 font-medium" for="destination-room">หมายเลขห้อง</label>
-          <input type="text" id="destination-room" class="form-input" placeholder="เช่น 101, 201, Lab1" required>
+          <label class="block text-gray-700 mb-3 font-medium">เลือกห้องหรือสถานที่</label>
+          <div class="room-options" id="room-options">
+            <!-- Room options will be dynamically populated here -->
+          </div>
+          <input type="hidden" id="selected-room" required>
         </div>
         
         <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all shadow-lg flex items-center justify-center glow">
@@ -744,7 +820,7 @@
         <h3 class="font-bold text-white text-lg">นำทางไปยัง</h3>
         <span id="distance-indicator" class="bg-green-500 text-white px-2 py-1 rounded-full text-sm font-medium">150m</span>
       </div>
-      <p id="destination-info" class="text-white mb-3">อาคาร 3 ห้อง 201</p>
+      <p id="destination-info" class="text-white mb-3">อาคาร 6 - ลานต่อต้านยาเสพติด</p>
       
       <div class="progress-container">
         <div id="navigation-progress" class="progress-bar" style="width: 30%"></div>
@@ -798,6 +874,17 @@
     let currentDestination = null;
     let navigationInterval = null;
 
+    // Room data for Building 6
+    const building6Rooms = [
+      { id: 'laan-drug-free', name: 'ลานต่อต้านยาเสพติด', type: 'ลานกิจกรรม' },
+      { id: 'room-101', name: 'ห้องเรียนสามัญสัมพันธ์', floor: 'ชั้น 1', type: 'ห้องเรียน' },
+      { id: 'club-to-be-number-one', name: 'ห้องชมรม To be number one', floor: 'ชั้น 1', type: 'ห้องชมรม' },
+      { id: 'lab-computer-1', name: 'ห้องปฏิบัติการคอมพิวเตอร์ 1', floor: 'ชั้น 2', type: 'ห้องปฏิบัติการ' },
+      { id: 'lab-computer-2', name: 'ห้องปฏิบัติการคอมพิวเตอร์ 2', floor: 'ชั้น 2', type: 'ห้องปฏิบัติการ' },
+      { id: 'teacher-office', name: 'ห้องพักครูแผนกเทคโนโลยีสารสนเทศ', floor: 'ชั้น 3', type: 'ห้องพักครู' },
+      { id: 'meeting-room', name: 'ห้องประชุมแผนกเทคโนโลยีสารสนเทศ', floor: 'ชั้น 3', type: 'ห้องประชุม' }
+    ];
+
     // Initialize the application
     window.onload = () => {
       // Generate QR Code
@@ -818,7 +905,42 @@
       
       // Add some 3D building elements to the hero section for visual effect
       addFloatingBuildings();
+      
+      // Initialize room options
+      updateRoomOptions();
     };
+
+    // Update room options based on selected building
+    function updateRoomOptions() {
+      const buildingSelect = document.getElementById('destination-building');
+      const roomOptionsContainer = document.getElementById('room-options');
+      const selectedBuilding = buildingSelect.value;
+      
+      roomOptionsContainer.innerHTML = '';
+      
+      if (selectedBuilding === 'อาคาร 6') {
+        building6Rooms.forEach(room => {
+          const roomElement = document.createElement('div');
+          roomElement.className = 'room-option';
+          roomElement.innerHTML = `
+            <div class="font-medium text-gray-800">${room.name}</div>
+            ${room.floor ? `<div class="text-sm text-gray-600 mt-1">${room.floor}</div>` : ''}
+            <div class="text-xs text-gray-500 mt-1">${room.type}</div>
+          `;
+          roomElement.addEventListener('click', () => {
+            // Remove selected class from all options
+            document.querySelectorAll('.room-option').forEach(opt => {
+              opt.classList.remove('selected');
+            });
+            // Add selected class to clicked option
+            roomElement.classList.add('selected');
+            // Set the selected room value
+            document.getElementById('selected-room').value = room.id;
+          });
+          roomOptionsContainer.appendChild(roomElement);
+        });
+      }
+    }
 
     // Add floating 3D buildings to hero section
     function addFloatingBuildings() {
@@ -865,17 +987,26 @@
     // Start navigation
     function startNavigation() {
       const building = document.getElementById('destination-building').value;
-      const room = document.getElementById('destination-room').value;
+      const roomId = document.getElementById('selected-room').value;
       
-      if (!building || !room) {
-        alert("กรุณาเลือกอาคารและระบุหมายเลขห้อง");
+      if (!building || !roomId) {
+        alert("กรุณาเลือกอาคารและห้องหรือสถานที่");
+        return;
+      }
+      
+      // Find the selected room
+      const selectedRoom = building6Rooms.find(room => room.id === roomId);
+      
+      if (!selectedRoom) {
+        alert("ไม่พบข้อมูลห้องที่เลือก");
         return;
       }
       
       currentDestination = {
         building: building,
-        room: room,
-        fullName: `${building} ห้อง ${room}`
+        room: selectedRoom.name,
+        floor: selectedRoom.floor || '',
+        fullName: `${building} - ${selectedRoom.name}${selectedRoom.floor ? ` (${selectedRoom.floor})` : ''}`
       };
       
       closeNavigationModal();
