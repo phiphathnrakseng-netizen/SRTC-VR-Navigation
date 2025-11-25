@@ -30,6 +30,7 @@
       --danger-color: #ef4444;
       --text-dark: #1e293b;
       --text-light: #64748b;
+      --text-white: #f8fafc;
       --bg-light: #f8fafc;
       --bg-white: #ffffff;
       --glass-bg: rgba(255, 255, 255, 0.15);
@@ -46,12 +47,12 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      color: var(--text-dark);
+      color: var(--text-white);
     }
     
     /* Header Styles */
     .glass-header {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -65,7 +66,7 @@
       display: flex; 
       align-items: center; 
       justify-content: center;
-      color: white; 
+      color: var(--text-white); 
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: var(--shadow-light);
       background: rgba(255, 255, 255, 0.1);
@@ -82,7 +83,7 @@
     /* Main CTA Button */
     .cta-button {
       background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: white;
+      color: var(--text-white);
       font-weight: 600;
       padding: 1rem 2rem;
       border-radius: 16px;
@@ -121,7 +122,7 @@
     
     .cta-button.secondary {
       background: rgba(255, 255, 255, 0.15);
-      color: white;
+      color: var(--text-white);
       border: 1px solid rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(10px);
     }
@@ -177,7 +178,7 @@
     
     /* Modern Card Design */
     .modern-card {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(15px);
       border-radius: 1.5rem;
       box-shadow: var(--shadow-medium);
@@ -200,7 +201,7 @@
     .modern-card:hover {
       transform: translateY(-5px);
       box-shadow: var(--shadow-xl);
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.4);
     }
     
     /* Floating Elements */
@@ -233,7 +234,7 @@
       inset: 0;
       z-index: 10000;
       display: none;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+      background: #000000;
       flex-direction: column;
     }
     
@@ -242,8 +243,8 @@
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--text-white);
       padding: 1.5rem;
       backdrop-filter: blur(20px);
       z-index: 10001;
@@ -256,7 +257,7 @@
       left: 20px;
       right: 20px;
       background: rgba(0, 0, 0, 0.8);
-      color: white;
+      color: var(--text-white);
       padding: 1.5rem;
       border-radius: 20px;
       backdrop-filter: blur(20px);
@@ -328,12 +329,12 @@
     
     .nav-button.primary {
       background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-      color: white;
+      color: var(--text-white);
     }
     
     .nav-button.secondary {
       background: rgba(255, 255, 255, 0.2);
-      color: white;
+      color: var(--text-white);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
@@ -364,7 +365,7 @@
     .modal {
       position: fixed; 
       inset: 0; 
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       display: none; 
       align-items: center; 
       justify-content: center; 
@@ -378,7 +379,7 @@
     }
     
     .modal-content {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(30, 41, 59, 0.95);
       backdrop-filter: blur(30px);
       border-radius: 2rem; 
       padding: 2.5rem;
@@ -389,7 +390,8 @@
       max-width: 90%;
       max-height: 90%;
       overflow-y: auto;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-white);
     }
     
     @keyframes fadeIn { 
@@ -411,12 +413,12 @@
     /* Form Styles */
     .form-input {
       width: 100%;
-      border: 1px solid rgba(30, 64, 175, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 1rem;
       padding: 1rem 1.25rem;
       margin-bottom: 1.5rem;
-      color: var(--text-dark);
-      background-color: rgba(255, 255, 255, 0.8);
+      color: var(--text-white);
+      background-color: rgba(0, 0, 0, 0.4);
       font-size: 1rem;
       transition: all 0.3s ease;
       box-shadow: var(--shadow-light);
@@ -425,8 +427,12 @@
     .form-input:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
-      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
     }
     
     /* Map Container */
@@ -443,7 +449,7 @@
     
     /* Footer */
     .footer {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(15px);
       padding: 2rem 1rem;
       text-align: center;
@@ -542,12 +548,12 @@
     .custom-select select {
       appearance: none;
       width: 100%;
-      border: 1px solid rgba(30, 64, 175, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 1rem;
       padding: 1rem 1.25rem;
       margin-bottom: 1.5rem;
-      color: var(--text-dark);
-      background-color: rgba(255, 255, 255, 0.8);
+      color: var(--text-white);
+      background-color: rgba(0, 0, 0, 0.4);
       font-size: 1rem;
       transition: all 0.3s ease;
       box-shadow: var(--shadow-light);
@@ -564,15 +570,15 @@
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid var(--primary-color);
+      border-top: 6px solid var(--primary-light);
       pointer-events: none;
     }
     
     .custom-select select:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
-      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
+      background-color: rgba(0, 0, 0, 0.6);
     }
     
     /* Room Options */
@@ -584,26 +590,72 @@
     }
     
     .room-option {
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(30, 64, 175, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 1rem;
       padding: 1rem;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: var(--shadow-light);
+      color: var(--text-white);
     }
     
     .room-option:hover {
-      background: rgba(30, 64, 175, 0.1);
+      background: rgba(30, 64, 175, 0.3);
       transform: translateY(-2px);
       box-shadow: var(--shadow-medium);
     }
     
     .room-option.selected {
-      background: rgba(30, 64, 175, 0.2);
+      background: rgba(30, 64, 175, 0.4);
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.3);
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.5);
+    }
+    
+    /* Logo Styles */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo-icon {
+      width: 30px;
+      height: 30px;
+      color: white;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    
+    /* Camera View */
+    #camera-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    
+    .camera-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
     }
   </style>
 </head>
@@ -613,12 +665,17 @@
   <header class="glass-header sticky top-0 z-20">
     <div class="flex justify-between items-center px-5 sm:px-8 py-4">
       <div class="flex items-center space-x-4">
-        <div class="p-3 bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg glow">
-          <i data-lucide="compass" class="w-10 h-10 text-white"></i>
+        <div class="logo-container glow">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L3 7L12 12L21 7L12 2Z"/>
+            <path d="M3 7L12 12L21 7"/>
+            <path d="M3 17L12 22L21 17"/>
+            <path d="M3 12L12 17L21 12"/>
+          </svg>
         </div>
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-white">SRTC Navigation</h1>
-          <p class="text-sm text-white/80 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+          <p class="text-sm text-gray-300 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
         </div>
       </div>
 
@@ -640,14 +697,14 @@
     <section class="hero-section">
       <div class="hero-content">
         <div class="floating-element mb-8">
-          <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-6 glow">
+          <div class="inline-flex items-center bg-black/30 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-6 glow">
             <span class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></span>
             <span class="text-base font-semibold text-white">ระบบนำทางเสมือนจริง</span>
           </div>
         </div>
         
         <h1 class="section-title mb-6">สำรวจวิทยาลัยในรูปแบบใหม่</h1>
-        <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">สัมผัสประสบการณ์นำทางภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
+        <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">สัมผัสประสบการณ์นำทางภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
         
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <button onclick="openMapModal()" class="cta-button glow">
@@ -663,27 +720,27 @@
         
         <div class="features-grid">
           <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <i data-lucide="map-pin" class="w-7 h-7 text-white"></i>
             </div>
             <h3 class="text-xl font-bold mb-3 text-white">นำทางแบบเรียลไทม์</h3>
-            <p class="text-white/80 text-base">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+            <p class="text-gray-300 text-base">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
           </div>
           
           <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <i data-lucide="box" class="w-7 h-7 text-white"></i>
             </div>
             <h3 class="text-xl font-bold mb-3 text-white">ประสบการณ์ 3D</h3>
-            <p class="text-white/80 text-base">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+            <p class="text-gray-300 text-base">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
           </div>
           
           <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <i data-lucide="compass" class="w-7 h-7 text-white"></i>
             </div>
             <h3 class="text-xl font-bold mb-3 text-white">เทคโนโลยีล้ำสมัย</h3>
-            <p class="text-white/80 text-base">ใช้เทคโนโลยีล่าสุดเพื่อการนำทางที่แม่นยำและรวดเร็ว</p>
+            <p class="text-gray-300 text-base">ใช้เทคโนโลยีล่าสุดเพื่อการนำทางที่แม่นยำและรวดเร็ว</p>
           </div>
         </div>
       </div>
@@ -696,19 +753,24 @@
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
           <div class="flex items-center">
-            <div class="p-2 bg-white/20 rounded-xl mr-3">
-              <i data-lucide="compass" class="w-8 h-8 text-white"></i>
+            <div class="logo-container mr-3">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L3 7L12 12L21 7L12 2Z"/>
+                <path d="M3 7L12 12L21 7"/>
+                <path d="M3 17L12 22L21 17"/>
+                <path d="M3 12L12 17L21 12"/>
+              </svg>
             </div>
             <div>
               <p class="text-white font-semibold text-lg">SRTC Navigation</p>
-              <p class="text-white/70 text-sm">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+              <p class="text-gray-300 text-sm">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
             </div>
           </div>
         </div>
         
         <div class="text-center md:text-right">
           <p class="text-white text-base">© 2025 SRTC Navigation | All rights reserved.</p>
-          <p class="text-white/70 text-sm mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีล้ำสมัย</p>
+          <p class="text-gray-300 text-sm mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีล้ำสมัย</p>
         </div>
       </div>
     </div>
@@ -717,25 +779,25 @@
   <!-- QR Code Modal -->
   <div id="qr-modal" class="modal">
     <div class="modal-content max-w-xs">
-      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-4 text-primary">QR Code</h3>
+      <h3 class="font-bold text-xl mb-4 text-white">QR Code</h3>
       <div id="qrcode" class="mx-auto mb-4"></div>
-      <p class="text-gray-600 text-sm">สแกนเพื่อเข้าถึงระบบนำทาง</p>
+      <p class="text-gray-300 text-sm">สแกนเพื่อเข้าถึงระบบนำทาง</p>
     </div>
   </div>
 
   <!-- Navigation Destination Modal -->
   <div id="navigation-modal" class="modal">
     <div class="modal-content max-w-2xl w-full">
-      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-6 text-primary text-center">เลือกจุดหมายปลายทาง</h3>
+      <h3 class="font-bold text-xl mb-6 text-white text-center">เลือกจุดหมายปลายทาง</h3>
       <form id="navigation-form">
         <div class="mb-5">
-          <label class="block text-gray-700 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
+          <label class="block text-gray-200 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
           <div class="custom-select">
             <select id="destination-building" required onchange="updateRoomOptions()">
               <option value="">เลือกอาคาร</option>
@@ -745,7 +807,7 @@
         </div>
         
         <div class="mb-6">
-          <label class="block text-gray-700 mb-3 font-medium">เลือกห้องหรือสถานที่</label>
+          <label class="block text-gray-200 mb-3 font-medium">เลือกห้องหรือสถานที่</label>
           <div class="room-options" id="room-options">
             <!-- Room options will be dynamically populated here -->
           </div>
@@ -758,8 +820,8 @@
         </button>
       </form>
       
-      <p class="text-center text-gray-600 mt-5 text-sm">
-        ระบบจะแสดงเส้นทางนำทางแบบเรียลไทม์
+      <p class="text-center text-gray-300 mt-5 text-sm">
+        ระบบจะเปิดกล้องและแสดงเส้นทางนำทางแบบเรียลไทม์
       </p>
     </div>
   </div>
@@ -767,10 +829,10 @@
   <!-- Map Modal -->
   <div id="map-modal" class="modal">
     <div class="modal-content max-w-4xl w-full">
-      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-6 text-primary text-center">แผนที่วิทยาลัย 3D</h3>
+      <h3 class="font-bold text-xl mb-6 text-white text-center">แผนที่วิทยาลัย 3D</h3>
       
       <div class="map-container mb-6">
         <div class="w-full h-full flex items-center justify-center text-white text-lg">
@@ -800,6 +862,15 @@
 
   <!-- Navigation AR View -->
   <div id="navigation-ar-view">
+    <video id="camera-view" autoplay playsinline></video>
+    <div class="camera-overlay">
+      <div class="text-center text-white mb-8">
+        <i data-lucide="camera" class="w-16 h-16 mx-auto mb-4 opacity-70"></i>
+        <p class="text-xl font-semibold">กล้องกำลังทำงาน</p>
+        <p class="text-gray-300 mt-2">เดินตามเส้นทางสีเขียวเพื่อไปยังจุดหมาย</p>
+      </div>
+    </div>
+    
     <div class="navigation-header">
       <div class="flex justify-between items-center">
         <div class="flex items-center">
@@ -826,7 +897,7 @@
         <div id="navigation-progress" class="progress-bar" style="width: 30%"></div>
       </div>
       
-      <div class="flex justify-between items-center text-white/80 text-sm">
+      <div class="flex justify-between items-center text-gray-300 text-sm">
         <div class="flex items-center">
           <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
           <span id="time-indicator">ประมาณ 3 นาที</span>
@@ -834,17 +905,6 @@
         <div class="flex items-center">
           <i data-lucide="user" class="w-4 h-4 mr-1"></i>
           <span>เดิน</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- AR Camera View -->
-    <div id="ar-camera-container" class="absolute inset-0 bg-black z-0">
-      <div class="w-full h-full flex items-center justify-center text-white text-center">
-        <div>
-          <i data-lucide="compass" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
-          <p class="text-lg mb-2">ระบบนำทางกำลังทำงาน</p>
-          <p class="text-white/70">เดินตามเส้นทางสีเขียวเพื่อไปยังจุดหมาย</p>
         </div>
       </div>
     </div>
@@ -873,6 +933,7 @@
     let navigationActive = false;
     let currentDestination = null;
     let navigationInterval = null;
+    let cameraStream = null;
 
     // Room data for Building 6
     const building6Rooms = [
@@ -893,7 +954,7 @@
         width: 160,
         height: 160,
         colorDark: "#1e40af",
-        colorLight: "#ffffff",
+        colorLight: "#1e293b",
         correctLevel: QRCode.CorrectLevel.H
       });
       
@@ -923,9 +984,9 @@
           const roomElement = document.createElement('div');
           roomElement.className = 'room-option';
           roomElement.innerHTML = `
-            <div class="font-medium text-gray-800">${room.name}</div>
-            ${room.floor ? `<div class="text-sm text-gray-600 mt-1">${room.floor}</div>` : ''}
-            <div class="text-xs text-gray-500 mt-1">${room.type}</div>
+            <div class="font-medium text-white">${room.name}</div>
+            ${room.floor ? `<div class="text-sm text-gray-300 mt-1">${room.floor}</div>` : ''}
+            <div class="text-xs text-gray-400 mt-1">${room.type}</div>
           `;
           roomElement.addEventListener('click', () => {
             // Remove selected class from all options
@@ -984,7 +1045,7 @@
       document.getElementById('map-modal').classList.remove('show');
     }
 
-    // Start navigation
+    // Start navigation with camera
     function startNavigation() {
       const building = document.getElementById('destination-building').value;
       const roomId = document.getElementById('selected-room').value;
@@ -1020,22 +1081,44 @@
       }, 1500);
     }
 
-    // Start AR Navigation
-    function startARNavigation() {
+    // Start AR Navigation with camera
+    async function startARNavigation() {
       const navView = document.getElementById('navigation-ar-view');
+      const cameraView = document.getElementById('camera-view');
       
-      // Update destination info
-      document.getElementById('destination-info').textContent = currentDestination.fullName;
-      
-      // Show AR view
-      navView.style.display = 'flex';
-      navigationActive = true;
-      
-      // Start drawing navigation path
-      drawNavigationPath();
-      
-      // Start simulation of navigation updates
-      simulateNavigationUpdates();
+      try {
+        // Request camera access
+        cameraStream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment' } 
+        });
+        
+        // Set camera stream to video element
+        cameraView.srcObject = cameraStream;
+        
+        // Update destination info
+        document.getElementById('destination-info').textContent = currentDestination.fullName;
+        
+        // Show AR view
+        navView.style.display = 'flex';
+        navigationActive = true;
+        
+        // Start drawing navigation path
+        drawNavigationPath();
+        
+        // Start simulation of navigation updates
+        simulateNavigationUpdates();
+        
+      } catch (error) {
+        console.error("Camera error:", error);
+        // Fallback to simulated camera view
+        document.getElementById('destination-info').textContent = currentDestination.fullName;
+        navView.style.display = 'flex';
+        navigationActive = true;
+        drawNavigationPath();
+        simulateNavigationUpdates();
+        
+        showSuccess("เปิดใช้งานกล้องไม่สำเร็จ", "ระบบจะแสดงเส้นทางนำทางโดยไม่ใช้กล้อง");
+      }
     }
 
     // Draw navigation path
@@ -1130,6 +1213,12 @@
     function closeNavigationAR() {
       const navView = document.getElementById('navigation-ar-view');
       
+      // Stop camera stream
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      
       navView.style.display = 'none';
       navigationActive = false;
       currentDestination = null;
@@ -1157,7 +1246,7 @@
     function showSuccess(title, message) {
       // Create a custom notification
       const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded-2xl shadow-xl z-50 max-w-sm';
+      notification.className = 'fixed top-4 right-4 bg-green-600 text-white p-4 rounded-2xl shadow-xl z-50 max-w-sm';
       notification.innerHTML = `
         <div class="flex items-start">
           <i data-lucide="check-circle" class="w-5 h-5 mr-3 flex-shrink-0"></i>
