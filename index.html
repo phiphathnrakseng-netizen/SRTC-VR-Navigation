@@ -634,6 +634,111 @@
     .pulse {
       animation: pulse 2s infinite;
     }
+    
+    /* Loading Spinner */
+    .loading-spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 3px solid var(--primary-color);
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Success Animation */
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .check-icon {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      border-radius: 50%;
+      box-sizing: content-box;
+      border: 4px solid #4CAF50;
+    }
+    
+    .check-icon::before {
+      top: 3px;
+      left: -2px;
+      width: 30px;
+      transform-origin: 100% 50%;
+      border-radius: 100px 0 0 100px;
+    }
+    
+    .check-icon::after {
+      top: 0;
+      left: 30px;
+      width: 60px;
+      transform-origin: 0 50%;
+      border-radius: 0 100px 100px 0;
+      animation: rotate-circle 4.25s ease-in;
+    }
+    
+    .check-icon::before, .check-icon::after {
+      content: '';
+      height: 100px;
+      position: absolute;
+      background: #FFFFFF;
+      transform: rotate(-45deg);
+    }
+    
+    .icon-line {
+      height: 5px;
+      background-color: #4CAF50;
+      display: block;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 10;
+    }
+    
+    .icon-line.line-tip {
+      top: 46px;
+      left: 14px;
+      width: 25px;
+      transform: rotate(45deg);
+      animation: icon-line-tip 0.75s;
+    }
+    
+    .icon-line.line-long {
+      top: 38px;
+      right: 8px;
+      width: 47px;
+      transform: rotate(-45deg);
+      animation: icon-line-long 0.75s;
+    }
+    
+    @keyframes rotate-circle {
+      0% { transform: rotate(-45deg); }
+      5% { transform: rotate(-45deg); }
+      12% { transform: rotate(-405deg); }
+      100% { transform: rotate(-405deg); }
+    }
+    
+    @keyframes icon-line-tip {
+      0% { width: 0; left: 1px; top: 19px; }
+      54% { width: 0; left: 1px; top: 19px; }
+      70% { width: 50px; left: -8px; top: 37px; }
+      84% { width: 17px; left: 21px; top: 48px; }
+      100% { width: 25px; left: 14px; top: 45px; }
+    }
+    
+    @keyframes icon-line-long {
+      0% { width: 0; right: 46px; top: 54px; }
+      65% { width: 0; right: 46px; top: 54px; }
+      84% { width: 55px; right: 0px; top: 35px; }
+      100% { width: 47px; right: 8px; top: 38px; }
+    }
   </style>
 </head>
 
@@ -972,15 +1077,15 @@
         </div>
         
         <div class="flex flex-wrap gap-3 justify-center mt-6">
-          <button class="cta-button secondary">
+          <button class="cta-button secondary" onclick="rotateMap()">
             <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
             <span>หมุนมุมมอง</span>
           </button>
-          <button class="cta-button secondary">
+          <button class="cta-button secondary" onclick="zoomMap()">
             <i data-lucide="zoom-in" class="w-4 h-4"></i>
             <span>ขยาย</span>
           </button>
-          <button class="cta-button secondary">
+          <button class="cta-button secondary" onclick="navigateMap()">
             <i data-lucide="navigation" class="w-4 h-4"></i>
             <span>นำทาง</span>
           </button>
@@ -1068,6 +1173,34 @@
     </div>
   </div>
 
+  <!-- Success Modal -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content max-w-xs">
+      <div class="success-checkmark mb-4">
+        <div class="check-icon">
+          <span class="icon-line line-tip"></span>
+          <span class="icon-line line-long"></span>
+          <div class="icon-circle"></div>
+          <div class="icon-fix"></div>
+        </div>
+      </div>
+      <h3 class="font-bold text-lg mb-2" id="success-title">สำเร็จ!</h3>
+      <p class="text-sm text-muted mb-4" id="success-message"></p>
+      <button onclick="closeSuccessModal()" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
+        ตกลง
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Modal -->
+  <div id="loading-modal" class="modal">
+    <div class="modal-content max-w-xs">
+      <div class="loading-spinner mb-4"></div>
+      <h3 class="font-bold text-lg mb-2">กำลังประมวลผล</h3>
+      <p class="text-sm text-muted">กรุณารอสักครู่...</p>
+    </div>
+  </div>
+
   <!-- โหมด AR -->
   <div id="ar-view">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
@@ -1101,6 +1234,9 @@
       total: 0,
       activities: []
     };
+
+    // Initialize completed activities
+    let completedActivities = JSON.parse(localStorage.getItem("completedActivities")) || [];
 
     // Webcam error handling
     function handleWebcamError(error) {
@@ -1148,14 +1284,12 @@
 
     // User dropdown menu functions
     function editProfile() {
-      alert('เปิดฟังก์ชันแก้ไขข้อมูลผู้ใช้');
-      // ในอนาคตสามารถเพิ่มฟังก์ชันแก้ไขข้อมูลได้ที่นี่
+      showRegistration();
       closeUserDropdown();
     }
 
     function managePhotos() {
-      alert('เปิดฟังก์ชันจัดการรูปภาพ');
-      // ในอนาคตสามารถเพิ่มฟังก์ชันจัดการรูปภาพได้ที่นี่
+      alert('ระบบจัดการรูปภาพกำลังอยู่ในระหว่างการพัฒนา');
       closeUserDropdown();
     }
 
@@ -1260,11 +1394,15 @@
       
       // Update points badge
       updatePointsBadge();
+      
+      // Update activity buttons based on completion status
+      updateActivityButtons();
     };
 
     function openQRModal() {
       document.getElementById('qr-modal').classList.add('show');
     }
+    
     function closeQRModal() {
       document.getElementById('qr-modal').classList.remove('show');
     }
@@ -1346,6 +1484,19 @@
       document.getElementById('map-section').classList.add('hidden');
     }
 
+    // 3D Map Controls
+    function rotateMap() {
+      showSuccess("หมุนมุมมองแผนที่", "คุณสามารถหมุนมุมมองแผนที่ 3D ได้ด้วยการลากเมาส์");
+    }
+    
+    function zoomMap() {
+      showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์");
+    }
+    
+    function navigateMap() {
+      showSuccess("ระบบนำทาง", "ระบบนำทางจะช่วยแนะนำเส้นทางไปยังสถานที่ต่างๆ ในวิทยาลัย");
+    }
+
     // ลงทะเบียน
     function showRegistration() {
       document.getElementById('registration-section').classList.remove('hidden');
@@ -1374,20 +1525,26 @@
         interests.push(checkbox.value);
       });
       
-      // Get uploaded file
-      const fileInput = document.getElementById('file-input');
-      let imageData = null;
+      // Show loading
+      showLoading();
       
-      if (fileInput.files.length) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          imageData = e.target.result;
-          saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        saveRegistrationData(studentId, fullname, email, department, phone, interests, null);
-      }
+      // Simulate API call delay
+      setTimeout(() => {
+        // Get uploaded file
+        const fileInput = document.getElementById('file-input');
+        let imageData = null;
+        
+        if (fileInput.files.length) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imageData = e.target.result;
+            saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData);
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          saveRegistrationData(studentId, fullname, email, department, phone, interests, null);
+        }
+      }, 1500);
     }
     
     function saveRegistrationData(studentId, fullname, email, department, phone, interests, imageData) {
@@ -1398,7 +1555,8 @@
         department,
         phone,
         interests,
-        imageData
+        imageData,
+        registeredAt: new Date().toISOString()
       };
       
       localStorage.setItem("userData", JSON.stringify(userData));
@@ -1406,10 +1564,10 @@
       // Add registration points
       addPoints("ลงทะเบียนใช้งานระบบ", 50);
       
-      // Show notification
-      showNotification("ลงทะเบียนสำเร็จ! คุณได้รับ 50 คะแนน");
+      // Hide loading and show success
+      hideLoading();
+      showSuccess("ลงทะเบียนสำเร็จ", "คุณได้รับ 50 คะแนน และสามารถใช้งานฟีเจอร์พิเศษได้แล้ว");
       
-      alert("ลงทะเบียนสำเร็จ! คุณจะได้รับการแจ้งเตือนอัปเดตข้อมูลล่าสุด");
       hideRegistration();
       showUserInfo(userData);
       showActivitiesSection();
@@ -1479,19 +1637,56 @@
         return;
       }
       
-      addPoints(activityName, points);
-      showNotification(`คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
+      // Check if activity already completed
+      if (completedActivities.includes(activityName)) {
+        showSuccess("กิจกรรมนี้เสร็จสมบูรณ์แล้ว", `คุณได้รับ ${points} คะแนนจากกิจกรรมนี้แล้ว`);
+        return;
+      }
       
-      // Close the activity detail
-      const activityCards = document.querySelectorAll('.activity-card');
-      activityCards.forEach(card => {
-        const detail = card.querySelector('.activity-detail');
-        if (detail && detail.classList.contains('expanded')) {
-          detail.classList.remove('expanded');
-          const chevron = card.querySelector('.activity-chevron');
-          if (chevron) chevron.style.transform = 'rotate(0deg)';
+      // Show loading
+      showLoading();
+      
+      // Simulate activity completion delay
+      setTimeout(() => {
+        addPoints(activityName, points);
+        completedActivities.push(activityName);
+        localStorage.setItem("completedActivities", JSON.stringify(completedActivities));
+        
+        // Hide loading and show success
+        hideLoading();
+        showSuccess("กิจกรรมเสร็จสมบูรณ์", `คุณได้รับ ${points} คะแนนจากกิจกรรม: ${activityName}`);
+        
+        // Update activity buttons
+        updateActivityButtons();
+        
+        // Close the activity detail
+        const activityCards = document.querySelectorAll('.activity-card');
+        activityCards.forEach(card => {
+          const detail = card.querySelector('.activity-detail');
+          if (detail && detail.classList.contains('expanded')) {
+            detail.classList.remove('expanded');
+            const chevron = card.querySelector('.activity-chevron');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+          }
+        });
+      }, 1000);
+    }
+
+    function updateActivityButtons() {
+      // Update activity buttons based on completion status
+      const activityButtons = document.querySelectorAll('.activity-card button');
+      activityButtons.forEach(button => {
+        const activityName = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+        if (completedActivities.includes(activityName)) {
+          button.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 inline mr-1"></i> กิจกรรมเสร็จสมบูรณ์';
+          button.classList.remove('bg-primary', 'hover:bg-primary-dark');
+          button.classList.add('bg-green-500', 'hover:bg-green-600');
+          button.disabled = true;
         }
       });
+      
+      // Refresh icons
+      lucide.createIcons();
     }
 
     function openPointsModal() {
@@ -1529,6 +1724,26 @@
 
     function closePointsModal() {
       document.getElementById('points-modal').classList.remove('show');
+    }
+
+    // Success Modal
+    function showSuccess(title, message) {
+      document.getElementById('success-title').textContent = title;
+      document.getElementById('success-message').textContent = message;
+      document.getElementById('success-modal').classList.add('show');
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.remove('show');
+    }
+
+    // Loading Modal
+    function showLoading() {
+      document.getElementById('loading-modal').classList.add('show');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-modal').classList.remove('show');
     }
   </script>
 </body>
