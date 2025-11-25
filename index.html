@@ -3,43 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SRTC VR Virtual | แผนผังและตึก 3D</title>
+  <title>SRTC AR Navigation | ระบบนำทางเสมือนจริง</title>
   <meta name="theme-color" content="#1a56db">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
-
+  
   <!-- Modern Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     * { 
-      font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+      font-family: 'Poppins', 'Noto Sans Thai', sans-serif;
       box-sizing: border-box;
     }
     
     :root {
-      --primary-color: #1a56db;
-      --primary-light: #3f75ea;
-      --primary-dark: #0e3a9c;
-      --accent-color: #ff6b35;
-      --text-dark: #1f2937;
-      --text-light: #6b7280;
+      --primary-color: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --accent-color: #f59e0b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
       --bg-light: #f8fafc;
       --bg-white: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.18);
       --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --glass-bg: rgba(255, 255, 255, 0.25);
-      --glass-border: rgba(255, 255, 255, 0.18);
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
     
     body {
       overflow-x: hidden;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -48,169 +51,49 @@
     
     /* Header Styles */
     .glass-header {
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
     }
     
     /* Button Styles */
     .icon-button {
       position: relative; 
-      padding: 0.6rem; 
-      border-radius: 12px;
+      padding: 0.7rem; 
+      border-radius: 14px;
       display: flex; 
       align-items: center; 
       justify-content: center;
-      color: var(--text-dark); 
+      color: white; 
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: var(--shadow-light);
-      background: var(--glass-bg);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .icon-button:hover { 
-      transform: translateY(-2px); 
+      transform: translateY(-3px) scale(1.05); 
       box-shadow: var(--shadow-medium);
-      color: var(--primary-color);
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.25);
     }
     
-    /* Modal Styles */
-    .modal {
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.5);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      z-index: 50;
-      backdrop-filter: blur(5px);
-    }
-    
-    .modal.show { 
-      display: flex; 
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .modal-content {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      border-radius: 1.5rem; 
-      padding: 1.5rem;
-      box-shadow: var(--shadow-large); 
-      text-align: center;
-      position: relative; 
-      animation: modalSlideIn 0.3s ease;
-      max-width: 90%;
-      max-height: 90%;
-      overflow-y: auto;
-      border: 1px solid var(--glass-border);
-    }
-    
-    @keyframes fadeIn { 
-      from { opacity:0; } 
-      to { opacity:1; } 
-    }
-    
-    @keyframes modalSlideIn {
-      from {
-        opacity:0;
-        transform:translateY(20px) scale(0.95);
-      } 
-      to {
-        opacity:1;
-        transform:translateY(0) scale(1);
-      } 
-    }
-    
-    /* AR View */
-    #ar-view { 
-      position: fixed; 
-      inset: 0; 
-      z-index: 9999; 
-      display: none; 
-      background: black; 
-    }
-    
-    /* Modern Card Design */
-    .modern-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 1.25rem;
-      box-shadow: var(--shadow-light);
-      border: 1px solid var(--glass-border);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-    }
-    
-    .modern-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-medium);
-      background: rgba(255, 255, 255, 0.4);
-    }
-    
-    /* Hero Section */
-    .hero-section {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem 1rem;
-      position: relative;
-      min-height: auto;
-      overflow: hidden;
-    }
-    
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(26, 86, 219, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(26, 86, 219, 0.05) 0%, transparent 50%);
-      z-index: -1;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 900px;
-      width: 100%;
-    }
-    
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-      max-width: 900px;
-      width: 100%;
-    }
-    
-    /* CTA Button */
+    /* Main CTA Button */
     .cta-button {
       background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
       color: white;
       font-weight: 600;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
+      padding: 1rem 2rem;
+      border-radius: 16px;
       box-shadow: var(--shadow-medium);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       border: none;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
       position: relative;
       overflow: hidden;
     }
@@ -222,8 +105,8 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.7s;
     }
     
     .cta-button:hover::before {
@@ -231,63 +114,117 @@
     }
     
     .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-large);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: var(--shadow-xl);
       background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
     }
     
     .cta-button.secondary {
-      background: var(--glass-bg);
-      color: var(--primary-color);
-      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
     }
     
     .cta-button.secondary:hover {
-      background: rgba(26, 86, 219, 0.1);
+      background: rgba(255, 255, 255, 0.3);
     }
     
-    /* Footer */
-    .footer {
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      padding: 1rem;
+    /* Hero Section */
+    .hero-section {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 1.5rem;
+      position: relative;
+      min-height: 85vh;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 15% 70%, rgba(99, 102, 241, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      margin-top: auto;
-      border-top: 1px solid var(--glass-border);
-      box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+      max-width: 1000px;
+      width: 100%;
+    }
+    
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 1000px;
+      width: 100%;
+    }
+    
+    /* Modern Card Design */
+    .modern-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-medium);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .modern-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    }
+    
+    .modern-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-xl);
+      background: rgba(255, 255, 255, 0.2);
     }
     
     /* Floating Elements */
     .floating-element {
-      animation: float 6s ease-in-out infinite;
+      animation: float 8s ease-in-out infinite;
     }
     
     @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    /* 3D Map Container */
-    #aframe-container {
-      border-radius: 1rem;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--glass-border);
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
     }
     
     /* Section Title */
     .section-title {
       position: relative;
       display: inline-block;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      margin-bottom: 2rem;
+      font-weight: 800;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     /* Navigation AR View */
@@ -296,21 +233,36 @@
       inset: 0;
       z-index: 10000;
       display: none;
-      background: black;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
       flex-direction: column;
+    }
+    
+    .navigation-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      z-index: 10001;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .navigation-info {
       position: absolute;
-      top: 20px;
+      top: 100px;
       left: 20px;
       right: 20px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.8);
       color: white;
-      padding: 15px;
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
       z-index: 10001;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow-xl);
     }
     
     .navigation-path {
@@ -325,142 +277,236 @@
     
     .path-line {
       position: absolute;
-      background: linear-gradient(to right, transparent, #4ade80, transparent);
-      height: 6px;
-      border-radius: 3px;
-      box-shadow: 0 0 10px #4ade80;
+      background: linear-gradient(90deg, transparent, var(--success-color), transparent);
+      height: 8px;
+      border-radius: 4px;
+      box-shadow: 0 0 20px var(--success-color);
       transform-origin: left center;
+      filter: blur(0.5px);
     }
     
     .path-dot {
       position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #4ade80;
+      width: 16px;
+      height: 16px;
+      background: var(--success-color);
       border-radius: 50%;
-      box-shadow: 0 0 10px #4ade80;
-      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 20px var(--success-color);
+      animation: pulse 2s infinite;
     }
     
     @keyframes pulse {
       0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 0.7; }
       100% { transform: scale(1); opacity: 1; }
     }
     
     .navigation-controls {
       position: absolute;
-      bottom: 20px;
+      bottom: 30px;
       left: 0;
       right: 0;
       display: flex;
       justify-content: center;
-      gap: 10px;
-      padding: 0 20px;
+      gap: 15px;
+      padding: 0 25px;
       z-index: 10001;
     }
     
-    /* Form input styles */
+    .nav-button {
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .nav-button.primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+    }
+    
+    .nav-button.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .nav-button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-large);
+    }
+    
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px var(--primary-color);
+    }
+    
+    /* Modal Styles */
+    .modal {
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.7);
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+    
+    .modal.show { 
+      display: flex; 
+      animation: fadeIn 0.4s ease;
+    }
+    
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(30px);
+      border-radius: 2rem; 
+      padding: 2.5rem;
+      box-shadow: var(--shadow-xl); 
+      text-align: center;
+      position: relative; 
+      animation: modalSlideIn 0.4s ease;
+      max-width: 90%;
+      max-height: 90%;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    @keyframes fadeIn { 
+      from { opacity:0; } 
+      to { opacity:1; } 
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity:0;
+        transform:translateY(30px) scale(0.9);
+      } 
+      to {
+        opacity:1;
+        transform:translateY(0) scale(1);
+      } 
+    }
+    
+    /* Form Styles */
     .form-input {
       width: 100%;
-      border: 1px solid var(--glass-border);
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
       color: var(--text-dark);
-      background-color: rgba(255, 255, 255, 0.5);
-      font-size: 0.9rem;
+      background-color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
       transition: all 0.3s ease;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-light);
     }
     
     .form-input:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
-      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background-color: rgba(255, 255, 255, 0.95);
     }
     
-    /* Responsive adjustments */
+    /* Map Container */
+    .map-container {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      height: 500px;
+      position: relative;
+    }
+    
+    /* Footer */
+    .footer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Responsive */
     @media (max-width: 768px) {
       .hero-section {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1rem;
+        min-height: 80vh;
+      }
+      
+      .section-title {
+        font-size: 2.5rem;
       }
       
       .features-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
       }
       
-      .hero-content h2 {
-        font-size: 1.75rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .hero-content h2 {
-        font-size: 1.5rem;
+      .navigation-controls {
+        flex-direction: column;
+        align-items: center;
       }
       
-      .cta-button {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.85rem;
+      .nav-button {
+        width: 100%;
+        justify-content: center;
       }
     }
     
-    /* Compact layout adjustments */
-    .compact-layout {
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    
-    /* Text styles */
-    .text-primary {
-      color: var(--primary-color);
-    }
-    
-    .text-muted {
-      color: var(--text-light);
-    }
-    
-    /* Webcam Error Handling */
-    .webcam-error {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .webcam-error.show {
-      display: flex;
-    }
-    
-    .webcam-error-content {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
-      color: var(--text-dark);
-      box-shadow: var(--shadow-large);
-      border: 1px solid var(--glass-border);
-    }
-    
-    /* Glowing effect for important elements */
+    /* Glow Effects */
     .glow {
-      box-shadow: 0 0 20px rgba(26, 86, 219, 0.3);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+    }
+    
+    .glow-success {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    }
+    
+    /* 3D Building Models */
+    .building-model {
+      position: absolute;
+      width: 80px;
+      height: 120px;
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      border-radius: 8px;
+      transform-style: preserve-3d;
+      transform: rotateX(60deg) rotateZ(45deg);
+      box-shadow: 
+        0 10px 20px rgba(0,0,0,0.3),
+        inset 0 -5px 10px rgba(0,0,0,0.2);
+      animation: buildingFloat 6s ease-in-out infinite;
+    }
+    
+    @keyframes buildingFloat {
+      0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateY(0); }
+      50% { transform: rotateX(60deg) rotateZ(45deg) translateY(-10px); }
     }
   </style>
 </head>
@@ -468,120 +514,80 @@
 <body>
   <!-- Header -->
   <header class="glass-header sticky top-0 z-20">
-    <div class="flex justify-between items-center px-4 sm:px-6 py-3">
-      <div class="flex items-center space-x-3">
-        <div class="p-2 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
-          <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg" />
+    <div class="flex justify-between items-center px-5 sm:px-8 py-4">
+      <div class="flex items-center space-x-4">
+        <div class="p-3 bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg glow">
+          <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-xl" />
         </div>
         <div>
-          <h1 class="text-lg sm:text-xl font-bold text-primary">SRTC VR Navigation</h1>
-          <p class="text-xs text-muted hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-white">SRTC AR Navigation</h1>
+          <p class="text-sm text-white/80 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
         </div>
       </div>
 
-      <nav class="flex items-center space-x-2 sm:space-x-3">
+      <nav class="flex items-center space-x-3 sm:space-x-4">
         <button onclick="openQRModal()" class="icon-button" title="QR Code">
-          <i data-lucide="qr-code" class="w-5 h-5"></i>
+          <i data-lucide="qr-code" class="w-6 h-6"></i>
         </button>
 
-        <button onclick="toggleARMode()" class="icon-button" title="เปิดโหมด AR/VR">
-          <i data-lucide="scan" class="w-5 h-5"></i>
+        <button onclick="openNavigationModal()" class="icon-button" title="เริ่มนำทาง">
+          <i data-lucide="navigation" class="w-6 h-6"></i>
         </button>
       </nav>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow compact-layout px-4 py-6">
+  <main class="flex-grow">
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-        <div class="floating-element mb-6">
-          <div class="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-md mb-4 glow">
-            <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
-            <span class="text-sm font-medium text-primary">ระบบนำทางเสมือนจริง (AR/VR)</span>
+        <div class="floating-element mb-8">
+          <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-6 glow">
+            <span class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse glow-success"></span>
+            <span class="text-base font-semibold text-white">ระบบนำทางเสมือนจริง (AR Navigation)</span>
           </div>
         </div>
         
-        <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-title">สำรวจวิทยาลัยในรูปแบบใหม่</h2>
-        <p class="text-lg text-muted mb-6 max-w-2xl mx-auto">สัมผัสประสบการณ์นำทาง 3 มิติภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
+        <h1 class="section-title mb-6">สำรวจวิทยาลัยในรูปแบบใหม่</h1>
+        <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">สัมผัสประสบการณ์นำทาง 3 มิติภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
         
-        <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-          <button onclick="showMap()" class="cta-button glow">
-            <i data-lucide="map" class="w-5 h-5"></i>
-            <span>เปิดดูแผนผังอาคาร 3D</span>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <button onclick="openMapModal()" class="cta-button glow">
+            <i data-lucide="map" class="w-6 h-6"></i>
+            <span>เปิดแผนที่ 3D</span>
           </button>
           
-          <button onclick="toggleARMode()" class="cta-button secondary">
-            <i data-lucide="scan" class="w-5 h-5"></i>
-            <span>เปิดโหมด AR/VR</span>
+          <button onclick="openNavigationModal()" class="cta-button secondary">
+            <i data-lucide="navigation" class="w-6 h-6"></i>
+            <span>เริ่มนำทาง AR</span>
           </button>
         </div>
         
         <div class="features-grid">
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="map-pin" class="w-6 h-6 text-primary"></i>
+          <div class="modern-card p-6 text-center">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 glow">
+              <i data-lucide="map-pin" class="w-8 h-8 text-white"></i>
             </div>
-            <h3 class="text-lg font-bold mb-2">นำทางแบบเรียลไทม์</h3>
-            <p class="text-muted text-sm">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+            <h3 class="text-xl font-bold mb-3 text-white">นำทางแบบเรียลไทม์</h3>
+            <p class="text-white/80 text-base">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำด้วยเทคโนโลยี AR</p>
           </div>
           
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="box" class="w-6 h-6 text-primary"></i>
+          <div class="modern-card p-6 text-center">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 glow">
+              <i data-lucide="box" class="w-8 h-8 text-white"></i>
             </div>
-            <h3 class="text-lg font-bold mb-2">ประสบการณ์ 3D</h3>
-            <p class="text-muted text-sm">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+            <h3 class="text-xl font-bold mb-3 text-white">ประสบการณ์ 3D</h3>
+            <p class="text-white/80 text-base">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติที่สมจริง</p>
           </div>
           
-          <div class="modern-card p-5 text-center">
-            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i data-lucide="camera" class="w-6 h-6 text-primary"></i>
+          <div class="modern-card p-6 text-center">
+            <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 glow">
+              <i data-lucide="camera" class="w-8 h-8 text-white"></i>
             </div>
-            <h3 class="text-lg font-bold mb-2">เทคโนโลยี AR</h3>
-            <p class="text-muted text-sm">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริง</p>
+            <h3 class="text-xl font-bold mb-3 text-white">เทคโนโลยี AR</h3>
+            <p class="text-white/80 text-base">ใช้กล้องสมาร์ทโฟนเพื่อแสดงข้อมูลสถานที่ผ่านโลกจริงอย่างสมจริง</p>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3D Map Section -->
-    <section id="map-section" class="py-8 bg-white/80 backdrop-blur-sm hidden rounded-2xl mt-6 shadow-md">
-      <div class="max-w-4xl mx-auto px-4">
-        <h2 class="section-title text-2xl font-bold text-center mb-2">แผนผังอาคาร 3D</h2>
-        <p class="text-muted text-center mb-6">สำรวจอาคารเรียนและสถานที่ต่างๆ ในวิทยาลัยผ่านแผนที่สามมิติ</p>
-        
-        <div id="aframe-container" class="w-full h-80 rounded-xl overflow-hidden shadow-xl">
-          <a-scene embedded>
-            <a-box position="0 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-sphere position="2 1 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-            <a-cylinder position="-1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-            <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
-        </div>
-        
-        <div class="flex flex-wrap gap-3 justify-center mt-6">
-          <button class="cta-button secondary" onclick="rotateMap()">
-            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-            <span>หมุนมุมมอง</span>
-          </button>
-          <button class="cta-button secondary" onclick="zoomMap()">
-            <i data-lucide="zoom-in" class="w-4 h-4"></i>
-            <span>ขยาย</span>
-          </button>
-          <button class="cta-button secondary" onclick="openNavigationModal()">
-            <i data-lucide="navigation" class="w-4 h-4"></i>
-            <span>นำทาง</span>
-          </button>
-        </div>
-        
-        <div class="text-center mt-6">
-          <button onclick="hideMap()" class="bg-white/80 backdrop-blur-sm hover:bg-white text-dark font-medium px-4 py-2 rounded-lg transition-all text-sm border border-gray-200 shadow-sm">
-            <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
-            ปิดแผนที่
-          </button>
         </div>
       </div>
     </section>
@@ -593,17 +599,17 @@
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
           <div class="flex items-center">
-            <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-8 w-8 rounded-lg mr-2" />
+            <img src="https://www.srtc.ac.th/2020/images/images.jpg" class="h-10 w-10 rounded-xl mr-3" />
             <div>
-              <p class="text-dark font-medium">SRTC Virtual Campus</p>
-              <p class="text-xs text-muted">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+              <p class="text-white font-semibold text-lg">SRTC Virtual Campus</p>
+              <p class="text-white/70 text-sm">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
             </div>
           </div>
         </div>
         
         <div class="text-center md:text-right">
-          <p class="text-dark text-sm">© 2025 SRTC Virtual Campus | All rights reserved.</p>
-          <p class="text-xs text-muted mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
+          <p class="text-white text-base">© 2025 SRTC Virtual Campus | All rights reserved.</p>
+          <p class="text-white/70 text-sm mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีเสมือนจริง</p>
         </div>
       </div>
     </div>
@@ -612,25 +618,25 @@
   <!-- QR Code Modal -->
   <div id="qr-modal" class="modal">
     <div class="modal-content max-w-xs">
-      <button onclick="closeQRModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
+      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <i data-lucide="x" class="w-6 h-6"></i>
       </button>
-      <h3 class="font-bold text-lg mb-4">QR Code</h3>
+      <h3 class="font-bold text-2xl mb-4 text-primary">QR Code</h3>
       <div id="qrcode" class="mx-auto mb-4"></div>
-      <p class="text-sm text-muted">สแกนเพื่อเข้าถึงระบบนำทาง AR/VR</p>
+      <p class="text-gray-600 text-sm">สแกนเพื่อเข้าถึงระบบนำทาง AR</p>
     </div>
   </div>
 
   <!-- Navigation Destination Modal -->
   <div id="navigation-modal" class="modal">
-    <div class="modal-content max-w-sm">
-      <button onclick="closeNavigationModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
+    <div class="modal-content max-w-md">
+      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <i data-lucide="x" class="w-6 h-6"></i>
       </button>
-      <h3 class="font-bold text-lg mb-4">เลือกจุดหมายปลายทาง</h3>
+      <h3 class="font-bold text-2xl mb-6 text-primary text-center">เลือกจุดหมายปลายทาง</h3>
       <form id="navigation-form">
-        <div class="mb-4">
-          <label class="block text-dark mb-2 font-medium text-sm" for="destination-building">เลือกอาคาร</label>
+        <div class="mb-5">
+          <label class="block text-gray-700 mb-3 font-medium text-lg" for="destination-building">เลือกอาคาร</label>
           <select id="destination-building" class="form-input" required>
             <option value="">เลือกอาคาร</option>
             <option value="อาคาร 1">อาคาร 1 (อาคารอำนวยการ)</option>
@@ -641,98 +647,106 @@
           </select>
         </div>
         
-        <div class="mb-5">
-          <label class="block text-dark mb-2 font-medium text-sm" for="destination-room">หมายเลขห้อง</label>
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-3 font-medium text-lg" for="destination-room">หมายเลขห้อง</label>
           <input type="text" id="destination-room" class="form-input" placeholder="เช่น 101, 201, Lab1" required>
         </div>
         
-        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-sm shadow-lg flex items-center justify-center glow">
-          <i data-lucide="navigation" class="w-4 h-4 mr-2"></i>
-          เริ่มนำทาง
+        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-4 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all text-lg shadow-lg flex items-center justify-center glow">
+          <i data-lucide="navigation" class="w-5 h-5 mr-2"></i>
+          เริ่มนำทาง AR
         </button>
       </form>
       
-      <p class="text-center text-muted mt-4 text-sm">
-        ระบบจะเปิดกล้องหลังและแสดงเส้นทางนำทาง
+      <p class="text-center text-gray-600 mt-5 text-base">
+        ระบบจะเปิดกล้องและแสดงเส้นทางนำทางแบบเรียลไทม์
       </p>
     </div>
   </div>
 
-  <!-- Webcam Error Modal -->
-  <div id="webcam-error" class="webcam-error">
-    <div class="webcam-error-content">
-      <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-3"></i>
-      <h3 class="font-bold text-lg mb-2">ไม่สามารถเข้าถึงกล้องได้</h3>
-      <p class="text-muted mb-4">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
-      <div class="flex flex-col gap-2">
-        <button onclick="closeWebcamError()" class="bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-          <i data-lucide="x" class="w-4 h-4 inline mr-1"></i>
-          ปิดข้อความ
-        </button>
-        <button onclick="window.location.reload()" class="bg-white/80 backdrop-blur-sm hover:bg-white text-dark py-2 rounded-lg transition-all text-sm border border-gray-200">
-          <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-1"></i>
-          รีเฟรชหน้าเว็บ
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Success Modal -->
-  <div id="success-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <div class="success-checkmark mb-4">
-        <div class="check-icon">
-          <span class="icon-line line-tip"></span>
-          <span class="icon-line line-long"></span>
-          <div class="icon-circle"></div>
-          <div class="icon-fix"></div>
+  <!-- Map Modal -->
+  <div id="map-modal" class="modal">
+    <div class="modal-content max-w-4xl w-full">
+      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+      <h3 class="font-bold text-2xl mb-6 text-primary text-center">แผนที่วิทยาลัย 3D</h3>
+      
+      <div class="map-container mb-6">
+        <!-- 3D Map will be rendered here -->
+        <div class="w-full h-full flex items-center justify-center text-white text-lg">
+          <div class="text-center">
+            <i data-lucide="map" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+            <p>แผนที่ 3D กำลังโหลด...</p>
+          </div>
         </div>
       </div>
-      <h3 class="font-bold text-lg mb-2" id="success-title">สำเร็จ!</h3>
-      <p class="text-sm text-muted mb-4" id="success-message"></p>
-      <button onclick="closeSuccessModal()" class="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg transition-all text-sm font-medium">
-        ตกลง
-      </button>
-    </div>
-  </div>
-
-  <!-- AR View -->
-  <div id="ar-view">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-marker preset="hiro">
-        <a-box position="0 0.5 0" color="#4CC3D9" rotation="0 45 0"></a-box>
-        <a-text value="อาคารเรียน SRTC" position="-0.8 1 0" rotation="-90 0 0" color="#fff"></a-text>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-    <button onclick="closeAR()" class="absolute top-4 right-4 bg-black/70 hover:bg-black/80 text-white px-4 py-2 rounded-full shadow-md z-[99999] flex items-center text-sm backdrop-blur-sm">
-      <i data-lucide="x" class="w-4 h-4 mr-1"></i>
-      ปิด AR
-    </button>
-    <div id="camera-error" class="absolute inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center hidden">
-      <i data-lucide="alert-triangle" class="w-12 h-12 text-white mb-3"></i>
-      <h3 class="text-lg font-bold text-white mb-1">ไม่สามารถเข้าถึงกล้องได้</h3>
-      <p class="text-gray-300 text-center max-w-md text-sm">กรุณาตรวจสอบการอนุญาตใช้งานกล้องและรีเฟรชหน้าเว็บอีกครั้ง</p>
-      <button onclick="closeAR()" class="mt-3 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">
-        ปิดโหมด AR
-      </button>
+      
+      <div class="flex flex-wrap gap-3 justify-center">
+        <button class="nav-button secondary" onclick="rotateMap()">
+          <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+          <span>หมุนมุมมอง</span>
+        </button>
+        <button class="nav-button secondary" onclick="zoomMap()">
+          <i data-lucide="zoom-in" class="w-5 h-5"></i>
+          <span>ขยายแผนที่</span>
+        </button>
+        <button class="nav-button primary" onclick="closeMapModal(); openNavigationModal();">
+          <i data-lucide="navigation" class="w-5 h-5"></i>
+          <span>เริ่มนำทาง</span>
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- Navigation AR View -->
   <div id="navigation-ar-view">
-    <video id="navigation-video" autoplay playsinline class="w-full h-full object-cover"></video>
-    <canvas id="navigation-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    <div class="navigation-header">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <i data-lucide="navigation" class="w-6 h-6 text-white mr-3"></i>
+          <h2 class="text-white text-xl font-bold">การนำทาง AR</h2>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium glow-success">
+            <i data-lucide="wifi" class="w-3 h-3 inline mr-1"></i>
+            ออนไลน์
+          </div>
+        </div>
+      </div>
+    </div>
     
     <div class="navigation-info">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="font-bold text-white text-lg">นำทางไปยัง</h3>
-        <span id="distance-indicator" class="bg-green-500 text-white px-2 py-1 rounded-full text-sm font-medium">150m</span>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-white text-xl">นำทางไปยัง</h3>
+        <span id="distance-indicator" class="bg-green-500 text-white px-3 py-1 rounded-full text-base font-medium glow-success">150m</span>
       </div>
-      <p id="destination-info" class="text-white text-sm">อาคาร 3 ห้อง 201</p>
-      <div class="flex items-center mt-2">
-        <i data-lucide="clock" class="w-4 h-4 text-white mr-1"></i>
-        <span id="time-indicator" class="text-white text-sm">ประมาณ 3 นาที</span>
+      <p id="destination-info" class="text-white text-lg mb-3">อาคาร 3 ห้อง 201</p>
+      
+      <div class="progress-container">
+        <div id="navigation-progress" class="progress-bar" style="width: 30%"></div>
+      </div>
+      
+      <div class="flex justify-between items-center text-white/80">
+        <div class="flex items-center">
+          <i data-lucide="clock" class="w-5 h-5 mr-2"></i>
+          <span id="time-indicator">ประมาณ 3 นาที</span>
+        </div>
+        <div class="flex items-center">
+          <i data-lucide="user" class="w-5 h-5 mr-2"></i>
+          <span>เดิน</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- AR Camera View will be here -->
+    <div id="ar-camera-container" class="absolute inset-0 bg-black z-0">
+      <div class="w-full h-full flex items-center justify-center text-white text-center">
+        <div>
+          <i data-lucide="camera" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+          <p class="text-xl mb-2">กล้อง AR กำลังทำงาน</p>
+          <p class="text-white/70">เดินตามเส้นทางสีเขียวเพื่อไปยังจุดหมาย</p>
+        </div>
       </div>
     </div>
     
@@ -741,13 +755,17 @@
     </div>
     
     <div class="navigation-controls">
-      <button onclick="closeNavigationAR()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full shadow-md flex items-center text-sm font-medium">
-        <i data-lucide="x" class="w-4 h-4 mr-1"></i>
-        หยุดนำทาง
+      <button onclick="closeNavigationAR()" class="nav-button secondary">
+        <i data-lucide="x" class="w-5 h-5"></i>
+        <span>หยุดนำทาง</span>
       </button>
-      <button onclick="toggleNavigationInstructions()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full shadow-md flex items-center text-sm font-medium">
-        <i data-lucide="info" class="w-4 h-4 mr-1"></i>
-        คำแนะนำ
+      <button onclick="toggleNavigationInstructions()" class="nav-button primary">
+        <i data-lucide="info" class="w-5 h-5"></i>
+        <span>คำแนะนำ</span>
+      </button>
+      <button onclick="switchCamera()" class="nav-button secondary">
+        <i data-lucide="camera" class="w-5 h-5"></i>
+        <span>สลับกล้อง</span>
       </button>
     </div>
   </div>
@@ -759,27 +777,16 @@
     // Navigation state
     let navigationActive = false;
     let currentDestination = null;
+    let navigationInterval = null;
 
-    // Webcam error handling
-    function handleWebcamError(error) {
-      console.error("Webcam Error:", error);
-      document.getElementById('camera-error').classList.add('hidden');
-      document.getElementById('webcam-error').classList.add('show');
-      document.getElementById('ar-view').style.display = 'none';
-      document.getElementById('navigation-ar-view').style.display = 'none';
-    }
-
-    function closeWebcamError() {
-      document.getElementById('webcam-error').classList.remove('show');
-    }
-
+    // Initialize the application
     window.onload = () => {
       // Generate QR Code
       const qrcode = new QRCode(document.getElementById("qrcode"), {
         text: window.location.href,
-        width: 160,
-        height: 160,
-        colorDark: "#1a56db",
+        width: 180,
+        height: 180,
+        colorDark: "#6366f1",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
@@ -789,8 +796,28 @@
         e.preventDefault();
         startNavigation();
       });
+      
+      // Add some 3D building elements to the hero section for visual effect
+      addFloatingBuildings();
     };
 
+    // Add floating 3D buildings to hero section
+    function addFloatingBuildings() {
+      const heroSection = document.querySelector('.hero-section');
+      const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#06b6d4'];
+      
+      for (let i = 0; i < 5; i++) {
+        const building = document.createElement('div');
+        building.className = 'building-model';
+        building.style.left = `${10 + i * 15}%`;
+        building.style.bottom = '10%';
+        building.style.background = `linear-gradient(135deg, ${colors[i % colors.length]}, ${colors[(i + 1) % colors.length]})`;
+        building.style.animationDelay = `${i * 0.5}s`;
+        heroSection.appendChild(building);
+      }
+    }
+
+    // Modal functions
     function openQRModal() {
       document.getElementById('qr-modal').classList.add('show');
     }
@@ -799,13 +826,20 @@
       document.getElementById('qr-modal').classList.remove('show');
     }
 
-    // Navigation modal functions
     function openNavigationModal() {
       document.getElementById('navigation-modal').classList.add('show');
     }
     
     function closeNavigationModal() {
       document.getElementById('navigation-modal').classList.remove('show');
+    }
+
+    function openMapModal() {
+      document.getElementById('map-modal').classList.add('show');
+    }
+    
+    function closeMapModal() {
+      document.getElementById('map-modal').classList.remove('show');
     }
 
     // Start navigation with AR
@@ -835,91 +869,69 @@
       }, 2000);
     }
 
-    // Start AR Navigation with back camera
+    // Start AR Navigation
     function startARNavigation() {
       const navView = document.getElementById('navigation-ar-view');
-      const video = document.getElementById('navigation-video');
-      const canvas = document.getElementById('navigation-canvas');
-      const ctx = canvas.getContext('2d');
-      
-      // Set canvas size
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
       
       // Update destination info
       document.getElementById('destination-info').textContent = currentDestination.fullName;
       
-      // Try to access back camera
-      const constraints = {
-        video: {
-          facingMode: 'environment', // Use back camera
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        }
-      };
+      // Show AR view
+      navView.style.display = 'flex';
+      navigationActive = true;
       
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(stream) {
-          video.srcObject = stream;
-          navView.style.display = 'flex';
-          navigationActive = true;
-          
-          // Start drawing navigation path
-          drawNavigationPath();
-          
-          // Start simulation of navigation updates
-          simulateNavigationUpdates();
-        })
-        .catch(function(err) {
-          console.error("Camera error:", err);
-          handleWebcamError(err);
-        });
+      // Start drawing navigation path
+      drawNavigationPath();
+      
+      // Start simulation of navigation updates
+      simulateNavigationUpdates();
     }
 
-    // Draw navigation path on canvas
+    // Draw navigation path
     function drawNavigationPath() {
       if (!navigationActive) return;
       
-      const canvas = document.getElementById('navigation-canvas');
-      const ctx = canvas.getContext('2d');
       const pathContainer = document.getElementById('navigation-path');
       
       // Clear previous path
       pathContainer.innerHTML = '';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Create a curved path from bottom to top (simulating a path ahead)
-      const startX = canvas.width / 2;
-      const startY = canvas.height - 100;
-      const endX = canvas.width / 2;
+      // Create a curved path
+      const startX = window.innerWidth / 2;
+      const startY = window.innerHeight - 100;
+      const controlX = window.innerWidth / 2 + 100;
+      const controlY = window.innerHeight / 2;
+      const endX = window.innerWidth / 2;
       const endY = 200;
       
       // Draw path line
       const pathLine = document.createElement('div');
       pathLine.className = 'path-line';
-      pathLine.style.width = '300px';
-      pathLine.style.height = '6px';
-      pathLine.style.left = (startX - 150) + 'px';
-      pathLine.style.top = (startY - 3) + 'px';
+      pathLine.style.width = '400px';
+      pathLine.style.height = '8px';
+      pathLine.style.left = (startX - 200) + 'px';
+      pathLine.style.top = (startY - 4) + 'px';
       pathLine.style.transform = 'rotate(-5deg)';
       pathContainer.appendChild(pathLine);
       
       // Draw path dots
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 8; i++) {
         const dot = document.createElement('div');
         dot.className = 'path-dot';
-        dot.style.left = (startX - 6 + Math.sin(i) * 20) + 'px';
-        dot.style.top = (startY - 100 - i * 80) + 'px';
+        dot.style.left = (startX - 8 + Math.sin(i * 0.5) * 30) + 'px';
+        dot.style.top = (startY - 80 - i * 70) + 'px';
+        dot.style.animationDelay = `${i * 0.3}s`;
         pathContainer.appendChild(dot);
       }
       
       // Draw arrow at the end
       const arrow = document.createElement('div');
-      arrow.innerHTML = '<i data-lucide="arrow-up" class="w-8 h-8 text-green-400"></i>';
+      arrow.innerHTML = '<i data-lucide="arrow-up" class="w-10 h-10 text-green-400"></i>';
       arrow.style.position = 'absolute';
-      arrow.style.left = (endX - 16) + 'px';
-      arrow.style.top = (endY - 16) + 'px';
-      arrow.style.filter = 'drop-shadow(0 0 8px #4ade80)';
+      arrow.style.left = (endX - 20) + 'px';
+      arrow.style.top = (endY - 20) + 'px';
+      arrow.style.filter = 'drop-shadow(0 0 15px #10b981)';
+      arrow.style.animation = 'pulse 2s infinite';
       pathContainer.appendChild(arrow);
       
       // Refresh icons
@@ -929,107 +941,115 @@
       requestAnimationFrame(drawNavigationPath);
     }
 
-    // Simulate navigation updates (distance and time)
+    // Simulate navigation updates
     function simulateNavigationUpdates() {
       if (!navigationActive) return;
       
       // Simulate decreasing distance
       let distance = 150;
-      let time = 3; // minutes
+      let progress = 30;
       
-      const updateInterval = setInterval(() => {
+      navigationInterval = setInterval(() => {
         if (!navigationActive) {
-          clearInterval(updateInterval);
+          clearInterval(navigationInterval);
           return;
         }
         
-        distance -= 5;
-        time = Math.max(1, Math.round(distance / 50));
+        distance -= 2;
+        progress += 1;
         
+        // Update progress bar
+        document.getElementById('navigation-progress').style.width = `${progress}%`;
+        
+        // Update distance and time
         document.getElementById('distance-indicator').textContent = `${distance}m`;
+        const time = Math.max(1, Math.round(distance / 50));
         document.getElementById('time-indicator').textContent = `ประมาณ ${time} นาที`;
+        
+        // Show turn instructions occasionally
+        if (distance % 40 === 0) {
+          showTurnInstruction();
+        }
         
         if (distance <= 10) {
           // Destination reached
-          clearInterval(updateInterval);
+          clearInterval(navigationInterval);
           showSuccess("ถึงจุดหมายแล้ว", `คุณได้มาถึง ${currentDestination.fullName} แล้ว`);
           setTimeout(() => {
             closeNavigationAR();
-          }, 3000);
+          }, 4000);
         }
-      }, 2000);
+      }, 1000);
+    }
+
+    // Show turn instruction
+    function showTurnInstruction() {
+      const instructions = [
+        "เลี้ยวขวาที่ทางแยกหน้า",
+        "เดินตรงไปอีก 50 เมตร",
+        "เลี้ยวซ้ายที่ทางแยก",
+        "เดินขึ้นบันไดด้านหน้า",
+        "เดินผ่านลานหน้า"
+      ];
+      
+      const instruction = instructions[Math.floor(Math.random() * instructions.length)];
+      showSuccess("คำแนะนำการเดินทาง", instruction);
     }
 
     // Close navigation AR view
     function closeNavigationAR() {
       const navView = document.getElementById('navigation-ar-view');
-      const video = document.getElementById('navigation-video');
-      
-      // Stop video stream
-      if (video.srcObject) {
-        video.srcObject.getTracks().forEach(track => track.stop());
-      }
       
       navView.style.display = 'none';
       navigationActive = false;
       currentDestination = null;
+      
+      if (navigationInterval) {
+        clearInterval(navigationInterval);
+      }
     }
 
     // Toggle navigation instructions
     function toggleNavigationInstructions() {
-      showSuccess("คำแนะนำการใช้งาน", "เดินตามเส้นทางสีเขียวที่ปรากฏบนหน้าจอ จนกว่าจะถึงจุดหมายปลายทาง");
+      showSuccess("คำแนะนำการใช้งาน", "เดินตามเส้นทางสีเขียวที่ปรากฏบนหน้าจอ จนกว่าจะถึงจุดหมายปลายทาง\n\n- เส้นสีเขียว: เส้นทางนำทาง\n- จุดกระพริบ: จุดเปลี่ยนทิศทาง\n- ลูกศร: จุดหมายปลายทาง");
     }
 
-    // AR Mode
-    function toggleARMode() {
-      const arView = document.getElementById('ar-view');
-      arView.style.display = 'block';
-      
-      // Check camera access
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function(stream) {
-          document.getElementById('camera-error').classList.add('hidden');
-          stream.getTracks().forEach(track => track.stop());
-        })
-        .catch(function(err) {
-          console.error("Camera error:", err);
-          handleWebcamError(err);
-        });
-    }
-    
-    function closeAR() {
-      const arView = document.getElementById('ar-view');
-      arView.style.display = 'none';
+    // Switch camera (placeholder function)
+    function switchCamera() {
+      showSuccess("สลับกล้อง", "กำลังสลับระหว่างกล้องหน้าและกล้องหลัง...");
     }
 
-    // 3D Map
-    function showMap() {
-      document.getElementById('map-section').classList.remove('hidden');
-      window.scrollTo({ top: document.getElementById('map-section').offsetTop, behavior: "smooth" });
-    }
-    
-    function hideMap() {
-      document.getElementById('map-section').classList.add('hidden');
-    }
-
-    // 3D Map Controls
+    // Map controls
     function rotateMap() {
       showSuccess("หมุนมุมมองแผนที่", "คุณสามารถหมุนมุมมองแผนที่ 3D ได้ด้วยการลากเมาส์");
     }
     
     function zoomMap() {
-      showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์");
+      showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์หรือใช้ปุ่มควบคุม");
     }
 
-    // Success Modal
+    // Success message
     function showSuccess(title, message) {
-      document.getElementById('success-title').textContent = title;
-      document.getElementById('success-message').textContent = message;
-      document.getElementById('success-modal').classList.add('show');
-    }
-
-    function closeSuccessModal() {
-      document.getElementById('success-modal').classList.remove('show');
+      // Create a custom notification
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded-2xl shadow-xl z-50 max-w-sm';
+      notification.innerHTML = `
+        <div class="flex items-start">
+          <i data-lucide="check-circle" class="w-6 h-6 mr-3 flex-shrink-0"></i>
+          <div>
+            <h4 class="font-bold text-lg">${title}</h4>
+            <p class="text-white/90 text-sm mt-1">${message}</p>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      lucide.createIcons();
+      
+      // Remove after 4 seconds
+      setTimeout(() => {
+        notification.remove();
+      }, 4000);
     }
   </script>
 </body>
