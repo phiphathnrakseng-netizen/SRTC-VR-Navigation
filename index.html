@@ -74,22 +74,22 @@
 
         .logo-icon {
             font-size: 2.5rem;
-            background-color: var(--white); /* เปลี่ยนพื้นหลังเป็นสีขาว */
+            background-color: var(--white);
             width: 60px;
             height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* เพิ่มเพื่อป้องกันรูปภาพล้น */
-            border: 2px solid rgba(255, 255, 255, 0.3); /* เพิ่มขอบให้โดดเด่น */
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .logo-icon img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* ทำให้รูปภาพพอดีกับพื้นที่ */
-            padding: 5px; /* เพิ่ม padding ให้รูปภาพดูสบายตา */
+            object-fit: contain;
+            padding: 5px;
         }
 
         .logo-text h1 {
@@ -174,6 +174,7 @@
             overflow: hidden;
             box-shadow: var(--shadow-hover);
             height: 400px;
+            cursor: pointer;
         }
 
         .hero-image img {
@@ -187,6 +188,36 @@
             transform: scale(1.05);
         }
 
+        /* เพิ่มลูกศรสำหรับขยายภาพ */
+        .expand-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 10;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .hero-image:hover .expand-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .expand-icon:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
         .hero-bg {
             position: absolute;
             right: 0;
@@ -196,6 +227,117 @@
             background-color: var(--accent-blue);
             opacity: 0.05;
             border-radius: var(--border-radius) 0 0 var(--border-radius);
+        }
+
+        /* Modal สำหรับแสดงรูปภาพเต็มหน้าจอ */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.2);
+            color: var(--accent-blue);
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+        }
+
+        .modal-nav button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-nav button:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* เพิ่มลูกศรให้กับรูปภาพอาจารย์ */
+        .teacher-card {
+            position: relative;
+        }
+
+        .teacher-expand {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 5;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .teacher-card:hover .teacher-expand {
+            opacity: 1;
+        }
+
+        .teacher-expand:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
         }
 
         .btn {
@@ -598,6 +740,16 @@
             .hero-image {
                 height: 300px;
             }
+            
+            .modal-nav {
+                padding: 0 10px;
+            }
+            
+            .modal-nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -619,6 +771,22 @@
             
             .hero-image {
                 height: 250px;
+            }
+            
+            .expand-icon {
+                top: 10px;
+                right: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .teacher-expand {
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -661,9 +829,13 @@
                     <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
                     <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
                 </div>
-                <div class="hero-image">
+                <div class="hero-image" id="heroImage">
                     <!-- รูปภาพอาคารเรียนจากลิงก์ที่ให้มา -->
                     <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                    <!-- ลูกศรสำหรับขยายรูปภาพ -->
+                    <div class="expand-icon" data-image="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" data-title="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                 </div>
             </div>
             <div class="hero-bg"></div>
@@ -679,6 +851,9 @@
             <div class="teachers-container">
                 <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" data-title="นายสัญญา ชูช่วย - หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
                          alt="นายสัญญา ชูช่วย" class="teacher-img">
                     <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
@@ -692,6 +867,9 @@
                 
                 <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" data-title="นายพนม บุญญ์ไพร - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
                          alt="นายพนม บุญญ์ไพร" class="teacher-img">
                     <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
@@ -708,6 +886,9 @@
                 
                 <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" data-title="นางขนิษฐา สุมน - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
                          alt="นางขนิษฐา สุมน" class="teacher-img">
                     <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
@@ -722,6 +903,9 @@
                 
                 <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" data-title="นางดวงฤดี เสนเรือง - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
                          alt="นางดวงฤดี เสนเรือง" class="teacher-img">
                     <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
@@ -736,6 +920,9 @@
                 
                 <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" data-title="นางสาววิยะดา คงแก้ว - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
                          alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
                     <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
@@ -749,6 +936,9 @@
                 
                 <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" data-title="นายธันติวัชร์ ธนานันทน์โอฬาร - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
                          alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
                     <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
@@ -762,6 +952,9 @@
 
                 <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" data-title="นายวศิตว์ บุญเรือง - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
                          alt="นายวศิตว์ บุญเรือง" class="teacher-img">
                     <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
@@ -775,6 +968,9 @@
 
                 <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" data-title="น.ส.ธัญญารัตน์ ศรชนะ - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
                          alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
                     <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
@@ -788,6 +984,9 @@
 
                 <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" data-title="น.ส.อมรพรรณ นนทฤทธิ์ - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
                          alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
                     <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
@@ -801,6 +1000,9 @@
                 
                 <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
                 <div class="teacher-card">
+                    <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" data-title="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า - ครูประจำแผนก">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
                          alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
                     <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
@@ -1057,6 +1259,21 @@
         </div>
     </footer>
 
+    <!-- Modal สำหรับแสดงรูปภาพเต็มหน้าจอ -->
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-nav">
+                <button id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <img id="modalImage" src="" alt="">
+            <div id="modalTitle" style="color: white; text-align: center; margin-top: 15px; font-size: 1.2rem;"></div>
+        </div>
+    </div>
+
     <script>
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -1138,6 +1355,146 @@
                     link.classList.add('active');
                 }
             });
+        });
+
+        // ระบบขยายรูปภาพ
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalClose = document.getElementById('modalClose');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // รายการรูปภาพทั้งหมดที่สามารถขยายได้
+        let images = [];
+        let currentImageIndex = 0;
+
+        // รวบรวมรูปภาพทั้งหมดที่มีลูกศรสำหรับขยาย
+        function collectExpandableImages() {
+            images = [];
+            
+            // รูปภาพจาก Hero section
+            const heroExpand = document.querySelector('.hero-image .expand-icon');
+            if (heroExpand) {
+                images.push({
+                    src: heroExpand.getAttribute('data-image'),
+                    title: heroExpand.getAttribute('data-title')
+                });
+            }
+            
+            // รูปภาพจาก Teacher cards
+            const teacherExpands = document.querySelectorAll('.teacher-expand');
+            teacherExpands.forEach(expand => {
+                images.push({
+                    src: expand.getAttribute('data-image'),
+                    title: expand.getAttribute('data-title')
+                });
+            });
+            
+            return images;
+        }
+
+        // เปิดโมดัลแสดงรูปภาพ
+        function openImageModal(imageIndex) {
+            currentImageIndex = imageIndex;
+            const image = images[imageIndex];
+            
+            modalImage.src = image.src;
+            modalTitle.textContent = image.title || '';
+            imageModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // ป้องกันการ scroll ด้านหลัง
+        }
+
+        // ปิดโมดัล
+        function closeImageModal() {
+            imageModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // แสดงรูปภาพก่อนหน้า
+        function showPrevImage() {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            const image = images[currentImageIndex];
+            modalImage.src = image.src;
+            modalTitle.textContent = image.title || '';
+        }
+
+        // แสดงรูปภาพถัดไป
+        function showNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            const image = images[currentImageIndex];
+            modalImage.src = image.src;
+            modalTitle.textContent = image.title || '';
+        }
+
+        // กำหนด Event Listeners สำหรับลูกศรขยายภาพ
+        document.addEventListener('DOMContentLoaded', function() {
+            // รวบรวมรูปภาพทั้งหมด
+            collectExpandableImages();
+            
+            // กำหนด Event Listeners สำหรับรูปภาพ Hero
+            const heroExpand = document.querySelector('.hero-image .expand-icon');
+            if (heroExpand) {
+                heroExpand.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const imageIndex = 0; // รูปแรกในรายการ
+                    openImageModal(imageIndex);
+                });
+            }
+            
+            // กำหนด Event Listeners สำหรับรูปภาพอาจารย์
+            const teacherExpands = document.querySelectorAll('.teacher-expand');
+            teacherExpands.forEach((expand, index) => {
+                expand.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // รูปแรกคือรูป Hero ดังนั้น index + 1
+                    openImageModal(index + 1);
+                });
+            });
+            
+            // กำหนด Event Listener สำหรับการคลิกที่รูปภาพอาจารย์โดยตรง
+            const teacherImages = document.querySelectorAll('.teacher-img');
+            teacherImages.forEach((img, index) => {
+                img.addEventListener('click', function() {
+                    // รูปแรกคือรูป Hero ดังนั้น index + 1
+                    openImageModal(index + 1);
+                });
+                
+                // เพิ่ม cursor pointer ให้กับรูปภาพ
+                img.style.cursor = 'pointer';
+            });
+            
+            // กำหนด Event Listener สำหรับการคลิกที่รูปภาพ Hero
+            const heroImage = document.querySelector('.hero-image img');
+            if (heroImage) {
+                heroImage.addEventListener('click', function() {
+                    openImageModal(0);
+                });
+                heroImage.style.cursor = 'pointer';
+            }
+        });
+
+        // กำหนด Event Listeners สำหรับโมดัล
+        modalClose.addEventListener('click', closeImageModal);
+        prevBtn.addEventListener('click', showPrevImage);
+        nextBtn.addEventListener('click', showNextImage);
+
+        // ปิดโมดัลเมื่อคลิกพื้นหลัง
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) {
+                closeImageModal();
+            }
+        });
+
+        // ปิดโมดัลด้วยปุ่ม Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+                closeImageModal();
+            } else if (e.key === 'ArrowLeft' && imageModal.classList.contains('active')) {
+                showPrevImage();
+            } else if (e.key === 'ArrowRight' && imageModal.classList.contains('active')) {
+                showNextImage();
+            }
         });
     </script>
 </body>
