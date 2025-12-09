@@ -218,57 +218,91 @@
             font-size: 1.1rem;
         }
 
-        .features {
+        /* Teachers Section */
+        .teachers {
             padding: 80px 0;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            margin: 40px 0;
         }
 
-        .cards-container {
+        .teachers-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
             margin-top: 40px;
         }
 
-        .card {
+        .teacher-card {
             background-color: var(--white);
             border-radius: var(--border-radius);
             padding: 30px;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .card:hover {
+        .teacher-card:hover {
             transform: translateY(-10px);
             box-shadow: var(--shadow-hover);
         }
 
-        .card-icon {
-            width: 70px;
-            height: 70px;
-            background-color: var(--light-blue);
+        .teacher-img {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid var(--light-blue);
+            box-shadow: var(--shadow);
+        }
+
+        .teacher-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+
+        .teacher-position {
             color: var(--accent-blue);
-            font-size: 1.8rem;
-        }
-
-        .card h3 {
+            font-weight: 500;
             margin-bottom: 15px;
-            font-size: 1.4rem;
+            padding: 5px 15px;
+            background-color: var(--light-blue);
+            border-radius: 50px;
+            display: inline-block;
         }
 
-        .card p {
+        .teacher-degree {
             color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .teacher-expertise {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .expertise-tag {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         /* Building Info */
         .building-info {
             padding: 80px 0;
-            background-color: var(--light-blue);
+            background-color: var(--white);
             border-radius: var(--border-radius);
             margin: 40px 0;
         }
@@ -514,8 +548,13 @@
                 font-size: 1.8rem;
             }
             
-            .features, .building-info, .floor-plan, .contact {
+            .teachers, .building-info, .floor-plan, .contact {
                 padding: 60px 0;
+            }
+            
+            .teacher-img {
+                width: 120px;
+                height: 120px;
             }
         }
 
@@ -528,7 +567,7 @@
                 padding: 12px 24px;
             }
             
-            .card {
+            .teacher-card {
                 padding: 25px;
             }
             
@@ -543,7 +582,6 @@
     <header>
         <div class="container header-container">
             <div class="logo">
-                <!-- แก้ไขตรงนี้: เปลี่ยนไอคอนคอมพิวเตอร์เป็นตราเทคนิคสุราษฎร์ธานี -->
                 <div class="logo-icon">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" alt="ตราเทคนิคสุราษฎร์ธานี">
                 </div>
@@ -558,7 +596,7 @@
             <nav id="mainNav">
                 <ul>
                     <li><a href="#home" class="active">หน้าแรก</a></li>
-                    <li><a href="#features">จุดเด่น</a></li>
+                    <li><a href="#teachers">คณะอาจารย์</a></li>
                     <li><a href="#info">ข้อมูลอาคาร</a></li>
                     <li><a href="#floor">แผนผัง</a></li>
                     <li><a href="#contact">ติดต่อ</a></li>
@@ -573,50 +611,108 @@
             <div class="hero-content">
                 <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
                 <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
-                <a href="#features" class="btn">สำรวจอาคารเรียน</a>
+                <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
                 <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
             </div>
             <div class="hero-bg"></div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
+    <!-- Teachers Section -->
+    <section class="teachers" id="teachers">
         <div class="container">
-            <h2 class="section-title">จุดเด่นของอาคารเรียน</h2>
-            <p class="section-subtitle">อาคารเรียนของเราออกแบบมาเพื่อให้นักศึกษาและคณาจารย์มีสภาพแวดล้อมการเรียนรู้ที่ดีที่สุด พร้อมด้วยเทคโนโลยีที่ทันสมัย</p>
+            <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
+            <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
             
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-wifi"></i>
+            <div class="teachers-container">
+                <!-- อาจารย์คนที่ 1 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์ธนาพร วิทยารุ่งเรือง" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์ธนาพร วิทยารุ่งเรือง</h3>
+                    <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศ</div>
+                    <div class="teacher-degree">ปร.ด. สาขาวิทยาการคอมพิวเตอร์</div>
+                    <p>ผู้เชี่ยวชาญด้านระบบฐานข้อมูลและปัญญาประดิษฐ์ มีประสบการณ์การสอนมากว่า 15 ปี</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">ฐานข้อมูล</span>
+                        <span class="expertise-tag">ปัญญาประดิษฐ์</span>
+                        <span class="expertise-tag">ระบบสารสนเทศ</span>
                     </div>
-                    <h3>อินเทอร์เน็ตความเร็วสูง</h3>
-                    <p>เชื่อมต่ออินเทอร์เน็ตไร้สายความเร็วสูงครอบคลุมทั่วทั้งอาคาร</p>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-laptop-house"></i>
+                <!-- อาจารย์คนที่ 2 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์สุรชัย เทคโนโลยีก้าวหน้า" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์สุรชัย เทคโนโลยีก้าวหน้า</h3>
+                    <div class="teacher-position">อาจารย์ประจำ</div>
+                    <div class="teacher-degree">ศศ.ม. สาขาวิศวกรรมซอฟต์แวร์</div>
+                    <p>เชี่ยวชาญด้านการพัฒนาแอปพลิเคชันและระบบเว็บ พร้อมผลงานวิจัยด้านการพัฒนาซอฟต์แวร์</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">พัฒนาเว็บ</span>
+                        <span class="expertise-tag">โมบายแอป</span>
+                        <span class="expertise-tag">DevOps</span>
                     </div>
-                    <h3>ห้องปฏิบัติการคอมพิวเตอร์</h3>
-                    <p>ห้องปฏิบัติการคอมพิวเตอร์ที่ทันสมัยพร้อมซอฟต์แวร์ล่าสุด</p>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-users"></i>
+                <!-- อาจารย์คนที่ 3 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์วิทยา สายเน็ตเวิร์ก" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์วิทยา สายเน็ตเวิร์ก</h3>
+                    <div class="teacher-position">อาจารย์ประจำ</div>
+                    <div class="teacher-degree">วศ.ม. สาขาเครือข่ายคอมพิวเตอร์</div>
+                    <p>ผู้เชี่ยวชาญด้านระบบเครือข่ายและความปลอดภัยไซเบอร์ มีประสบการณ์ด้านระบบคลาวด์คอมพิวติ้ง</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">เครือข่าย</span>
+                        <span class="expertise-tag">ความปลอดภัย</span>
+                        <span class="expertise-tag">คลาวด์</span>
                     </div>
-                    <h3>พื้นที่ทำงานกลุ่ม</h3>
-                    <p>พื้นที่สำหรับการทำงานกลุ่มและการประชุมแบบมีส่วนร่วม</p>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-solar-panel"></i>
+                <!-- อาจารย์คนที่ 4 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์วรรณา สุดสร้างสรรค์" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์วรรณา สุดสร้างสรรค์</h3>
+                    <div class="teacher-position">อาจารย์ประจำ</div>
+                    <div class="teacher-degree">ศศ.ม. สาขามัลติมีเดียและแอนิเมชัน</div>
+                    <p>เชี่ยวชาญด้านกราฟิกดีไซน์ มัลติมีเดีย และการพัฒนาเกม มีผลงานด้านการออกแบบ UI/UX มากมาย</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">กราฟิกดีไซน์</span>
+                        <span class="expertise-tag">UI/UX</span>
+                        <span class="expertise-tag">พัฒนาเกม</span>
                     </div>
-                    <h3>พลังงานสะอาด</h3>
-                    <p>ติดตั้งระบบโซลาร์เซลล์เพื่อการใช้พลังงานอย่างยั่งยืน</p>
+                </div>
+                
+                <!-- อาจารย์คนที่ 5 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์ชัยวัฒน์ ไอทีล้ำสมัย" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์ชัยวัฒน์ ไอทีล้ำสมัย</h3>
+                    <div class="teacher-position">อาจารย์ประจำ</div>
+                    <div class="teacher-degree">ปร.ด. สาขาวิทยาศาสตร์ข้อมูล</div>
+                    <p>เชี่ยวชาญด้าน Data Science และ Big Data Analytics มีประสบการณ์วิจัยด้านการวิเคราะห์ข้อมูลขนาดใหญ่</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">Data Science</span>
+                        <span class="expertise-tag">Big Data</span>
+                        <span class="expertise-tag">Machine Learning</span>
+                    </div>
+                </div>
+                
+                <!-- อาจารย์คนที่ 6 -->
+                <div class="teacher-card">
+                    <img src="https://images.unsplash.com/photo-1544717305-99670f9c28f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" 
+                         alt="อาจารย์สายสมร วงศ์ปัญญา" class="teacher-img">
+                    <h3 class="teacher-name">อาจารย์สายสมร วงศ์ปัญญา</h3>
+                    <div class="teacher-position">อาจารย์ผู้ช่วย</div>
+                    <div class="teacher-degree">ศศ.ม. สาขาระบบสารสนเทศเพื่อการจัดการ</div>
+                    <p>เชี่ยวชาญด้านการวิเคราะห์และออกแบบระบบ ERP และระบบธุรกิจอัจฉริยะ</p>
+                    <div class="teacher-expertise">
+                        <span class="expertise-tag">ERP</span>
+                        <span class="expertise-tag">Business Intelligence</span>
+                        <span class="expertise-tag">System Analysis</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -771,7 +867,7 @@
                         </div>
                         <div class="info-content">
                             <h4>ที่อยู่</h4>
-                            <p>อาคารนวัตกรรมดิจิทัล แผนกเทคโนโลยีสารสนเทศ<br>มหาวิทยาลัยเทคโนโลยีไทย</p>
+                            <p>อาคารนวัตกรรมดิจิทัล แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
                         </div>
                     </div>
                     
@@ -781,7 +877,7 @@
                         </div>
                         <div class="info-content">
                             <h4>โทรศัพท์</h4>
-                            <p>02-345-6789</p>
+                            <p>077-123-4567</p>
                         </div>
                     </div>
                     
@@ -791,7 +887,7 @@
                         </div>
                         <div class="info-content">
                             <h4>อีเมล</h4>
-                            <p>it-building@university.ac.th</p>
+                            <p>it-building@surat-technique.ac.th</p>
                         </div>
                     </div>
                     
@@ -839,14 +935,14 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>เราเป็นศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
+                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
                         <li style="margin-bottom: 10px;"><a href="#home" style="color: white; text-decoration: none; opacity: 0.9;">หน้าแรก</a></li>
-                        <li style="margin-bottom: 10px;"><a href="#features" style="color: white; text-decoration: none; opacity: 0.9;">จุดเด่นอาคาร</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#teachers" style="color: white; text-decoration: none; opacity: 0.9;">คณะอาจารย์</a></li>
                         <li style="margin-bottom: 10px;"><a href="#info" style="color: white; text-decoration: none; opacity: 0.9;">ข้อมูลอาคาร</a></li>
                         <li style="margin-bottom: 10px;"><a href="#floor" style="color: white; text-decoration: none; opacity: 0.9;">แผนผังอาคาร</a></li>
                     </ul>
@@ -859,7 +955,7 @@
             </div>
             
             <div class="copyright">
-                <p>© 2023 แผนกเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีไทย | ออกแบบด้วย Material UI Design</p>
+                <p>© 2023 วิทยาลัยเทคนิคสุราษฎร์ธานี | แผนกเทคโนโลยีสารสนเทศ | ออกแบบด้วย Material UI Design</p>
             </div>
         </div>
     </footer>
@@ -949,4 +1045,3 @@
     </script>
 </body>
 </html>
-
