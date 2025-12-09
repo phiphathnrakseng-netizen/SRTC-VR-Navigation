@@ -1,3 +1,7 @@
+ปรับปรุงต่อให้โค้ดนี้มีการปรับปรุงดังนี้
+1. ที่วงไว้ เลข 1 ให้ใส่ไอคอนเฟืองแล้วกดได้สีขาวเมื่อกดแล้วจะแสดงรายการ ตั้งค่า ธีมสว่าง มืด ตั้งค่ากล้อง เวอรชั่นเว็บ
+2. ที่วงไว้เลข 2 ให้ขยับไปตามตำแหน่งลูกศร
+3. ที่วงไว้เลข 3 ให้รุปหมู่อยู่ในกรอบสีฟ้าอ่อนเท่านั้น ไม่ต้องล้นออกมา
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -18,10 +22,8 @@
             --gray: #757575;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --border-radius: 20px;
-            --border-radius-large: 30px;
-            --border-radius-small: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 16px;
+            --border-radius-small: 8px;
         }
 
         * {
@@ -36,7 +38,6 @@
             color: #333;
             background-color: var(--white);
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
         h1, h2, h3, h4 {
@@ -52,18 +53,15 @@
             padding: 0 20px;
         }
 
-        /* Header - ปรับให้โค้งมนและ minimal */
+        /* Header */
         header {
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
             color: var(--white);
             padding: 1.5rem 0;
-            border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
-            box-shadow: 0 4px 20px rgba(26, 35, 126, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
 
         .header-container {
@@ -76,7 +74,6 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            text-decoration: none;
         }
 
         .logo-icon {
@@ -84,19 +81,12 @@
             background-color: var(--white);
             width: 60px;
             height: 60px;
-            border-radius: 18px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-
-        .logo:hover .logo-icon {
-            transform: rotate(5deg) scale(1.05);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
         .logo-icon img {
@@ -110,52 +100,30 @@
             color: var(--white);
             font-size: 1.8rem;
             margin-bottom: 5px;
-            letter-spacing: -0.5px;
         }
 
         .logo-text p {
             opacity: 0.9;
             font-size: 0.9rem;
-            letter-spacing: 0.3px;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 25px;
-            align-items: center;
+            gap: 30px;
         }
 
         nav a {
             color: var(--white);
             text-decoration: none;
             font-weight: 500;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        nav a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.7s;
-        }
-
-        nav a:hover::before {
-            left: 100%;
+            transition: all 0.3s ease;
         }
 
         nav a:hover, nav a.active {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .mobile-menu-btn {
@@ -165,134 +133,25 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            transition: var(--transition);
         }
 
-        .mobile-menu-btn:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        /* 1. ปุ่มตั้งค่า (เฟือง) - ปรับให้โค้งมนและ minimal */
-        .settings-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            position: relative;
-            backdrop-filter: blur(10px);
-        }
-
-        .settings-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: rotate(30deg) scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .settings-btn.active {
-            background-color: var(--white);
-            color: var(--primary-blue);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .settings-dropdown {
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            width: 280px;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px) scale(0.95);
-            transition: var(--transition);
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .settings-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        .settings-dropdown ul {
-            list-style: none;
-            padding: 8px 0;
-        }
-
-        .settings-dropdown li {
-            padding: 14px 24px;
-            color: var(--primary-blue);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .settings-dropdown li:hover {
-            background-color: var(--light-blue);
-            padding-left: 28px;
-        }
-
-        .settings-dropdown li i {
-            width: 20px;
-            color: var(--accent-blue);
-            font-size: 1.1rem;
-        }
-
-        .settings-dropdown hr {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--light-blue), transparent);
-            margin: 6px 24px;
-        }
-
-        /* Hero Section - ปรับให้โค้งมนและ minimal */
+        /* Hero Section */
         .hero {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--light-blue) 0%, #f0f2ff 100%);
-            border-radius: var(--border-radius-large);
+            padding: 80px 0;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
             margin: 40px 0;
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
-            box-shadow: 0 10px 40px rgba(63, 81, 181, 0.1);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(63, 81, 181, 0.05) 0%, transparent 70%);
-            z-index: 1;
         }
 
         .hero-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 50px;
             align-items: center;
-            position: relative;
-            z-index: 2;
         }
 
         .hero-content {
@@ -302,144 +161,76 @@
         }
 
         .hero h2 {
-            font-size: 3.2rem;
-            margin-bottom: 25px;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
             line-height: 1.2;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
 
         .hero p {
             font-size: 1.2rem;
             color: var(--gray);
-            margin-bottom: 35px;
-            line-height: 1.8;
+            margin-bottom: 30px;
         }
 
         .hero-image {
             position: relative;
             border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            height: 420px;
+            box-shadow: var(--shadow-hover);
+            height: 400px;
             cursor: pointer;
-            transform: perspective(1000px) rotateY(-5deg);
-            transition: var(--transition);
-        }
-
-        .hero-image:hover {
-            transform: perspective(1000px) rotateY(0deg) scale(1.02);
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
         }
 
         .hero-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s ease;
         }
 
         .hero-image:hover img {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         /* เพิ่มลูกศรสำหรับขยายภาพ */
         .expand-icon {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            background: rgba(0, 0, 0, 0.7);
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
             color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             z-index: 10;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             opacity: 0;
-            transform: scale(0.8) translateY(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.8);
         }
 
         .hero-image:hover .expand-icon {
             opacity: 1;
-            transform: scale(1) translateY(0);
+            transform: scale(1);
         }
 
         .expand-icon:hover {
-            background: var(--accent-blue);
+            background-color: var(--accent-blue);
             transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.4);
         }
 
-        /* 2. ปุ่มติดต่อเราให้ขยับไปตามลูกศร */
-        .contact-btn-container {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--accent-blue) 0%, #5c6bc0 100%);
-            color: white;
-            padding: 16px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Kanit', sans-serif;
-            font-size: 1rem;
-            box-shadow: 0 8px 24px rgba(63, 81, 181, 0.3);
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
+        .hero-bg {
             position: absolute;
+            right: 0;
             top: 0;
-            left: -100%;
-            width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.7s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(63, 81, 181, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--accent-blue);
-            color: var(--accent-blue);
-            box-shadow: none;
-        }
-
-        .btn-outline:hover {
-            background: var(--accent-blue);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(63, 81, 181, 0.3);
+            width: 40%;
+            background-color: var(--accent-blue);
+            opacity: 0.05;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
         }
 
         /* Modal สำหรับแสดงรูปภาพเต็มหน้าจอ */
@@ -450,13 +241,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
+            transition: opacity 0.3s ease;
         }
 
         .image-modal.active {
@@ -468,41 +258,30 @@
             max-width: 90%;
             max-height: 90%;
             position: relative;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
         }
 
         .modal-content img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            display: block;
+            border-radius: 8px;
         }
 
         .modal-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: -40px;
+            right: 0;
             color: white;
             font-size: 2rem;
             cursor: pointer;
-            background: rgba(0, 0, 0, 0.5);
+            background: none;
             border: none;
-            transition: var(--transition);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
         }
 
         .modal-close:hover {
-            transform: scale(1.2) rotate(90deg);
-            background: var(--accent-blue);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.4);
+            transform: scale(1.2);
+            color: var(--accent-blue);
         }
 
         .modal-nav {
@@ -511,355 +290,267 @@
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 0 30px;
+            padding: 0 20px;
             transform: translateY(-50%);
         }
 
         .modal-nav button {
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
 
         .modal-nav button:hover {
             background-color: var(--accent-blue);
             transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.4);
+        }
+
+        /* เพิ่มลูกศรให้กับรูปภาพอาจารย์ */
+        .teacher-card {
+            position: relative;
+        }
+
+        .teacher-expand {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 5;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .teacher-card:hover .teacher-expand {
+            opacity: 1;
+        }
+
+        .teacher-expand:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent-blue);
+            color: white;
         }
 
         /* Cards Section */
         .section-title {
             text-align: center;
-            margin-bottom: 60px;
-            font-size: 2.5rem;
-            position: relative;
-            padding-bottom: 20px;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
-            border-radius: 2px;
+            margin-bottom: 50px;
+            font-size: 2.2rem;
         }
 
         .section-subtitle {
             text-align: center;
             color: var(--gray);
             max-width: 700px;
-            margin: 0 auto 80px;
+            margin: 0 auto 60px;
             font-size: 1.1rem;
-            line-height: 1.8;
         }
 
-        /* 3. Teachers Section - ปรับให้โค้งมนและ minimal */
+        /* Teachers Section */
         .teachers {
-            padding: 100px 0;
-            background-color: var(--white);
-            border-radius: var(--border-radius-large);
-            margin: 60px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .teachers::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 300px;
-            background: linear-gradient(135deg, var(--light-blue) 0%, #f0f2ff 100%);
-            border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
-            z-index: 0;
+            padding: 80px 0;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            margin: 40px 0;
         }
 
         .teachers-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
             margin-top: 40px;
-            position: relative;
-            z-index: 1;
         }
 
         .teacher-card {
             background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: var(--transition);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        .teacher-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .teacher-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .teacher-expand {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            cursor: pointer;
-            z-index: 5;
-            opacity: 0;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .teacher-card:hover .teacher-expand {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .teacher-expand:hover {
-            background-color: var(--accent-blue);
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.4);
-        }
-
-        .teacher-img-container {
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            margin-bottom: 25px;
-            border: 12px solid var(--light-blue);
-            box-shadow: 0 15px 40px rgba(63, 81, 181, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background-color: var(--light-blue);
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .teacher-card:hover .teacher-img-container {
-            transform: scale(1.05);
-            box-shadow: 0 20px 50px rgba(63, 81, 181, 0.25);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
         }
 
         .teacher-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .teacher-card:hover .teacher-img {
-            transform: scale(1.1);
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid var(--light-blue);
+            box-shadow: var(--shadow);
         }
 
         .teacher-name {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
             color: var(--primary-blue);
-            font-weight: 600;
         }
 
         .teacher-position {
             color: var(--accent-blue);
-            font-weight: 600;
-            margin-bottom: 18px;
-            padding: 8px 20px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            padding: 5px 15px;
             background-color: var(--light-blue);
             border-radius: 50px;
             display: inline-block;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
         }
 
         .teacher-degree {
             color: var(--gray);
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             font-size: 0.95rem;
-            line-height: 1.6;
         }
 
         .teacher-expertise {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 15px;
         }
 
         .expertise-tag {
             background-color: var(--light-blue);
             color: var(--primary-blue);
-            padding: 6px 16px;
+            padding: 5px 12px;
             border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 600;
-            transition: var(--transition);
-            border: 1px solid rgba(63, 81, 181, 0.1);
-        }
-
-        .expertise-tag:hover {
-            background-color: var(--accent-blue);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.2);
+            font-weight: 500;
         }
 
         /* Building Info */
         .building-info {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--light-blue) 0%, #f0f2ff 100%);
-            border-radius: var(--border-radius-large);
-            margin: 60px 0;
+            padding: 80px 0;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin: 40px 0;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
+            gap: 40px;
             margin-top: 50px;
         }
 
         .info-item {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             align-items: flex-start;
-            background: var(--white);
-            padding: 35px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        .info-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
         }
 
         .info-icon {
             flex-shrink: 0;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
-            border-radius: 18px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--white);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-            box-shadow: 0 10px 30px rgba(63, 81, 181, 0.3);
-            transition: var(--transition);
-        }
-
-        .info-item:hover .info-icon {
-            transform: rotate(10deg) scale(1.1);
+            color: var(--accent-blue);
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
         }
 
         .info-content h3 {
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-        }
-
-        .info-content p {
-            color: var(--gray);
-            line-height: 1.8;
+            margin-bottom: 10px;
         }
 
         /* Floor Plan */
         .floor-plan {
-            padding: 100px 0;
-            background-color: var(--white);
-            border-radius: var(--border-radius-large);
-            margin: 60px 0;
+            padding: 80px 0;
         }
 
         .floor-container {
             display: flex;
             flex-direction: column;
-            gap: 35px;
+            gap: 30px;
             margin-top: 40px;
         }
 
         .floor {
             background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        .floor:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+            padding: 30px;
+            box-shadow: var(--shadow);
         }
 
         .floor-header {
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--light-blue);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-blue);
         }
 
         .floor-number {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-blue);
             color: white;
-            border-radius: 16px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-right: 25px;
-            box-shadow: 0 8px 25px rgba(63, 81, 181, 0.3);
-            transition: var(--transition);
-        }
-
-        .floor:hover .floor-number {
-            transform: rotate(10deg) scale(1.1);
+            margin-right: 20px;
         }
 
         .floor-rooms {
@@ -870,211 +561,123 @@
 
         .room {
             background-color: var(--light-blue);
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--primary-blue);
-            transition: var(--transition);
-            border: 1px solid rgba(63, 81, 181, 0.1);
-        }
-
-        .room:hover {
-            background-color: var(--accent-blue);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.2);
         }
 
         /* Contact */
         .contact {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--light-blue) 0%, #f0f2ff 100%);
-            border-radius: var(--border-radius-large);
-            margin: 60px 0;
+            padding: 80px 0;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            margin: 40px 0;
         }
 
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
+            gap: 40px;
             margin-top: 50px;
         }
 
         .contact-form {
             background-color: var(--white);
-            padding: 45px;
+            padding: 40px;
             border-radius: var(--border-radius);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            box-shadow: var(--shadow);
         }
 
         .form-group {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 12px;
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: var(--primary-blue);
-            font-size: 1.05rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 18px;
-            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border: 1px solid #ddd;
             border-radius: var(--border-radius-small);
             font-family: 'Noto Sans Thai', sans-serif;
             font-size: 1rem;
-            transition: var(--transition);
-            background-color: var(--white);
+            transition: border 0.3s ease;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--accent-blue);
-            box-shadow: 0 8px 25px rgba(63, 81, 181, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .form-control::placeholder {
-            color: #aaa;
         }
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            background-color: var(--primary-blue);
             color: var(--white);
-            padding: 80px 0 40px;
-            margin-top: 100px;
-            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" opacity="0.05"><path d="M0,0 L1000,0 L1000,100 Q500,80 0,100 Z" fill="white"/></svg>');
-            background-size: 100% auto;
-            background-repeat: no-repeat;
-            background-position: top;
+            padding: 60px 0 30px;
+            margin-top: 80px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 60px;
-            position: relative;
-            z-index: 1;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
         .footer-section h3 {
             color: var(--white);
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 2px;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
         }
 
         .footer-section p {
             opacity: 0.9;
             line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-section ul li a {
-            color: white;
-            text-decoration: none;
-            opacity: 0.9;
-            transition: var(--transition);
-            display: inline-block;
-            padding: 5px 0;
-        }
-
-        .footer-section ul li a:hover {
-            opacity: 1;
-            transform: translateX(5px);
         }
 
         .social-links {
             display: flex;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         .social-links a {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 50%;
             color: white;
             text-decoration: none;
-            transition: var(--transition);
-            font-size: 1.2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-            background-color: var(--white);
-            color: var(--primary-blue);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: var(--accent-blue);
+            transform: translateY(-3px);
         }
 
         .copyright {
             text-align: center;
-            padding-top: 40px;
+            padding-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0.8;
-            font-size: 0.95rem;
-            position: relative;
-            z-index: 1;
+            font-size: 0.9rem;
         }
 
         /* Responsive */
-        @media (max-width: 1200px) {
-            .hero h2 {
-                font-size: 2.8rem;
-            }
-            
-            .hero-container {
-                gap: 50px;
-            }
-        }
-
         @media (max-width: 992px) {
             .hero h2 {
-                font-size: 2.5rem;
+                font-size: 2.3rem;
             }
             
             nav ul {
@@ -1083,18 +686,12 @@
             
             .hero-container {
                 grid-template-columns: 1fr;
-                gap: 50px;
+                gap: 40px;
             }
             
             .hero-image {
-                height: 400px;
+                height: 350px;
                 order: -1;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            
-            .teachers-container {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
         }
 
@@ -1117,7 +714,6 @@
                 flex-direction: column;
                 width: 100%;
                 margin-top: 20px;
-                gap: 10px;
             }
             
             nav.active ul {
@@ -1125,133 +721,76 @@
             }
             
             .hero {
-                padding: 80px 0;
+                padding: 60px 0;
             }
             
             .hero h2 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             
             .section-title {
-                font-size: 2rem;
-                margin-bottom: 40px;
-            }
-            
-            .section-subtitle {
-                margin-bottom: 50px;
+                font-size: 1.8rem;
             }
             
             .teachers, .building-info, .floor-plan, .contact {
-                padding: 80px 0;
+                padding: 60px 0;
             }
             
-            .teacher-img-container {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .hero-image {
-                height: 350px;
-            }
-            
-            .modal-nav {
-                padding: 0 20px;
-            }
-            
-            .modal-nav button {
-                width: 48px;
-                height: 48px;
-                font-size: 1.3rem;
-            }
-
-            .settings-dropdown {
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                left: 20px;
-                width: auto;
-            }
-            
-            .contact-btn-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .btn, .btn-outline {
-                width: 100%;
-                text-align: center;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero h2 {
-                font-size: 1.9rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .btn {
-                padding: 14px 28px;
-            }
-            
-            .teacher-card {
-                padding: 30px 25px;
-            }
-            
-            .contact-form {
-                padding: 30px 25px;
+            .teacher-img {
+                width: 120px;
+                height: 120px;
             }
             
             .hero-image {
                 height: 300px;
             }
             
-            .expand-icon {
-                top: 15px;
-                right: 15px;
-                width: 42px;
-                height: 42px;
-                font-size: 1.1rem;
+            .modal-nav {
+                padding: 0 10px;
             }
             
-            .teacher-expand {
-                top: 15px;
-                right: 15px;
-                width: 36px;
-                height: 36px;
+            .modal-nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+            }
+            
+            .teacher-card {
+                padding: 25px;
+            }
+            
+            .contact-form {
+                padding: 25px;
+            }
+            
+            .hero-image {
+                height: 250px;
+            }
+            
+            .expand-icon {
+                top: 10px;
+                right: 10px;
+                width: 35px;
+                height: 35px;
                 font-size: 1rem;
             }
             
-            .teacher-img-container {
-                width: 140px;
-                height: 140px;
-                border-width: 10px;
-            }
-            
-            .info-item {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                gap: 20px;
-            }
-            
-            .info-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-            
-            .floor-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            
-            .floor-number {
-                margin-right: 0;
+            .teacher-expand {
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -1260,7 +799,7 @@
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <a href="#home" class="logo">
+            <div class="logo">
                 <div class="logo-icon">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" alt="ตราเทคนิคสุราษฎร์ธานี">
                 </div>
@@ -1268,7 +807,7 @@
                     <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
                     <p>แผนกเทคโนโลยีสารสนเทศ</p>
                 </div>
-            </a>
+            </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </button>
@@ -1279,34 +818,6 @@
                     <li><a href="#info">ข้อมูลอาคาร</a></li>
                     <li><a href="#floor">แผนผัง</a></li>
                     <li><a href="#contact">ติดต่อ</a></li>
-                    <!-- 1. ปุ่มตั้งค่า (เฟือง) -->
-                    <li>
-                        <button class="settings-btn" id="settingsBtn">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <div class="settings-dropdown" id="settingsDropdown">
-                            <ul>
-                                <li id="themeLight">
-                                    <i class="fas fa-sun"></i>
-                                    <span>ธีมสว่าง</span>
-                                </li>
-                                <li id="themeDark">
-                                    <i class="fas fa-moon"></i>
-                                    <span>ธีมมืด</span>
-                                </li>
-                                <hr>
-                                <li id="cameraSettings">
-                                    <i class="fas fa-camera"></i>
-                                    <span>ตั้งค่ากล้อง</span>
-                                </li>
-                                <hr>
-                                <li id="webVersion">
-                                    <i class="fas fa-code"></i>
-                                    <span>เวอร์ชันเว็บ 1.0.0</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
                 </ul>
             </nav>
         </div>
@@ -1319,11 +830,8 @@
                 <div class="hero-content">
                     <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
                     <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
-                    <!-- 2. ปุ่มติดต่อเราให้ขยับไปตามลูกศร -->
-                    <div class="contact-btn-container">
-                        <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
-                        <a href="#contact" class="btn btn-outline">ติดต่อเรา</a>
-                    </div>
+                    <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
+                    <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
                 </div>
                 <div class="hero-image" id="heroImage">
                     <!-- รูปภาพอาคารเรียนจากลิงก์ที่ให้มา -->
@@ -1334,6 +842,7 @@
                     </div>
                 </div>
             </div>
+            <div class="hero-bg"></div>
         </div>
     </section>
 
@@ -1349,11 +858,8 @@
                     <div class="teacher-expand" data-image="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" data-title="นายสัญญา ชูช่วย - หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <!-- 3. รูปหมู่อยู่ในกรอบสีฟ้าอ่อน -->
-                    <div class="teacher-img-container">
-                        <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
-                             alt="นายสัญญา ชูช่วย" class="teacher-img">
-                    </div>
+                    <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
+                         alt="นายสัญญา ชูช่วย" class="teacher-img">
                     <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
                     <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
                     <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
@@ -1368,10 +874,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" data-title="นายพนม บุญญ์ไพร - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                             alt="นายพนม บุญญ์ไพร" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
+                         alt="นายพนม บุญญ์ไพร" class="teacher-img">
                     <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
@@ -1389,10 +893,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" data-title="นางขนิษฐา สุมน - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                             alt="นางขนิษฐา สุมน" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
+                         alt="นางขนิษฐา สุมน" class="teacher-img">
                     <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
@@ -1408,10 +910,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" data-title="นางดวงฤดี เสนเรือง - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
-                             alt="นางดวงฤดี เสนเรือง" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
+                         alt="นางดวงฤดี เสนเรือง" class="teacher-img">
                     <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
@@ -1427,10 +927,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" data-title="นางสาววิยะดา คงแก้ว - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
-                             alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
+                         alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
                     <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
@@ -1445,10 +943,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" data-title="นายธันติวัชร์ ธนานันทน์โอฬาร - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
-                             alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
+                         alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
                     <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
@@ -1463,10 +959,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" data-title="นายวศิตว์ บุญเรือง - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
-                             alt="นายวศิตว์ บุญเรือง" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
+                         alt="นายวศิตว์ บุญเรือง" class="teacher-img">
                     <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1481,10 +975,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" data-title="น.ส.ธัญญารัตน์ ศรชนะ - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
-                             alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
+                         alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
                     <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1499,10 +991,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" data-title="น.ส.อมรพรรณ นนทฤทธิ์ - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
-                             alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
+                         alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
                     <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
@@ -1517,10 +1007,8 @@
                     <div class="teacher-expand" data-image="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" data-title="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า - ครูประจำแผนก">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </div>
-                    <div class="teacher-img-container">
-                        <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
-                             alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
-                    </div>
+                    <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
+                         alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
                     <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
                     <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
@@ -1755,11 +1243,11 @@
                 
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
-                    <ul>
-                        <li><a href="#home">หน้าแรก</a></li>
-                        <li><a href="#teachers">คณะอาจารย์</a></li>
-                        <li><a href="#info">ข้อมูลอาคาร</a></li>
-                        <li><a href="#floor">แผนผังอาคาร</a></li>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 10px;"><a href="#home" style="color: white; text-decoration: none; opacity: 0.9;">หน้าแรก</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#teachers" style="color: white; text-decoration: none; opacity: 0.9;">คณะอาจารย์</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#info" style="color: white; text-decoration: none; opacity: 0.9;">ข้อมูลอาคาร</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#floor" style="color: white; text-decoration: none; opacity: 0.9;">แผนผังอาคาร</a></li>
                     </ul>
                 </div>
                 
@@ -1786,7 +1274,7 @@
                 <button id="nextBtn"><i class="fas fa-chevron-right"></i></button>
             </div>
             <img id="modalImage" src="" alt="">
-            <div id="modalTitle" style="color: white; text-align: center; margin-top: 20px; font-size: 1.3rem; padding: 0 20px;"></div>
+            <div id="modalTitle" style="color: white; text-align: center; margin-top: 15px; font-size: 1.2rem;"></div>
         </div>
     </div>
 
@@ -1871,18 +1359,6 @@
                     link.classList.add('active');
                 }
             });
-            
-            // Header shadow on scroll
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.boxShadow = '0 10px 30px rgba(26, 35, 126, 0.2)';
-                header.style.backdropFilter = 'blur(20px)';
-                header.style.background = 'linear-gradient(135deg, rgba(26, 35, 126, 0.95) 0%, rgba(63, 81, 181, 0.95) 100%)';
-            } else {
-                header.style.boxShadow = '0 4px 20px rgba(26, 35, 126, 0.15)';
-                header.style.backdropFilter = 'blur(10px)';
-                header.style.background = 'linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%)';
-            }
         });
 
         // ระบบขยายรูปภาพ
@@ -2023,172 +1499,6 @@
             } else if (e.key === 'ArrowRight' && imageModal.classList.contains('active')) {
                 showNextImage();
             }
-        });
-
-        // 1. การตั้งค่า (Settings)
-        const settingsBtn = document.getElementById('settingsBtn');
-        const settingsDropdown = document.getElementById('settingsDropdown');
-        const themeLight = document.getElementById('themeLight');
-        const themeDark = document.getElementById('themeDark');
-        const cameraSettings = document.getElementById('cameraSettings');
-        const webVersion = document.getElementById('webVersion');
-
-        // เปิด/ปิดเมนูตั้งค่า
-        settingsBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            settingsBtn.classList.toggle('active');
-            settingsDropdown.classList.toggle('active');
-        });
-
-        // ปิดเมนูตั้งค่าเมื่อคลิกนอกพื้นที่
-        document.addEventListener('click', function(e) {
-            if (!settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
-                settingsBtn.classList.remove('active');
-                settingsDropdown.classList.remove('active');
-            }
-        });
-
-        // ธีมสว่าง
-        themeLight.addEventListener('click', function() {
-            document.documentElement.style.setProperty('--primary-blue', '#1a237e');
-            document.documentElement.style.setProperty('--light-blue', '#e8eaf6');
-            document.documentElement.style.setProperty('--accent-blue', '#3f51b5');
-            document.documentElement.style.setProperty('--white', '#ffffff');
-            document.documentElement.style.setProperty('--gray-light', '#f5f5f5');
-            document.documentElement.style.setProperty('--gray', '#757575');
-            document.body.style.backgroundColor = '#ffffff';
-            
-            // แสดง notification แบบสวยงาม
-            showNotification('เปลี่ยนเป็นธีมสว่างแล้ว', 'success');
-            settingsBtn.classList.remove('active');
-            settingsDropdown.classList.remove('active');
-        });
-
-        // ธีมมืด
-        themeDark.addEventListener('click', function() {
-            document.documentElement.style.setProperty('--primary-blue', '#121858');
-            document.documentElement.style.setProperty('--light-blue', '#2a2d5a');
-            document.documentElement.style.setProperty('--accent-blue', '#5c6bc0');
-            document.documentElement.style.setProperty('--white', '#1e1e1e');
-            document.documentElement.style.setProperty('--gray-light', '#2d2d2d');
-            document.documentElement.style.setProperty('--gray', '#aaaaaa');
-            document.body.style.backgroundColor = '#1e1e1e';
-            
-            // แสดง notification แบบสวยงาม
-            showNotification('เปลี่ยนเป็นธีมมืดแล้ว', 'success');
-            settingsBtn.classList.remove('active');
-            settingsDropdown.classList.remove('active');
-        });
-
-        // ตั้งค่ากล้อง
-        cameraSettings.addEventListener('click', function() {
-            showNotification('กำลังเปิดตั้งค่ากล้อง... (ฟีเจอร์นี้อยู่ในระหว่างการพัฒนา)', 'info');
-            settingsBtn.classList.remove('active');
-            settingsDropdown.classList.remove('active');
-        });
-
-        // เวอร์ชันเว็บ
-        webVersion.addEventListener('click', function() {
-            showNotification('เวอร์ชันเว็บปัจจุบัน: 1.0.0<br>อัปเดตล่าสุด: ธันวาคม 2567', 'info');
-            settingsBtn.classList.remove('active');
-            settingsDropdown.classList.remove('active');
-        });
-
-        // ป้องกันการขยายเมนูตั้งค่าจากการคลิกภายใน
-        settingsDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        // ฟังก์ชันแสดง notification แบบสวยงาม
-        function showNotification(message, type) {
-            // สร้าง element notification
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            // เพิ่มสไตล์
-            notification.style.cssText = `
-                position: fixed;
-                top: 30px;
-                right: 30px;
-                background: ${type === 'success' ? 'linear-gradient(135deg, #4CAF50, #45a049)' : 'linear-gradient(135deg, #2196F3, #1976D2)'};
-                color: white;
-                padding: 18px 25px;
-                border-radius: 16px;
-                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-                z-index: 9999;
-                transform: translateX(100%);
-                opacity: 0;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                max-width: 350px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            `;
-            
-            // เพิ่มสไตล์สำหรับเนื้อหา
-            const content = notification.querySelector('.notification-content');
-            content.style.cssText = `
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                font-weight: 500;
-            `;
-            
-            // เพิ่ม icon
-            const icon = notification.querySelector('i');
-            icon.style.cssText = `
-                font-size: 1.4rem;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // แสดง notification
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-                notification.style.opacity = '1';
-            }, 10);
-            
-            // ซ่อน notification หลังจาก 3 วินาที
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                notification.style.opacity = '0';
-                
-                // ลบ element หลังจาก animation เสร็จ
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 400);
-            }, 3000);
-        }
-
-        // เพิ่ม animation ให้กับ element เมื่อ scroll เข้ามาใน viewport
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements ที่ต้องการให้มี animation
-        document.querySelectorAll('.teacher-card, .info-item, .floor, .contact-form').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            observer.observe(el);
         });
     </script>
 </body>
