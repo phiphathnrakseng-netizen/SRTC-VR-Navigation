@@ -4,801 +4,649 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SRTC Navigation | ระบบนำทางวิทยาลัยเทคนิคสุราษฎร์ธานี</title>
-  <meta name="theme-color" content="#1e40af">
+  <meta name="theme-color" content="#1a56db">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   
   <!-- Modern Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    * { 
-      font-family: 'Poppins', 'Noto Sans Thai', sans-serif;
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3f83f8;
+      --primary-dark: #1e429f;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    
+    * {
+      font-family: 'Inter', 'Noto Sans Thai', sans-serif;
       box-sizing: border-box;
     }
     
-    :root {
-      --primary-color: #1e40af;
-      --primary-light: #3b82f6;
-      --primary-dark: #1e3a8a;
-      --accent-color: #f59e0b;
-      --success-color: #10b981;
-      --warning-color: #f59e0b;
-      --danger-color: #ef4444;
-      --text-dark: #1e293b;
-      --text-light: #64748b;
-      --text-white: #f8fafc;
-      --bg-light: #f8fafc;
-      --bg-white: #ffffff;
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    
     body {
-      overflow-x: hidden;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+      background-color: var(--gray-50);
+      color: var(--gray-800);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      color: var(--text-white);
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
     }
     
-    /* Header Styles */
-    .glass-header {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    /* Header */
+    .header-minimal {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
     }
     
-    /* Button Styles */
-    .icon-button {
-      position: relative; 
-      padding: 0.75rem; 
-      border-radius: 14px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      color: var(--text-white); 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-light);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    
-    .icon-button:hover { 
-      transform: translateY(-2px); 
-      box-shadow: var(--shadow-medium);
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    /* Main CTA Button */
-    .cta-button {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: var(--text-white);
-      font-weight: 600;
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      box-shadow: var(--shadow-medium);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Button */
+    .btn-minimal {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+      border-radius: 10px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      border: none;
+      justify-content: center;
+      gap: 0.5rem;
       cursor: pointer;
-      font-size: 1rem;
-      position: relative;
-      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      font-size: 0.9375rem;
+      line-height: 1.25rem;
     }
     
-    .cta-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
+    .btn-minimal:hover {
+      border-color: var(--gray-400);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-minimal:active {
+      transform: translateY(0);
+    }
+    
+    .btn-minimal.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .btn-minimal.primary:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .btn-minimal.secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border-color: var(--gray-200);
+    }
+    
+    .btn-minimal.secondary:hover {
+      background: var(--gray-200);
+      border-color: var(--gray-300);
+    }
+    
+    /* Card */
+    .card-minimal {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--gray-200);
+      padding: 1.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.7s;
     }
     
-    .cta-button:hover::before {
-      left: 100%;
-    }
-    
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-xl);
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-    }
-    
-    .cta-button.secondary {
-      background: rgba(255, 255, 255, 0.15);
-      color: var(--text-white);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(10px);
-    }
-    
-    .cta-button.secondary:hover {
-      background: rgba(255, 255, 255, 0.25);
+    .card-minimal:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
     }
     
     /* Hero Section */
-    .hero-section {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 1.5rem;
+    .hero-minimal {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       position: relative;
-      min-height: 85vh;
       overflow: hidden;
+      width: 100%;
+      padding: 4rem 1.5rem;
     }
     
-    .hero-section::before {
+    .hero-minimal::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(30, 64, 175, 0.1) 0%, transparent 50%);
-      z-index: -1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
     }
     
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 1200px;
-      width: 100%;
-    }
-    
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-      max-width: 1200px;
-      width: 100%;
-    }
-    
-    /* Modern Card Design */
-    .modern-card {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      border-radius: 1.5rem;
-      box-shadow: var(--shadow-medium);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .modern-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    }
-    
-    .modern-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-xl);
-      background: rgba(0, 0, 0, 0.4);
-    }
-    
-    /* Floating Elements */
-    .floating-element {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    /* Section Title */
-    .section-title {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 2rem;
-      font-weight: 800;
-      font-size: 3.5rem;
-      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Navigation AR View */
-    #navigation-ar-view {
+    /* Modal */
+    .modal-minimal {
       position: fixed;
       inset: 0;
-      z-index: 10000;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
       display: none;
-      background: #000000;
-      flex-direction: column;
-    }
-    
-    .navigation-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.8);
-      color: var(--text-white);
-      padding: 1.5rem;
-      backdrop-filter: blur(20px);
-      z-index: 10001;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .navigation-info {
-      position: absolute;
-      top: 100px;
-      left: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      color: var(--text-white);
-      padding: 1.5rem;
-      border-radius: 20px;
-      backdrop-filter: blur(20px);
-      z-index: 10001;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: var(--shadow-xl);
-    }
-    
-    .navigation-path {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-    
-    .path-line {
-      position: absolute;
-      background: linear-gradient(90deg, transparent, var(--success-color), transparent);
-      height: 6px;
-      border-radius: 4px;
-      box-shadow: 0 0 15px var(--success-color);
-      transform-origin: left center;
-    }
-    
-    .path-dot {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: var(--success-color);
-      border-radius: 50%;
-      box-shadow: 0 0 15px var(--success-color);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.7; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    
-    .navigation-controls {
-      position: absolute;
-      bottom: 30px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 0 25px;
-      z-index: 10001;
-    }
-    
-    .nav-button {
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      font-weight: 600;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
       align-items: center;
-      gap: 0.5rem;
-      box-shadow: var(--shadow-medium);
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
     }
     
-    .nav-button.primary {
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-      color: var(--text-white);
+    .modal-minimal.show {
+      display: flex;
+      animation: fadeIn 0.2s ease;
     }
     
-    .nav-button.secondary {
-      background: rgba(255, 255, 255, 0.2);
-      color: var(--text-white);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .nav-button:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-large);
-    }
-    
-    /* Progress Bar */
-    .progress-container {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
-    
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
-    
-    /* Modal Styles */
-    .modal {
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.8);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      z-index: 50;
-      backdrop-filter: blur(10px);
-    }
-    
-    .modal.show { 
-      display: flex; 
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .modal-content {
-      background: rgba(30, 41, 59, 0.95);
-      backdrop-filter: blur(30px);
-      border-radius: 2rem; 
-      padding: 2.5rem;
-      box-shadow: var(--shadow-xl); 
-      text-align: center;
-      position: relative; 
-      animation: modalSlideIn 0.3s ease;
-      max-width: 90%;
-      max-height: 90%;
+    .modal-content-minimal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      max-width: 100%;
+      max-height: 90vh;
       overflow-y: auto;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-white);
+      position: relative;
+      animation: modalSlideIn 0.3s ease;
+      width: 100%;
     }
     
-    @keyframes fadeIn { 
-      from { opacity:0; } 
-      to { opacity:1; } 
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
     @keyframes modalSlideIn {
       from {
-        opacity:0;
-        transform:translateY(20px) scale(0.95);
-      } 
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
       to {
-        opacity:1;
-        transform:translateY(0) scale(1);
-      } 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
     
-    /* Form Styles */
-    .form-input {
+    /* Form Input */
+    .input-minimal {
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 1rem;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-white);
-      background-color: rgba(0, 0, 0, 0.4);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
+      border: 1px solid var(--gray-300);
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      font-size: 0.9375rem;
+      color: var(--gray-800);
+      transition: all 0.2s ease;
+      background: white;
+      line-height: 1.25rem;
     }
     
-    .form-input:focus {
+    .input-minimal:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
-      background-color: rgba(0, 0, 0, 0.6);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
     }
     
-    .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+    .input-minimal::placeholder {
+      color: var(--gray-400);
     }
     
-    /* Map Container */
-    .map-container {
-      border-radius: 1.5rem;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      height: 500px;
+    /* Select */
+    .select-minimal {
       position: relative;
+      width: 100%;
     }
     
-    /* Footer */
-    .footer {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      padding: 2rem 1rem;
-      text-align: center;
-      margin-top: auto;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    /* Floor Tabs */
-    .floor-tabs {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    
-    .floor-tab {
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text-white);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    .select-minimal select {
+      appearance: none;
+      width: 100%;
+      border: 1px solid var(--gray-300);
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      font-size: 0.9375rem;
+      color: var(--gray-800);
+      transition: all 0.2s ease;
+      background: white;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
+      line-height: 1.25rem;
+    }
+    
+    .select-minimal::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--gray-400);
+      pointer-events: none;
+    }
+    
+    .select-minimal select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    }
+    
+    /* Tab */
+    .tab-minimal {
       display: flex;
-      align-items: center;
       gap: 0.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
     
-    .floor-tab:hover {
-      background: rgba(30, 64, 175, 0.3);
-      transform: translateY(-2px);
+    .tab-item {
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      color: var(--gray-600);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      border: none;
+      white-space: nowrap;
+      font-size: 0.9375rem;
+      line-height: 1.25rem;
     }
     
-    .floor-tab.active {
-      background: rgba(30, 64, 175, 0.5);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.3);
+    .tab-item:hover {
+      color: var(--gray-800);
+      background: var(--gray-100);
     }
     
-    /* Floor Content */
-    .floor-content {
-      display: none;
+    .tab-item.active {
+      color: var(--primary);
+      background: rgba(26, 86, 219, 0.1);
+      font-weight: 600;
     }
     
-    .floor-content.active {
-      display: block;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    /* Room Options */
-    .room-options {
+    /* Room Grid */
+    .room-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
       margin-top: 1rem;
     }
     
-    .room-option {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 1rem;
+    .room-item {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
       padding: 1rem;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      color: var(--text-white);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
     }
     
-    .room-option:hover {
-      background: rgba(30, 64, 175, 0.3);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
+    .room-item:hover {
+      border-color: var(--primary-light);
+      background: rgba(26, 86, 219, 0.05);
+      transform: translateY(-1px);
     }
     
-    .room-option.selected {
-      background: rgba(30, 64, 175, 0.4);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.5);
+    .room-item.selected {
+      background: rgba(26, 86, 219, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    /* Footer */
+    .footer-minimal {
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      padding: 2rem 1.5rem;
+      margin-top: auto;
+      width: 100%;
+    }
+    
+    /* Map Container */
+    .map-container-minimal {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--gray-200);
+      background: var(--gray-100);
+      height: 400px;
+      width: 100%;
+      position: relative;
+    }
+    
+    /* Navigation View */
+    .nav-view-minimal {
+      position: fixed;
+      inset: 0;
+      background: var(--gray-900);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+    }
+    
+    .nav-header-minimal {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+    }
+    
+    /* Progress Bar */
+    .progress-minimal {
+      height: 4px;
+      background: var(--gray-200);
+      border-radius: 2px;
+      overflow: hidden;
+      width: 100%;
+    }
+    
+    .progress-bar-minimal {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+      width: 30%;
+    }
+    
+    /* Utility */
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26, 86, 219, 0.1);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    
+    .badge-minimal {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      line-height: 1.25rem;
+    }
+    
+    .badge-minimal.primary {
+      background: rgba(26, 86, 219, 0.1);
+      color: var(--primary);
+    }
+    
+    .badge-minimal.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      z-index: 3000;
+      max-width: 350px;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.info {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .notification.success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .notification.warning {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .notification.error {
+      background: var(--error);
+      color: white;
     }
     
     /* Responsive */
-    @media (max-width: 1024px) {
-      .section-title {
-        font-size: 3rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-      }
-    }
-    
     @media (max-width: 768px) {
-      .hero-section {
-        padding: 2rem 1rem;
-        min-height: 80vh;
+      .modal-content-minimal {
+        padding: 1.5rem;
+        border-radius: 16px;
       }
       
-      .section-title {
-        font-size: 2.5rem;
-      }
-      
-      .features-grid {
+      .room-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
       }
       
-      .navigation-controls {
-        flex-direction: column;
-        align-items: center;
+      .tab-minimal {
+        gap: 0.25rem;
       }
       
-      .nav-button {
-        width: 100%;
-        justify-content: center;
+      .tab-item {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
       }
       
-      .modal-content {
-        padding: 2rem;
+      .hero-minimal {
+        padding: 3rem 1rem;
       }
       
-      .floor-tabs {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .floor-tab {
-        width: 100%;
-        justify-content: center;
+      .card-minimal {
+        padding: 1.25rem;
       }
     }
     
     @media (max-width: 480px) {
-      .section-title {
-        font-size: 2rem;
+      .btn-minimal {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
       }
       
-      .cta-button {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.9rem;
+      .modal-content-minimal {
+        padding: 1.25rem;
       }
       
-      .modern-card {
-        padding: 1.5rem;
-      }
-      
-      .room-options {
-        grid-template-columns: 1fr;
+      .footer-minimal {
+        padding: 1.5rem 1rem;
       }
     }
     
-    /* Glow Effects */
-    .glow {
-      box-shadow: 0 0 20px rgba(30, 64, 175, 0.4);
-    }
-    
-    /* Building Models Animation */
-    .building-model {
+    /* Accessibility */
+    .sr-only {
       position: absolute;
-      width: 60px;
-      height: 100px;
-      background: linear-gradient(135deg, #3b82f6, #1e40af);
-      border-radius: 8px;
-      transform-style: preserve-3d;
-      transform: rotateX(60deg) rotateZ(45deg);
-      box-shadow: 
-        0 8px 16px rgba(0,0,0,0.2),
-        inset 0 -5px 10px rgba(0,0,0,0.15);
-      animation: buildingFloat 6s ease-in-out infinite;
-    }
-    
-    @keyframes buildingFloat {
-      0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateY(0); }
-      50% { transform: rotateX(60deg) rotateZ(45deg) translateY(-8px); }
-    }
-
-    /* Custom Select Styles */
-    .custom-select {
-      position: relative;
-      width: 100%;
-    }
-    
-    .custom-select select {
-      appearance: none;
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 1rem;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-white);
-      background-color: rgba(0, 0, 0, 0.4);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      cursor: pointer;
-    }
-    
-    .custom-select::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 1.25rem;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid var(--primary-light);
-      pointer-events: none;
-    }
-    
-    .custom-select select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-    
-    /* Logo Styles */
-    .logo-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50px;
-      height: 50px;
-      background: linear-gradient(135deg, #1e40af, #3b82f6);
-      border-radius: 12px;
-      position: relative;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
       overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
     
-    .logo-icon {
-      width: 30px;
-      height: 30px;
-      color: white;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
     }
     
-    /* Camera View */
-    #camera-view {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
-    
-    .camera-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 
 <body>
   <!-- Header -->
-  <header class="glass-header sticky top-0 z-20">
-    <div class="flex justify-between items-center px-5 sm:px-8 py-4">
-      <div class="flex items-center space-x-4">
-        <div class="logo-container glow">
-          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L3 7L12 12L21 7L12 2Z"/>
-            <path d="M3 7L12 12L21 7"/>
-            <path d="M3 17L12 22L21 17"/>
-            <path d="M3 12L12 17L21 12"/>
-          </svg>
+  <header class="header-minimal">
+    <div class="flex justify-between items-center px-4 sm:px-6 py-4">
+      <div class="flex items-center gap-3">
+        <div class="icon-circle">
+          <i data-lucide="map" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-white">SRTC Navigation</h1>
-          <p class="text-sm text-gray-300 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+          <h1 class="text-lg font-semibold text-gray-900">SRTC Navigation</h1>
+          <p class="text-sm text-gray-500 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
         </div>
       </div>
 
-      <nav class="flex items-center space-x-3 sm:space-x-4">
-        <button onclick="openQRModal()" class="icon-button" title="QR Code">
+      <div class="flex items-center gap-2">
+        <button onclick="openQRModal()" class="btn-minimal" title="QR Code" aria-label="เปิด QR Code">
           <i data-lucide="qr-code" class="w-5 h-5"></i>
+          <span class="sr-only">QR Code</span>
         </button>
-
-        <button onclick="openNavigationModal()" class="icon-button" title="เริ่มนำทาง">
+        <button onclick="openNavigationModal()" class="btn-minimal primary">
           <i data-lucide="navigation" class="w-5 h-5"></i>
+          <span class="hidden sm:inline">เริ่มนำทาง</span>
+          <span class="sr-only sm:hidden">เริ่มนำทาง</span>
         </button>
-      </nav>
+      </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow">
+  <main class="flex-grow w-full">
     <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <div class="floating-element mb-8">
-          <div class="inline-flex items-center bg-black/30 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-6 glow">
-            <span class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></span>
-            <span class="text-base font-semibold text-white">ระบบนำทางเสมือนจริง</span>
-          </div>
+    <section class="hero-minimal">
+      <div class="max-w-6xl mx-auto text-center">
+        <div class="badge-minimal primary inline-flex items-center mb-6">
+          <i data-lucide="compass" class="w-4 h-4 mr-2"></i>
+          ระบบนำทางเสมือนจริง
         </div>
         
-        <h1 class="section-title mb-6">สำรวจวิทยาลัยในรูปแบบใหม่</h1>
-        <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">สัมผัสประสบการณ์นำทางภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-6">
+          สำรวจวิทยาลัยใน<span class="text-gradient">รูปแบบใหม่</span>
+        </h1>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button onclick="openMapModal()" class="cta-button glow">
-            <i data-lucide="map" class="w-5 h-5"></i>
-            <span>เปิดแผนที่ 3D</span>
+        <p class="text-lg sm:text-xl text-gray-600 mb-8 md:mb-10 max-w-2xl mx-auto px-4">
+          ค้นหาสถานที่ภายในวิทยาลัยเทคนิคสุราษฎร์ธานีได้อย่างง่ายดาย 
+          ด้วยระบบนำทางที่แม่นยำและใช้งานง่าย
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-3 justify-center px-4">
+          <button onclick="openMapModal()" class="btn-minimal primary py-3 px-6 sm:px-8 text-base">
+            <i data-lucide="map" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            <span>เปิดแผนที่</span>
           </button>
           
-          <button onclick="openNavigationModal()" class="cta-button secondary">
-            <i data-lucide="navigation" class="w-5 h-5"></i>
+          <button onclick="openNavigationModal()" class="btn-minimal py-3 px-6 sm:px-8 text-base">
+            <i data-lucide="navigation" class="w-5 h-5 sm:w-6 sm:h-6"></i>
             <span>เริ่มนำทาง</span>
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-12 md:py-16 px-4 sm:px-6 bg-white">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
+          คุณสมบัติหลัก
+        </h2>
         
-        <div class="features-grid">
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="map-pin" class="w-7 h-7 text-white"></i>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div class="card-minimal text-center">
+            <div class="icon-circle mx-auto mb-4">
+              <i data-lucide="map-pin" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-xl font-bold mb-3 text-white">นำทางแบบเรียลไทม์</h3>
-            <p class="text-gray-300 text-base">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 md:mb-3 text-gray-900">นำทางแบบเรียลไทม์</h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำและรวดเร็ว
+            </p>
           </div>
           
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="box" class="w-7 h-7 text-white"></i>
+          <div class="card-minimal text-center">
+            <div class="icon-circle mx-auto mb-4">
+              <i data-lucide="layers" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-xl font-bold mb-3 text-white">ประสบการณ์ 3D</h3>
-            <p class="text-gray-300 text-base">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 md:mb-3 text-gray-900">แผนที่ 3 มิติ</h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติที่สมจริง
+            </p>
           </div>
           
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="compass" class="w-7 h-7 text-white"></i>
+          <div class="card-minimal text-center">
+            <div class="icon-circle mx-auto mb-4">
+              <i data-lucide="zap" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-xl font-bold mb-3 text-white">เทคโนโลยีล้ำสมัย</h3>
-            <p class="text-gray-300 text-base">ใช้เทคโนโลยีล่าสุดเพื่อการนำทางที่แม่นยำและรวดเร็ว</p>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 md:mb-3 text-gray-900">ใช้งานง่าย</h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              อินเตอร์เฟซที่เรียบง่าย ใช้งานได้ทันทีโดยไม่ต้องเรียนรู้
+            </p>
+          </div>
+          
+          <div class="card-minimal text-center sm:col-span-2 lg:col-span-1 lg:col-start-2">
+            <div class="icon-circle mx-auto mb-4">
+              <i data-lucide="smartphone" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 md:mb-3 text-gray-900">รองรับทุกอุปกรณ์</h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              ใช้งานได้ทั้งบนคอมพิวเตอร์ แท็บเล็ต และสมาร์ทโฟน
+            </p>
           </div>
         </div>
       </div>
@@ -806,120 +654,116 @@
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container mx-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <div class="flex items-center">
-            <div class="logo-container mr-3">
-              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L3 7L12 12L21 7L12 2Z"/>
-                <path d="M3 7L12 12L21 7"/>
-                <path d="M3 17L12 22L21 17"/>
-                <path d="M3 12L12 17L21 12"/>
-              </svg>
-            </div>
-            <div>
-              <p class="text-white font-semibold text-lg">SRTC Navigation</p>
-              <p class="text-gray-300 text-sm">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-            </div>
+  <footer class="footer-minimal">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center">
+          <div class="icon-circle mr-3">
+            <i data-lucide="map" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">SRTC Navigation</p>
+            <p class="text-sm text-gray-500">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
           </div>
         </div>
         
         <div class="text-center md:text-right">
-          <p class="text-white text-base">© 2025 SRTC Navigation | All rights reserved.</p>
-          <p class="text-gray-300 text-sm mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีล้ำสมัย</p>
+          <p class="text-gray-600 text-sm sm:text-base">© 2025 SRTC Navigation | All rights reserved.</p>
+          <p class="text-sm text-gray-500 mt-1">ระบบนำทางภายในวิทยาลัย</p>
         </div>
       </div>
     </div>
   </footer>
 
   <!-- QR Code Modal -->
-  <div id="qr-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
+  <div id="qr-modal" class="modal-minimal">
+    <div class="modal-content-minimal max-w-sm">
+      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-4 text-white">QR Code</h3>
-      <div id="qrcode" class="mx-auto mb-4"></div>
-      <p class="text-gray-300 text-sm">สแกนเพื่อเข้าถึงระบบนำทาง</p>
+      <h3 class="font-bold text-xl mb-4 text-gray-900">QR Code</h3>
+      <div id="qrcode" class="mx-auto mb-4 flex justify-center"></div>
+      <p class="text-gray-600 text-sm text-center">สแกนเพื่อเข้าถึงระบบนำทาง</p>
     </div>
   </div>
 
-  <!-- Navigation Destination Modal -->
-  <div id="navigation-modal" class="modal">
-    <div class="modal-content max-w-4xl w-full">
-      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
+  <!-- Navigation Modal -->
+  <div id="navigation-modal" class="modal-minimal">
+    <div class="modal-content-minimal max-w-2xl w-full">
+      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-6 text-white text-center">เลือกจุดหมายปลายทาง</h3>
+      
+      <h3 class="font-bold text-2xl mb-6 text-gray-900 text-center">เลือกจุดหมายปลายทาง</h3>
+      
       <form id="navigation-form">
-        <div class="mb-5">
-          <label class="block text-gray-200 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
-          <div class="custom-select">
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-2 font-medium" for="destination-building">เลือกอาคาร</label>
+          <div class="select-minimal">
             <select id="destination-building" required onchange="updateFloorTabs()">
               <option value="">เลือกอาคาร</option>
               <option value="อาคาร 6">อาคาร 6 (แผนกเทคโนโลยีสารสนเทศ)</option>
+              <option value="อาคารอำนวยการ">อาคารอำนวยการ</option>
+              <option value="อาคารปฏิบัติการ">อาคารปฏิบัติการ</option>
+              <option value="โรงฝึกงาน">โรงฝึกงาน</option>
             </select>
           </div>
         </div>
         
         <div class="mb-6">
-          <label class="block text-gray-200 mb-3 font-medium">เลือกชั้นและห้อง</label>
+          <label class="block text-gray-700 mb-2 font-medium">เลือกชั้นและห้อง</label>
           
           <!-- Floor Tabs -->
-          <div class="floor-tabs" id="floor-tabs">
-            <!-- Floor tabs will be dynamically populated here -->
+          <div class="tab-minimal" id="floor-tabs">
+            <!-- Tabs will be populated dynamically -->
           </div>
           
           <!-- Floor Contents -->
           <div id="floor-contents">
-            <!-- Floor contents will be dynamically populated here -->
+            <!-- Contents will be populated dynamically -->
           </div>
           
           <input type="hidden" id="selected-room" required>
         </div>
         
-        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all shadow-lg flex items-center justify-center glow">
-          <i data-lucide="navigation" class="w-5 h-5 mr-2"></i>
+        <button type="submit" class="btn-minimal primary w-full py-3 text-base">
+          <i data-lucide="navigation" class="w-5 h-5"></i>
           เริ่มนำทาง
         </button>
       </form>
-      
-      <p class="text-center text-gray-300 mt-5 text-sm">
-        ระบบจะเปิดกล้องและแสดงเส้นทางนำทางแบบเรียลไทม์
-      </p>
     </div>
   </div>
 
   <!-- Map Modal -->
-  <div id="map-modal" class="modal">
-    <div class="modal-content max-w-4xl w-full">
-      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
+  <div id="map-modal" class="modal-minimal">
+    <div class="modal-content-minimal max-w-4xl w-full">
+      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <h3 class="font-bold text-xl mb-6 text-white text-center">แผนที่วิทยาลัย 3D</h3>
       
-      <div class="map-container mb-6">
-        <div class="w-full h-full flex items-center justify-center text-white text-lg">
-          <div class="text-center">
-            <i data-lucide="map" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
-            <p>แผนที่ 3D กำลังโหลด...</p>
+      <h3 class="font-bold text-2xl mb-6 text-gray-900 text-center">แผนที่วิทยาลัย</h3>
+      
+      <div class="map-container-minimal mb-6">
+        <div class="w-full h-full flex items-center justify-center">
+          <div class="text-center text-gray-500">
+            <i data-lucide="map" class="w-16 h-16 mx-auto mb-4"></i>
+            <p class="text-lg">แผนที่กำลังโหลด...</p>
+            <p class="text-sm mt-2">รองรับการแสดงผล 3 มิติ</p>
           </div>
         </div>
       </div>
       
       <div class="flex flex-wrap gap-3 justify-center">
-        <button class="nav-button secondary" onclick="rotateMap()">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        <button class="btn-minimal secondary" onclick="rotateMap()">
+          <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
           <span>หมุนมุมมอง</span>
         </button>
-        <button class="nav-button secondary" onclick="zoomMap()">
-          <i data-lucide="zoom-in" class="w-4 h-4"></i>
+        <button class="btn-minimal secondary" onclick="zoomMap()">
+          <i data-lucide="zoom-in" class="w-5 h-5"></i>
           <span>ขยายแผนที่</span>
         </button>
-        <button class="nav-button primary" onclick="closeMapModal(); openNavigationModal();">
-          <i data-lucide="navigation" class="w-4 h-4"></i>
+        <button class="btn-minimal primary" onclick="closeMapModal(); openNavigationModal();">
+          <i data-lucide="navigation" class="w-5 h-5"></i>
           <span>เริ่มนำทาง</span>
         </button>
       </div>
@@ -927,205 +771,345 @@
   </div>
 
   <!-- Navigation AR View -->
-  <div id="navigation-ar-view">
-    <video id="camera-view" autoplay playsinline></video>
-    <div class="camera-overlay">
-      <div class="text-center text-white mb-8">
-        <i data-lucide="camera" class="w-16 h-16 mx-auto mb-4 opacity-70"></i>
-        <p class="text-xl font-semibold">กล้องกำลังทำงาน</p>
-        <p class="text-gray-300 mt-2">เดินตามเส้นทางสีเขียวเพื่อไปยังจุดหมาย</p>
-      </div>
-    </div>
-    
-    <div class="navigation-header">
+  <div id="navigation-ar-view" class="nav-view-minimal">
+    <div class="nav-header-minimal">
       <div class="flex justify-between items-center">
         <div class="flex items-center">
           <i data-lucide="navigation" class="w-5 h-5 text-white mr-2"></i>
-          <h2 class="text-white text-lg font-bold">การนำทาง</h2>
+          <h2 class="text-white text-lg font-semibold">การนำทาง</h2>
         </div>
-        <div class="flex items-center space-x-2">
-          <div class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-            <i data-lucide="wifi" class="w-3 h-3 inline mr-1"></i>
-            ออนไลน์
+        <div class="flex items-center gap-2">
+          <span id="distance-badge" class="badge-minimal success">150m</span>
+          <button onclick="closeNavigationAR()" class="btn-minimal" aria-label="หยุดนำทาง">
+            <i data-lucide="x" class="w-5 h-5 text-white"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-grow p-4 md:p-6 overflow-auto">
+      <div class="card-minimal bg-gray-800 border-gray-700 text-white max-w-md mx-auto">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold text-lg">นำทางไปยัง</h3>
+          <span class="badge-minimal primary">กำลังเดินทาง</span>
+        </div>
+        <p id="destination-info" class="text-gray-300 mb-4 text-base">อาคาร 6 - ลานต่อต้านยาเสพติด</p>
+        
+        <div class="progress-minimal mb-4 bg-gray-700">
+          <div id="navigation-progress" class="progress-bar-minimal" style="width: 30%"></div>
+        </div>
+        
+        <div class="flex justify-between text-gray-400 text-sm">
+          <div class="flex items-center">
+            <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+            <span id="time-indicator">ประมาณ 3 นาที</span>
+          </div>
+          <div class="flex items-center">
+            <i data-lucide="user" class="w-4 h-4 mr-1"></i>
+            <span>เดิน</span>
           </div>
         </div>
       </div>
-    </div>
-    
-    <div class="navigation-info">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-white text-lg">นำทางไปยัง</h3>
-        <span id="distance-indicator" class="bg-green-500 text-white px-2 py-1 rounded-full text-sm font-medium">150m</span>
-      </div>
-      <p id="destination-info" class="text-white mb-3">อาคาร 6 - ลานต่อต้านยาเสพติด</p>
       
-      <div class="progress-container">
-        <div id="navigation-progress" class="progress-bar" style="width: 30%"></div>
-      </div>
-      
-      <div class="flex justify-between items-center text-gray-300 text-sm">
-        <div class="flex items-center">
-          <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
-          <span id="time-indicator">ประมาณ 3 นาที</span>
+      <div class="mt-8 md:mt-12 text-center">
+        <div class="icon-circle bg-gray-800 border-gray-700 mx-auto mb-4">
+          <i data-lucide="camera" class="w-6 h-6 text-white"></i>
         </div>
-        <div class="flex items-center">
-          <i data-lucide="user" class="w-4 h-4 mr-1"></i>
-          <span>เดิน</span>
+        <p class="text-gray-400 text-base">กล้องกำลังทำงาน</p>
+        <p class="text-gray-300 mt-2 text-sm">เดินตามเส้นทางที่ปรากฏบนหน้าจอ</p>
+        
+        <div class="mt-6">
+          <button onclick="toggleInstructions()" class="btn-minimal secondary mt-4">
+            <i data-lucide="info" class="w-5 h-5"></i>
+            <span>ดูคำแนะนำ</span>
+          </button>
         </div>
       </div>
     </div>
-    
-    <div class="navigation-path" id="navigation-path">
-      <!-- Path elements will be added here dynamically -->
-    </div>
-    
-    <div class="navigation-controls">
-      <button onclick="closeNavigationAR()" class="nav-button secondary">
-        <i data-lucide="x" class="w-4 h-4"></i>
-        <span>หยุดนำทาง</span>
+  </div>
+
+  <!-- Instructions Modal -->
+  <div id="instructions-modal" class="modal-minimal">
+    <div class="modal-content-minimal max-w-md">
+      <button onclick="closeInstructions()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
+        <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <button onclick="toggleNavigationInstructions()" class="nav-button primary">
-        <i data-lucide="info" class="w-4 h-4"></i>
-        <span>คำแนะนำ</span>
+      
+      <h3 class="font-bold text-xl mb-4 text-gray-900">คำแนะนำการใช้งาน</h3>
+      
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <div class="icon-circle flex-shrink-0">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-1">ใช้งานกล้อง</h4>
+            <p class="text-gray-600 text-sm">อนุญาตการเข้าถึงกล้องเพื่อใช้ระบบนำทาง AR</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-3">
+          <div class="icon-circle flex-shrink-0">
+            <i data-lucide="navigation" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-1">เดินตามเส้นทาง</h4>
+            <p class="text-gray-600 text-sm">เดินตามเส้นทางสีน้ำเงินที่ปรากฏบนหน้าจอ</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start gap-3">
+          <div class="icon-circle flex-shrink-0">
+            <i data-lucide="alert-circle" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-1">ความปลอดภัย</h4>
+            <p class="text-gray-600 text-sm">ระมัดระวังสิ่งกีดขวางขณะใช้งานระบบนำทาง</p>
+          </div>
+        </div>
+      </div>
+      
+      <button onclick="closeInstructions()" class="btn-minimal primary w-full mt-6">
+        เข้าใจแล้ว
       </button>
     </div>
   </div>
 
   <script>
-    // Initialize Lucide icons
-    lucide.createIcons();
-
-    // Navigation state
+    // Application State
     let navigationActive = false;
     let currentDestination = null;
     let navigationInterval = null;
-    let cameraStream = null;
+    let currentFloor = null;
+    let qrCodeInstance = null;
 
-    // Room data for Building 6
-    const building6Rooms = {
-      "ลานกีฬา": [
-        { id: 'laan-sport-drug-free', name: 'ลานกีฬาต้านยาเสพติด', type: 'ลานกิจกรรม' }
-      ],
-      "ชั้น 1": [
-        { id: 'room-polymer', name: 'ห้องแผนกวิชาการยางและพอลิเมอร์', type: 'ห้องเรียนแผนกวิชา' }
-      ],
-      "ชั้น 2": [
-        { id: 'room-samun-samphan', name: 'ห้องเรียนแผนกวิชาสามัญสัมพันธ์', type: 'ห้องเรียนแผนกวิชา' }
-      ],
-      "ชั้น 3": [
-        { id: 'room-631', name: 'ห้องเรียน 631', type: 'ห้องเรียน' },
-        { id: 'room-632', name: 'ห้องเรียน 632', type: 'ห้องเรียน' },
-        { id: 'room-633', name: 'ห้องเรียน 633', type: 'ห้องเรียน' },
-        { id: 'room-634', name: 'ห้องเรียน 634', type: 'ห้องเรียน' },
-        { id: 'room-653', name: 'ห้องเรียน 653', type: 'ห้องเรียน' }
-      ],
-      "ชั้น 4": [
-        { id: 'teacher-office', name: 'ห้องพักครู', type: 'ห้องพักครู' },
-        { id: 'lecture-room', name: 'ห้อง Lecture', type: 'ห้องบรรยาย' },
-        { id: 'lab-1', name: 'ห้อง Lab 1', type: 'ห้องปฏิบัติการ' },
-        { id: 'lab-2', name: 'ห้อง Lab 2', type: 'ห้องปฏิบัติการ' },
-        { id: 'lab-3', name: 'ห้อง Lab 3', type: 'ห้องปฏิบัติการ' }
-      ]
+    // Room data for different buildings
+    const buildingData = {
+      "อาคาร 6": {
+        floors: ["ลานกีฬา", "ชั้น 1", "ชั้น 2", "ชั้น 3", "ชั้น 4"],
+        rooms: {
+          "ลานกีฬา": [
+            { id: 'laan-sport-drug-free', name: 'ลานกีฬาต้านยาเสพติด', type: 'ลานกิจกรรม' }
+          ],
+          "ชั้น 1": [
+            { id: 'room-polymer', name: 'ห้องแผนกวิชาการยางและพอลิเมอร์', type: 'ห้องเรียนแผนกวิชา' }
+          ],
+          "ชั้น 2": [
+            { id: 'room-samun-samphan', name: 'ห้องเรียนแผนกวิชาสามัญสัมพันธ์', type: 'ห้องเรียนแผนกวิชา' }
+          ],
+          "ชั้น 3": [
+            { id: 'room-631', name: 'ห้องเรียน 631', type: 'ห้องเรียน' },
+            { id: 'room-632', name: 'ห้องเรียน 632', type: 'ห้องเรียน' },
+            { id: 'room-633', name: 'ห้องเรียน 633', type: 'ห้องเรียน' },
+            { id: 'room-634', name: 'ห้องเรียน 634', type: 'ห้องเรียน' },
+            { id: 'room-653', name: 'ห้องเรียน 653', type: 'ห้องเรียน' }
+          ],
+          "ชั้น 4": [
+            { id: 'teacher-office', name: 'ห้องพักครู', type: 'ห้องพักครู' },
+            { id: 'lecture-room', name: 'ห้อง Lecture', type: 'ห้องบรรยาย' },
+            { id: 'lab-1', name: 'ห้อง Lab 1', type: 'ห้องปฏิบัติการ' },
+            { id: 'lab-2', name: 'ห้อง Lab 2', type: 'ห้องปฏิบัติการ' },
+            { id: 'lab-3', name: 'ห้อง Lab 3', type: 'ห้องปฏิบัติการ' }
+          ]
+        }
+      },
+      "อาคารอำนวยการ": {
+        floors: ["ชั้น 1", "ชั้น 2", "ชั้น 3"],
+        rooms: {
+          "ชั้น 1": [
+            { id: 'reception', name: 'ต้อนรับ', type: 'แผนก' },
+            { id: 'admin-office', name: 'สำนักงานบริหาร', type: 'สำนักงาน' }
+          ],
+          "ชั้น 2": [
+            { id: 'finance', name: 'การเงิน', type: 'แผนก' },
+            { id: 'personnel', name: 'บุคลากร', type: 'แผนก' }
+          ],
+          "ชั้น 3": [
+            { id: 'director-office', name: 'สำนักผู้อำนวยการ', type: 'สำนักงาน' },
+            { id: 'meeting-room', name: 'ห้องประชุมใหญ่', type: 'ห้องประชุม' }
+          ]
+        }
+      }
     };
 
-    // Initialize the application
-    window.onload = () => {
+    // Initialize application
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide icons
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      
       // Generate QR Code
-      const qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: window.location.href,
-        width: 160,
-        height: 160,
-        colorDark: "#1e40af",
-        colorLight: "#1e293b",
-        correctLevel: QRCode.CorrectLevel.H
-      });
+      generateQRCode();
       
       // Setup navigation form
-      document.getElementById('navigation-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        startNavigation();
-      });
-      
-      // Add some 3D building elements to the hero section for visual effect
-      addFloatingBuildings();
+      const navigationForm = document.getElementById('navigation-form');
+      if (navigationForm) {
+        navigationForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          startNavigation();
+        });
+      }
       
       // Initialize floor tabs
       updateFloorTabs();
-    };
+      
+      // Setup close modals on outside click
+      setupModalCloseHandlers();
+    });
+
+    // Generate QR Code
+    function generateQRCode() {
+      const qrContainer = document.getElementById('qrcode');
+      if (!qrContainer) return;
+      
+      // Clear existing QR code
+      qrContainer.innerHTML = '';
+      
+      // Generate new QR code
+      qrCodeInstance = new QRCode(qrContainer, {
+        text: window.location.href,
+        width: 160,
+        height: 160,
+        colorDark: "#1a56db",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    // Setup modal close handlers
+    function setupModalCloseHandlers() {
+      const modals = document.querySelectorAll('.modal-minimal');
+      modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            const modalId = modal.id;
+            switch(modalId) {
+              case 'qr-modal':
+                closeQRModal();
+                break;
+              case 'navigation-modal':
+                closeNavigationModal();
+                break;
+              case 'map-modal':
+                closeMapModal();
+                break;
+              case 'instructions-modal':
+                closeInstructions();
+                break;
+            }
+          }
+        });
+      });
+    }
 
     // Update floor tabs based on selected building
     function updateFloorTabs() {
       const buildingSelect = document.getElementById('destination-building');
       const floorTabsContainer = document.getElementById('floor-tabs');
       const floorContentsContainer = document.getElementById('floor-contents');
+      
+      if (!buildingSelect || !floorTabsContainer || !floorContentsContainer) return;
+      
       const selectedBuilding = buildingSelect.value;
       
+      // Clear containers
       floorTabsContainer.innerHTML = '';
       floorContentsContainer.innerHTML = '';
       
-      if (selectedBuilding === 'อาคาร 6') {
+      // Reset selected room
+      document.getElementById('selected-room').value = '';
+      
+      if (buildingData[selectedBuilding]) {
+        const { floors, rooms } = buildingData[selectedBuilding];
+        
         // Create floor tabs
-        const floors = Object.keys(building6Rooms);
         floors.forEach((floor, index) => {
-          // Create tab
-          const tab = document.createElement('div');
-          tab.className = `floor-tab ${index === 0 ? 'active' : ''}`;
+          // Create tab button
+          const tab = document.createElement('button');
+          tab.type = 'button';
+          tab.className = `tab-item ${index === 0 ? 'active' : ''}`;
           tab.dataset.floor = floor;
           tab.innerHTML = `
-            <i data-lucide="${getFloorIcon(floor)}" class="w-4 h-4"></i>
+            <i data-lucide="${getFloorIcon(floor)}" class="w-4 h-4 mr-2"></i>
             <span>${floor}</span>
           `;
+          
           tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            document.querySelectorAll('.floor-tab').forEach(t => {
+            // Update active tab
+            document.querySelectorAll('.tab-item').forEach(t => {
               t.classList.remove('active');
             });
-            // Add active class to clicked tab
             tab.classList.add('active');
+            
             // Show corresponding floor content
-            showFloorContent(floor);
+            showFloorContent(floor, selectedBuilding);
+            currentFloor = floor;
           });
+          
           floorTabsContainer.appendChild(tab);
           
-          // Create floor content
+          // Create floor content container
           const floorContent = document.createElement('div');
           floorContent.className = `floor-content ${index === 0 ? 'active' : ''}`;
           floorContent.id = `floor-${floor.replace(/\s+/g, '-')}`;
+          floorContent.setAttribute('role', 'tabpanel');
+          floorContent.setAttribute('aria-labelledby', `tab-${floor.replace(/\s+/g, '-')}`);
           
-          const roomOptions = document.createElement('div');
-          roomOptions.className = 'room-options';
+          // Create room grid
+          const roomGrid = document.createElement('div');
+          roomGrid.className = 'room-grid';
           
-          building6Rooms[floor].forEach(room => {
-            const roomElement = document.createElement('div');
-            roomElement.className = 'room-option';
-            roomElement.innerHTML = `
-              <div class="font-medium text-white">${room.name}</div>
-              <div class="text-xs text-gray-400 mt-1">${room.type}</div>
-            `;
-            roomElement.addEventListener('click', () => {
-              // Remove selected class from all options
-              document.querySelectorAll('.room-option').forEach(opt => {
-                opt.classList.remove('selected');
+          // Add rooms for this floor
+          if (rooms[floor]) {
+            rooms[floor].forEach(room => {
+              const roomItem = document.createElement('div');
+              roomItem.className = 'room-item';
+              roomItem.dataset.roomId = room.id;
+              roomItem.innerHTML = `
+                <div class="font-medium">${room.name}</div>
+                <div class="text-sm text-gray-500 mt-1">${room.type}</div>
+              `;
+              
+              roomItem.addEventListener('click', () => {
+                selectRoom(roomItem, room.id);
               });
-              // Add selected class to clicked option
-              roomElement.classList.add('selected');
-              // Set the selected room value
-              document.getElementById('selected-room').value = room.id;
+              
+              roomGrid.appendChild(roomItem);
             });
-            roomOptions.appendChild(roomElement);
-          });
+          } else {
+            // No rooms available for this floor
+            const noRoomsMsg = document.createElement('div');
+            noRoomsMsg.className = 'text-center text-gray-500 py-8';
+            noRoomsMsg.textContent = 'ไม่มีข้อมูลห้องในชั้นนี้';
+            roomGrid.appendChild(noRoomsMsg);
+          }
           
-          floorContent.appendChild(roomOptions);
+          floorContent.appendChild(roomGrid);
           floorContentsContainer.appendChild(floorContent);
         });
         
+        // Initialize first floor content
+        if (floors.length > 0) {
+          currentFloor = floors[0];
+          showFloorContent(floors[0], selectedBuilding);
+        }
+        
         // Refresh icons
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      } else {
+        // No building selected or no data
+        const noDataMsg = document.createElement('div');
+        noDataMsg.className = 'text-center text-gray-500 py-8';
+        noDataMsg.textContent = 'กรุณาเลือกอาคาร';
+        floorContentsContainer.appendChild(noDataMsg);
       }
     }
 
-    // Show floor content based on selected tab
-    function showFloorContent(floor) {
+    // Show floor content
+    function showFloorContent(floor, building) {
       // Hide all floor contents
       document.querySelectorAll('.floor-content').forEach(content => {
         content.classList.remove('active');
@@ -1136,9 +1120,32 @@
       if (floorContent) {
         floorContent.classList.add('active');
       }
+      
+      // Clear any previous room selection
+      clearRoomSelection();
     }
 
-    // Get appropriate icon for each floor
+    // Select a room
+    function selectRoom(roomElement, roomId) {
+      // Clear previous selection
+      clearRoomSelection();
+      
+      // Mark as selected
+      roomElement.classList.add('selected');
+      
+      // Set the selected room value
+      document.getElementById('selected-room').value = roomId;
+    }
+
+    // Clear room selection
+    function clearRoomSelection() {
+      document.querySelectorAll('.room-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      document.getElementById('selected-room').value = '';
+    }
+
+    // Get floor icon
     function getFloorIcon(floor) {
       switch(floor) {
         case 'ลานกีฬา': return 'activity';
@@ -1150,272 +1157,299 @@
       }
     }
 
-    // Add floating 3D buildings to hero section
-    function addFloatingBuildings() {
-      const heroSection = document.querySelector('.hero-section');
-      const colors = ['#1e40af', '#3b82f6', '#2563eb', '#1d4ed8'];
-      
-      for (let i = 0; i < 4; i++) {
-        const building = document.createElement('div');
-        building.className = 'building-model';
-        building.style.left = `${15 + i * 20}%`;
-        building.style.bottom = '15%';
-        building.style.background = `linear-gradient(135deg, ${colors[i % colors.length]}, ${colors[(i + 1) % colors.length]})`;
-        building.style.animationDelay = `${i * 0.5}s`;
-        building.style.opacity = '0.7';
-        heroSection.appendChild(building);
-      }
-    }
-
-    // Modal functions
+    // Modal Functions
     function openQRModal() {
       document.getElementById('qr-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
     }
     
     function closeQRModal() {
       document.getElementById('qr-modal').classList.remove('show');
+      document.body.style.overflow = 'auto';
     }
 
     function openNavigationModal() {
       document.getElementById('navigation-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
     }
     
     function closeNavigationModal() {
       document.getElementById('navigation-modal').classList.remove('show');
+      document.body.style.overflow = 'auto';
     }
 
     function openMapModal() {
       document.getElementById('map-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
     }
     
     function closeMapModal() {
       document.getElementById('map-modal').classList.remove('show');
+      document.body.style.overflow = 'auto';
     }
 
-    // Start navigation with camera
+    function toggleInstructions() {
+      document.getElementById('instructions-modal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeInstructions() {
+      document.getElementById('instructions-modal').classList.remove('show');
+      document.body.style.overflow = navigationActive ? 'hidden' : 'auto';
+    }
+
+    // Start navigation
     function startNavigation() {
       const building = document.getElementById('destination-building').value;
       const roomId = document.getElementById('selected-room').value;
       
       if (!building || !roomId) {
-        alert("กรุณาเลือกอาคารและห้องหรือสถานที่");
+        showNotification('กรุณาเลือกอาคารและห้องหรือสถานที่', 'warning');
         return;
       }
       
       // Find the selected room
       let selectedRoom = null;
-      for (const floor in building6Rooms) {
-        selectedRoom = building6Rooms[floor].find(room => room.id === roomId);
-        if (selectedRoom) break;
+      if (buildingData[building] && buildingData[building].rooms) {
+        for (const floor in buildingData[building].rooms) {
+          selectedRoom = buildingData[building].rooms[floor].find(room => room.id === roomId);
+          if (selectedRoom) break;
+        }
       }
       
       if (!selectedRoom) {
-        alert("ไม่พบข้อมูลห้องที่เลือก");
+        showNotification('ไม่พบข้อมูลห้องที่เลือก', 'error');
         return;
       }
       
       currentDestination = {
         building: building,
         room: selectedRoom.name,
-        fullName: `${building} - ${selectedRoom.name}`
+        fullName: `${building} - ${selectedRoom.name}`,
+        roomId: roomId
       };
       
       closeNavigationModal();
       
-      // Show loading message
-      showSuccess("กำลังเริ่มนำทาง", `นำทางไปยัง ${currentDestination.fullName}`);
+      // Show loading notification
+      showNotification(`กำลังเริ่มนำทางไปยัง ${currentDestination.fullName}`, 'info');
       
-      // Start navigation after a short delay
+      // Start navigation after delay
       setTimeout(() => {
         startARNavigation();
       }, 1500);
     }
 
-    // Start AR Navigation with camera
-    async function startARNavigation() {
+    // Start AR Navigation
+    function startARNavigation() {
       const navView = document.getElementById('navigation-ar-view');
-      const cameraView = document.getElementById('camera-view');
       
-      try {
-        // Request camera access
-        cameraStream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment' } 
-        });
-        
-        // Set camera stream to video element
-        cameraView.srcObject = cameraStream;
-        
-        // Update destination info
-        document.getElementById('destination-info').textContent = currentDestination.fullName;
-        
-        // Show AR view
-        navView.style.display = 'flex';
-        navigationActive = true;
-        
-        // Start drawing navigation path
-        drawNavigationPath();
-        
-        // Start simulation of navigation updates
-        simulateNavigationUpdates();
-        
-      } catch (error) {
-        console.error("Camera error:", error);
-        // Fallback to simulated camera view
-        document.getElementById('destination-info').textContent = currentDestination.fullName;
-        navView.style.display = 'flex';
-        navigationActive = true;
-        drawNavigationPath();
-        simulateNavigationUpdates();
-        
-        showSuccess("เปิดใช้งานกล้องไม่สำเร็จ", "ระบบจะแสดงเส้นทางนำทางโดยไม่ใช้กล้อง");
-      }
-    }
-
-    // Draw navigation path
-    function drawNavigationPath() {
-      if (!navigationActive) return;
-      
-      const pathContainer = document.getElementById('navigation-path');
-      
-      // Clear previous path
-      pathContainer.innerHTML = '';
-      
-      // Create a curved path
-      const startX = window.innerWidth / 2;
-      const startY = window.innerHeight - 100;
-      const endX = window.innerWidth / 2;
-      const endY = 200;
-      
-      // Draw path line
-      const pathLine = document.createElement('div');
-      pathLine.className = 'path-line';
-      pathLine.style.width = '350px';
-      pathLine.style.height = '6px';
-      pathLine.style.left = (startX - 175) + 'px';
-      pathLine.style.top = (startY - 3) + 'px';
-      pathLine.style.transform = 'rotate(-5deg)';
-      pathContainer.appendChild(pathLine);
-      
-      // Draw path dots
-      for (let i = 0; i < 6; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'path-dot';
-        dot.style.left = (startX - 6 + Math.sin(i * 0.5) * 25) + 'px';
-        dot.style.top = (startY - 80 - i * 80) + 'px';
-        dot.style.animationDelay = `${i * 0.3}s`;
-        pathContainer.appendChild(dot);
+      if (!navView) {
+        showNotification('ไม่สามารถเริ่มการนำทางได้', 'error');
+        return;
       }
       
-      // Draw arrow at the end
-      const arrow = document.createElement('div');
-      arrow.innerHTML = '<i data-lucide="arrow-up" class="w-8 h-8 text-green-400"></i>';
-      arrow.style.position = 'absolute';
-      arrow.style.left = (endX - 16) + 'px';
-      arrow.style.top = (endY - 16) + 'px';
-      arrow.style.filter = 'drop-shadow(0 0 10px #10b981)';
-      arrow.style.animation = 'pulse 2s infinite';
-      pathContainer.appendChild(arrow);
+      // Update destination info
+      const destinationInfo = document.getElementById('destination-info');
+      if (destinationInfo) {
+        destinationInfo.textContent = currentDestination.fullName;
+      }
       
-      // Refresh icons
-      lucide.createIcons();
+      // Reset progress
+      const progressBar = document.getElementById('navigation-progress');
+      if (progressBar) {
+        progressBar.style.width = '0%';
+      }
       
-      // Continue animation
-      requestAnimationFrame(drawNavigationPath);
+      // Show navigation view
+      navView.style.display = 'flex';
+      navigationActive = true;
+      document.body.style.overflow = 'hidden';
+      
+      // Start navigation simulation
+      simulateNavigationUpdates();
+      
+      // Show success notification
+      setTimeout(() => {
+        showNotification('เริ่มการนำทางสำเร็จ', 'success');
+      }, 500);
     }
 
     // Simulate navigation updates
     function simulateNavigationUpdates() {
       if (!navigationActive) return;
       
-      // Simulate decreasing distance
+      // Reset simulation values
       let distance = 150;
-      let progress = 30;
+      let progress = 0;
       
+      // Clear any existing interval
+      if (navigationInterval) {
+        clearInterval(navigationInterval);
+      }
+      
+      // Start new simulation
       navigationInterval = setInterval(() => {
         if (!navigationActive) {
           clearInterval(navigationInterval);
           return;
         }
         
-        distance -= 2;
-        progress += 1;
+        // Update distance and progress
+        distance = Math.max(0, distance - 1.5);
+        progress = Math.min(100, progress + 0.67);
         
         // Update progress bar
-        document.getElementById('navigation-progress').style.width = `${progress}%`;
+        const progressBar = document.getElementById('navigation-progress');
+        if (progressBar) {
+          progressBar.style.width = `${progress}%`;
+        }
         
-        // Update distance and time
-        document.getElementById('distance-indicator').textContent = `${distance}m`;
-        const time = Math.max(1, Math.round(distance / 50));
-        document.getElementById('time-indicator').textContent = `ประมาณ ${time} นาที`;
+        // Update distance badge
+        const distanceBadge = document.getElementById('distance-badge');
+        if (distanceBadge) {
+          distanceBadge.textContent = `${Math.round(distance)}m`;
+        }
         
-        if (distance <= 10) {
-          // Destination reached
+        // Update time estimate
+        const timeIndicator = document.getElementById('time-indicator');
+        if (timeIndicator) {
+          const time = Math.max(0, Math.round(distance / 50));
+          timeIndicator.textContent = time > 0 ? `ประมาณ ${time} นาที` : 'ถึงแล้ว';
+        }
+        
+        // Check if destination reached
+        if (distance <= 0) {
           clearInterval(navigationInterval);
-          showSuccess("ถึงจุดหมายแล้ว", `คุณได้มาถึง ${currentDestination.fullName} แล้ว`);
+          showNotification('ถึงจุดหมายแล้ว!', 'success');
+          
+          // Auto-close navigation after delay
           setTimeout(() => {
             closeNavigationAR();
           }, 3000);
         }
-      }, 1000);
+      }, 500);
     }
 
-    // Close navigation AR view
+    // Close AR navigation
     function closeNavigationAR() {
       const navView = document.getElementById('navigation-ar-view');
       
-      // Stop camera stream
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-      }
-      
-      navView.style.display = 'none';
+      // Stop navigation
       navigationActive = false;
       currentDestination = null;
       
+      // Clear interval
       if (navigationInterval) {
         clearInterval(navigationInterval);
+        navigationInterval = null;
       }
-    }
-
-    // Toggle navigation instructions
-    function toggleNavigationInstructions() {
-      showSuccess("คำแนะนำการใช้งาน", "เดินตามเส้นทางสีเขียวที่ปรากฏบนหน้าจอ จนกว่าจะถึงจุดหมายปลายทาง");
+      
+      // Hide navigation view
+      if (navView) {
+        navView.style.display = 'none';
+      }
+      
+      // Restore body scroll
+      document.body.style.overflow = 'auto';
+      
+      // Show notification
+      showNotification('หยุดการนำทางแล้ว', 'info');
     }
 
     // Map controls
     function rotateMap() {
-      showSuccess("หมุนมุมมองแผนที่", "คุณสามารถหมุนมุมมองแผนที่ 3D ได้ด้วยการลากเมาส์");
+      showNotification('หมุนมุมมองแผนที่', 'info');
     }
     
     function zoomMap() {
-      showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์หรือใช้ปุ่มควบคุม");
+      showNotification('ขยายแผนที่', 'info');
     }
 
-    // Success message
-    function showSuccess(title, message) {
-      // Create a custom notification
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Remove existing notifications
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notification => {
+        notification.remove();
+      });
+      
+      // Create notification element
       const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-600 text-white p-4 rounded-2xl shadow-xl z-50 max-w-sm';
+      notification.className = `notification ${type}`;
+      
+      // Set icon based on type
+      let icon = 'info';
+      switch(type) {
+        case 'success': icon = 'check-circle'; break;
+        case 'warning': icon = 'alert-triangle'; break;
+        case 'error': icon = 'alert-circle'; break;
+        default: icon = 'info';
+      }
+      
       notification.innerHTML = `
         <div class="flex items-start">
-          <i data-lucide="check-circle" class="w-5 h-5 mr-3 flex-shrink-0"></i>
-          <div>
-            <h4 class="font-bold">${title}</h4>
-            <p class="text-white/90 text-sm mt-1">${message}</p>
+          <i data-lucide="${icon}" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+          <div class="flex-grow">
+            <p class="font-medium">${message}</p>
           </div>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white/80 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
         </div>
       `;
       
       document.body.appendChild(notification);
-      lucide.createIcons();
       
-      // Remove after 3 seconds
+      // Refresh icons
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      
+      // Show notification
       setTimeout(() => {
-        notification.remove();
+        notification.classList.add('show');
+      }, 10);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            if (notification.parentElement) {
+              notification.remove();
+            }
+          }, 300);
+        }
       }, 3000);
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Escape key closes modals
+      if (e.key === 'Escape') {
+        if (document.getElementById('qr-modal').classList.contains('show')) {
+          closeQRModal();
+        } else if (document.getElementById('navigation-modal').classList.contains('show')) {
+          closeNavigationModal();
+        } else if (document.getElementById('map-modal').classList.contains('show')) {
+          closeMapModal();
+        } else if (document.getElementById('instructions-modal').classList.contains('show')) {
+          closeInstructions();
+        } else if (navigationActive) {
+          closeNavigationAR();
+        }
+      }
+    });
+
+    // Service Worker for PWA (optional)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(error => {
+          console.log('ServiceWorker registration failed:', error);
+        });
+      });
     }
   </script>
 </body>
 </html>
-
