@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี</title>
+    <title>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -527,64 +527,6 @@
                 padding: 25px;
             }
         }
-        
-        /* Styles for the new content from image */
-        .image-content-section {
-            padding: 40px 0;
-            background-color: var(--white);
-        }
-        
-        .image-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .image-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: var(--primary-blue);
-        }
-        
-        .image-content h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--accent-blue);
-        }
-        
-        .image-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            color: var(--primary-blue);
-        }
-        
-        .image-content p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            margin-bottom: 30px;
-            line-height: 1.8;
-        }
-        
-        .divider {
-            height: 2px;
-            background-color: var(--light-blue);
-            width: 100%;
-            margin: 30px 0;
-        }
-        
-        .image-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .image-section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin: 40px 0 20px;
-            color: var(--primary-blue);
-        }
     </style>
 </head>
 <body>
@@ -596,8 +538,8 @@
                     <i class="fas fa-laptop-code"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
-                    <p>แผนกเทคโนโลยีสารสนเทศ</p>
+                    <h1>แผนกเทคโนโลยีสารสนเทศ</h1>
+                    <p>อาคารเรียนนวัตกรรมดิจิทัล</p>
                 </div>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -606,7 +548,6 @@
             <nav id="mainNav">
                 <ul>
                     <li><a href="#home" class="active">หน้าแรก</a></li>
-                    <li><a href="#image-content">เกี่ยวกับเรา</a></li>
                     <li><a href="#features">จุดเด่น</a></li>
                     <li><a href="#info">ข้อมูลอาคาร</a></li>
                     <li><a href="#floor">แผนผัง</a></li>
@@ -616,29 +557,16 @@
         </div>
     </header>
 
-    <!-- Image Content Section (ตามไฟล์ที่ให้มา) -->
-    <section class="image-content-section" id="image-content">
+    <!-- Hero Section -->
+    <section class="hero" id="home">
         <div class="container">
-            <div class="image-content">
-                <h1>ยินดีต้อนรับ</h1>
-                <h2>อาคารเรียนนวัตกรรมดิจิทัล</h2>
-                <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                
+            <div class="hero-content">
+                <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
                 <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
-                
-                <div class="divider"></div>
-                
-                <div class="image-buttons">
-                    <a href="#features" class="btn">สำรวจอาคารเรียน</a>
-                    <a href="#contact" class="btn btn-outline">ติดต่อเรา</a>
-                </div>
-                
-                <div class="divider"></div>
-                
-                <h2 class="image-section-title">จุดเด่นของอาคารเรียน</h2>
-                
-                <p>อาคารเรียนของเราเป็นสถานที่ที่ออกแบบมาเพื่อการเรียนรู้ในยุคดิจิทัล ด้วยเทคโนโลยีที่ทันสมัยและสภาพแวดล้อมที่เอื้อต่อการพัฒนาทักษะด้านเทคโนโลยีสารสนเทศ</p>
+                <a href="#features" class="btn">สำรวจอาคารเรียน</a>
+                <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
             </div>
+            <div class="hero-bg"></div>
         </div>
     </section>
 
@@ -833,7 +761,7 @@
                         </div>
                         <div class="info-content">
                             <h4>ที่อยู่</h4>
-                            <p>อาคารนวัตกรรมดิจิทัล แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+                            <p>อาคารนวัตกรรมดิจิทัล แผนกเทคโนโลยีสารสนเทศ<br>มหาวิทยาลัยเทคโนโลยีไทย</p>
                         </div>
                     </div>
                     
@@ -843,7 +771,7 @@
                         </div>
                         <div class="info-content">
                             <h4>โทรศัพท์</h4>
-                            <p>077-123-4567</p>
+                            <p>02-345-6789</p>
                         </div>
                     </div>
                     
@@ -853,7 +781,7 @@
                         </div>
                         <div class="info-content">
                             <h4>อีเมล</h4>
-                            <p>it-building@surat-technique.ac.th</p>
+                            <p>it-building@university.ac.th</p>
                         </div>
                     </div>
                     
@@ -901,16 +829,16 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
+                    <p>เราเป็นศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
                         <li style="margin-bottom: 10px;"><a href="#home" style="color: white; text-decoration: none; opacity: 0.9;">หน้าแรก</a></li>
-                        <li style="margin-bottom: 10px;"><a href="#image-content" style="color: white; text-decoration: none; opacity: 0.9;">เกี่ยวกับเรา</a></li>
                         <li style="margin-bottom: 10px;"><a href="#features" style="color: white; text-decoration: none; opacity: 0.9;">จุดเด่นอาคาร</a></li>
                         <li style="margin-bottom: 10px;"><a href="#info" style="color: white; text-decoration: none; opacity: 0.9;">ข้อมูลอาคาร</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#floor" style="color: white; text-decoration: none; opacity: 0.9;">แผนผังอาคาร</a></li>
                     </ul>
                 </div>
                 
@@ -921,7 +849,7 @@
             </div>
             
             <div class="copyright">
-                <p>© 2023 วิทยาลัยเทคนิคสุราษฎร์ธานี | แผนกเทคโนโลยีสารสนเทศ | ออกแบบด้วย Material UI Design</p>
+                <p>© 2023 แผนกเทคโนโลยีสารสนเทศ มหาวิทยาลัยเทคโนโลยีไทย | ออกแบบด้วย Material UI Design</p>
             </div>
         </div>
     </footer>
