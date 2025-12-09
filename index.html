@@ -139,6 +139,15 @@
             margin: 40px 0;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
         }
 
         .hero-content {
@@ -157,6 +166,25 @@
             font-size: 1.2rem;
             color: var(--gray);
             margin-bottom: 30px;
+        }
+
+        .hero-image {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            height: 400px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.05);
         }
 
         .hero-bg {
@@ -509,6 +537,16 @@
             nav ul {
                 gap: 15px;
             }
+            
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .hero-image {
+                height: 350px;
+                order: -1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -556,6 +594,10 @@
                 width: 120px;
                 height: 120px;
             }
+            
+            .hero-image {
+                height: 300px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -573,6 +615,10 @@
             
             .contact-form {
                 padding: 25px;
+            }
+            
+            .hero-image {
+                height: 250px;
             }
         }
     </style>
@@ -608,11 +654,17 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
-            <div class="hero-content">
-                <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
-                <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
-                <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
-                <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
+                    <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
+                    <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
+                    <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
+                </div>
+                <div class="hero-image">
+                    <!-- รูปภาพอาคารเรียนจากลิงก์ที่ให้มา -->
+                    <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                </div>
             </div>
             <div class="hero-bg"></div>
         </div>
@@ -624,7 +676,9 @@
             <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
             <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
 
-  <div class="teacher-card">
+            <div class="teachers-container">
+                <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
+                <div class="teacher-card">
                     <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
                          alt="นายสัญญา ชูช่วย" class="teacher-img">
                     <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
@@ -633,12 +687,10 @@
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
-        
-            <div class="teachers-container">
-                <!-- อาจารย์คนที่ 1 -->
+                
+                <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
                          alt="นายพนม บุญญ์ไพร" class="teacher-img">
@@ -649,12 +701,12 @@
 -ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
                     <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
                     <div class="teacher-expertise">
-                        <span class="expertise-tag">Google certificate </span>
-                        <span class="expertise-tag">aruba certificate</span>
+                        <span class="expertise-tag">Google certificate</span>
+                        <span class="expertise-tag">Aruba certificate</span>
                     </div>
                 </div>
                 
-                <!-- อาจารย์คนที่ 2 -->
+                <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
                          alt="นางขนิษฐา สุมน" class="teacher-img">
@@ -665,12 +717,10 @@
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
                 
-                <!-- อาจารย์คนที่ 3 -->
+                <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
                          alt="นางดวงฤดี เสนเรือง" class="teacher-img">
@@ -681,12 +731,10 @@
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
                 
-                <!-- อาจารย์คนที่ 4 -->
+                <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
                          alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
@@ -696,46 +744,36 @@
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
                 
-                <!-- อาจารย์คนที่ 5 -->
+                <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
                          alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
                     <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
-                    <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา
-
-</div>
+                    <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
 
-            <!-- อาจารย์คนที่ 6 -->
+                <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
                          alt="นายวศิตว์ บุญเรือง" class="teacher-img">
                     <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
-                    <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์
-
-</div>
+                    <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
 
-        <!-- อาจารย์คนที่ 7 -->
+                <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
                          alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
@@ -745,41 +783,31 @@
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
 
-        <!-- อาจารย์คนที่ 7 -->
+                <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
                          alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
                     <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
-                    <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ
-
-</div>
+                    <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
                 
-                <!-- อาจารย์คนที่ 6 -->
+                <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
                 <div class="teacher-card">
                     <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
                          alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
                     <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
                     <div class="teacher-position">ครูประจำแผนก</div>
-                    <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์
-
-</div>
+                    <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
                     <p>ยังไม่บันทึกในระบบ</p>
                     <div class="teacher-expertise">
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                        <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                         <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                     </div>
                 </div>
@@ -1114,6 +1142,3 @@
     </script>
 </body>
 </html>
-
-
-
