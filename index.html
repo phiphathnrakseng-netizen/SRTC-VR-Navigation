@@ -9,7 +9,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   
-  <!-- Modern Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -541,17 +540,10 @@
 </head>
 
 <body>
-  <!-- Header -->
   <header class="header-minimal">
     <div class="flex justify-between items-center px-4 sm:px-6 py-4">
-      <div class="flex items-center gap-3">
-        <div class="icon-circle">
-          <i data-lucide="map" class="w-6 h-6"></i>
-        </div>
-        <div>
-          <h1 class="text-lg font-semibold text-gray-900">SRTC Navigation</h1>
-          <p class="text-sm text-gray-500 hidden sm:block">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-        </div>
+      <div class="flex items-center">
+        <img src="image_1.png" alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี" class="h-14 w-auto">
       </div>
 
       <div class="flex items-center gap-2">
@@ -568,9 +560,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="flex-grow w-full">
-    <!-- Hero Section -->
     <section class="hero-minimal">
       <div class="max-w-6xl mx-auto text-center">
         <div class="badge-minimal primary inline-flex items-center mb-6">
@@ -601,7 +591,6 @@
       </div>
     </section>
 
-    <!-- Features Section -->
     <section class="py-12 md:py-16 px-4 sm:px-6 bg-white">
       <div class="max-w-6xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 md:mb-12">
@@ -653,7 +642,6 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer-minimal">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -675,7 +663,6 @@
     </div>
   </footer>
 
-  <!-- QR Code Modal -->
   <div id="qr-modal" class="modal-minimal">
     <div class="modal-content-minimal max-w-sm">
       <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
@@ -687,7 +674,6 @@
     </div>
   </div>
 
-  <!-- Navigation Modal -->
   <div id="navigation-modal" class="modal-minimal">
     <div class="modal-content-minimal max-w-2xl w-full">
       <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
@@ -713,15 +699,11 @@
         <div class="mb-6">
           <label class="block text-gray-700 mb-2 font-medium">เลือกชั้นและห้อง</label>
           
-          <!-- Floor Tabs -->
           <div class="tab-minimal" id="floor-tabs">
-            <!-- Tabs will be populated dynamically -->
-          </div>
+            </div>
           
-          <!-- Floor Contents -->
           <div id="floor-contents">
-            <!-- Contents will be populated dynamically -->
-          </div>
+            </div>
           
           <input type="hidden" id="selected-room" required>
         </div>
@@ -734,7 +716,6 @@
     </div>
   </div>
 
-  <!-- Map Modal -->
   <div id="map-modal" class="modal-minimal">
     <div class="modal-content-minimal max-w-4xl w-full">
       <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
@@ -770,7 +751,6 @@
     </div>
   </div>
 
-  <!-- Navigation AR View -->
   <div id="navigation-ar-view" class="nav-view-minimal">
     <div class="nav-header-minimal">
       <div class="flex justify-between items-center">
@@ -828,7 +808,6 @@
     </div>
   </div>
 
-  <!-- Instructions Modal -->
   <div id="instructions-modal" class="modal-minimal">
     <div class="modal-content-minimal max-w-md">
       <button onclick="closeInstructions()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="ปิด">
