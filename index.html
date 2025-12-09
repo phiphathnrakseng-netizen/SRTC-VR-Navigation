@@ -1,1487 +1,287 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ระบบนำทางวิทยาลัยเทคนิคสุราษฎร์ธานี</title>
-  <meta name="theme-color" content="#1e40af">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  
-  <!-- Modern Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>อาคารเรียน แผนกเทคโนโลยีสารสนเทศ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
   <style>
-    * { 
-      font-family: 'Poppins', 'Noto Sans Thai', sans-serif;
-      box-sizing: border-box;
+    :root{
+      --bg:#f6f9ff; /* very light blue */
+      --card:#ffffff;
+      --primary:#0a58ca; /* blue */
+      --primary-600:#084aa3;
+      --muted:#6b7280;
+      --radius:18px;
+      --glass: rgba(255,255,255,0.7);
+      font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Helvetica Neue", Arial;
     }
-    
-    :root {
-      --primary-color: #1e40af;
-      --primary-light: #3b82f6;
-      --primary-dark: #1e3a8a;
-      --accent-color: #f59e0b;
-      --success-color: #10b981;
-      --warning-color: #f59e0b;
-      --danger-color: #ef4444;
-      --text-dark: #1e293b;
-      --text-light: #64748b;
-      --text-white: #f8fafc;
-      --bg-light: #f8fafc;
-      --bg-white: #ffffff;
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    
-    body {
-      overflow-x: hidden;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: var(--text-white);
-    }
-    
-    /* Header Styles */
-    .glass-header {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    }
-    
-    /* Button Styles */
-    .icon-button {
-      position: relative; 
-      padding: 0.75rem; 
-      border-radius: 14px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      color: var(--text-white); 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-light);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    
-    .icon-button:hover { 
-      transform: translateY(-2px); 
-      box-shadow: var(--shadow-medium);
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    /* Main CTA Button */
-    .cta-button {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: var(--text-white);
-      font-weight: 600;
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      box-shadow: var(--shadow-medium);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .cta-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.7s;
-    }
-    
-    .cta-button:hover::before {
-      left: 100%;
-    }
-    
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-xl);
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-    }
-    
-    .cta-button.secondary {
-      background: rgba(255, 255, 255, 0.15);
-      color: var(--text-white);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(10px);
-    }
-    
-    .cta-button.secondary:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
-    
-    /* Hero Section */
-    .hero-section {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 1.5rem;
-      position: relative;
-      min-height: 85vh;
-      overflow: hidden;
-    }
-    
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(30, 64, 175, 0.1) 0%, transparent 50%);
-      z-index: -1;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      max-width: 1200px;
-      width: 100%;
-    }
-    
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-      max-width: 1200px;
-      width: 100%;
-    }
-    
-    /* Modern Card Design */
-    .modern-card {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      border-radius: 1.5rem;
-      box-shadow: var(--shadow-medium);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .modern-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    }
-    
-    .modern-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-xl);
-      background: rgba(0, 0, 0, 0.4);
-    }
-    
-    /* Floating Elements */
-    .floating-element {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-    
-    /* Section Title */
-    .section-title {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 2rem;
-      font-weight: 800;
-      font-size: 3.5rem;
-      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Navigation AR View */
-    #navigation-ar-view {
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      display: none;
-      background: #000000;
-      flex-direction: column;
-    }
-    
-    .navigation-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.8);
-      color: var(--text-white);
-      padding: 1.5rem;
-      backdrop-filter: blur(20px);
-      z-index: 10001;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .navigation-info {
-      position: absolute;
-      top: 100px;
-      left: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      color: var(--text-white);
-      padding: 1.5rem;
-      border-radius: 20px;
-      backdrop-filter: blur(20px);
-      z-index: 10001;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: var(--shadow-xl);
-    }
-    
-    .navigation-path {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-    
-    .path-line {
-      position: absolute;
-      background: linear-gradient(90deg, transparent, var(--success-color), transparent);
-      height: 6px;
-      border-radius: 4px;
-      box-shadow: 0 0 15px var(--success-color);
-      transform-origin: left center;
-    }
-    
-    .path-dot {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: var(--success-color);
-      border-radius: 50%;
-      box-shadow: 0 0 15px var(--success-color);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.7; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    
-    .navigation-controls {
-      position: absolute;
-      bottom: 30px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 0 25px;
-      z-index: 10001;
-    }
-    
-    .nav-button {
-      padding: 1rem 2rem;
-      border-radius: 16px;
-      font-weight: 600;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: var(--shadow-medium);
-    }
-    
-    .nav-button.primary {
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-      color: var(--text-white);
-    }
-    
-    .nav-button.secondary {
-      background: rgba(255, 255, 255, 0.2);
-      color: var(--text-white);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .nav-button:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-large);
-    }
-    
-    /* Progress Bar */
-    .progress-container {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
-    
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
-    
-    /* Modal Styles */
-    .modal {
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.8);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      z-index: 50;
-      backdrop-filter: blur(10px);
-    }
-    
-    .modal.show { 
-      display: flex; 
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .modal-content {
-      background: rgba(30, 41, 59, 0.95);
-      backdrop-filter: blur(30px);
-      border-radius: 2rem; 
-      padding: 2.5rem;
-      box-shadow: var(--shadow-xl); 
-      text-align: center;
-      position: relative; 
-      animation: modalSlideIn 0.3s ease;
-      max-width: 90%;
-      max-height: 90%;
-      overflow-y: auto;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-white);
-    }
-    
-    @keyframes fadeIn { 
-      from { opacity:0; } 
-      to { opacity:1; } 
-    }
-    
-    @keyframes modalSlideIn {
-      from {
-        opacity:0;
-        transform:translateY(20px) scale(0.95);
-      } 
-      to {
-        opacity:1;
-        transform:translateY(0) scale(1);
-      } 
-    }
-    
-    /* Form Styles */
-    .form-input {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 1rem;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-white);
-      background-color: rgba(0, 0, 0, 0.4);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-    
-    .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-    
-    /* Map Container */
-    .map-container {
-      border-radius: 1.5rem;
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      height: 500px;
-      position: relative;
-    }
-    
-    /* Footer */
-    .footer {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(15px);
-      padding: 2rem 1rem;
-      text-align: center;
-      margin-top: auto;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    /* Floor Tabs */
-    .floor-tabs {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    
-    .floor-tab {
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text-white);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .floor-tab:hover {
-      background: rgba(30, 64, 175, 0.3);
-      transform: translateY(-2px);
-    }
-    
-    .floor-tab.active {
-      background: rgba(30, 64, 175, 0.5);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.3);
-    }
-    
-    /* Floor Content */
-    .floor-content {
-      display: none;
-    }
-    
-    .floor-content.active {
-      display: block;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    /* Room Options */
-    .room-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .room-option {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 1rem;
-      padding: 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      color: var(--text-white);
-    }
-    
-    .room-option:hover {
-      background: rgba(30, 64, 175, 0.3);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-    
-    .room-option.selected {
-      background: rgba(30, 64, 175, 0.4);
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.5);
-    }
-    
-    /* Logo Container with Emblem */
-    .emblem-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #1e40af, #3b82f6);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    .emblem-text {
-      font-family: 'Noto Sans Thai', sans-serif;
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: white;
-      text-align: center;
-      line-height: 1.1;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .section-title {
-        font-size: 3rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .hero-section {
-        padding: 2rem 1rem;
-        min-height: 80vh;
-      }
-      
-      .section-title {
-        font-size: 2.5rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      
-      .navigation-controls {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .nav-button {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .modal-content {
-        padding: 2rem;
-      }
-      
-      .floor-tabs {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .floor-tab {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .emblem-container {
-        width: 50px;
-        height: 50px;
-      }
-      
-      .emblem-text {
-        font-size: 0.9rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .section-title {
-        font-size: 2rem;
-      }
-      
-      .cta-button {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.9rem;
-      }
-      
-      .modern-card {
-        padding: 1.5rem;
-      }
-      
-      .room-options {
-        grid-template-columns: 1fr;
-      }
-      
-      .emblem-container {
-        width: 45px;
-        height: 45px;
-      }
-      
-      .emblem-text {
-        font-size: 0.8rem;
-      }
-    }
-    
-    /* Glow Effects */
-    .glow {
-      box-shadow: 0 0 20px rgba(30, 64, 175, 0.4);
-    }
-    
-    /* Building Models Animation */
-    .building-model {
-      position: absolute;
-      width: 60px;
-      height: 100px;
-      background: linear-gradient(135deg, #3b82f6, #1e40af);
-      border-radius: 8px;
-      transform-style: preserve-3d;
-      transform: rotateX(60deg) rotateZ(45deg);
-      box-shadow: 
-        0 8px 16px rgba(0,0,0,0.2),
-        inset 0 -5px 10px rgba(0,0,0,0.15);
-      animation: buildingFloat 6s ease-in-out infinite;
-    }
-    
-    @keyframes buildingFloat {
-      0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateY(0); }
-      50% { transform: rotateX(60deg) rotateZ(45deg) translateY(-8px); }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,var(--bg),#ffffff);
+      color:#0f1724;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:32px;
     }
 
-    /* Custom Select Styles */
-    .custom-select {
-      position: relative;
-      width: 100%;
+    .container{
+      max-width:1100px;
+      margin:0 auto;
     }
-    
-    .custom-select select {
-      appearance: none;
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 1rem;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-white);
-      background-color: rgba(0, 0, 0, 0.4);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
-      cursor: pointer;
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;padding:12px 18px;background:transparent;
     }
-    
-    .custom-select::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 1.25rem;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid var(--primary-light);
-      pointer-events: none;
+    .brand{
+      display:flex;align-items:center;gap:12px;
     }
-    
-    .custom-select select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.3);
-      background-color: rgba(0, 0, 0, 0.6);
+    .logo{
+      width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary-600));
+      display:grid;place-items:center;color:white;font-weight:700;box-shadow:0 6px 18px rgba(10,88,202,0.18);
+      flex-shrink:0;
     }
-    
-    /* Camera View */
-    #camera-view {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav{display:flex;gap:12px;align-items:center}
+    .btn{
+      background:var(--card);border-radius:12px;padding:10px 14px;display:inline-flex;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(12,20,40,0.06);cursor:pointer;border:none;
     }
-    
-    .camera-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+    .btn.primary{background:linear-gradient(90deg,var(--primary),var(--primary-600));color:white}
+
+    /* hero */
+    .hero{
+      margin-top:18px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;
     }
+    .hero-card{background:var(--card);border-radius:var(--radius);padding:26px;box-shadow:0 12px 30px rgba(12,20,40,0.06)}
+
+    .hero h2{margin:0 0 8px 0;font-size:26px}
+    .hero p.lead{margin:0;color:var(--muted)}
+
+    .stats{display:flex;gap:10px;margin-top:16px}
+    .stat{background:linear-gradient(180deg,var(--glass),rgba(255,255,255,0.9));padding:10px;border-radius:12px;min-width:100px;text-align:center;box-shadow:0 6px 18px rgba(10,88,202,0.05)}
+    .stat small{display:block;color:var(--muted)}
+
+    /* building card */
+    .building{
+      border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;height:100%;
+    }
+    .building .image{
+      background:linear-gradient(180deg, rgba(10,88,202,0.08), rgba(10,88,202,0.02));padding:22px;display:grid;place-items:center;
+    }
+    .img-placeholder{width:100%;height:220px;border-radius:14px;background:linear-gradient(90deg,#e9f1ff,#ffffff);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:600;font-size:14px}
+
+    .card-body{padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{background:rgba(10,88,202,0.08);color:var(--primary);padding:6px 10px;border-radius:999px;font-size:13px}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+    .mini{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 8px 20px rgba(12,20,40,0.04)}
+    .mini h4{margin:0 0 6px 0}
+    .mini p{margin:0;color:var(--muted);font-size:13px}
+
+    /* facilities & map */
+    section{margin-top:22px}
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+
+    .facilities{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .facility{background:linear-gradient(180deg,var(--card),#fbfdff);padding:14px;border-radius:12px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 20px rgba(12,20,40,0.03)}
+    .facility .mi{font-size:34px;color:var(--primary)}
+    .facility p{margin:0}
+
+    /* gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .gallery img{width:100%;height:120px;object-fit:cover;border-radius:10px}
+
+    footer{margin-top:34px;padding:16px;background:transparent;border-radius:14px;display:flex;justify-content:space-between;align-items:center}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .facilities{grid-template-columns:repeat(2,1fr)}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:520px){
+      body{padding:18px}
+      .grid{grid-template-columns:1fr}
+      .facilities{grid-template-columns:1fr}
+      .gallery{grid-template-columns:1fr}
+      .logo{width:52px;height:52px;border-radius:12px}
+    }
+
+    /* small interactions */
+    .chip{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;background:rgba(10,88,202,0.06)}
+    .muted{color:var(--muted)}
   </style>
 </head>
-
 <body>
-  <!-- Header -->
-  <header class="glass-header sticky top-0 z-20">
-    <div class="flex justify-between items-center px-5 sm:px-8 py-4">
-      <div class="flex items-center space-x-4">
-        <div class="emblem-container glow">
-          <div class="emblem-text">
-            ตร<br>วท
-          </div>
-        </div>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">IT</div>
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-white">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
-          <p class="text-sm text-gray-300 hidden sm:block">Surat Thani Technical College</p>
+          <h1>อาคารแผนกเทคโนโลยีสารสนเทศ</h1>
+          <p>คณะ/วิทยาลัย — แนะนำอาคารเรียนและสิ่งอำนวยความสะดวก</p>
         </div>
       </div>
-
-      <nav class="flex items-center space-x-3 sm:space-x-4">
-        <button onclick="openQRModal()" class="icon-button" title="QR Code">
-          <i data-lucide="qr-code" class="w-5 h-5"></i>
-        </button>
-
-        <button onclick="openNavigationModal()" class="icon-button" title="เริ่มนำทาง">
-          <i data-lucide="navigation" class="w-5 h-5"></i>
-        </button>
+      <nav>
+        <button class="btn">ติดต่อ</button>
+        <button class="btn primary">เยี่ยมชมอาคาร</button>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <div class="floating-element mb-8">
-          <div class="inline-flex items-center bg-black/30 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-6 glow">
-            <span class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></span>
-            <span class="text-base font-semibold text-white">ระบบนำทางเสมือนจริง</span>
-          </div>
-        </div>
-        
-        <h1 class="section-title mb-6">สำรวจวิทยาลัยในรูปแบบใหม่</h1>
-        <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">สัมผัสประสบการณ์นำทางภายในวิทยาลัยเทคนิคสุราษฎร์ธานี ด้วยเทคโนโลยีล้ำสมัยที่ช่วยให้คุณค้นหาสถานที่ได้อย่างง่ายดายและรวดเร็ว</p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button onclick="openMapModal()" class="cta-button glow">
-            <i data-lucide="map" class="w-5 h-5"></i>
-            <span>เปิดแผนที่ 3D</span>
-          </button>
-          
-          <button onclick="openNavigationModal()" class="cta-button secondary">
-            <i data-lucide="navigation" class="w-5 h-5"></i>
-            <span>เริ่มนำทาง</span>
-          </button>
-        </div>
-        
-        <div class="features-grid">
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="map-pin" class="w-7 h-7 text-white"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-white">นำทางแบบเรียลไทม์</h3>
-            <p class="text-gray-300 text-base">ค้นหาเส้นทางไปยังจุดหมายภายในวิทยาลัยได้อย่างแม่นยำ</p>
-          </div>
-          
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="box" class="w-7 h-7 text-white"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-white">ประสบการณ์ 3D</h3>
-            <p class="text-gray-300 text-base">สำรวจอาคารและสถานที่ต่างๆ ในรูปแบบสามมิติ</p>
-          </div>
-          
-          <div class="modern-card p-6 text-center">
-            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <i data-lucide="compass" class="w-7 h-7 text-white"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-white">เทคโนโลยีล้ำสมัย</h3>
-            <p class="text-gray-300 text-base">ใช้เทคโนโลยีล่าสุดเพื่อการนำทางที่แม่นยำและรวดเร็ว</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+    <main>
+      <div class="hero">
+        <div class="hero-card">
+          <h2>ยินดีต้อนรับสู่ อาคารเรียน แผนกเทคโนโลยีสารสนเทศ</h2>
+          <p class="lead">อาคารทันสมัย ออกแบบเพื่อการเรียนรู้และปฏิบัติจริง มีห้องปฏิบัติการคอมพิวเตอร์ ห้องประชุม และพื้นที่ทำงานกลุ่ม</p>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container mx-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <div class="flex items-center">
-            <div class="emblem-container mr-3">
-              <div class="emblem-text">
-                ตร<br>วท
+          <div class="stats">
+            <div class="stat">
+              <strong>5</strong>
+              <small>ชั้นเรียน</small>
+            </div>
+            <div class="stat">
+              <strong>120+</strong>
+              <small>ที่นั่งคอมพิวเตอร์</small>
+            </div>
+            <div class="stat">
+              <strong>3</strong>
+              <small>ห้องปฏิบัติการ</small>
+            </div>
+          </div>
+
+          <div class="section-title" style="margin-top:18px">
+            <h3 style="margin:0">ข้อมูลอาคาร</h3>
+            <div class="chip">
+              <span class="material-icons-outlined">place</span>
+              <small class="muted">ตำแหน่ง: อาคารใหม่ ฝั่งตะวันออก</small>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="mini">
+              <h4>ชั้น 1</h4>
+              <p>โถงต้อนรับ ห้องปฏิบัติการคอมพิวเตอร์ 2 ห้อง</p>
+            </div>
+            <div class="mini">
+              <h4>ชั้น 2</h4>
+              <p>ห้องเรียนสัมมนา ห้องอาจารย์</p>
+            </div>
+            <div class="mini">
+              <h4>ชั้น 3</h4>
+              <p>ห้องปฏิบัติการเครือข่าย และห้องทดสอบ</p>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="hero-card building">
+          <div class="image">
+            <div class="img-placeholder">รูปอาคาร (ตัวอย่าง)</div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <h3 style="margin:0">อาคาร IT - ใหม่</h3>
+                <small class="muted">พื้นที่ 3,200 ตร.ม. • เปิดใช้งานปี 2568</small>
+              </div>
+              <div class="tags">
+                <span class="tag">ปลอดภัย</span>
+                <span class="tag">เข้าถึงง่าย</span>
               </div>
             </div>
-            <div>
-              <p class="text-white font-semibold text-lg">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-              <p class="text-gray-300 text-sm">Surat Thani Technical College</p>
+
+            <p class="muted">สิ่งอำนวยความสะดวก: ห้องปฏิบัติการ, ห้องประชุม, มุมทำงานกลุ่ม, พื้นที่แสดงผลงาน</p>
+
+            <div style="display:flex;gap:10px;margin-top:8px;">
+              <button class="btn">ดาวน์โหลดแผนที่</button>
+              <button class="btn primary">จองห้อง</button>
+            </div>
+
+            <div style="margin-top:12px">
+              <small class="muted">เวลาทำการ: จันทร์-ศุกร์ 08:30 - 17:00</small>
             </div>
           </div>
-        </div>
-        
-        <div class="text-center md:text-right">
-          <p class="text-white text-base">© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-          <p class="text-gray-300 text-sm mt-1">นวัตกรรมการนำทางด้วยเทคโนโลยีล้ำสมัย</p>
-        </div>
+        </aside>
       </div>
-    </div>
-  </footer>
 
-  <!-- QR Code Modal -->
-  <div id="qr-modal" class="modal">
-    <div class="modal-content max-w-xs">
-      <button onclick="closeQRModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-xl mb-4 text-white">QR Code</h3>
-      <div id="qrcode" class="mx-auto mb-4"></div>
-      <p class="text-gray-300 text-sm">สแกนเพื่อเข้าถึงระบบนำทาง</p>
-    </div>
-  </div>
-
-  <!-- Navigation Destination Modal -->
-  <div id="navigation-modal" class="modal">
-    <div class="modal-content max-w-4xl w-full">
-      <button onclick="closeNavigationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-xl mb-6 text-white text-center">เลือกจุดหมายปลายทาง</h3>
-      <form id="navigation-form">
-        <div class="mb-5">
-          <label class="block text-gray-200 mb-3 font-medium" for="destination-building">เลือกอาคาร</label>
-          <div class="custom-select">
-            <select id="destination-building" required onchange="updateFloorTabs()">
-              <option value="">เลือกอาคาร</option>
-              <option value="อาคาร 6">อาคาร 6 (แผนกเทคโนโลยีสารสนเทศ)</option>
-              <option value="อาคาร 1">อาคาร 1 (แผนกช่างกลโรงงาน)</option>
-              <option value="อาคาร 2">อาคาร 2 (แผนกไฟฟ้ากำลัง)</option>
-              <option value="อาคาร 3">อาคาร 3 (แผนกอิเล็กทรอนิกส์)</option>
-              <option value="อาคาร 4">อาคาร 4 (แผนกยานยนต์)</option>
-            </select>
-          </div>
+      <section>
+        <div class="section-title">
+          <h3 style="margin:0">สิ่งอำนวยความสะดวก</h3>
+          <small class="muted">สำรวจห้องและบริการต่าง ๆ</small>
         </div>
-        
-        <div class="mb-6">
-          <label class="block text-gray-200 mb-3 font-medium">เลือกชั้นและห้อง</label>
-          
-          <!-- Floor Tabs -->
-          <div class="floor-tabs" id="floor-tabs">
-            <!-- Floor tabs will be dynamically populated here -->
-          </div>
-          
-          <!-- Floor Contents -->
-          <div id="floor-contents">
-            <!-- Floor contents will be dynamically populated here -->
-          </div>
-          
-          <input type="hidden" id="selected-room" required>
+        <div class="facilities">
+          <div class="facility"><span class="mi material-icons-outlined">computer</span><div><strong>ห้องปฏิบัติการ</strong><p class="muted">เครื่องคอมพิวเตอร์มาตรฐาน พร้อมซอฟต์แวร์สอน</p></div></div>
+          <div class="facility"><span class="mi material-icons-outlined">wifi</span><div><strong>เครือข่ายไวไฟ</strong><p class="muted">สัญญาณครอบคลุมทั้งอาคาร</p></div></div>
+          <div class="facility"><span class="mi material-icons-outlined">meeting_room</span><div><strong>ห้องประชุม</strong><p class="muted">ระบบโปรเจคเตอร์ และวิดีโอคอนเฟอเรนซ์</p></div></div>
+          <div class="facility"><span class="mi material-icons-outlined">people</span><div><strong>พื้นที่ทำงานกลุ่ม</strong><p class="muted">โต๊ะและปลั๊กสำหรับทีม</p></div></div>
         </div>
-        
-        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-xl font-semibold hover:from-primary-dark hover:to-primary transition-all shadow-lg flex items-center justify-center glow">
-          <i data-lucide="navigation" class="w-5 h-5 mr-2"></i>
-          เริ่มนำทาง
-        </button>
-      </form>
-      
-      <p class="text-center text-gray-300 mt-5 text-sm">
-        ระบบจะเปิดกล้องและแสดงเส้นทางนำทางแบบเรียลไทม์
-      </p>
-    </div>
-  </div>
+      </section>
 
-  <!-- Map Modal -->
-  <div id="map-modal" class="modal">
-    <div class="modal-content max-w-4xl w-full">
-      <button onclick="closeMapModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-300">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <h3 class="font-bold text-xl mb-6 text-white text-center">แผนที่วิทยาลัย 3D</h3>
-      
-      <div class="map-container mb-6">
-        <div class="w-full h-full flex items-center justify-center text-white text-lg">
-          <div class="text-center">
-            <div class="emblem-container mx-auto mb-4">
-              <div class="emblem-text">
-                ตร<br>วท
-              </div>
+      <section>
+        <div class="section-title">
+          <h3 style="margin:0">แกลเลอรี</h3>
+          <small class="muted">รูปภาพตัวอย่าง</small>
+        </div>
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=000" alt="lab">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=111" alt="room">
+          <img src="https://images.unsplash.com/photo-1581091012184-7b61f6dfb6a9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=222" alt="students">
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h3 style="margin:0">ติดต่อ / ที่ตั้ง</h3>
+          <small class="muted">ข้อมูลการติดต่อและแผนที่</small>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start">
+          <div class="hero-card">
+            <h4 style="margin-top:0">แผนที่และการเดินทาง</h4>
+            <p class="muted">ที่อยู่: 123 ถนนการศึกษา เขตตัวอย่าง จังหวัดตัวอย่าง 12345</p>
+            <p class="muted">โทร: 0-1234-5678 • อีเมล: it-dept@example.edu</p>
+            <div style="height:220px;border-radius:12px;background:linear-gradient(90deg,#e9f1ff,#ffffff);display:grid;place-items:center;color:var(--primary);margin-top:12px">Map (ฝัง Google Maps)</div>
+          </div>
+
+          <aside class="hero-card">
+            <h4 style="margin:0 0 8px 0">เวลาทำการ</h4>
+            <p class="muted">ดูแลโดยเจ้าหน้าที่ต้อนรับทุกวันทำการ</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+              <div style="display:flex;justify-content:space-between"><small>จันทร์-ศุกร์</small><strong>08:30 - 17:00</strong></div>
+              <div style="display:flex;justify-content:space-between"><small>เสาร์</small><strong>09:00 - 12:00</strong></div>
+              <div style="display:flex;justify-content:space-between"><small>อาทิตย์</small><strong>ปิด</strong></div>
             </div>
-            <p>แผนที่ 3D กำลังโหลด...</p>
-            <p class="text-gray-300 text-sm mt-2">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="flex flex-wrap gap-3 justify-center">
-        <button class="nav-button secondary" onclick="rotateMap()">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-          <span>หมุนมุมมอง</span>
-        </button>
-        <button class="nav-button secondary" onclick="zoomMap()">
-          <i data-lucide="zoom-in" class="w-4 h-4"></i>
-          <span>ขยายแผนที่</span>
-        </button>
-        <button class="nav-button primary" onclick="closeMapModal(); openNavigationModal();">
-          <i data-lucide="navigation" class="w-4 h-4"></i>
-          <span>เริ่มนำทาง</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Navigation AR View -->
-  <div id="navigation-ar-view">
-    <video id="camera-view" autoplay playsinline></video>
-    <div class="camera-overlay">
-      <div class="text-center text-white mb-8">
-        <div class="emblem-container mx-auto mb-4">
-          <div class="emblem-text">
-            ตร<br>วท
-          </div>
-        </div>
-        <p class="text-xl font-semibold">วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-        <p class="text-gray-300 mt-2">เดินตามเส้นทางสีเขียวเพื่อไปยังจุดหมาย</p>
-      </div>
-    </div>
-    
-    <div class="navigation-header">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center">
-          <div class="emblem-container mr-3" style="width: 40px; height: 40px;">
-            <div class="emblem-text" style="font-size: 0.8rem;">
-              ตร<br>วท
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn">ส่งคำถาม</button>
+              <button class="btn primary">โทรหาเรา</button>
             </div>
-          </div>
-          <div>
-            <h2 class="text-white text-lg font-bold">วิทยาลัยเทคนิคสุราษฎร์ธานี</h2>
-            <p class="text-gray-300 text-sm">ระบบนำทาง AR</p>
-          </div>
+          </aside>
         </div>
-        <div class="flex items-center space-x-2">
-          <div class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-            <i data-lucide="wifi" class="w-3 h-3 inline mr-1"></i>
-            ออนไลน์
-          </div>
+      </section>
+
+      <footer>
+        <div class="muted">© 2568 แผนกเทคโนโลยีสารสนเทศ — วิทยาลัยของคุณ</div>
+        <div>
+          <small class="muted">ออกแบบแบบมินิมอล • โทนสี วิทยาลัย (ขาว - น้ำเงิน)</small>
         </div>
-      </div>
-    </div>
-    
-    <div class="navigation-info">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-white text-lg">นำทางไปยัง</h3>
-        <span id="distance-indicator" class="bg-green-500 text-white px-2 py-1 rounded-full text-sm font-medium">150m</span>
-      </div>
-      <p id="destination-info" class="text-white mb-3">อาคาร 6 - ลานกีฬาต้านยาเสพติด</p>
-      
-      <div class="progress-container">
-        <div id="navigation-progress" class="progress-bar" style="width: 30%"></div>
-      </div>
-      
-      <div class="flex justify-between items-center text-gray-300 text-sm">
-        <div class="flex items-center">
-          <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
-          <span id="time-indicator">ประมาณ 3 นาที</span>
-        </div>
-        <div class="flex items-center">
-          <i data-lucide="user" class="w-4 h-4 mr-1"></i>
-          <span>เดิน</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="navigation-path" id="navigation-path">
-      <!-- Path elements will be added here dynamically -->
-    </div>
-    
-    <div class="navigation-controls">
-      <button onclick="closeNavigationAR()" class="nav-button secondary">
-        <i data-lucide="x" class="w-4 h-4"></i>
-        <span>หยุดนำทาง</span>
-      </button>
-      <button onclick="toggleNavigationInstructions()" class="nav-button primary">
-        <i data-lucide="info" class="w-4 h-4"></i>
-        <span>คำแนะนำ</span>
-      </button>
-    </div>
+      </footer>
+
+    </main>
   </div>
 
   <script>
-    // Initialize Lucide icons
-    lucide.createIcons();
-
-    // Navigation state
-    let navigationActive = false;
-    let currentDestination = null;
-    let navigationInterval = null;
-    let cameraStream = null;
-
-    // Room data for Building 6
-    const building6Rooms = {
-      "ลานกีฬา": [
-        { id: 'laan-sport-drug-free', name: 'ลานกีฬาต้านยาเสพติด', type: 'ลานกิจกรรม' }
-      ],
-      "ชั้น 1": [
-        { id: 'room-polymer', name: 'ห้องแผนกวิชาการยางและพอลิเมอร์', type: 'ห้องเรียนแผนกวิชา' },
-        { id: 'room-office', name: 'ห้องธุรการ', type: 'สำนักงาน' }
-      ],
-      "ชั้น 2": [
-        { id: 'room-samun-samphan', name: 'ห้องเรียนแผนกวิชาสามัญสัมพันธ์', type: 'ห้องเรียนแผนกวิชา' },
-        { id: 'room-library', name: 'ห้องสมุด', type: 'ห้องสมุด' }
-      ],
-      "ชั้น 3": [
-        { id: 'room-631', name: 'ห้องเรียน 631', type: 'ห้องเรียน' },
-        { id: 'room-632', name: 'ห้องเรียน 632', type: 'ห้องเรียน' },
-        { id: 'room-633', name: 'ห้องเรียน 633', type: 'ห้องเรียน' },
-        { id: 'room-634', name: 'ห้องเรียน 634', type: 'ห้องเรียน' },
-        { id: 'room-653', name: 'ห้องเรียน 653', type: 'ห้องเรียน' }
-      ],
-      "ชั้น 4": [
-        { id: 'teacher-office', name: 'ห้องพักครู', type: 'ห้องพักครู' },
-        { id: 'lecture-room', name: 'ห้อง Lecture', type: 'ห้องบรรยาย' },
-        { id: 'lab-1', name: 'ห้อง Lab 1', type: 'ห้องปฏิบัติการ' },
-        { id: 'lab-2', name: 'ห้อง Lab 2', type: 'ห้องปฏิบัติการ' },
-        { id: 'lab-3', name: 'ห้อง Lab 3', type: 'ห้องปฏิบัติการ' }
-      ]
-    };
-
-    // Initialize the application
-    window.onload = () => {
-      // Generate QR Code
-      const qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: window.location.href,
-        width: 160,
-        height: 160,
-        colorDark: "#1e40af",
-        colorLight: "#1e293b",
-        correctLevel: QRCode.CorrectLevel.H
-      });
-      
-      // Setup navigation form
-      document.getElementById('navigation-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        startNavigation();
-      });
-      
-      // Add some 3D building elements to the hero section for visual effect
-      addFloatingBuildings();
-      
-      // Initialize floor tabs
-      updateFloorTabs();
-    };
-
-    // Update floor tabs based on selected building
-    function updateFloorTabs() {
-      const buildingSelect = document.getElementById('destination-building');
-      const floorTabsContainer = document.getElementById('floor-tabs');
-      const floorContentsContainer = document.getElementById('floor-contents');
-      const selectedBuilding = buildingSelect.value;
-      
-      floorTabsContainer.innerHTML = '';
-      floorContentsContainer.innerHTML = '';
-      
-      if (selectedBuilding === 'อาคาร 6') {
-        // Create floor tabs
-        const floors = Object.keys(building6Rooms);
-        floors.forEach((floor, index) => {
-          // Create tab
-          const tab = document.createElement('div');
-          tab.className = `floor-tab ${index === 0 ? 'active' : ''}`;
-          tab.dataset.floor = floor;
-          tab.innerHTML = `
-            <i data-lucide="${getFloorIcon(floor)}" class="w-4 h-4"></i>
-            <span>${floor}</span>
-          `;
-          tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            document.querySelectorAll('.floor-tab').forEach(t => {
-              t.classList.remove('active');
-            });
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            // Show corresponding floor content
-            showFloorContent(floor);
-          });
-          floorTabsContainer.appendChild(tab);
-          
-          // Create floor content
-          const floorContent = document.createElement('div');
-          floorContent.className = `floor-content ${index === 0 ? 'active' : ''}`;
-          floorContent.id = `floor-${floor.replace(/\s+/g, '-')}`;
-          
-          const roomOptions = document.createElement('div');
-          roomOptions.className = 'room-options';
-          
-          building6Rooms[floor].forEach(room => {
-            const roomElement = document.createElement('div');
-            roomElement.className = 'room-option';
-            roomElement.innerHTML = `
-              <div class="font-medium text-white">${room.name}</div>
-              <div class="text-xs text-gray-400 mt-1">${room.type}</div>
-            `;
-            roomElement.addEventListener('click', () => {
-              // Remove selected class from all options
-              document.querySelectorAll('.room-option').forEach(opt => {
-                opt.classList.remove('selected');
-              });
-              // Add selected class to clicked option
-              roomElement.classList.add('selected');
-              // Set the selected room value
-              document.getElementById('selected-room').value = room.id;
-            });
-            roomOptions.appendChild(roomElement);
-          });
-          
-          floorContent.appendChild(roomOptions);
-          floorContentsContainer.appendChild(floorContent);
-        });
-        
-        // Refresh icons
-        lucide.createIcons();
-      } else {
-        // For other buildings, show a simple message
-        const floorContent = document.createElement('div');
-        floorContent.className = 'floor-content active';
-        floorContent.innerHTML = `
-          <div class="text-center py-8">
-            <div class="emblem-container mx-auto mb-4">
-              <div class="emblem-text">
-                ตร<br>วท
-              </div>
-            </div>
-            <p class="text-white text-lg mb-4">ระบบกำลังพัฒนาเพิ่มเติมสำหรับอาคารนี้</p>
-            <p class="text-gray-300">ขณะนี้ระบบนำทางสามารถใช้ได้เฉพาะอาคาร 6 เท่านั้น</p>
-          </div>
-        `;
-        floorContentsContainer.appendChild(floorContent);
-      }
-    }
-
-    // Show floor content based on selected tab
-    function showFloorContent(floor) {
-      // Hide all floor contents
-      document.querySelectorAll('.floor-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      
-      // Show selected floor content
-      const floorContent = document.getElementById(`floor-${floor.replace(/\s+/g, '-')}`);
-      if (floorContent) {
-        floorContent.classList.add('active');
-      }
-    }
-
-    // Get appropriate icon for each floor
-    function getFloorIcon(floor) {
-      switch(floor) {
-        case 'ลานกีฬา': return 'activity';
-        case 'ชั้น 1': return 'building';
-        case 'ชั้น 2': return 'building';
-        case 'ชั้น 3': return 'building';
-        case 'ชั้น 4': return 'building';
-        default: return 'map-pin';
-      }
-    }
-
-    // Add floating 3D buildings to hero section
-    function addFloatingBuildings() {
-      const heroSection = document.querySelector('.hero-section');
-      const colors = ['#1e40af', '#3b82f6', '#2563eb', '#1d4ed8'];
-      
-      for (let i = 0; i < 4; i++) {
-        const building = document.createElement('div');
-        building.className = 'building-model';
-        building.style.left = `${15 + i * 20}%`;
-        building.style.bottom = '15%';
-        building.style.background = `linear-gradient(135deg, ${colors[i % colors.length]}, ${colors[(i + 1) % colors.length]})`;
-        building.style.animationDelay = `${i * 0.5}s`;
-        building.style.opacity = '0.7';
-        heroSection.appendChild(building);
-      }
-    }
-
-    // Modal functions
-    function openQRModal() {
-      document.getElementById('qr-modal').classList.add('show');
-    }
-    
-    function closeQRModal() {
-      document.getElementById('qr-modal').classList.remove('show');
-    }
-
-    function openNavigationModal() {
-      document.getElementById('navigation-modal').classList.add('show');
-    }
-    
-    function closeNavigationModal() {
-      document.getElementById('navigation-modal').classList.remove('show');
-    }
-
-    function openMapModal() {
-      document.getElementById('map-modal').classList.add('show');
-    }
-    
-    function closeMapModal() {
-      document.getElementById('map-modal').classList.remove('show');
-    }
-
-    // Start navigation with camera
-    function startNavigation() {
-      const building = document.getElementById('destination-building').value;
-      const roomId = document.getElementById('selected-room').value;
-      
-      if (!building) {
-        alert("กรุณาเลือกอาคาร");
-        return;
-      }
-      
-      if (building !== 'อาคาร 6') {
-        showSuccess("ระบบกำลังพัฒนา", "ขณะนี้ระบบนำทางสามารถใช้ได้เฉพาะอาคาร 6 เท่านั้น");
-        return;
-      }
-      
-      if (!roomId) {
-        alert("กรุณาเลือกห้องหรือสถานที่");
-        return;
-      }
-      
-      // Find the selected room
-      let selectedRoom = null;
-      for (const floor in building6Rooms) {
-        selectedRoom = building6Rooms[floor].find(room => room.id === roomId);
-        if (selectedRoom) break;
-      }
-      
-      if (!selectedRoom) {
-        alert("ไม่พบข้อมูลห้องที่เลือก");
-        return;
-      }
-      
-      currentDestination = {
-        building: building,
-        room: selectedRoom.name,
-        fullName: `${building} - ${selectedRoom.name}`
-      };
-      
-      closeNavigationModal();
-      
-      // Show loading message
-      showSuccess("กำลังเริ่มนำทาง", `นำทางไปยัง ${currentDestination.fullName}`);
-      
-      // Start navigation after a short delay
-      setTimeout(() => {
-        startARNavigation();
-      }, 1500);
-    }
-
-    // Start AR Navigation with camera
-    async function startARNavigation() {
-      const navView = document.getElementById('navigation-ar-view');
-      const cameraView = document.getElementById('camera-view');
-      
-      try {
-        // Request camera access
-        cameraStream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment' } 
-        });
-        
-        // Set camera stream to video element
-        cameraView.srcObject = cameraStream;
-        
-        // Update destination info
-        document.getElementById('destination-info').textContent = currentDestination.fullName;
-        
-        // Show AR view
-        navView.style.display = 'flex';
-        navigationActive = true;
-        
-        // Start drawing navigation path
-        drawNavigationPath();
-        
-        // Start simulation of navigation updates
-        simulateNavigationUpdates();
-        
-      } catch (error) {
-        console.error("Camera error:", error);
-        // Fallback to simulated camera view
-        document.getElementById('destination-info').textContent = currentDestination.fullName;
-        navView.style.display = 'flex';
-        navigationActive = true;
-        drawNavigationPath();
-        simulateNavigationUpdates();
-        
-        showSuccess("เปิดใช้งานกล้องไม่สำเร็จ", "ระบบจะแสดงเส้นทางนำทางโดยไม่ใช้กล้อง");
-      }
-    }
-
-    // Draw navigation path
-    function drawNavigationPath() {
-      if (!navigationActive) return;
-      
-      const pathContainer = document.getElementById('navigation-path');
-      
-      // Clear previous path
-      pathContainer.innerHTML = '';
-      
-      // Create a curved path
-      const startX = window.innerWidth / 2;
-      const startY = window.innerHeight - 100;
-      const endX = window.innerWidth / 2;
-      const endY = 200;
-      
-      // Draw path line
-      const pathLine = document.createElement('div');
-      pathLine.className = 'path-line';
-      pathLine.style.width = '350px';
-      pathLine.style.height = '6px';
-      pathLine.style.left = (startX - 175) + 'px';
-      pathLine.style.top = (startY - 3) + 'px';
-      pathLine.style.transform = 'rotate(-5deg)';
-      pathContainer.appendChild(pathLine);
-      
-      // Draw path dots
-      for (let i = 0; i < 6; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'path-dot';
-        dot.style.left = (startX - 6 + Math.sin(i * 0.5) * 25) + 'px';
-        dot.style.top = (startY - 80 - i * 80) + 'px';
-        dot.style.animationDelay = `${i * 0.3}s`;
-        pathContainer.appendChild(dot);
-      }
-      
-      // Draw arrow at the end
-      const arrow = document.createElement('div');
-      arrow.innerHTML = '<i data-lucide="arrow-up" class="w-8 h-8 text-green-400"></i>';
-      arrow.style.position = 'absolute';
-      arrow.style.left = (endX - 16) + 'px';
-      arrow.style.top = (endY - 16) + 'px';
-      arrow.style.filter = 'drop-shadow(0 0 10px #10b981)';
-      arrow.style.animation = 'pulse 2s infinite';
-      pathContainer.appendChild(arrow);
-      
-      // Refresh icons
-      lucide.createIcons();
-      
-      // Continue animation
-      requestAnimationFrame(drawNavigationPath);
-    }
-
-    // Simulate navigation updates
-    function simulateNavigationUpdates() {
-      if (!navigationActive) return;
-      
-      // Simulate decreasing distance
-      let distance = 150;
-      let progress = 30;
-      
-      navigationInterval = setInterval(() => {
-        if (!navigationActive) {
-          clearInterval(navigationInterval);
-          return;
-        }
-        
-        distance -= 2;
-        progress += 1;
-        
-        // Update progress bar
-        document.getElementById('navigation-progress').style.width = `${progress}%`;
-        
-        // Update distance and time
-        document.getElementById('distance-indicator').textContent = `${distance}m`;
-        const time = Math.max(1, Math.round(distance / 50));
-        document.getElementById('time-indicator').textContent = `ประมาณ ${time} นาที`;
-        
-        if (distance <= 10) {
-          // Destination reached
-          clearInterval(navigationInterval);
-          showSuccess("ถึงจุดหมายแล้ว", `คุณได้มาถึง ${currentDestination.fullName} แล้ว`);
-          setTimeout(() => {
-            closeNavigationAR();
-          }, 3000);
-        }
-      }, 1000);
-    }
-
-    // Close navigation AR view
-    function closeNavigationAR() {
-      const navView = document.getElementById('navigation-ar-view');
-      
-      // Stop camera stream
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-        cameraStream = null;
-      }
-      
-      navView.style.display = 'none';
-      navigationActive = false;
-      currentDestination = null;
-      
-      if (navigationInterval) {
-        clearInterval(navigationInterval);
-      }
-    }
-
-    // Toggle navigation instructions
-    function toggleNavigationInstructions() {
-      showSuccess("คำแนะนำการใช้งาน", "เดินตามเส้นทางสีเขียวที่ปรากฏบนหน้าจอ จนกว่าจะถึงจุดหมายปลายทาง");
-    }
-
-    // Map controls
-    function rotateMap() {
-      showSuccess("หมุนมุมมองแผนที่", "คุณสามารถหมุนมุมมองแผนที่ 3D ได้ด้วยการลากเมาส์");
-    }
-    
-    function zoomMap() {
-      showSuccess("ขยายแผนที่", "คุณสามารถขยายแผนที่ได้ด้วยการเลื่อนเมาส์หรือใช้ปุ่มควบคุม");
-    }
-
-    // Success message
-    function showSuccess(title, message) {
-      // Create a custom notification
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-600 text-white p-4 rounded-2xl shadow-xl z-50 max-w-sm';
-      notification.innerHTML = `
-        <div class="flex items-start">
-          <div class="emblem-container mr-3 flex-shrink-0" style="width: 30px; height: 30px;">
-            <div class="emblem-text" style="font-size: 0.7rem;">
-              ตร<br>วท
-            </div>
-          </div>
-          <div>
-            <h4 class="font-bold">${title}</h4>
-            <p class="text-white/90 text-sm mt-1">${message}</p>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(notification);
-      
-      // Remove after 3 seconds
-      setTimeout(() => {
-        notification.remove();
-      }, 3000);
-    }
+    // small JS: accessible keyboard focus for cards (example)
+    document.querySelectorAll('.mini, .facility').forEach(el=>{
+      el.setAttribute('tabindex','0');
+      el.addEventListener('keydown', e=>{ if(e.key === 'Enter') el.click(); });
+    });
   </script>
 </body>
 </html>
