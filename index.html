@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRTC|Navigation</title>
+    <title>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,8 @@
             --success-green: #4caf50;
             --warning-orange: #ff9800;
             --error-red: #f44336;
+            --purple: #9c27b0;
+            --teal: #009688;
         }
 
         * {
@@ -390,6 +392,22 @@
 
         .btn-warning:hover {
             background-color: #f57c00;
+        }
+
+        .btn-purple {
+            background-color: var(--purple);
+        }
+
+        .btn-purple:hover {
+            background-color: #7b1fa2;
+        }
+
+        .btn-teal {
+            background-color: var(--teal);
+        }
+
+        .btn-teal:hover {
+            background-color: #00796b;
         }
 
         /* Cards Section */
@@ -992,16 +1010,535 @@
             margin-top: 10px;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+        /* Floating Action Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-end;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .floating-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-hover);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .floating-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(63, 81, 181, 0.4);
+        }
+
+        .floating-button:active {
+            transform: scale(0.95);
+        }
+
+        .floating-button.share {
+            background: linear-gradient(135deg, var(--purple) 0%, #ba68c8 100%);
+        }
+
+        .floating-button.events {
+            background: linear-gradient(135deg, var(--teal) 0%, #4db6ac 100%);
+        }
+
+        .floating-button-label {
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .floating-button:hover .floating-button-label {
+            opacity: 1;
+            visibility: visible;
+            right: 75px;
+        }
+
+        /* Share Position Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1300;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .share-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .share-modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-modal-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--purple) 0%, #ba68c8 100%);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            position: relative;
+        }
+
+        .share-modal-header h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .share-modal-header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .share-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .share-modal-body {
+            padding: 30px;
+        }
+
+        .share-room-select {
+            margin-bottom: 30px;
+        }
+
+        .share-room-select h4 {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .room-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .room-select-item {
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius-small);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .room-select-item:hover {
+            background-color: #e0e0ff;
+            transform: translateY(-3px);
+        }
+
+        .room-select-item.selected {
+            background-color: #e8eaff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.2);
+        }
+
+        .room-select-item h5 {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .room-select-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .share-options {
+            margin-bottom: 30px;
+        }
+
+        .share-options h4 {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .share-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            flex: 1;
+            min-width: 120px;
+            background-color: var(--light-blue);
+            border: none;
+            border-radius: var(--border-radius-small);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-blue);
+        }
+
+        .share-btn:hover {
+            background-color: #e0e0ff;
+            transform: translateY(-3px);
+        }
+
+        .share-btn i {
+            font-size: 1.8rem;
+        }
+
+        .share-btn span {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .share-btn.link {
+            color: var(--accent-blue);
+        }
+
+        .share-btn.copy {
+            color: var(--success-green);
+        }
+
+        .share-btn.qr {
+            color: var(--purple);
+        }
+
+        .share-link-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .share-link-container.active {
+            display: block;
+        }
+
+        .share-link-box {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .share-link-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .share-link-copy {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .share-link-copy:hover {
+            background-color: var(--primary-blue);
+        }
+
+        .share-qr-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .share-qr-container.active {
+            display: block;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: #f5f5f5;
+            border-radius: var(--border-radius-small);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Activities Modal */
+        .activities-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1300;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .activities-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .activities-modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .activities-modal-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--teal) 0%, #4db6ac 100%);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            position: relative;
+        }
+
+        .activities-modal-header h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .activities-modal-header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .activities-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activities-modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .activities-modal-body {
+            padding: 30px;
+        }
+
+        .activities-filter {
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            background-color: var(--light-blue);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 500;
+            color: var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #e0e0ff;
+        }
+
+        .filter-btn.active {
+            background-color: var(--teal);
+            color: white;
+        }
+
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .activity-card {
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--teal);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .activity-card.upcoming {
+            border-left-color: var(--success-green);
+        }
+
+        .activity-card.ongoing {
+            border-left-color: var(--warning-orange);
+        }
+
+        .activity-card.completed {
+            border-left-color: var(--gray);
+            opacity: 0.8;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .activity-title {
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+
+        .activity-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .activity-badge {
+            background-color: var(--teal);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .activity-badge.upcoming {
+            background-color: var(--success-green);
+        }
+
+        .activity-badge.ongoing {
+            background-color: var(--warning-orange);
+        }
+
+        .activity-badge.completed {
+            background-color: var(--gray);
+        }
+
+        .activity-description {
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .activity-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .activity-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .activity-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         /* Contact */
@@ -1111,6 +1648,18 @@
             font-size: 0.9rem;
         }
 
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             .hero h2 {
@@ -1129,6 +1678,11 @@
             .hero-image {
                 height: 350px;
                 order: -1;
+            }
+            
+            .activities-modal-content,
+            .share-modal-content {
+                width: 95%;
             }
         }
 
@@ -1213,6 +1767,30 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .floating-buttons {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .floating-button {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+            }
+            
+            .activity-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .room-select-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1265,6 +1843,27 @@
                 width: 40px;
                 height: 40px;
             }
+            
+            .floating-buttons {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .floating-button {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .share-modal-header,
+            .activities-modal-header {
+                padding: 20px;
+            }
+            
+            .share-modal-body,
+            .activities-modal-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -1301,16 +1900,14 @@
         <div class="container">
             <div class="hero-container">
                 <div class="hero-content">
-                    <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
-                    <p>เทคโนโลยีสารสนเทศ หรือไอที เป็นการประยุกต์ใช้คอมพิวเตอร์และอุปกรณ์โทรคมนาคม เพื่อจัดเก็บ ค้นหา ส่งผ่าน และจัดดำเนินการข้อมูล โดยปกติใช้แทนความหมายของเครื่องคอมพิวเตอร์และเครือข่ายคอมพิวเตอร์ และยังรวมไปถึงเทคโนโลยีการกระจายสารสนเทศอย่างอื่นด้วย
-
-</p>
+                    <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
+                    <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
                     <a href="#teachers" class="btn">พบกับคณะอาจารย์</a>
                     <a href="#contact" class="btn btn-outline" style="margin-left: 15px;">ติดต่อเรา</a>
                 </div>
                 <div class="hero-image" id="heroImage">
                     <!-- รูปภาพอาคารเรียนจากลิงก์ที่ให้มา -->
-                    <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01092-scaled-e1669201178704-1024x509.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                    <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
                     <!-- ลูกศรสำหรับขยายรูปภาพ -->
                     <div class="expand-icon" data-image="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" data-title="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
                         <i class="fas fa-expand-arrows-alt"></i>
@@ -1723,6 +2320,21 @@
         </div>
     </footer>
 
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <!-- Activities Button -->
+        <button class="floating-button events" id="activitiesBtn">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="floating-button-label">กิจกรรม Upcoming</span>
+        </button>
+        
+        <!-- Share Position Button -->
+        <button class="floating-button share" id="shareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span class="floating-button-label">แชร์ตำแหน่งห้อง</span>
+        </button>
+    </div>
+
     <!-- Modal สำหรับแสดงรูปภาพเต็มหน้าจอ -->
     <div class="image-modal" id="imageModal">
         <div class="modal-content">
@@ -1805,6 +2417,89 @@
                     <p id="navigationInfo">เดินตรงไปข้างหน้า 15 เมตร</p>
                     <p id="currentStep">ขั้นตอนที่ 1/3: จากทางเข้าอาคาร</p>
                     <div class="distance-indicator" id="distanceIndicator">เหลืออีก 25 เมตร</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับแชร์ตำแหน่งห้อง -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3><i class="fas fa-share-alt"></i> แชร์ตำแหน่งห้องกับเพื่อน</h3>
+                <p>เลือกห้องและวิธีการแชร์ตำแหน่งกับเพื่อนของคุณ</p>
+                <button class="share-modal-close" id="shareModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="share-modal-body">
+                <div class="share-room-select">
+                    <h4><i class="fas fa-door-open"></i> เลือกห้องที่ต้องการแชร์</h4>
+                    <div class="room-select-grid" id="roomSelectGrid">
+                        <!-- Rooms will be added dynamically -->
+                    </div>
+                </div>
+                
+                <div class="share-options">
+                    <h4><i class="fas fa-share-square"></i> วิธีการแชร์</h4>
+                    <div class="share-buttons">
+                        <button class="share-btn link" id="shareLinkBtn">
+                            <i class="fas fa-link"></i>
+                            <span>สร้างลิงก์แชร์</span>
+                        </button>
+                        <button class="share-btn copy" id="shareCopyBtn">
+                            <i class="fas fa-copy"></i>
+                            <span>คัดลอกข้อมูล</span>
+                        </button>
+                        <button class="share-btn qr" id="shareQrBtn">
+                            <i class="fas fa-qrcode"></i>
+                            <span>สร้าง QR Code</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Link Share Container -->
+                    <div class="share-link-container" id="shareLinkContainer">
+                        <p>ลิงก์สำหรับแชร์:</p>
+                        <div class="share-link-box">
+                            <input type="text" class="share-link-input" id="shareLinkInput" readonly>
+                            <button class="share-link-copy" id="shareLinkCopyBtn">คัดลอก</button>
+                        </div>
+                    </div>
+                    
+                    <!-- QR Code Container -->
+                    <div class="share-qr-container" id="shareQrContainer">
+                        <p>สแกน QR Code เพื่อดูตำแหน่งห้อง:</p>
+                        <div class="qr-code" id="qrCode">
+                            <i class="fas fa-qrcode fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับกิจกรรม Upcoming -->
+    <div class="activities-modal" id="activitiesModal">
+        <div class="activities-modal-content">
+            <div class="activities-modal-header">
+                <h3><i class="fas fa-calendar-alt"></i> กิจกรรม Upcoming</h3>
+                <p>กิจกรรมที่น่าสนใจและกำลังจะมาถึงของแผนกเทคโนโลยีสารสนเทศ</p>
+                <button class="activities-modal-close" id="activitiesModalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="activities-modal-body">
+                <div class="activities-filter">
+                    <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+                    <button class="filter-btn" data-filter="upcoming">กำลังจะมาถึง</button>
+                    <button class="filter-btn" data-filter="ongoing">กำลังจัด</button>
+                    <button class="filter-btn" data-filter="completed">จบแล้ว</button>
+                </div>
+                
+                <div class="activities-list" id="activitiesList">
+                    <!-- Activities will be added dynamically -->
                 </div>
             </div>
         </div>
@@ -2301,7 +2996,6 @@
         let currentRoom = null;
         let currentStepIndex = 0;
         let isListening = false;
-        let voiceRecognition = null;
 
         // เปิดโมดัลระบบนำทาง
         function openNavigationModal(roomId) {
@@ -2533,15 +3227,466 @@
                     cameraModal.classList.remove('active');
                     document.body.style.overflow = 'auto';
                 }
+                if (shareModal.classList.contains('active')) {
+                    closeShareModal();
+                }
+                if (activitiesModal.classList.contains('active')) {
+                    closeActivitiesModal();
+                }
             }
         });
 
         // ตั้งค่าเริ่มต้นสำหรับระบบนำทางด้วยกล้อง
         updateNavigationInfo();
+
+        // ระบบแชร์ตำแหน่งห้อง
+        const shareModal = document.getElementById('shareModal');
+        const shareBtn = document.getElementById('shareBtn');
+        const shareModalClose = document.getElementById('shareModalClose');
+        const roomSelectGrid = document.getElementById('roomSelectGrid');
+        const shareLinkBtn = document.getElementById('shareLinkBtn');
+        const shareCopyBtn = document.getElementById('shareCopyBtn');
+        const shareQrBtn = document.getElementById('shareQrBtn');
+        const shareLinkContainer = document.getElementById('shareLinkContainer');
+        const shareQrContainer = document.getElementById('shareQrContainer');
+        const shareLinkInput = document.getElementById('shareLinkInput');
+        const shareLinkCopyBtn = document.getElementById('shareLinkCopyBtn');
+        const qrCode = document.getElementById('qrCode');
+
+        let selectedRoomId = null;
+
+        // เปิดโมดัลแชร์ตำแหน่งห้อง
+        function openShareModal() {
+            // เติมข้อมูลห้องในตารางเลือก
+            populateRoomSelectGrid();
+            
+            // ล้างการเลือกห้อง
+            selectedRoomId = null;
+            
+            // ซ่อน containers ทั้งหมด
+            shareLinkContainer.classList.remove('active');
+            shareQrContainer.classList.remove('active');
+            
+            // แสดงโมดัล
+            shareModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ปิดโมดัลแชร์ตำแหน่งห้อง
+        function closeShareModal() {
+            shareModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // เติมข้อมูลห้องในตารางเลือก
+        function populateRoomSelectGrid() {
+            roomSelectGrid.innerHTML = '';
+            
+            // สร้างรายการห้องจาก roomData
+            for (const [roomId, room] of Object.entries(roomData)) {
+                const roomItem = document.createElement('div');
+                roomItem.className = 'room-select-item';
+                roomItem.dataset.roomId = roomId;
+                roomItem.innerHTML = `
+                    <h5>${room.name}</h5>
+                    <p>ชั้น ${room.floor}</p>
+                `;
+                
+                roomItem.addEventListener('click', function() {
+                    // ล้างการเลือกเก่า
+                    document.querySelectorAll('.room-select-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // เลือกห้องใหม่
+                    this.classList.add('selected');
+                    selectedRoomId = roomId;
+                    
+                    // ซ่อน containers ทั้งหมด
+                    shareLinkContainer.classList.remove('active');
+                    shareQrContainer.classList.remove('active');
+                });
+                
+                roomSelectGrid.appendChild(roomItem);
+            }
+        }
+
+        // สร้างลิงก์สำหรับแชร์
+        function generateShareLink(roomId) {
+            const room = roomData[roomId];
+            if (!room) return '#';
+            
+            // ในเว็บจริงจะสร้างลิงก์ที่ชี้ไปยังตำแหน่งห้อง
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?room=${roomId}&name=${encodeURIComponent(room.name)}&floor=${room.floor}`;
+        }
+
+        // สร้างข้อมูลสำหรับคัดลอก
+        function generateShareText(roomId) {
+            const room = roomData[roomId];
+            if (!room) return '';
+            
+            return `ตำแหน่งห้อง: ${room.name}
+ชั้น: ${room.floor}
+วิทยาลัยเทคนิคสุราษฎร์ธานี แผนกเทคโนโลยีสารสนเทศ
+ลิงก์แผนที่: ${generateShareLink(roomId)}`;
+        }
+
+        // คัดลอกข้อมูลไปยังคลิปบอร์ด
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('คัดลอกข้อมูลไปยังคลิปบอร์ดแล้ว!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback สำหรับเบราว์เซอร์เก่า
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('คัดลอกข้อมูลไปยังคลิปบอร์ดแล้ว!');
+            });
+        }
+
+        // สร้าง QR Code (จำลอง)
+        function generateQrCode(roomId) {
+            const room = roomData[roomId];
+            if (!room) return;
+            
+            // ในเว็บจริงจะใช้ไลบรารีสร้าง QR Code จริง
+            // ที่นี่จำลองด้วยข้อความ
+            qrCode.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-qrcode fa-4x" style="color: #333; margin-bottom: 15px;"></i>
+                    <p style="font-size: 14px; color: #333; margin: 0;">${room.name}</p>
+                    <p style="font-size: 12px; color: #666; margin: 5px 0 0 0;">ชั้น ${room.floor}</p>
+                </div>
+            `;
+        }
+
+        // เปิดโมดัลแชร์ตำแหน่งห้อง
+        shareBtn.addEventListener('click', openShareModal);
+
+        // ปิดโมดัลแชร์ตำแหน่งห้อง
+        shareModalClose.addEventListener('click', closeShareModal);
+
+        // ปิดโมดัลเมื่อคลิกพื้นหลัง
+        shareModal.addEventListener('click', function(e) {
+            if (e.target === shareModal) {
+                closeShareModal();
+            }
+        });
+
+        // สร้างลิงก์แชร์
+        shareLinkBtn.addEventListener('click', function() {
+            if (!selectedRoomId) {
+                alert('กรุณาเลือกห้องก่อน');
+                return;
+            }
+            
+            const link = generateShareLink(selectedRoomId);
+            shareLinkInput.value = link;
+            shareLinkContainer.classList.add('active');
+            shareQrContainer.classList.remove('active');
+        });
+
+        // คัดลอกข้อมูล
+        shareCopyBtn.addEventListener('click', function() {
+            if (!selectedRoomId) {
+                alert('กรุณาเลือกห้องก่อน');
+                return;
+            }
+            
+            const text = generateShareText(selectedRoomId);
+            copyToClipboard(text);
+        });
+
+        // สร้าง QR Code
+        shareQrBtn.addEventListener('click', function() {
+            if (!selectedRoomId) {
+                alert('กรุณาเลือกห้องก่อน');
+                return;
+            }
+            
+            generateQrCode(selectedRoomId);
+            shareQrContainer.classList.add('active');
+            shareLinkContainer.classList.remove('active');
+        });
+
+        // คัดลอกลิงก์
+        shareLinkCopyBtn.addEventListener('click', function() {
+            const link = shareLinkInput.value;
+            if (link && link !== '#') {
+                copyToClipboard(link);
+            }
+        });
+
+        // ระบบกิจกรรม Upcoming
+        const activitiesModal = document.getElementById('activitiesModal');
+        const activitiesBtn = document.getElementById('activitiesBtn');
+        const activitiesModalClose = document.getElementById('activitiesModalClose');
+        const activitiesList = document.getElementById('activitiesList');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // ข้อมูลกิจกรรม
+        const activitiesData = [
+            {
+                id: 1,
+                title: "ค่ายพัฒนาโปรแกรมขั้นสูง",
+                description: "ค่ายพัฒนาโปรแกรมสำหรับนักศึกษาชั้นปีที่ 3-4 เพื่อเรียนรู้เทคโนโลยีใหม่ๆ และพัฒนาทักษะการเขียนโปรแกรม",
+                date: "2025-03-15",
+                time: "09:00 - 16:00",
+                location: "ห้อง Lab 1 ชั้น 4",
+                type: "upcoming",
+                category: "การเรียนการสอน"
+            },
+            {
+                id: 2,
+                title: "แข่งขันโปรแกรมมิ่ง IT Contest 2025",
+                description: "การแข่งขันเขียนโปรแกรมระดับแผนก โดยมีรางวัลสำหรับทีมที่ชนะเลิศ",
+                date: "2025-03-22",
+                time: "13:00 - 17:00",
+                location: "ห้องเรียน 633 ชั้น 3",
+                type: "upcoming",
+                category: "การแข่งขัน"
+            },
+            {
+                id: 3,
+                title: "อบรมระบบเครือข่ายขั้นสูง",
+                description: "การอบรมระบบเครือข่ายสำหรับอาจารย์และนักศึกษาที่สนใจ โดยวิทยากรจากบริษัท Aruba",
+                date: "2025-03-10",
+                time: "08:30 - 16:30",
+                location: "ห้อง Lecture ชั้น 4",
+                type: "ongoing",
+                category: "การอบรม"
+            },
+            {
+                id: 4,
+                title: "โครงการจิตอาสาพัฒนาห้องปฏิบัติการ",
+                description: "กิจกรรมจิตอาสาทำความสะอาดและพัฒนาห้องปฏิบัติการคอมพิวเตอร์",
+                date: "2025-03-05",
+                time: "08:00 - 12:00",
+                location: "ห้องปฏิบัติการทุกห้อง",
+                type: "completed",
+                category: "กิจกรรมพิเศษ"
+            },
+            {
+                id: 5,
+                title: "สัมมนาเทคโนโลยี AI กับการศึกษา",
+                description: "การสัมมนาเกี่ยวกับการประยุกต์ใช้เทคโนโลยี AI ในการจัดการเรียนการสอน",
+                date: "2025-03-28",
+                time: "10:00 - 15:00",
+                location: "ห้อง Lecture ชั้น 4",
+                type: "upcoming",
+                category: "การสัมมนา"
+            },
+            {
+                id: 6,
+                title: "โครงการสอนเสริมฐานข้อมูล",
+                description: "การสอนเสริมวิชาฐานข้อมูลสำหรับนักศึกษาที่ต้องการเพิ่มความเข้าใจ",
+                date: "2025-03-12",
+                time: "16:00 - 18:00",
+                location: "ห้องเรียน 632 ชั้น 3",
+                type: "ongoing",
+                category: "การเรียนการสอน"
+            },
+            {
+                id: 7,
+                title: "นิทรรศการผลงานนักศึกษา",
+                description: "แสดงผลงานโปรเจคของนักศึกษาแผนกเทคโนโลยีสารสนเทศ",
+                date: "2025-02-28",
+                time: "09:00 - 16:00",
+                location: "ล็อบบี้อาคาร",
+                type: "completed",
+                category: "นิทรรศการ"
+            },
+            {
+                id: 8,
+                title: "อบรมการใช้ Google Workspace",
+                description: "การอบรมการใช้เครื่องมือ Google Workspace สำหรับการทำงานและการเรียน",
+                date: "2025-03-18",
+                time: "13:00 - 16:00",
+                location: "ห้องเรียน 631 ชั้น 3",
+                type: "upcoming",
+                category: "การอบรม"
+            }
+        ];
+
+        // เปิดโมดัลกิจกรรม
+        function openActivitiesModal() {
+            // โหลดกิจกรรมทั้งหมด
+            loadActivities('all');
+            
+            // แสดงโมดัล
+            activitiesModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ปิดโมดัลกิจกรรม
+        function closeActivitiesModal() {
+            activitiesModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // โหลดกิจกรรมตามประเภท
+        function loadActivities(filter) {
+            activitiesList.innerHTML = '';
+            
+            // กรองกิจกรรม
+            let filteredActivities = activitiesData;
+            if (filter !== 'all') {
+                filteredActivities = activitiesData.filter(activity => activity.type === filter);
+            }
+            
+            // เรียงลำดับตามวันที่ (จากอนาคตไปอดีต)
+            filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // สร้างการ์ดกิจกรรม
+            filteredActivities.forEach(activity => {
+                const activityCard = document.createElement('div');
+                activityCard.className = `activity-card ${activity.type}`;
+                activityCard.innerHTML = `
+                    <div class="activity-header">
+                        <div>
+                            <h4 class="activity-title">${activity.title}</h4>
+                            <div class="activity-date">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(activity.date)} | ${activity.time}</span>
+                            </div>
+                        </div>
+                        <span class="activity-badge ${activity.type}">
+                            ${getTypeText(activity.type)}
+                        </span>
+                    </div>
+                    <p class="activity-description">${activity.description}</p>
+                    <div class="activity-details">
+                        <div class="activity-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${activity.location}</span>
+                        </div>
+                        <div class="activity-detail">
+                            <i class="fas fa-tag"></i>
+                            <span>${activity.category}</span>
+                        </div>
+                    </div>
+                    <div class="activity-actions">
+                        <button class="btn btn-outline btn-sm view-details" data-id="${activity.id}">
+                            <i class="fas fa-info-circle"></i> รายละเอียด
+                        </button>
+                        <button class="btn btn-teal btn-sm add-calendar" data-id="${activity.id}">
+                            <i class="fas fa-calendar-plus"></i> เพิ่มในปฏิทิน
+                        </button>
+                    </div>
+                `;
+                
+                activitiesList.appendChild(activityCard);
+            });
+            
+            // เพิ่ม Event Listeners สำหรับปุ่มในกิจกรรม
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const activityId = parseInt(this.dataset.id);
+                    viewActivityDetails(activityId);
+                });
+            });
+            
+            document.querySelectorAll('.add-calendar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const activityId = parseInt(this.dataset.id);
+                    addToCalendar(activityId);
+                });
+            });
+        }
+
+        // จัดรูปแบบวันที่
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('th-TH', options);
+        }
+
+        // ข้อความประเภทกิจกรรม
+        function getTypeText(type) {
+            switch(type) {
+                case 'upcoming': return 'กำลังจะมาถึง';
+                case 'ongoing': return 'กำลังจัด';
+                case 'completed': return 'จบแล้ว';
+                default: return '';
+            }
+        }
+
+        // ดูรายละเอียดกิจกรรม
+        function viewActivityDetails(activityId) {
+            const activity = activitiesData.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            alert(`รายละเอียดกิจกรรม: ${activity.title}\n\nวันที่: ${formatDate(activity.date)}\nเวลา: ${activity.time}\nสถานที่: ${activity.location}\n\n${activity.description}`);
+        }
+
+        // เพิ่มในปฏิทิน
+        function addToCalendar(activityId) {
+            const activity = activitiesData.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            // สร้างข้อมูลสำหรับปฏิทิน (ในเว็บจริงอาจใช้ iCal หรือ Google Calendar API)
+            const calendarText = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:${activity.title}
+DESCRIPTION:${activity.description}
+LOCATION:${activity.location}
+DTSTART:${activity.date.replace(/-/g, '')}T${activity.time.replace(':', '')}00
+DTEND:${activity.date.replace(/-/g, '')}T${activity.time.replace(':', '')}00
+END:VEVENT
+END:VCALENDAR`;
+            
+            // สร้างไฟล์ iCal และดาวน์โหลด
+            const blob = new Blob([calendarText], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `กิจกรรม_${activity.title.replace(/\s+/g, '_')}.ics`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`เพิ่มกิจกรรม "${activity.title}" ลงในปฏิทินแล้ว!`);
+        }
+
+        // เปิดโมดัลกิจกรรม
+        activitiesBtn.addEventListener('click', openActivitiesModal);
+
+        // ปิดโมดัลกิจกรรม
+        activitiesModalClose.addEventListener('click', closeActivitiesModal);
+
+        // ปิดโมดัลเมื่อคลิกพื้นหลัง
+        activitiesModal.addEventListener('click', function(e) {
+            if (e.target === activitiesModal) {
+                closeActivitiesModal();
+            }
+        });
+
+        // กรองกิจกรรม
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // ล้างการเลือกเก่า
+                filterBtns.forEach(b => b.classList.remove('active'));
+                
+                // เลือกปุ่มใหม่
+                this.classList.add('active');
+                
+                // โหลดกิจกรรมตามประเภท
+                const filter = this.dataset.filter;
+                loadActivities(filter);
+            });
+        });
+
+        // เริ่มต้นโหลดกิจกรรมทั้งหมดเมื่อเปิดหน้า
+        document.addEventListener('DOMContentLoaded', function() {
+            loadActivities('all');
+        });
     </script>
 </body>
 </html>
-
-
-
-
