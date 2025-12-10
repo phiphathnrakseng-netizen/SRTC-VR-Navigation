@@ -20,6 +20,9 @@
             --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
             --border-radius: 16px;
             --border-radius-small: 8px;
+            --success-green: #4caf50;
+            --warning-orange: #ff9800;
+            --error-red: #f44336;
         }
 
         * {
@@ -373,6 +376,22 @@
             color: white;
         }
 
+        .btn-success {
+            background-color: var(--success-green);
+        }
+
+        .btn-success:hover {
+            background-color: #388e3c;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-orange);
+        }
+
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+
         /* Cards Section */
         .section-title {
             text-align: center;
@@ -715,7 +734,9 @@
             padding: 20px 30px;
             border-top: 1px solid var(--light-blue);
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .nav-modal-close {
@@ -733,6 +754,254 @@
         .nav-modal-close:hover {
             background-color: var(--accent-blue);
             color: white;
+        }
+
+        .camera-btn {
+            background-color: var(--success-green);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .camera-btn:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Camera Navigation Modal */
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1200;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            flex-direction: column;
+        }
+
+        .camera-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .camera-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .camera-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .camera-header h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .camera-close {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-close:hover {
+            background-color: var(--error-red);
+            transform: scale(1.1);
+        }
+
+        .camera-view {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .ar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .navigation-path {
+            position: absolute;
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            z-index: 3;
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+
+        .navigation-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 4;
+            box-shadow: 0 4px 15px rgba(63, 81, 181, 0.5);
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .camera-controls {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .voice-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+        }
+
+        .voice-control h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .voice-btn {
+            background-color: var(--warning-orange);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .voice-btn:hover {
+            background-color: #f57c00;
+            transform: scale(1.05);
+        }
+
+        .voice-btn.listening {
+            background-color: var(--error-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        .voice-result {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            color: white;
+            text-align: center;
+            display: none;
+        }
+
+        .voice-result.active {
+            display: block;
+        }
+
+        .navigation-info-panel {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .navigation-info-panel h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .navigation-info-panel p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .distance-indicator {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--success-green);
+            margin-top: 10px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         /* Contact */
@@ -923,12 +1192,26 @@
                 font-size: 1.2rem;
             }
             
-            .nav-modal-content {
+            .nav-modal-content, .camera-modal {
                 width: 95%;
+                max-height: 95vh;
             }
             
             .nav-modal-header, .nav-modal-body, .nav-modal-footer {
                 padding: 20px;
+            }
+            
+            .camera-header, .camera-controls {
+                padding: 15px;
+            }
+            
+            .nav-modal-footer {
+                flex-direction: column;
+            }
+            
+            .camera-btn, .voice-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -972,6 +1255,15 @@
             .room {
                 padding: 8px 16px;
                 font-size: 0.9rem;
+            }
+            
+            .camera-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .camera-close {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -1464,7 +1756,56 @@
                 </div>
             </div>
             <div class="nav-modal-footer">
+                <button class="camera-btn" id="openCameraBtn">
+                    <i class="fas fa-camera"></i> เปิดกล้องนำทาง
+                </button>
                 <button class="nav-modal-close" id="navModalClose">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับระบบนำทางด้วยกล้อง -->
+    <div class="camera-modal" id="cameraModal">
+        <div class="camera-container">
+            <div class="camera-header">
+                <h3 id="cameraTitle">ระบบนำทางด้วยกล้อง</h3>
+                <button class="camera-close" id="cameraClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="camera-view">
+                <!-- กล้องจะแสดงที่นี่ -->
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="ตัวอย่างภาพกล้อง" class="camera-preview">
+                
+                <div class="ar-overlay">
+                    <!-- เส้นทางนำทางจะแสดงที่นี่ -->
+                    <div class="navigation-path"></div>
+                    <!-- มาร์กเกอร์ห้องปลายทาง -->
+                    <div class="navigation-marker" id="destinationMarker">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="camera-controls">
+                <div class="voice-control">
+                    <h4><i class="fas fa-microphone"></i> ระบบรับเสียง</h4>
+                    <button class="voice-btn" id="voiceBtn">
+                        <i class="fas fa-microphone"></i> พูดเลขห้อง
+                    </button>
+                </div>
+                
+                <div class="voice-result" id="voiceResult">
+                    <p>ระบบกำลังฟังคำสั่งเสียง...</p>
+                </div>
+                
+                <div class="navigation-info-panel">
+                    <h4><i class="fas fa-road"></i> ข้อมูลการนำทาง</h4>
+                    <p id="navigationInfo">เดินตรงไปข้างหน้า 15 เมตร</p>
+                    <p id="currentStep">ขั้นตอนที่ 1/3: จากทางเข้าอาคาร</p>
+                    <div class="distance-indicator" id="distanceIndicator">เหลืออีก 25 เมตร</div>
+                </div>
             </div>
         </div>
     </div>
@@ -1699,6 +2040,18 @@
         const roomDescription = document.getElementById('roomDescription');
         const navigationSteps = document.getElementById('navigationSteps');
         const navModalClose = document.getElementById('navModalClose');
+        const openCameraBtn = document.getElementById('openCameraBtn');
+        
+        // ระบบนำทางด้วยกล้อง
+        const cameraModal = document.getElementById('cameraModal');
+        const cameraClose = document.getElementById('cameraClose');
+        const cameraTitle = document.getElementById('cameraTitle');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const voiceResult = document.getElementById('voiceResult');
+        const navigationInfo = document.getElementById('navigationInfo');
+        const currentStep = document.getElementById('currentStep');
+        const distanceIndicator = document.getElementById('distanceIndicator');
+        const destinationMarker = document.getElementById('destinationMarker');
 
         // ข้อมูลห้องแต่ละห้อง
         const roomData = {
@@ -1719,7 +2072,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ ให้เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางขวามือ'
                     }
-                ]
+                ],
+                distance: 25
             },
             'polymer-lab-2': {
                 name: 'ห้องปฏิบัติการยางและพอลิเมอร์ 2',
@@ -1738,7 +2092,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ ให้เลี้ยวขวาเดินไปประมาณ 20 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 30
             },
             'to-be-number-one': {
                 name: 'ห้องชมรม To be number one',
@@ -1757,7 +2112,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 10 เมตร ห้องจะอยู่ทางขวามือ'
                     }
-                ]
+                ],
+                distance: 20
             },
             'english-class-1': {
                 name: 'ห้องเรียนภาษาอังกฤษ 1',
@@ -1776,7 +2132,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 25
             },
             'science-lab': {
                 name: 'ห้องปฏิบัติการวิทยาศาสตร์',
@@ -1795,7 +2152,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เลี้ยวขวาเดินไปประมาณ 25 เมตร ห้องจะอยู่ปลายทางเดิน'
                     }
-                ]
+                ],
+                distance: 35
             },
             '631': {
                 name: 'ห้องเรียน 631',
@@ -1814,7 +2172,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 5 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 15
             },
             '632': {
                 name: 'ห้องเรียน 632',
@@ -1833,7 +2192,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 10 เมตร ห้องจะอยู่ทางขวามือ'
                     }
-                ]
+                ],
+                distance: 20
             },
             '633': {
                 name: 'ห้องเรียน 633',
@@ -1852,7 +2212,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 25
             },
             'teacher-lounge': {
                 name: 'ห้องพักครู',
@@ -1871,7 +2232,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 3 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 10
             },
             'lecture-hall': {
                 name: 'ห้อง Lecture',
@@ -1890,7 +2252,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เลี้ยวขวาเดินไปประมาณ 20 เมตร ห้องจะอยู่ปลายทางเดิน'
                     }
-                ]
+                ],
+                distance: 30
             },
             'lab-1': {
                 name: 'ห้องปฏิบัติการ Lab 1',
@@ -1909,7 +2272,8 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 15 เมตร ห้องจะอยู่ทางขวามือ'
                     }
-                ]
+                ],
+                distance: 25
             },
             'lab-2': {
                 name: 'ห้องปฏิบัติการ Lab 2',
@@ -1928,9 +2292,16 @@
                         title: 'เดินไปยังห้อง',
                         description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 20 เมตร ห้องจะอยู่ทางซ้ายมือ'
                     }
-                ]
+                ],
+                distance: 30
             }
         };
+
+        // ตัวแปรเก็บข้อมูลห้องปัจจุบัน
+        let currentRoom = null;
+        let currentStepIndex = 0;
+        let isListening = false;
+        let voiceRecognition = null;
 
         // เปิดโมดัลระบบนำทาง
         function openNavigationModal(roomId) {
@@ -1943,8 +2314,13 @@
                         title: 'เส้นทางแนะนำ',
                         description: 'กรุณาติดต่อเจ้าหน้าที่เพื่อขอข้อมูลเส้นทาง'
                     }
-                ]
+                ],
+                distance: 0
             };
+            
+            // เก็บข้อมูลห้องปัจจุบัน
+            currentRoom = room;
+            currentStepIndex = 0;
             
             // อัพเดทข้อมูลในโมดัล
             navModalTitle.textContent = room.name;
@@ -1979,6 +2355,133 @@
             document.body.style.overflow = 'auto';
         }
 
+        // เปิดระบบนำทางด้วยกล้อง
+        function openCameraNavigation() {
+            if (!currentRoom) return;
+            
+            // อัพเดทข้อมูลในกล้อง
+            cameraTitle.textContent = `นำทางไปยัง: ${currentRoom.name}`;
+            
+            // อัพเดทข้อมูลการนำทาง
+            updateNavigationInfo();
+            
+            // ตั้งตำแหน่งมาร์กเกอร์ปลายทางแบบสุ่ม (จำลอง)
+            const markerX = 70 + Math.random() * 20;
+            const markerY = 30 + Math.random() * 40;
+            destinationMarker.style.left = `${markerX}%`;
+            destinationMarker.style.top = `${markerY}%`;
+            
+            // แสดงโมดัลกล้อง
+            cameraModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // ปิดโมดัลนำทาง
+            closeNavigationModal();
+        }
+
+        // อัพเดทข้อมูลการนำทาง
+        function updateNavigationInfo() {
+            if (!currentRoom || !currentRoom.steps || currentRoom.steps.length === 0) return;
+            
+            const step = currentRoom.steps[currentStepIndex];
+            navigationInfo.textContent = step.description;
+            currentStep.textContent = `ขั้นตอนที่ ${currentStepIndex + 1}/${currentRoom.steps.length}: ${step.title}`;
+            
+            // คำนวณระยะทางที่เหลือ
+            const remainingDistance = Math.max(0, currentRoom.distance - (currentStepIndex * 10));
+            distanceIndicator.textContent = `เหลืออีก ${remainingDistance} เมตร`;
+        }
+
+        // ไปยังขั้นตอนถัดไป
+        function goToNextStep() {
+            if (!currentRoom || !currentRoom.steps) return;
+            
+            if (currentStepIndex < currentRoom.steps.length - 1) {
+                currentStepIndex++;
+                updateNavigationInfo();
+                
+                // อัพเดทตำแหน่งมาร์กเกอร์ (จำลองการเคลื่อนที่)
+                const currentX = parseInt(destinationMarker.style.left) || 80;
+                const currentY = parseInt(destinationMarker.style.top) || 40;
+                destinationMarker.style.left = `${currentX - 5}%`;
+                destinationMarker.style.top = `${currentY + 5}%`;
+            } else {
+                // ถึงปลายทางแล้ว
+                navigationInfo.textContent = "คุณได้มาถึงปลายทางแล้ว!";
+                currentStep.textContent = "ถึงปลายทาง";
+                distanceIndicator.textContent = "ถึงแล้ว!";
+                
+                // แสดงข้อความถึงปลายทาง
+                setTimeout(() => {
+                    alert(`คุณได้มาถึง ${currentRoom.name} แล้ว!`);
+                }, 500);
+            }
+        }
+
+        // ระบบรับเสียง
+        function startVoiceRecognition() {
+            if (isListening) return;
+            
+            // จำลองระบบรับเสียง (ในเว็บจริงต้องใช้ Web Speech API)
+            isListening = true;
+            voiceBtn.classList.add('listening');
+            voiceResult.classList.add('active');
+            voiceResult.innerHTML = '<p><i class="fas fa-microphone"></i> กำลังฟัง... พูดเลขห้องที่ต้องการไป เช่น "ห้อง 631"</p>';
+            
+            // จำลองการฟังเสียง 3 วินาที
+            setTimeout(() => {
+                // สุ่มคำสั่งเสียง
+                const roomCommands = ['631', '632', '633', '634', '635', 'ห้อง 631', 'ห้อง 632', 'ห้องพักครู', 'ห้อง lecture'];
+                const randomCommand = roomCommands[Math.floor(Math.random() * roomCommands.length)];
+                
+                // แสดงผลการรับเสียง
+                voiceResult.innerHTML = `<p><i class="fas fa-check-circle"></i> ระบบรับรู้: "${randomCommand}"</p>`;
+                
+                // หาห้องที่ตรงกับคำสั่งเสียง
+                let foundRoom = null;
+                let foundRoomId = null;
+                
+                for (const [roomId, room] of Object.entries(roomData)) {
+                    if (randomCommand.includes(room.name) || 
+                        room.name.includes(randomCommand) ||
+                        (roomId.includes(randomCommand.replace('ห้อง ', '')))) {
+                        foundRoom = room;
+                        foundRoomId = roomId;
+                        break;
+                    }
+                }
+                
+                // หากไม่พบห้อง ให้ใช้ห้อง 631 เป็นค่าเริ่มต้น
+                if (!foundRoom) {
+                    foundRoom = roomData['631'];
+                    foundRoomId = '631';
+                }
+                
+                // ปรับปรุงข้อมูลการนำทาง
+                setTimeout(() => {
+                    // ปิดสถานะการฟัง
+                    isListening = false;
+                    voiceBtn.classList.remove('listening');
+                    
+                    // ปิดผลลัพธ์เสียง
+                    setTimeout(() => {
+                        voiceResult.classList.remove('active');
+                    }, 2000);
+                    
+                    // อัพเดทการนำทางไปยังห้องที่พบ
+                    currentRoom = foundRoom;
+                    currentStepIndex = 0;
+                    cameraTitle.textContent = `นำทางไปยัง: ${foundRoom.name}`;
+                    updateNavigationInfo();
+                    
+                    // แสดงข้อความยืนยัน
+                    alert(`ระบบจะนำทางคุณไปยัง ${foundRoom.name}`);
+                    
+                }, 1500);
+                
+            }, 3000);
+        }
+
         // กำหนด Event Listeners สำหรับห้องต่างๆ
         document.querySelectorAll('.room').forEach(room => {
             room.addEventListener('click', function() {
@@ -1990,6 +2493,21 @@
         // ปิดโมดัลระบบนำทาง
         navModalClose.addEventListener('click', closeNavigationModal);
 
+        // เปิดกล้องนำทาง
+        openCameraBtn.addEventListener('click', openCameraNavigation);
+
+        // ปิดโมดัลระบบนำทางด้วยกล้อง
+        cameraClose.addEventListener('click', function() {
+            cameraModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // เริ่มต้นระบบรับเสียง
+        voiceBtn.addEventListener('click', startVoiceRecognition);
+
+        // จำลองการก้าวเดิน (คลิกที่เส้นทางเพื่อไปยังขั้นตอนถัดไป)
+        document.querySelector('.navigation-path').addEventListener('click', goToNextStep);
+
         // ปิดโมดัลระบบนำทางเมื่อคลิกพื้นหลัง
         navModal.addEventListener('click', function(e) {
             if (e.target === navModal) {
@@ -1997,12 +2515,29 @@
             }
         });
 
-        // ปิดโมดัลระบบนำทางด้วยปุ่ม Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navModal.classList.contains('active')) {
-                closeNavigationModal();
+        // ปิดโมดัลระบบนำทางด้วยกล้องเมื่อคลิกพื้นหลัง
+        cameraModal.addEventListener('click', function(e) {
+            if (e.target === cameraModal) {
+                cameraModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
             }
         });
+
+        // ปิดโมดัลระบบนำทางด้วยปุ่ม Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (navModal.classList.contains('active')) {
+                    closeNavigationModal();
+                }
+                if (cameraModal.classList.contains('active')) {
+                    cameraModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        });
+
+        // ตั้งค่าเริ่มต้นสำหรับระบบนำทางด้วยกล้อง
+        updateNavigationInfo();
     </script>
 </body>
 </html>
