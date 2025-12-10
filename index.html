@@ -508,9 +508,10 @@
             margin-bottom: 10px;
         }
 
-        /* Floor Plan */
+        /* Floor Plan Section */
         .floor-plan {
             padding: 80px 0;
+            background-color: var(--white);
         }
 
         .floor-container {
@@ -525,6 +526,11 @@
             border-radius: var(--border-radius);
             padding: 30px;
             box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .floor:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .floor-header {
@@ -561,6 +567,172 @@
             border-radius: 50px;
             font-weight: 500;
             color: var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .room:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .room::after {
+            content: "คลิกดูเส้นทาง";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .room:hover::after {
+            opacity: 1;
+        }
+
+        /* Navigation Modal */
+        .nav-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .nav-modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-modal-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .nav-modal-header h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .nav-modal-header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .nav-modal-body {
+            padding: 30px;
+        }
+
+        .navigation-info {
+            margin-bottom: 30px;
+        }
+
+        .navigation-info h4 {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navigation-info p {
+            color: var(--gray);
+            line-height: 1.7;
+            padding-left: 26px;
+        }
+
+        .navigation-steps {
+            margin-top: 25px;
+            padding-left: 26px;
+        }
+
+        .navigation-step {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-blue);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-content h5 {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .nav-modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--light-blue);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nav-modal-close {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .nav-modal-close:hover {
+            background-color: var(--accent-blue);
+            color: white;
         }
 
         /* Contact */
@@ -750,6 +922,14 @@
                 height: 40px;
                 font-size: 1.2rem;
             }
+            
+            .nav-modal-content {
+                width: 95%;
+            }
+            
+            .nav-modal-header, .nav-modal-body, .nav-modal-footer {
+                padding: 20px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -788,6 +968,11 @@
                 height: 30px;
                 font-size: 0.9rem;
             }
+            
+            .room {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -812,7 +997,7 @@
                     <li><a href="#home" class="active">หน้าแรก</a></li>
                     <li><a href="#teachers">คณะอาจารย์</a></li>
                     <li><a href="#info">ข้อมูลอาคาร</a></li>
-                    <li><a href="#floor">แผนผัง</a></li>
+                    <li><a href="#floor">แผนผังและแนะนำทาง</a></li>
                     <li><a href="#contact">ติดต่อ</a></li>
                 </ul>
             </nav>
@@ -1067,25 +1252,25 @@
         </div>
     </section>
 
-    <!-- Floor Plan -->
+    <!-- Floor Plan and Navigation -->
     <section class="floor-plan" id="floor">
         <div class="container">
-            <h2 class="section-title">แผนผังอาคาร</h2>
-            <p class="section-subtitle">แต่ละชั้นของอาคารออกแบบให้สอดคล้องกับวัตถุประสงค์การใช้งานที่แตกต่างกัน</p>
+            <h2 class="section-title">แผนผังและแนะนำทาง</h2>
+            <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
             
             <div class="floor-container">
                 <!-- Floor 1 -->
                 <div class="floor">
                     <div class="floor-header">
                         <div class="floor-number">1</div>
-                        <h3>ชั้นที่ 1: ห้องประชุมและบริการ</h3>
+                        <h3>ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
                     </div>
                     <div class="floor-rooms">
-                        <span class="room">ห้องประชุมใหญ่</span>
-                        <span class="room">ศูนย์บริการนักศึกษา</span>
-                        <span class="room">ร้านกาแฟ</span>
-                        <span class="room">ล็อบบี้หลัก</span>
-                        <span class="room">พื้นที่นิทรรศการ</span>
+                        <span class="room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1">ห้องปฏิบัติการ 1</span>
+                        <span class="room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2">ห้องปฏิบัติการ 2</span>
+                        <span class="room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1">ห้องเรียน 1</span>
+                        <span class="room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2">ห้องเรียน 2</span>
+                        <span class="room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง">สำนักงานแผนก</span>
                     </div>
                 </div>
                 
@@ -1093,13 +1278,14 @@
                 <div class="floor">
                     <div class="floor-header">
                         <div class="floor-number">2</div>
-                        <h3>ชั้นที่ 2: ห้องเรียนทั่วไป</h3>
+                        <h3>ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
                     </div>
                     <div class="floor-rooms">
-                        <span class="room">ห้องเรียน 201-208</span>
-                        <span class="room">ศูนย์การเรียนรู้</span>
-                        <span class="room">ห้องอาจารย์</span>
-                        <span class="room">พื้นที่ทำงานกลุ่ม</span>
+                        <span class="room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one">ชมรม To be number one</span>
+                        <span class="room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1">ห้องอังกฤษ 1</span>
+                        <span class="room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2">ห้องอังกฤษ 2</span>
+                        <span class="room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์">แล็บวิทยาศาสตร์</span>
+                        <span class="room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์">ห้องวิทยาศาสตร์</span>
                     </div>
                 </div>
                 
@@ -1107,14 +1293,14 @@
                 <div class="floor">
                     <div class="floor-header">
                         <div class="floor-number">3</div>
-                        <h3>ชั้นที่ 3: ห้องปฏิบัติการคอมพิวเตอร์</h3>
+                        <h3>ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
                     </div>
                     <div class="floor-rooms">
-                        <span class="room">แล็บพัฒนาโปรแกรม</span>
-                        <span class="room">แล็บเครือข่ายคอมพิวเตอร์</span>
-                        <span class="room">แล็บฐานข้อมูล</span>
-                        <span class="room">ศูนย์เซิร์ฟเวอร์</span>
-                        <span class="room">ห้องควบคุมระบบ</span>
+                        <span class="room" data-room="631" data-floor="3" data-name="ห้องเรียน 631">ห้อง 631</span>
+                        <span class="room" data-room="632" data-floor="3" data-name="ห้องเรียน 632">ห้อง 632</span>
+                        <span class="room" data-room="633" data-floor="3" data-name="ห้องเรียน 633">ห้อง 633</span>
+                        <span class="room" data-room="634" data-floor="3" data-name="ห้องเรียน 634">ห้อง 634</span>
+                        <span class="room" data-room="635" data-floor="3" data-name="ห้องเรียน 635">ห้อง 635</span>
                     </div>
                 </div>
                 
@@ -1122,29 +1308,15 @@
                 <div class="floor">
                     <div class="floor-header">
                         <div class="floor-number">4</div>
-                        <h3>ชั้นที่ 4: ห้องปฏิบัติการพิเศษ</h3>
+                        <h3>ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
                     </div>
                     <div class="floor-rooms">
-                        <span class="room">แล็บ IoT และหุ่นยนต์</span>
-                        <span class="room">แล็บความปลอดภัยไซเบอร์</span>
-                        <span class="room">สตูดิโอพัฒนาเกม</span>
-                        <span class="room">ห้องวิจัย</span>
-                        <span class="room">ห้องสัมมนา</span>
-                    </div>
-                </div>
-                
-                <!-- Floor 5 -->
-                <div class="floor">
-                    <div class="floor-header">
-                        <div class="floor-number">5</div>
-                        <h3>ชั้นที่ 5: สำนักงานและพื้นที่ส่วนกลาง</h3>
-                    </div>
-                    <div class="floor-rooms">
-                        <span class="room">สำนักงานคณะ</span>
-                        <span class="room">ห้องผู้อำนวยการ</span>
-                        <span class="room">สวนระเบียง</span>
-                        <span class="room">พื้นที่พักผ่อน</span>
-                        <span class="room">ห้องสมุดดิจิทัล</span>
+                        <span class="room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู">ห้องพักครู</span>
+                        <span class="room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture">ห้อง Lecture</span>
+                        <span class="room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
+                        <span class="room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
+                        <span class="room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3">Lab 3</span>
+                        <span class="room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์">ห้องเซิร์ฟเวอร์</span>
                     </div>
                 </div>
             </div>
@@ -1243,7 +1415,7 @@
                         <li style="margin-bottom: 10px;"><a href="#home" style="color: white; text-decoration: none; opacity: 0.9;">หน้าแรก</a></li>
                         <li style="margin-bottom: 10px;"><a href="#teachers" style="color: white; text-decoration: none; opacity: 0.9;">คณะอาจารย์</a></li>
                         <li style="margin-bottom: 10px;"><a href="#info" style="color: white; text-decoration: none; opacity: 0.9;">ข้อมูลอาคาร</a></li>
-                        <li style="margin-bottom: 10px;"><a href="#floor" style="color: white; text-decoration: none; opacity: 0.9;">แผนผังอาคาร</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#floor" style="color: white; text-decoration: none; opacity: 0.9;">แผนผังและแนะนำทาง</a></li>
                     </ul>
                 </div>
                 
@@ -1271,6 +1443,29 @@
             </div>
             <img id="modalImage" src="" alt="">
             <div id="modalTitle" style="color: white; text-align: center; margin-top: 15px; font-size: 1.2rem;"></div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับระบบนำทาง -->
+    <div class="nav-modal" id="navModal">
+        <div class="nav-modal-content">
+            <div class="nav-modal-header">
+                <h3 id="navModalTitle">เส้นทางแนะนำ</h3>
+                <p id="navModalSubtitle">ข้อมูลเส้นทางไปยังห้อง</p>
+            </div>
+            <div class="nav-modal-body">
+                <div class="navigation-info">
+                    <h4><i class="fas fa-info-circle"></i>ข้อมูลห้อง</h4>
+                    <p id="roomDescription">รายละเอียดของห้องและข้อมูลที่เกี่ยวข้อง</p>
+                    
+                    <div class="navigation-steps" id="navigationSteps">
+                        <!-- Steps will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="nav-modal-footer">
+                <button class="nav-modal-close" id="navModalClose">ปิด</button>
+            </div>
         </div>
     </div>
 
@@ -1496,7 +1691,318 @@
                 showNextImage();
             }
         });
+
+        // ระบบนำทาง
+        const navModal = document.getElementById('navModal');
+        const navModalTitle = document.getElementById('navModalTitle');
+        const navModalSubtitle = document.getElementById('navModalSubtitle');
+        const roomDescription = document.getElementById('roomDescription');
+        const navigationSteps = document.getElementById('navigationSteps');
+        const navModalClose = document.getElementById('navModalClose');
+
+        // ข้อมูลห้องแต่ละห้อง
+        const roomData = {
+            'polymer-lab-1': {
+                name: 'ห้องปฏิบัติการยางและพอลิเมอร์ 1',
+                floor: 1,
+                description: 'ห้องปฏิบัติการที่ทันสมัยสำหรับการทดลองและวิจัยด้านเทคโนโลยียางและพอลิเมอร์ พร้อมอุปกรณ์ครบครัน',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก ผ่านล็อบบี้กลาง ทางซ้ายมือจะเห็นทางขึ้นบันได'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 1'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ ให้เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางขวามือ'
+                    }
+                ]
+            },
+            'polymer-lab-2': {
+                name: 'ห้องปฏิบัติการยางและพอลิเมอร์ 2',
+                floor: 1,
+                description: 'ห้องปฏิบัติการเสริมสำหรับการทดลองขั้นสูงด้านเทคโนโลยียางและพอลิเมอร์',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก ผ่านล็อบบี้กลาง'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 1'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ ให้เลี้ยวขวาเดินไปประมาณ 20 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            },
+            'to-be-number-one': {
+                name: 'ห้องชมรม To be number one',
+                floor: 2,
+                description: 'พื้นที่จัดกิจกรรมสำหรับชมรม To be number one พร้อมอุปกรณ์สำหรับการจัดกิจกรรม',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 2'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 10 เมตร ห้องจะอยู่ทางขวามือ'
+                    }
+                ]
+            },
+            'english-class-1': {
+                name: 'ห้องเรียนภาษาอังกฤษ 1',
+                floor: 2,
+                description: 'ห้องเรียนสำหรับวิชาภาษาอังกฤษ พร้อมอุปกรณ์มัลติมีเดียและระบบเสียง',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 2'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            },
+            'science-lab': {
+                name: 'ห้องปฏิบัติการวิทยาศาสตร์',
+                floor: 2,
+                description: 'ห้องปฏิบัติการวิทยาศาสตร์ที่ทันสมัย พร้อมอุปกรณ์ทดลองครบครัน',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 2'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เลี้ยวขวาเดินไปประมาณ 25 เมตร ห้องจะอยู่ปลายทางเดิน'
+                    }
+                ]
+            },
+            '631': {
+                name: 'ห้องเรียน 631',
+                floor: 3,
+                description: 'ห้องเรียนเทคโนโลยีสารสนเทศ ขนาด 40 ที่นั่ง พร้อมระบบคอมพิวเตอร์และโปรเจคเตอร์',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 3'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 5 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            },
+            '632': {
+                name: 'ห้องเรียน 632',
+                floor: 3,
+                description: 'ห้องเรียนเทคโนโลยีสารสนเทศ ขนาด 40 ที่นั่ง พร้อมอุปกรณ์การสอนมัลติมีเดีย',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 3'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 10 เมตร ห้องจะอยู่ทางขวามือ'
+                    }
+                ]
+            },
+            '633': {
+                name: 'ห้องเรียน 633',
+                floor: 3,
+                description: 'ห้องเรียนเทคโนโลยีสารสนเทศสำหรับวิชาโปรแกรมมิ่ง พร้อมคอมพิวเตอร์ครบทุกที่นั่ง',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 3'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 15 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            },
+            'teacher-lounge': {
+                name: 'ห้องพักครู',
+                floor: 4,
+                description: 'พื้นที่พักผ่อนสำหรับครูอาจารย์ พร้อมตู้เย็น ไมโครเวฟ และเครื่องชงกาแฟ',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 4'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เดินตรงไปประมาณ 3 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            },
+            'lecture-hall': {
+                name: 'ห้อง Lecture',
+                floor: 4,
+                description: 'ห้องบรรยายขนาดใหญ่ความจุ 120 คน พร้อมระบบเสียงและโปรเจคเตอร์คุณภาพสูง',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 4'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เลี้ยวขวาเดินไปประมาณ 20 เมตร ห้องจะอยู่ปลายทางเดิน'
+                    }
+                ]
+            },
+            'lab-1': {
+                name: 'ห้องปฏิบัติการ Lab 1',
+                floor: 4,
+                description: 'ห้องปฏิบัติการคอมพิวเตอร์ขั้นสูง พร้อมเครื่องคอมพิวเตอร์รุ่นใหม่และอุปกรณ์เน็ตเวิร์ค',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 4'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 15 เมตร ห้องจะอยู่ทางขวามือ'
+                    }
+                ]
+            },
+            'lab-2': {
+                name: 'ห้องปฏิบัติการ Lab 2',
+                floor: 4,
+                description: 'ห้องปฏิบัติการสำหรับการพัฒนาโปรแกรมและระบบฐานข้อมูล',
+                steps: [
+                    {
+                        title: 'จากทางเข้าอาคาร',
+                        description: 'เดินตรงมาจากประตูหลัก'
+                    },
+                    {
+                        title: 'ขึ้นบันไดหรือลิฟต์',
+                        description: 'ใช้บันไดกลางหรือลิฟต์ขึ้นมาที่ชั้น 4'
+                    },
+                    {
+                        title: 'เดินไปยังห้อง',
+                        description: 'จากบันไดหรือลิฟต์ เลี้ยวซ้ายเดินไปประมาณ 20 เมตร ห้องจะอยู่ทางซ้ายมือ'
+                    }
+                ]
+            }
+        };
+
+        // เปิดโมดัลระบบนำทาง
+        function openNavigationModal(roomId) {
+            const room = roomData[roomId] || {
+                name: 'ข้อมูลห้อง',
+                floor: 1,
+                description: 'ข้อมูลห้องนี้กำลังอยู่ในระหว่างการอัพเดท',
+                steps: [
+                    {
+                        title: 'เส้นทางแนะนำ',
+                        description: 'กรุณาติดต่อเจ้าหน้าที่เพื่อขอข้อมูลเส้นทาง'
+                    }
+                ]
+            };
+            
+            // อัพเดทข้อมูลในโมดัล
+            navModalTitle.textContent = room.name;
+            navModalSubtitle.textContent = `ชั้นที่ ${room.floor}`;
+            roomDescription.textContent = room.description;
+            
+            // ล้าง steps ก่อนหน้า
+            navigationSteps.innerHTML = '';
+            
+            // เพิ่ม steps ใหม่
+            room.steps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'navigation-step';
+                stepElement.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-content">
+                        <h5>${step.title}</h5>
+                        <p>${step.description}</p>
+                    </div>
+                `;
+                navigationSteps.appendChild(stepElement);
+            });
+            
+            // แสดงโมดัล
+            navModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ปิดโมดัลระบบนำทาง
+        function closeNavigationModal() {
+            navModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // กำหนด Event Listeners สำหรับห้องต่างๆ
+        document.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', function() {
+                const roomId = this.getAttribute('data-room');
+                openNavigationModal(roomId);
+            });
+        });
+
+        // ปิดโมดัลระบบนำทาง
+        navModalClose.addEventListener('click', closeNavigationModal);
+
+        // ปิดโมดัลระบบนำทางเมื่อคลิกพื้นหลัง
+        navModal.addEventListener('click', function(e) {
+            if (e.target === navModal) {
+                closeNavigationModal();
+            }
+        });
+
+        // ปิดโมดัลระบบนำทางด้วยปุ่ม Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navModal.classList.contains('active')) {
+                closeNavigationModal();
+            }
+        });
     </script>
 </body>
 </html>
-
