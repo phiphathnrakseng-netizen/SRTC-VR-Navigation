@@ -17,6 +17,9 @@
             --secondary: #34A853;
             --secondary-dark: #1B5E20;
             --secondary-light: #81C784;
+            --accent: #FF6D00;
+            --accent-dark: #C43C00;
+            --accent-light: #FF9E40;
             --surface: #FFFFFF;
             --background: #F8FAFD;
             --on-primary: #FFFFFF;
@@ -26,25 +29,25 @@
             --border: #E8EAED;
             --divider: #DADCE0;
             --hover: #F1F3F4;
-            --elevation-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-            --elevation-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
-            --elevation-3: 0 2px 6px 2px rgba(60,64,67,0.15), 0 1px 2px 0 rgba(60,64,67,0.3);
-            --elevation-4: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px 0 rgba(60,64,67,0.3);
-            --elevation-5: 0 8px 12px 6px rgba(60,64,67,0.15), 0 4px 4px 0 rgba(60,64,67,0.3);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
-            --radius-full: 9999px;
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+            --shadow-3: 0 2px 6px 2px rgba(60,64,67,0.15), 0 1px 2px 0 rgba(60,64,67,0.3);
+            --shadow-4: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px 0 rgba(60,64,67,0.3);
+            --shadow-5: 0 8px 12px 6px rgba(60,64,67,0.15), 0 4px 4px 0 rgba(60,64,67,0.3);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 50px;
             --spacing-xs: 4px;
             --spacing-sm: 8px;
             --spacing-md: 16px;
             --spacing-lg: 24px;
             --spacing-xl: 32px;
             --spacing-xxl: 48px;
-            --animation-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-            --animation-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-            --animation-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+            --animation-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --animation-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --animation-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -85,10 +88,9 @@
             height: 64px;
             background-color: var(--surface);
             z-index: 1000;
-            box-shadow: var(--elevation-1);
+            box-shadow: var(--shadow-1);
             transition: all var(--animation-normal);
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--border);
         }
 
         .app-bar-container {
@@ -105,21 +107,25 @@
             gap: var(--spacing-md);
             text-decoration: none;
             color: var(--on-surface);
-            padding: var(--spacing-sm) 0;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-sm);
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background-color: var(--surface);
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--on-primary);
-            font-weight: 600;
-            font-size: 18px;
+            padding: 2px;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -128,18 +134,17 @@
         }
 
         .logo-text h1 {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--primary);
             margin: 0;
-            letter-spacing: -0.25px;
         }
 
         .logo-text p {
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             color: var(--on-background);
             margin: 0;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .nav-links {
@@ -151,14 +156,13 @@
             color: var(--on-background);
             text-decoration: none;
             padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--radius-full);
+            border-radius: var(--radius-md);
             font-weight: 500;
             font-size: 0.875rem;
             transition: all var(--animation-fast);
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
-            position: relative;
         }
 
         .nav-link:hover {
@@ -167,20 +171,8 @@
         }
 
         .nav-link.active {
-            color: var(--primary);
             background-color: rgba(26, 115, 232, 0.08);
-        }
-
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background-color: var(--primary);
-            border-radius: var(--radius-full);
+            color: var(--primary);
         }
 
         .nav-link .material-icons-round {
@@ -208,24 +200,19 @@
         /* Main Content */
         .main-content {
             margin-top: 64px;
+            padding: var(--spacing-xl) 0;
         }
 
         /* Hero Section */
         .hero {
             padding: var(--spacing-xxl) 0;
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-xxl);
             position: relative;
             overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(26, 115, 232, 0.03) 0%, rgba(52, 168, 83, 0.03) 100%);
-            border-radius: var(--radius-lg);
-            z-index: -1;
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--border);
         }
 
         .hero-container {
@@ -235,13 +222,12 @@
             align-items: center;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
+        .hero-content h2 {
+            font-size: 2.5rem;
+            line-height: 1.2;
             margin-bottom: var(--spacing-lg);
-            font-weight: 600;
             color: var(--on-surface);
-            letter-spacing: -0.5px;
+            font-weight: 600;
         }
 
         .hero-content p {
@@ -249,14 +235,13 @@
             color: var(--on-background);
             margin-bottom: var(--spacing-xl);
             line-height: 1.6;
-            max-width: 500px;
         }
 
         .hero-image {
             position: relative;
             border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--elevation-3);
+            box-shadow: var(--shadow-3);
             height: 400px;
         }
 
@@ -268,26 +253,26 @@
         }
 
         .hero-image:hover img {
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
         /* Cards */
         .card {
             background-color: var(--surface);
             border-radius: var(--radius-lg);
-            box-shadow: var(--elevation-1);
+            box-shadow: var(--shadow-1);
             transition: all var(--animation-normal);
             overflow: hidden;
             border: 1px solid var(--border);
         }
 
         .card:hover {
-            box-shadow: var(--elevation-2);
-            border-color: var(--primary-light);
+            box-shadow: var(--shadow-2);
         }
 
         .card-header {
-            padding: var(--spacing-xl) var(--spacing-xl) 0;
+            padding: var(--spacing-xl);
+            border-bottom: 1px solid var(--divider);
         }
 
         .card-body {
@@ -295,12 +280,14 @@
         }
 
         .card-footer {
-            padding: 0 var(--spacing-xl) var(--spacing-xl);
+            padding: var(--spacing-xl);
+            border-top: 1px solid var(--divider);
+            background-color: var(--background);
         }
 
         /* Section */
         .section {
-            padding: var(--spacing-xxl) 0;
+            margin-bottom: var(--spacing-xxl);
         }
 
         .section-header {
@@ -308,11 +295,10 @@
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 600;
             color: var(--on-surface);
             margin-bottom: var(--spacing-sm);
-            letter-spacing: -0.25px;
         }
 
         .section-subtitle {
@@ -330,50 +316,39 @@
         }
 
         .teacher-card {
-            position: relative;
-            transition: transform var(--animation-normal);
+            text-align: center;
         }
 
-        .teacher-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .teacher-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: var(--radius-full);
+        .teacher-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto var(--spacing-md);
-            display: block;
+            margin-bottom: var(--spacing-md);
             border: 4px solid var(--surface);
-            box-shadow: var(--elevation-2);
+            box-shadow: var(--shadow-2);
         }
 
         .teacher-name {
             font-size: 1.25rem;
             font-weight: 600;
-            text-align: center;
             margin-bottom: var(--spacing-xs);
         }
 
         .teacher-position {
             color: var(--primary);
             font-weight: 500;
-            text-align: center;
             margin-bottom: var(--spacing-md);
             padding: var(--spacing-xs) var(--spacing-md);
             background-color: rgba(26, 115, 232, 0.08);
             border-radius: var(--radius-full);
             display: inline-block;
-            font-size: 0.875rem;
         }
 
         .teacher-degree {
             color: var(--on-background);
-            text-align: center;
-            font-size: 0.875rem;
             margin-bottom: var(--spacing-md);
-            line-height: 1.5;
+            font-size: 0.875rem;
         }
 
         .teacher-expertise {
@@ -383,7 +358,7 @@
             justify-content: center;
         }
 
-        .expertise-chip {
+        .expertise-tag {
             background-color: var(--background);
             color: var(--on-background);
             padding: var(--spacing-xs) var(--spacing-sm);
@@ -401,116 +376,87 @@
             margin-top: var(--spacing-xl);
         }
 
-        .info-card {
-            padding: var(--spacing-xl);
+        .info-item {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            border-radius: var(--radius-lg);
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            transition: all var(--animation-normal);
-        }
-
-        .info-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
+            gap: var(--spacing-md);
+            align-items: flex-start;
         }
 
         .info-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            width: 56px;
+            height: 56px;
+            background-color: var(--surface);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: var(--spacing-lg);
-            color: var(--on-primary);
-        }
-
-        .info-icon .material-icons-round {
-            font-size: 2rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--border);
         }
 
         /* Floor Plan */
-        .floor-tabs {
+        .floor-container {
             display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-            overflow-x: auto;
-            padding: var(--spacing-sm) 0;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
         }
 
-        .floor-tab {
-            flex: 0 0 auto;
-            padding: var(--spacing-md) var(--spacing-lg);
+        .floor {
             background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-1);
             border: 1px solid var(--border);
-            border-radius: var(--radius-full);
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-            color: var(--on-background);
-            cursor: pointer;
-            transition: all var(--animation-fast);
+        }
+
+        .floor-header {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            white-space: nowrap;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--divider);
         }
 
-        .floor-tab:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .floor-tab.active {
+        .floor-number {
+            width: 40px;
+            height: 40px;
             background-color: var(--primary);
-            border-color: var(--primary);
             color: var(--on-primary);
-        }
-
-        .floor-content {
-            display: none;
-        }
-
-        .floor-content.active {
-            display: block;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-right: var(--spacing-md);
         }
 
         .floor-rooms {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: var(--spacing-md);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
         }
 
-        .room-card {
-            padding: var(--spacing-lg);
-            background-color: var(--surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
+        .room {
+            background-color: var(--background);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            color: var(--primary);
             cursor: pointer;
             transition: all var(--animation-fast);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
-        }
-
-        .room-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--elevation-2);
-        }
-
-        .room-name {
-            font-weight: 600;
-            color: var(--on-surface);
-        }
-
-        .room-type {
+            border: 1px solid var(--border);
             font-size: 0.875rem;
-            color: var(--on-background);
+        }
+
+        .room:hover {
+            background-color: var(--primary);
+            color: var(--on-primary);
+            border-color: var(--primary);
         }
 
         /* Buttons */
@@ -525,78 +471,35 @@
             font-family: 'Kanit', sans-serif;
             font-weight: 500;
             font-size: 0.875rem;
-            text-transform: none;
-            letter-spacing: 0.25px;
             cursor: pointer;
             transition: all var(--animation-fast);
             text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        .btn:focus:not(:active)::after {
-            animation: ripple 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(20, 20);
-                opacity: 0;
-            }
         }
 
         .btn-primary {
             background-color: var(--primary);
             color: var(--on-primary);
-            box-shadow: 0 2px 4px rgba(26, 115, 232, 0.25);
+            box-shadow: var(--shadow-1);
         }
 
         .btn-primary:hover {
             background-color: var(--primary-dark);
-            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
-            transform: translateY(-1px);
+            box-shadow: var(--shadow-2);
         }
 
-        .btn-outlined {
+        .btn-outline {
             background-color: transparent;
+            border: 2px solid var(--primary);
             color: var(--primary);
-            border: 1px solid var(--primary);
         }
 
-        .btn-outlined:hover {
+        .btn-outline:hover {
             background-color: rgba(26, 115, 232, 0.08);
-            border-color: var(--primary-dark);
         }
 
         /* Form */
         .form-group {
             margin-bottom: var(--spacing-lg);
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--spacing-xs);
-            font-weight: 500;
-            color: var(--on-surface);
-            font-size: 0.875rem;
         }
 
         .form-control {
@@ -605,7 +508,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             font-family: 'Noto Sans Thai', sans-serif;
-            font-size: 0.875rem;
+            font-size: 1rem;
             transition: all var(--animation-fast);
             background-color: var(--surface);
         }
@@ -613,7 +516,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
         }
 
         /* Contact */
@@ -624,41 +527,30 @@
             margin-top: var(--spacing-xl);
         }
 
-        .contact-info {
+        .social-links {
             display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
         }
 
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            padding: var(--spacing-lg);
-            background-color: var(--surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            transition: all var(--animation-fast);
-        }
-
-        .contact-item:hover {
-            border-color: var(--primary);
-        }
-
-        .contact-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: var(--radius-md);
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background-color: var(--background);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-            color: var(--on-primary);
+            color: var(--on-background);
+            text-decoration: none;
+            transition: all var(--animation-fast);
+            border: 1px solid var(--border);
         }
 
-        .contact-icon .material-icons-round {
-            font-size: 1.5rem;
+        .social-links a:hover {
+            background-color: var(--primary);
+            color: var(--on-primary);
+            border-color: var(--primary);
         }
 
         /* Footer */
@@ -667,6 +559,7 @@
             color: var(--surface);
             padding: var(--spacing-xxl) 0 var(--spacing-xl);
             margin-top: var(--spacing-xxl);
+            border-top: 1px solid var(--border);
         }
 
         .footer-content {
@@ -680,49 +573,23 @@
             color: var(--surface);
             margin-bottom: var(--spacing-lg);
             font-size: 1.125rem;
-            font-weight: 600;
         }
 
         .footer-section p {
             opacity: 0.8;
             line-height: 1.6;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
             font-size: 0.875rem;
         }
 
-        .social-links {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-lg);
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--surface);
-            text-decoration: none;
-            transition: all var(--animation-fast);
-        }
-
-        .social-link:hover {
-            background-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .footer-bottom {
-            padding-top: var(--spacing-xl);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            opacity: 0.7;
-            font-size: 0.75rem;
-        }
-
         /* Floating Action Buttons */
-        .fab-container {
+        .floating-buttons {
             position: fixed;
             bottom: var(--spacing-xl);
             right: var(--spacing-xl);
@@ -733,41 +600,44 @@
             align-items: flex-end;
         }
 
-        .fab {
+        .floating-button {
             width: 56px;
             height: 56px;
-            border-radius: var(--radius-full);
+            border-radius: 50%;
             background-color: var(--primary);
             color: var(--on-primary);
             border: none;
-            box-shadow: var(--elevation-3);
+            box-shadow: var(--shadow-3);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all var(--animation-normal);
-            position: relative;
         }
 
-        .fab:hover {
+        .floating-button:hover {
             background-color: var(--primary-dark);
-            box-shadow: var(--elevation-4);
+            box-shadow: var(--shadow-4);
             transform: translateY(-2px);
         }
 
-        .fab:active {
-            transform: translateY(0);
+        .floating-button.share {
+            background-color: #9C27B0;
         }
 
-        .fab-secondary {
+        .floating-button.share:hover {
+            background-color: #7B1FA2;
+        }
+
+        .floating-button.events {
             background-color: var(--secondary);
         }
 
-        .fab-secondary:hover {
+        .floating-button.events:hover {
             background-color: var(--secondary-dark);
         }
 
-        .fab-label {
+        .floating-button-label {
             position: absolute;
             right: 70px;
             top: 50%;
@@ -782,11 +652,10 @@
             opacity: 0;
             visibility: hidden;
             transition: all var(--animation-normal);
-            pointer-events: none;
-            box-shadow: var(--elevation-2);
+            box-shadow: var(--shadow-2);
         }
 
-        .fab:hover .fab-label {
+        .floating-button:hover .floating-button-label {
             opacity: 1;
             visibility: visible;
             right: 65px;
@@ -807,7 +676,6 @@
             padding: var(--spacing-md);
             opacity: 0;
             transition: opacity var(--animation-normal);
-            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -818,7 +686,7 @@
         .modal-content {
             background-color: var(--surface);
             border-radius: var(--radius-lg);
-            box-shadow: var(--elevation-4);
+            box-shadow: var(--shadow-5);
             max-width: 500px;
             width: 100%;
             max-height: 90vh;
@@ -834,72 +702,31 @@
 
         .modal-header {
             padding: var(--spacing-xl);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            border-bottom: 1px solid var(--divider);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--on-primary);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         }
 
-        .modal-title {
+        .modal-header h3 {
+            color: var(--on-primary);
             font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--on-surface);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .modal-close {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color var(--animation-fast);
-            color: var(--on-background);
-        }
-
-        .modal-close:hover {
-            background-color: var(--hover);
+            margin: 0;
         }
 
         .modal-body {
             padding: var(--spacing-xl);
         }
 
-        /* Share Modal */
-        .room-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .room-option {
-            padding: var(--spacing-md);
-            background-color: var(--surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all var(--animation-fast);
+        .modal-footer {
+            padding: var(--spacing-xl);
+            border-top: 1px solid var(--divider);
             display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
+            justify-content: flex-end;
+            gap: var(--spacing-md);
         }
 
-        .room-option:hover {
-            border-color: var(--primary);
-        }
-
-        .room-option.selected {
-            background-color: rgba(26, 115, 232, 0.08);
-            border-color: var(--primary);
-        }
-
+        /* Share Modal */
         .share-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -907,9 +734,9 @@
             margin-bottom: var(--spacing-xl);
         }
 
-        .share-option {
+        .share-btn {
             padding: var(--spacing-lg);
-            background-color: var(--surface);
+            background-color: var(--background);
             border-radius: var(--radius-md);
             border: 1px solid var(--border);
             cursor: pointer;
@@ -921,23 +748,14 @@
             text-align: center;
         }
 
-        .share-option:hover {
+        .share-btn:hover {
             border-color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.08);
         }
 
-        .share-option-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--on-primary);
-        }
-
-        .share-option-icon .material-icons-round {
+        .share-btn i {
             font-size: 1.5rem;
+            color: var(--primary);
         }
 
         /* Activities Modal */
@@ -948,12 +766,11 @@
             flex-wrap: wrap;
         }
 
-        .filter-chip {
+        .filter-btn {
             padding: var(--spacing-sm) var(--spacing-md);
-            background-color: var(--surface);
-            border-radius: var(--radius-full);
+            background-color: var(--background);
             border: 1px solid var(--border);
-            font-family: 'Kanit', sans-serif;
+            border-radius: var(--radius-full);
             font-weight: 500;
             color: var(--on-background);
             cursor: pointer;
@@ -961,12 +778,12 @@
             font-size: 0.875rem;
         }
 
-        .filter-chip:hover {
+        .filter-btn:hover {
             border-color: var(--primary);
             color: var(--primary);
         }
 
-        .filter-chip.active {
+        .filter-btn.active {
             background-color: var(--primary);
             border-color: var(--primary);
             color: var(--on-primary);
@@ -978,16 +795,12 @@
             gap: var(--spacing-md);
         }
 
-        .activity-item {
+        .activity-card {
             padding: var(--spacing-lg);
-            background-color: var(--surface);
+            background-color: var(--background);
             border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
             border: 1px solid var(--border);
-            transition: all var(--animation-fast);
-        }
-
-        .activity-item:hover {
-            border-color: var(--primary);
         }
 
         .activity-header {
@@ -998,26 +811,16 @@
         }
 
         .activity-title {
-            font-size: 1rem;
+            font-size: 1.125rem;
             font-weight: 600;
             color: var(--on-surface);
-        }
-
-        .activity-date {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            color: var(--on-background);
-            font-size: 0.75rem;
         }
 
         .activity-badge {
             padding: var(--spacing-xs) var(--spacing-sm);
             border-radius: var(--radius-full);
-            font-size: 0.625rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .badge-upcoming {
@@ -1038,68 +841,6 @@
             border: 1px solid rgba(158, 158, 158, 0.2);
         }
 
-        .activity-description {
-            color: var(--on-background);
-            margin-bottom: var(--spacing-md);
-            line-height: 1.6;
-            font-size: 0.875rem;
-        }
-
-        .activity-meta {
-            display: flex;
-            gap: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            color: var(--on-background);
-            font-size: 0.75rem;
-        }
-
-        /* Snackbar */
-        .snackbar {
-            position: fixed;
-            bottom: var(--spacing-xl);
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background-color: var(--on-surface);
-            color: var(--surface);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--elevation-4);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            z-index: 1200;
-            opacity: 0;
-            transition: all var(--animation-normal);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .snackbar.active {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .snackbar-content {
-            flex: 1;
-            font-size: 0.875rem;
-        }
-
-        .snackbar-action {
-            background: none;
-            border: none;
-            color: var(--primary-light);
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         /* Responsive */
         @media (max-width: 992px) {
             .hero-container {
@@ -1107,17 +848,13 @@
                 gap: var(--spacing-xl);
             }
             
-            .hero-content h1 {
-                font-size: 2.75rem;
+            .hero-content h2 {
+                font-size: 2rem;
             }
             
             .hero-image {
                 height: 350px;
                 order: -1;
-            }
-            
-            .section-title {
-                font-size: 2rem;
             }
         }
 
@@ -1138,22 +875,17 @@
                 display: flex;
             }
             
-            .hero-content h1 {
-                font-size: 2.25rem;
+            .hero-content h2 {
+                font-size: 1.75rem;
             }
             
-            .section {
-                padding: var(--spacing-xl) 0;
+            .section-title {
+                font-size: 1.75rem;
             }
             
-            .fab-container {
+            .floating-buttons {
                 bottom: var(--spacing-lg);
                 right: var(--spacing-lg);
-            }
-            
-            .teachers-grid,
-            .info-grid {
-                grid-template-columns: 1fr;
             }
         }
 
@@ -1166,35 +898,26 @@
                 padding: var(--spacing-xl) 0;
             }
             
-            .hero-content h1 {
-                font-size: 1.875rem;
+            .hero-content h2 {
+                font-size: 1.5rem;
             }
             
             .hero-image {
                 height: 250px;
             }
             
-            .section-title {
-                font-size: 1.75rem;
+            .teachers-grid {
+                grid-template-columns: 1fr;
             }
             
-            .fab-container {
+            .floating-buttons {
                 bottom: var(--spacing-md);
                 right: var(--spacing-md);
             }
             
-            .fab {
+            .floating-button {
                 width: 48px;
                 height: 48px;
-            }
-            
-            .modal-content {
-                margin: 0 var(--spacing-sm);
-            }
-            
-            .room-grid,
-            .share-options {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1203,15 +926,15 @@
     <!-- App Bar -->
     <header class="app-bar" id="appBar">
         <div class="container app-bar-container">
-            <a href="#home" class="app-bar-logo">
+            <div class="app-bar-logo">
                 <div class="logo-icon">
-                    <span class="material-icons-round">school</span>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" alt="ตราเทคนิคสุราษฎร์ธานี">
                 </div>
                 <div class="logo-text">
-                    <h1>เทคโนสารสนเทศ</h1>
-                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+                    <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
+                    <p>แผนกเทคโนโลยีสารสนเทศ</p>
                 </div>
-            </a>
+            </div>
             
             <nav class="nav-links">
                 <a href="#home" class="nav-link active">
@@ -1220,18 +943,18 @@
                 </a>
                 <a href="#teachers" class="nav-link">
                     <span class="material-icons-round">groups</span>
-                    คณาจารย์
+                    คณะอาจารย์
                 </a>
                 <a href="#info" class="nav-link">
-                    <span class="material-icons-round">apartment</span>
-                    อาคาร
+                    <span class="material-icons-round">business</span>
+                    ข้อมูลอาคาร
                 </a>
                 <a href="#floor" class="nav-link">
                     <span class="material-icons-round">map</span>
-                    แผนผัง
+                    แผนผังและแนะนำทาง
                 </a>
                 <a href="#contact" class="nav-link">
-                    <span class="material-icons-round">contact_mail</span>
+                    <span class="material-icons-round">contact_support</span>
                     ติดต่อ
                 </a>
             </nav>
@@ -1246,25 +969,25 @@
     <main class="main-content">
         <!-- Hero Section -->
         <section class="hero" id="home">
-            <div class="hero-bg"></div>
-            <div class="container hero-container">
-                <div class="hero-content">
-                    <h1>ยินดีต้อนรับสู่<br>อาคารเรียน<br>เทคโนโลยีสารสนเทศ</h1>
-                    <p>สถานที่เรียนรู้ที่ทันสมัย พร้อมอุปกรณ์และเทคโนโลยีล้ำสมัย สร้างประสบการณ์การเรียนรู้ในยุคดิจิทัล</p>
-                    <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                        <a href="#teachers" class="btn btn-primary">
-                            <span class="material-icons-round">person</span>
-                            รู้จักคณะอาจารย์
-                        </a>
-                        <a href="#floor" class="btn btn-outlined">
-                            <span class="material-icons-round">explore</span>
-                            สำรวจอาคาร
-                        </a>
+            <div class="container">
+                <div class="hero-container">
+                    <div class="hero-content">
+                        <h2>ยินดีต้อนรับสู่<br>อาคารเรียนแผนกเทคโนโลยีสารสนเทศ</h2>
+                        <p>อาคารเรียนที่ทันสมัย ออกแบบเพื่อส่งเสริมการเรียนรู้ด้านเทคโนโลยีสารสนเทศด้วยสภาพแวดล้อมที่เหมาะสม พร้อมด้วยอุปกรณ์และห้องปฏิบัติการที่ครบครัน</p>
+                        <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                            <a href="#teachers" class="btn btn-primary">
+                                <span class="material-icons-round">groups</span>
+                                พบกับคณะอาจารย์
+                            </a>
+                            <a href="#contact" class="btn btn-outline">
+                                <span class="material-icons-round">contact_support</span>
+                                ติดต่อเรา
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="hero-image">
-                    <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" 
-                         alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ">
+                    <div class="hero-image">
+                        <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                    </div>
                 </div>
             </div>
         </section>
@@ -1272,54 +995,161 @@
         <!-- Teachers Section -->
         <section class="section" id="teachers">
             <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">คณะอาจารย์ผู้สอน</h2>
-                    <p class="section-subtitle">ทีมคณาจารย์ผู้มากประสบการณ์ พร้อมถ่ายทอดความรู้สู่คนรุ่นใหม่</p>
-                </div>
-                
+                <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
+                <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
+
                 <div class="teachers-grid">
-                    <!-- Teacher 1 -->
+                    <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
-                                 alt="นายสัญญา ชูช่วย" class="teacher-avatar">
+                                 alt="นายสัญญา ชูช่วย" class="teacher-img">
                             <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
-                            <div class="teacher-position">หัวหน้าแผนก</div>
-                            <p class="teacher-degree">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</p>
+                            <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
+                            <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
                             <div class="teacher-expertise">
-                                <span class="expertise-chip">บริหารการศึกษา</span>
-                                <span class="expertise-chip">วิชาการ</span>
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Teacher 2 -->
+                    <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                                 alt="นายพนม บุญญ์ไพร" class="teacher-avatar">
+                                 alt="นายพนม บุญญ์ไพร" class="teacher-img">
                             <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
-                            <div class="teacher-position">ครูชำนาญการพิเศษ</div>
-                            <p class="teacher-degree">วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ, ปทส. ครูเทคนิคไฟฟ้ากำลัง</p>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
+-ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
+-ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
+                            <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
                             <div class="teacher-expertise">
-                                <span class="expertise-chip">Google Certified</span>
-                                <span class="expertise-chip">Aruba Certified</span>
-                                <span class="expertise-chip">เครือข่าย</span>
+                                <span class="expertise-tag">Google certificate</span>
+                                <span class="expertise-tag">Aruba certificate</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Teacher 3 -->
+                    <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                                 alt="นางขนิษฐา สุมน" class="teacher-avatar">
+                                 alt="นางขนิษฐา สุมน" class="teacher-img">
                             <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
-                            <p class="teacher-degree">วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ, บธ.บ. คอมพิวเตอร์</p>
+                            <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
+ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
                             <div class="teacher-expertise">
-                                <span class="expertise-chip">ระบบสารสนเทศ</span>
-                                <span class="expertise-chip">ฐานข้อมูล</span>
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
+                                 alt="นางดวงฤดี เสนเรือง" class="teacher-img">
+                            <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
+ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
+                                 alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
+                            <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
+                                 alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
+                            <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
+                                 alt="นายวศิตว์ บุญเรือง" class="teacher-img">
+                            <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
+                                 alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
+                            <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
+                                 alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
+                            <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
+                    <div class="card teacher-card">
+                        <div class="card-body">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
+                                 alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
+                            <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
+                            <p>ยังไม่บันทึกในระบบ</p>
+                            <div class="teacher-expertise">
+                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
                             </div>
                         </div>
                     </div>
@@ -1330,150 +1160,118 @@
         <!-- Building Info -->
         <section class="section" id="info">
             <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
-                    <p class="section-subtitle">สิ่งอำนวยความสะดวกและสภาพแวดล้อมที่เอื้อต่อการเรียนรู้</p>
-                </div>
+                <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
+                <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
                 
                 <div class="info-grid">
-                    <div class="info-card">
+                    <div class="info-item">
                         <div class="info-icon">
-                            <span class="material-icons-round">architecture</span>
+                            <i class="fas fa-building"></i>
                         </div>
-                        <h3>โครงสร้างอาคาร</h3>
-                        <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น ระบบรักษาความปลอดภัยครบวงจร และระบบควบคุมอุณหภูมิอัตโนมัติ</p>
+                        <div>
+                            <h3>โครงสร้างอาคาร</h3>
+                            <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
+                        </div>
                     </div>
                     
-                    <div class="info-card">
+                    <div class="info-item">
                         <div class="info-icon">
-                            <span class="material-icons-round">calendar_today</span>
+                            <i class="fas fa-calendar-alt"></i>
                         </div>
-                        <h3>ปีที่ก่อสร้าง</h3>
-                        <p>เริ่มก่อสร้างปี 2561 เปิดใช้งานปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัยครบครัน</p>
+                        <div>
+                            <h3>ปีที่ก่อสร้าง</h3>
+                            <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
+                        </div>
                     </div>
                     
-                    <div class="info-card">
+                    <div class="info-item">
                         <div class="info-icon">
-                            <span class="material-icons-round">square_foot</span>
+                            <i class="fas fa-expand-arrows-alt"></i>
                         </div>
-                        <h3>พื้นที่ใช้สอย</h3>
-                        <p>พื้นที่ทั้งหมด 8,000 ตร.ม. ประกอบด้วยห้องเรียน 25 ห้อง และห้องปฏิบัติการ 12 ห้อง</p>
+                        <div>
+                            <h3>พื้นที่ใช้สอย</h3>
+                            <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
+                        </div>
                     </div>
                     
-                    <div class="info-card">
+                    <div class="info-item">
                         <div class="info-icon">
-                            <span class="material-icons-round">eco</span>
+                            <i class="fas fa-leaf"></i>
                         </div>
-                        <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
-                        <p>ออกแบบให้ใช้แสงธรรมชาติสูงสุด พร้อมระบบบำบัดน้ำและจัดการขยะภายในอาคาร</p>
+                        <div>
+                            <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
+                            <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Floor Plan -->
+        <!-- Floor Plan and Navigation -->
         <section class="section" id="floor">
             <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">แผนผังอาคาร</h2>
-                    <p class="section-subtitle">สำรวจห้องเรียนและพื้นที่ต่างๆ ภายในอาคาร</p>
-                </div>
+                <h2 class="section-title">แผนผังและแนะนำทาง</h2>
+                <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
                 
-                <div class="card">
-                    <div class="card-body">
-                        <div class="floor-tabs">
-                            <button class="floor-tab active" data-floor="1">
-                                <span class="material-icons-round">looks_one</span>
-                                ชั้น 1
-                            </button>
-                            <button class="floor-tab" data-floor="2">
-                                <span class="material-icons-round">looks_two</span>
-                                ชั้น 2
-                            </button>
-                            <button class="floor-tab" data-floor="3">
-                                <span class="material-icons-round">looks_3</span>
-                                ชั้น 3
-                            </button>
-                            <button class="floor-tab" data-floor="4">
-                                <span class="material-icons-round">looks_4</span>
-                                ชั้น 4
-                            </button>
+                <div class="floor-container">
+                    <!-- Floor 1 -->
+                    <div class="floor">
+                        <div class="floor-header">
+                            <div class="floor-number">1</div>
+                            <h3>ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
                         </div>
-                        
-                        <div class="floor-content active" data-floor="1">
-                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">ชั้น 1 - เทคโนโลยียางและพอลิเมอร์</h3>
-                            <div class="floor-rooms">
-                                <div class="room-card" data-room="polymer-lab-1">
-                                    <span class="room-name">ห้องปฏิบัติการ 1</span>
-                                    <span class="room-type">ยางและพอลิเมอร์</span>
-                                </div>
-                                <div class="room-card" data-room="polymer-lab-2">
-                                    <span class="room-name">ห้องปฏิบัติการ 2</span>
-                                    <span class="room-type">ยางและพอลิเมอร์</span>
-                                </div>
-                                <div class="room-card" data-room="polymer-class-1">
-                                    <span class="room-name">ห้องเรียน 1</span>
-                                    <span class="room-type">เทคโนโลยียาง</span>
-                                </div>
-                                <div class="room-card" data-room="polymer-office">
-                                    <span class="room-name">สำนักงานแผนก</span>
-                                    <span class="room-type">เทคโนโลยียาง</span>
-                                </div>
-                            </div>
+                        <div class="floor-rooms">
+                            <span class="room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1">ห้องปฏิบัติการ 1</span>
+                            <span class="room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2">ห้องปฏิบัติการ 2</span>
+                            <span class="room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1">ห้องเรียน 1</span>
+                            <span class="room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2">ห้องเรียน 2</span>
+                            <span class="room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง">สำนักงานแผนก</span>
                         </div>
-                        
-                        <div class="floor-content" data-floor="2">
-                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">ชั้น 2 - กิจกรรมและวิทยาศาสตร์</h3>
-                            <div class="floor-rooms">
-                                <div class="room-card" data-room="to-be-number-one">
-                                    <span class="room-name">ชมรม</span>
-                                    <span class="room-type">To be number one</span>
-                                </div>
-                                <div class="room-card" data-room="english-class-1">
-                                    <span class="room-name">ห้องอังกฤษ 1</span>
-                                    <span class="room-type">ภาษาอังกฤษ</span>
-                                </div>
-                                <div class="room-card" data-room="science-lab">
-                                    <span class="room-name">แล็บวิทยาศาสตร์</span>
-                                    <span class="room-type">วิทยาศาสตร์</span>
-                                </div>
-                            </div>
+                    </div>
+                    
+                    <!-- Floor 2 -->
+                    <div class="floor">
+                        <div class="floor-header">
+                            <div class="floor-number">2</div>
+                            <h3>ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
                         </div>
-                        
-                        <div class="floor-content" data-floor="3">
-                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">ชั้น 3 - เทคโนโลยีสารสนเทศ</h3>
-                            <div class="floor-rooms">
-                                <div class="room-card" data-room="631">
-                                    <span class="room-name">ห้อง 631</span>
-                                    <span class="room-type">เทคโนโลยีสารสนเทศ</span>
-                                </div>
-                                <div class="room-card" data-room="632">
-                                    <span class="room-name">ห้อง 632</span>
-                                    <span class="room-type">เทคโนโลยีสารสนเทศ</span>
-                                </div>
-                                <div class="room-card" data-room="633">
-                                    <span class="room-name">ห้อง 633</span>
-                                    <span class="room-type">เทคโนโลยีสารสนเทศ</span>
-                                </div>
-                            </div>
+                        <div class="floor-rooms">
+                            <span class="room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one">ชมรม To be number one</span>
+                            <span class="room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1">ห้องอังกฤษ 1</span>
+                            <span class="room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2">ห้องอังกฤษ 2</span>
+                            <span class="room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์">แล็บวิทยาศาสตร์</span>
+                            <span class="room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์">ห้องวิทยาศาสตร์</span>
                         </div>
-                        
-                        <div class="floor-content" data-floor="4">
-                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">ชั้น 4 - ห้องพิเศษและปฏิบัติการ</h3>
-                            <div class="floor-rooms">
-                                <div class="room-card" data-room="teacher-lounge">
-                                    <span class="room-name">ห้องพักครู</span>
-                                    <span class="room-type">พักผ่อน</span>
-                                </div>
-                                <div class="room-card" data-room="lecture-hall">
-                                    <span class="room-name">ห้อง Lecture</span>
-                                    <span class="room-type">บรรยาย</span>
-                                </div>
-                                <div class="room-card" data-room="lab-1">
-                                    <span class="room-name">Lab 1</span>
-                                    <span class="room-type">ปฏิบัติการคอมพิวเตอร์</span>
-                                </div>
-                            </div>
+                    </div>
+                    
+                    <!-- Floor 3 -->
+                    <div class="floor">
+                        <div class="floor-header">
+                            <div class="floor-number">3</div>
+                            <h3>ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
+                        </div>
+                        <div class="floor-rooms">
+                            <span class="room" data-room="631" data-floor="3" data-name="ห้องเรียน 631">ห้อง 631</span>
+                            <span class="room" data-room="632" data-floor="3" data-name="ห้องเรียน 632">ห้อง 632</span>
+                            <span class="room" data-room="633" data-floor="3" data-name="ห้องเรียน 633">ห้อง 633</span>
+                            <span class="room" data-room="634" data-floor="3" data-name="ห้องเรียน 634">ห้อง 634</span>
+                            <span class="room" data-room="635" data-floor="3" data-name="ห้องเรียน 635">ห้อง 635</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Floor 4 -->
+                    <div class="floor">
+                        <div class="floor-header">
+                            <div class="floor-number">4</div>
+                            <h3>ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
+                        </div>
+                        <div class="floor-rooms">
+                            <span class="room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู">ห้องพักครู</span>
+                            <span class="room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture">ห้อง Lecture</span>
+                            <span class="room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
+                            <span class="room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
+                            <span class="room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3">Lab 3</span>
+                            <span class="room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์">ห้องเซิร์ฟเวอร์</span>
                         </div>
                     </div>
                 </div>
@@ -1483,83 +1281,70 @@
         <!-- Contact Section -->
         <section class="section" id="contact">
             <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">ติดต่อเรา</h2>
-                    <p class="section-subtitle">สอบถามข้อมูลเพิ่มเติมเกี่ยวกับแผนกเทคโนโลยีสารสนเทศ</p>
-                </div>
+                <h2 class="section-title">ติดต่อเรา</h2>
+                <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
                 
                 <div class="contact-grid">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <span class="material-icons-round">location_on</span>
+                    <div>
+                        <h3>ข้อมูลติดต่อ</h3>
+                        <div class="info-item" style="margin-top: var(--spacing-lg);">
+                            <div class="info-icon">
+                                <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <div>
-                                <h3>ที่อยู่</h3>
+                                <h4>ที่อยู่</h4>
                                 <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
                             </div>
                         </div>
                         
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <span class="material-icons-round">call</span>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-phone"></i>
                             </div>
                             <div>
-                                <h3>โทรศัพท์</h3>
+                                <h4>โทรศัพท์</h4>
                                 <p>077-272-168</p>
                             </div>
                         </div>
                         
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <span class="material-icons-round">language</span>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
                             </div>
                             <div>
-                                <h3>เว็บไซต์</h3>
+                                <h4>เว็บหลักวิทยาลัย</h4>
                                 <p>www.srtc.ac.th</p>
                             </div>
                         </div>
                         
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <span class="material-icons-round">share</span>
-                            </div>
-                            <div>
-                                <h3>สื่อสังคม</h3>
-                                <div class="social-links">
-                                    <a href="https://www.facebook.com/PR.SRTC?locale=th_TH" class="social-link" target="_blank">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </a>
-                                    <a href="https://www.youtube.com/@srtcchannel3786" class="social-link" target="_blank">
-                                        <i class="fab fa-youtube"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/PR.SRTC?locale=th_TH"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.youtube.com/@srtcchannel3786"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                     
                     <div class="card">
                         <div class="card-body">
-                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">ส่งข้อความถึงเรา</h3>
+                            <h3>ส่งข้อความถึงเรา</h3>
                             <form id="contactForm">
                                 <div class="form-group">
-                                    <label class="form-label">ชื่อ-นามสกุล</label>
+                                    <label>ชื่อ-นามสกุล</label>
                                     <input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">อีเมล</label>
+                                    <label>อีเมล</label>
                                     <input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">เรื่อง</label>
+                                    <label>เรื่อง</label>
                                     <input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">ข้อความ</label>
-                                    <textarea class="form-control" rows="4" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
+                                    <label>ข้อความ</label>
+                                    <textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
                                 </div>
                                 
                                 <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -1580,512 +1365,474 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>พัฒนาศักยภาพนักศึกษาในยุคดิจิทัล ด้วยเทคโนโลยีและความรู้ที่ทันสมัย</p>
+                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
-                    <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
-                        <a href="#home" style="color: var(--surface); opacity: 0.8; text-decoration: none; font-size: 0.875rem;">หน้าแรก</a>
-                        <a href="#teachers" style="color: var(--surface); opacity: 0.8; text-decoration: none; font-size: 0.875rem;">คณะอาจารย์</a>
-                        <a href="#info" style="color: var(--surface); opacity: 0.8; text-decoration: none; font-size: 0.875rem;">ข้อมูลอาคาร</a>
-                        <a href="#floor" style="color: var(--surface); opacity: 0.8; text-decoration: none; font-size: 0.875rem;">แผนผังอาคาร</a>
-                    </div>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: var(--spacing-sm);"><a href="#home" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">หน้าแรก</a></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><a href="#teachers" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">คณะอาจารย์</a></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><a href="#info" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">ข้อมูลอาคาร</a></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><a href="#floor" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">แผนผังและแนะนำทาง</a></li>
+                    </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h3>เวลาเปิดทำการ</h3>
-                    <p>วันจันทร์ - ศุกร์<br>08:00 - 20:00 น.</p>
-                    <p style="margin-top: var(--spacing-sm);">วันเสาร์-อาทิตย์ปิดทำการ</p>
+                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br><br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
                 </div>
             </div>
             
-            <div class="footer-bottom">
-                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี | แผนกเทคโนโลยีสารสนเทศ</p>
+            <div class="copyright">
+                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี สถานศึกษารางวัลพระราชทาน | แผนกเทคโนโลยีสารสนเทศ | </p>
             </div>
         </div>
     </footer>
 
     <!-- Floating Action Buttons -->
-    <div class="fab-container">
-        <!-- Activities FAB -->
-        <button class="fab fab-secondary" id="activitiesFab">
-            <span class="material-icons-round">event</span>
-            <span class="fab-label">กิจกรรม</span>
+    <div class="floating-buttons">
+        <!-- Activities Button -->
+        <button class="floating-button events" id="activitiesBtn">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="floating-button-label">กิจกรรม Upcoming</span>
         </button>
         
-        <!-- Share Position FAB -->
-        <button class="fab" id="shareFab">
-            <span class="material-icons-round">share</span>
-            <span class="fab-label">แชร์ตำแหน่ง</span>
+        <!-- Share Position Button -->
+        <button class="floating-button share" id="shareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span class="floating-button-label">แชร์ตำแหน่งห้อง</span>
         </button>
-    </div>
-
-    <!-- Share Position Modal -->
-    <div class="modal" id="shareModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">
-                    <span class="material-icons-round">share</span>
-                    แชร์ตำแหน่งห้อง
-                </h2>
-                <button class="modal-close" id="shareModalClose">
-                    <span class="material-icons-round">close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">เลือกห้องที่ต้องการแชร์</label>
-                    <div class="room-grid" id="roomGrid">
-                        <!-- Rooms will be populated dynamically -->
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">เลือกวิธีการแชร์</label>
-                    <div class="share-options">
-                        <div class="share-option" data-share-type="link">
-                            <div class="share-option-icon">
-                                <span class="material-icons-round">link</span>
-                            </div>
-                            <span>สร้างลิงก์</span>
-                        </div>
-                        <div class="share-option" data-share-type="copy">
-                            <div class="share-option-icon">
-                                <span class="material-icons-round">content_copy</span>
-                            </div>
-                            <span>คัดลอก</span>
-                        </div>
-                        <div class="share-option" data-share-type="qr">
-                            <div class="share-option-icon">
-                                <span class="material-icons-round">qr_code</span>
-                            </div>
-                            <span>QR Code</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="shareResult" style="display: none;">
-                    <div class="form-group">
-                        <label class="form-label">ลิงก์สำหรับแชร์</label>
-                        <div style="display: flex; gap: var(--spacing-sm);">
-                            <input type="text" class="form-control" id="shareLink" readonly>
-                            <button class="btn btn-primary" id="copyLinkBtn">
-                                <span class="material-icons-round">content_copy</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Activities Modal -->
     <div class="modal" id="activitiesModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">
-                    <span class="material-icons-round">event</span>
-                    กิจกรรม Upcoming
-                </h2>
-                <button class="modal-close" id="activitiesModalClose">
-                    <span class="material-icons-round">close</span>
-                </button>
+                <h3><i class="fas fa-calendar-alt"></i> กิจกรรม Upcoming</h3>
+                <p>กิจกรรมที่น่าสนใจและกำลังจะมาถึงของแผนกเทคโนโลยีสารสนเทศ</p>
             </div>
             <div class="modal-body">
                 <div class="activities-filter">
-                    <button class="filter-chip active" data-filter="all">ทั้งหมด</button>
-                    <button class="filter-chip" data-filter="upcoming">กำลังจะมาถึง</button>
-                    <button class="filter-chip" data-filter="ongoing">กำลังจัด</button>
-                    <button class="filter-chip" data-filter="completed">จบแล้ว</button>
+                    <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+                    <button class="filter-btn" data-filter="upcoming">กำลังจะมาถึง</button>
+                    <button class="filter-btn" data-filter="ongoing">กำลังจัด</button>
+                    <button class="filter-btn" data-filter="completed">จบแล้ว</button>
                 </div>
                 
                 <div class="activities-list" id="activitiesList">
                     <!-- Activities will be populated dynamically -->
                 </div>
             </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeActivitiesModal">ปิด</button>
+            </div>
         </div>
     </div>
 
-    <!-- Snackbar -->
-    <div class="snackbar" id="snackbar">
-        <div class="snackbar-content" id="snackbarText"></div>
-        <button class="snackbar-action" id="snackbarAction">ปิด</button>
+    <!-- Share Position Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-share-alt"></i> แชร์ตำแหน่งห้องกับเพื่อน</h3>
+                <p>เลือกห้องและวิธีการแชร์ตำแหน่งกับเพื่อนของคุณ</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>เลือกห้องที่ต้องการแชร์</label>
+                    <div class="floor-rooms" id="shareRooms">
+                        <span class="room" data-room="631" data-name="ห้องเรียน 631">ห้อง 631</span>
+                        <span class="room" data-room="632" data-name="ห้องเรียน 632">ห้อง 632</span>
+                        <span class="room" data-room="633" data-name="ห้องเรียน 633">ห้อง 633</span>
+                        <span class="room" data-room="634" data-name="ห้องเรียน 634">ห้อง 634</span>
+                        <span class="room" data-room="635" data-name="ห้องเรียน 635">ห้อง 635</span>
+                        <span class="room" data-room="lab-1" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
+                        <span class="room" data-room="lab-2" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
+                        <span class="room" data-room="lecture-hall" data-name="ห้อง Lecture">ห้อง Lecture</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>วิธีการแชร์</label>
+                    <div class="share-options">
+                        <div class="share-btn" data-share-type="link">
+                            <i class="fas fa-link"></i>
+                            <span>สร้างลิงก์แชร์</span>
+                        </div>
+                        <div class="share-btn" data-share-type="copy">
+                            <i class="fas fa-copy"></i>
+                            <span>คัดลอกข้อมูล</span>
+                        </div>
+                        <div class="share-btn" data-share-type="qr">
+                            <i class="fas fa-qrcode"></i>
+                            <span>สร้าง QR Code</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="shareResult" style="display: none; margin-top: var(--spacing-xl);">
+                    <div class="form-group">
+                        <label>ลิงก์สำหรับแชร์:</label>
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" class="form-control" id="shareLinkInput" readonly>
+                            <button class="btn btn-primary" id="shareLinkCopyBtn">คัดลอก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeShareModal">ปิด</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', function() {
-            // App Bar Scroll Effect
-            const appBar = document.getElementById('appBar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    appBar.style.boxShadow = 'var(--elevation-2)';
-                    appBar.style.background = 'rgba(255, 255, 255, 0.98)';
-                } else {
-                    appBar.style.boxShadow = 'var(--elevation-1)';
-                    appBar.style.background = 'rgba(255, 255, 255, 0.95)';
-                }
-            });
-
-            // Navigation
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Remove active class from all links
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    
-                    // Add active class to clicked link
-                    this.classList.add('active');
-                    
-                    // Scroll to section
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        window.scrollTo({
-                            top: targetSection.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // Floor Tabs
-            const floorTabs = document.querySelectorAll('.floor-tab');
-            const floorContents = document.querySelectorAll('.floor-content');
-            
-            floorTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const floor = tab.dataset.floor;
-                    
-                    // Update tabs
-                    floorTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    
-                    // Update contents
-                    floorContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.dataset.floor === floor) {
-                            content.classList.add('active');
-                        }
-                    });
-                });
-            });
-
-            // Contact Form
-            const contactForm = document.getElementById('contactForm');
-            contactForm.addEventListener('submit', function(e) {
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+            const icon = mobileMenuBtn.querySelector('span');
+            if (mainNav.style.display === 'flex') {
+                icon.textContent = 'close';
+            } else {
+                icon.textContent = 'menu';
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // Show success message
-                showSnackbar('ส่งข้อความสำเร็จ! เราจะติดต่อกลับในเร็วๆ นี้', 'success');
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
                 
-                // Reset form
-                this.reset();
-            });
-
-            // Data
-            const roomData = {
-                'polymer-lab-1': { name: 'ห้องปฏิบัติการยางและพอลิเมอร์ 1', floor: 1 },
-                'polymer-lab-2': { name: 'ห้องปฏิบัติการยางและพอลิเมอร์ 2', floor: 1 },
-                'polymer-class-1': { name: 'ห้องเรียนเทคโนโลยียาง 1', floor: 1 },
-                'polymer-office': { name: 'สำนักงานแผนกเทคโนโลยียาง', floor: 1 },
-                'to-be-number-one': { name: 'ห้องชมรม To be number one', floor: 2 },
-                'english-class-1': { name: 'ห้องเรียนภาษาอังกฤษ 1', floor: 2 },
-                'science-lab': { name: 'ห้องปฏิบัติการวิทยาศาสตร์', floor: 2 },
-                '631': { name: 'ห้องเรียน 631', floor: 3 },
-                '632': { name: 'ห้องเรียน 632', floor: 3 },
-                '633': { name: 'ห้องเรียน 633', floor: 3 },
-                'teacher-lounge': { name: 'ห้องพักครู', floor: 4 },
-                'lecture-hall': { name: 'ห้อง Lecture', floor: 4 },
-                'lab-1': { name: 'ห้องปฏิบัติการ Lab 1', floor: 4 }
-            };
-
-            const activitiesData = [
-                {
-                    id: 1,
-                    title: "ค่ายพัฒนาโปรแกรมขั้นสูง",
-                    description: "ค่ายพัฒนาโปรแกรมสำหรับนักศึกษาชั้นปีที่ 3-4 เพื่อเรียนรู้เทคโนโลยีใหม่ๆ และพัฒนาทักษะการเขียนโปรแกรม",
-                    date: "2025-03-15",
-                    time: "09:00 - 16:00",
-                    location: "ห้อง Lab 1 ชั้น 4",
-                    type: "upcoming",
-                    category: "การเรียนการสอน"
-                },
-                {
-                    id: 2,
-                    title: "แข่งขันโปรแกรมมิ่ง IT Contest 2025",
-                    description: "การแข่งขันเขียนโปรแกรมระดับแผนก โดยมีรางวัลสำหรับทีมที่ชนะเลิศ",
-                    date: "2025-03-22",
-                    time: "13:00 - 17:00",
-                    location: "ห้องเรียน 633 ชั้น 3",
-                    type: "upcoming",
-                    category: "การแข่งขัน"
-                },
-                {
-                    id: 3,
-                    title: "อบรมระบบเครือข่ายขั้นสูง",
-                    description: "การอบรมระบบเครือข่ายสำหรับอาจารย์และนักศึกษาที่สนใจ โดยวิทยากรจากบริษัท Aruba",
-                    date: "2025-03-10",
-                    time: "08:30 - 16:30",
-                    location: "ห้อง Lecture ชั้น 4",
-                    type: "ongoing",
-                    category: "การอบรม"
-                },
-                {
-                    id: 4,
-                    title: "โครงการจิตอาสาพัฒนาห้องปฏิบัติการ",
-                    description: "กิจกรรมจิตอาสาทำความสะอาดและพัฒนาห้องปฏิบัติการคอมพิวเตอร์",
-                    date: "2025-03-05",
-                    time: "08:00 - 12:00",
-                    location: "ห้องปฏิบัติการทุกห้อง",
-                    type: "completed",
-                    category: "กิจกรรมพิเศษ"
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                if (window.innerWidth <= 768 && mainNav.style.display === 'flex') {
+                    mainNav.style.display = 'none';
+                    mobileMenuBtn.querySelector('span').textContent = 'menu';
                 }
-            ];
+            });
+        });
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name')?.value || 'ไม่ระบุชื่อ';
+            
+            // Show success message
+            alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
+            
+            // Reset form
+            contactForm.reset();
+        });
+        
+        // Add active class to nav links on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
 
-            // Share Modal
-            const shareFab = document.getElementById('shareFab');
-            const shareModal = document.getElementById('shareModal');
-            const shareModalClose = document.getElementById('shareModalClose');
-            const roomGrid = document.getElementById('roomGrid');
-            const shareOptions = document.querySelectorAll('.share-option');
-            const shareResult = document.getElementById('shareResult');
-            const shareLink = document.getElementById('shareLink');
-            const copyLinkBtn = document.getElementById('copyLinkBtn');
+        // Activities Modal
+        const activitiesBtn = document.getElementById('activitiesBtn');
+        const activitiesModal = document.getElementById('activitiesModal');
+        const closeActivitiesModal = document.getElementById('closeActivitiesModal');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const activitiesList = document.getElementById('activitiesList');
 
-            let selectedRoomId = null;
+        // Activities Data
+        const activitiesData = [
+            {
+                id: 1,
+                title: "ค่ายพัฒนาโปรแกรมขั้นสูง",
+                description: "ค่ายพัฒนาโปรแกรมสำหรับนักศึกษาชั้นปีที่ 3-4 เพื่อเรียนรู้เทคโนโลยีใหม่ๆ และพัฒนาทักษะการเขียนโปรแกรม",
+                date: "2025-03-15",
+                time: "09:00 - 16:00",
+                location: "ห้อง Lab 1 ชั้น 4",
+                type: "upcoming",
+                category: "การเรียนการสอน"
+            },
+            {
+                id: 2,
+                title: "แข่งขันโปรแกรมมิ่ง IT Contest 2025",
+                description: "การแข่งขันเขียนโปรแกรมระดับแผนก โดยมีรางวัลสำหรับทีมที่ชนะเลิศ",
+                date: "2025-03-22",
+                time: "13:00 - 17:00",
+                location: "ห้องเรียน 633 ชั้น 3",
+                type: "upcoming",
+                category: "การแข่งขัน"
+            },
+            {
+                id: 3,
+                title: "อบรมระบบเครือข่ายขั้นสูง",
+                description: "การอบรมระบบเครือข่ายสำหรับอาจารย์และนักศึกษาที่สนใจ โดยวิทยากรจากบริษัท Aruba",
+                date: "2025-03-10",
+                time: "08:30 - 16:30",
+                location: "ห้อง Lecture ชั้น 4",
+                type: "ongoing",
+                category: "การอบรม"
+            },
+            {
+                id: 4,
+                title: "โครงการจิตอาสาพัฒนาห้องปฏิบัติการ",
+                description: "กิจกรรมจิตอาสาทำความสะอาดและพัฒนาห้องปฏิบัติการคอมพิวเตอร์",
+                date: "2025-03-05",
+                time: "08:00 - 12:00",
+                location: "ห้องปฏิบัติการทุกห้อง",
+                type: "completed",
+                category: "กิจกรรมพิเศษ"
+            },
+            {
+                id: 5,
+                title: "สัมมนาเทคโนโลยี AI กับการศึกษา",
+                description: "การสัมมนาเกี่ยวกับการประยุกต์ใช้เทคโนโลยี AI ในการจัดการเรียนการสอน",
+                date: "2025-03-28",
+                time: "10:00 - 15:00",
+                location: "ห้อง Lecture ชั้น 4",
+                type: "upcoming",
+                category: "การสัมมนา"
+            },
+            {
+                id: 6,
+                title: "โครงการสอนเสริมฐานข้อมูล",
+                description: "การสอนเสริมวิชาฐานข้อมูลสำหรับนักศึกษาที่ต้องการเพิ่มความเข้าใจ",
+                date: "2025-03-12",
+                time: "16:00 - 18:00",
+                location: "ห้องเรียน 632 ชั้น 3",
+                type: "ongoing",
+                category: "การเรียนการสอน"
+            }
+        ];
 
-            // Populate room grid
-            Object.entries(roomData).forEach(([id, room]) => {
-                const roomOption = document.createElement('div');
-                roomOption.className = 'room-option';
-                roomOption.dataset.roomId = id;
-                roomOption.innerHTML = `
-                    <span class="room-name">${room.name}</span>
-                    <span class="room-type">ชั้น ${room.floor}</span>
+        // Load activities
+        function loadActivities(filter = 'all') {
+            activitiesList.innerHTML = '';
+            
+            let filteredActivities = activitiesData;
+            if (filter !== 'all') {
+                filteredActivities = activitiesData.filter(activity => activity.type === filter);
+            }
+            
+            // Sort by date
+            filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // Create activity items
+            filteredActivities.forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-card';
+                activityItem.innerHTML = `
+                    <div class="activity-header">
+                        <div>
+                            <h4 class="activity-title">${activity.title}</h4>
+                            <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: 0.875rem; color: var(--on-background);">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(activity.date)} | ${activity.time}</span>
+                            </div>
+                        </div>
+                        <span class="activity-badge badge-${activity.type}">
+                            ${getTypeText(activity.type)}
+                        </span>
+                    </div>
+                    <p style="margin: var(--spacing-sm) 0; color: var(--on-background);">${activity.description}</p>
+                    <div style="display: flex; gap: var(--spacing-lg); flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${activity.location}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                            <i class="fas fa-tag"></i>
+                            <span>${activity.category}</span>
+                        </div>
+                    </div>
                 `;
                 
-                roomOption.addEventListener('click', () => {
-                    // Remove selected class from all options
-                    document.querySelectorAll('.room-option').forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                    
-                    // Add selected class to clicked option
-                    roomOption.classList.add('selected');
-                    selectedRoomId = id;
-                    shareResult.style.display = 'none';
-                });
-                
-                roomGrid.appendChild(roomOption);
+                activitiesList.appendChild(activityItem);
             });
+        }
 
-            // Share options
-            shareOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    if (!selectedRoomId) {
-                        showSnackbar('กรุณาเลือกห้องก่อน', 'warning');
-                        return;
-                    }
-                    
-                    // Remove border from all options
-                    shareOptions.forEach(opt => opt.style.borderColor = 'var(--border)');
-                    
-                    // Add border to selected option
-                    option.style.borderColor = 'var(--primary)';
-                    
-                    // Generate share link
-                    const room = roomData[selectedRoomId];
-                    const shareUrl = `${window.location.origin}${window.location.pathname}#room=${selectedRoomId}`;
-                    shareLink.value = shareUrl;
-                    shareResult.style.display = 'block';
-                    
-                    showSnackbar('สร้างลิงก์สำหรับแชร์เรียบร้อยแล้ว', 'success');
-                });
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             });
+        }
 
-            // Copy link button
-            copyLinkBtn.addEventListener('click', () => {
-                if (!shareLink.value) return;
-                
-                navigator.clipboard.writeText(shareLink.value).then(() => {
-                    showSnackbar('คัดลอกลิงก์เรียบร้อยแล้ว', 'success');
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-            });
-
-            // Open share modal
-            shareFab.addEventListener('click', () => {
-                shareModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-
-            // Close share modal
-            shareModalClose.addEventListener('click', () => {
-                shareModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-
-            // Activities Modal
-            const activitiesFab = document.getElementById('activitiesFab');
-            const activitiesModal = document.getElementById('activitiesModal');
-            const activitiesModalClose = document.getElementById('activitiesModalClose');
-            const filterChips = document.querySelectorAll('.filter-chip');
-            const activitiesList = document.getElementById('activitiesList');
-
-            // Load activities
-            function loadActivities(filter = 'all') {
-                activitiesList.innerHTML = '';
-                
-                let filteredActivities = activitiesData;
-                if (filter !== 'all') {
-                    filteredActivities = activitiesData.filter(activity => activity.type === filter);
-                }
-                
-                // Sort by date
-                filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                // Create activity items
-                filteredActivities.forEach(activity => {
-                    const activityItem = document.createElement('div');
-                    activityItem.className = 'activity-item';
-                    activityItem.innerHTML = `
-                        <div class="activity-header">
-                            <div>
-                                <h4 class="activity-title">${activity.title}</h4>
-                                <div class="activity-date">
-                                    <span class="material-icons-round" style="font-size: 0.875rem;">calendar_today</span>
-                                    <span>${formatDate(activity.date)} | ${activity.time}</span>
-                                </div>
-                            </div>
-                            <span class="activity-badge badge-${activity.type}">
-                                ${getTypeText(activity.type)}
-                            </span>
-                        </div>
-                        <p class="activity-description">${activity.description}</p>
-                        <div class="activity-meta">
-                            <div class="meta-item">
-                                <span class="material-icons-round" style="font-size: 0.875rem;">location_on</span>
-                                <span>${activity.location}</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="material-icons-round" style="font-size: 0.875rem;">category</span>
-                                <span>${activity.category}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    activitiesList.appendChild(activityItem);
-                });
-            }
-
-            // Format date
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('th-TH', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                });
-            }
-
-            // Get type text
-            function getTypeText(type) {
-                const types = {
-                    'upcoming': 'กำลังจะมาถึง',
-                    'ongoing': 'กำลังจัด',
-                    'completed': 'จบแล้ว'
-                };
-                return types[type] || type;
-            }
-
-            // Filter chips
-            filterChips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    // Remove active class from all chips
-                    filterChips.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked chip
-                    chip.classList.add('active');
-                    
-                    // Load activities with filter
-                    const filter = chip.dataset.filter;
-                    loadActivities(filter);
-                });
-            });
-
-            // Open activities modal
-            activitiesFab.addEventListener('click', () => {
-                activitiesModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                loadActivities('all');
-            });
-
-            // Close activities modal
-            activitiesModalClose.addEventListener('click', () => {
-                activitiesModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-
-            // Snackbar
-            const snackbar = document.getElementById('snackbar');
-            const snackbarText = document.getElementById('snackbarText');
-            const snackbarAction = document.getElementById('snackbarAction');
-
-            // Show snackbar function
-            window.showSnackbar = function(message, type = 'info') {
-                snackbarText.textContent = message;
-                snackbar.classList.add('active');
-                
-                // Auto hide after 4 seconds
-                setTimeout(() => {
-                    snackbar.classList.remove('active');
-                }, 4000);
+        // Get type text
+        function getTypeText(type) {
+            const types = {
+                'upcoming': 'กำลังจะมาถึง',
+                'ongoing': 'กำลังจัด',
+                'completed': 'จบแล้ว'
             };
+            return types[type] || type;
+        }
 
-            // Snackbar action
-            snackbarAction.addEventListener('click', () => {
-                snackbar.classList.remove('active');
+        // Open activities modal
+        activitiesBtn.addEventListener('click', () => {
+            activitiesModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            loadActivities('all');
+        });
+
+        // Close activities modal
+        closeActivitiesModal.addEventListener('click', () => {
+            activitiesModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Filter activities
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                loadActivities(filter);
             });
+        });
 
-            // Close modals on backdrop click
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('active');
-                        document.body.style.overflow = 'auto';
-                    }
+        // Share Modal
+        const shareBtn = document.getElementById('shareBtn');
+        const shareModal = document.getElementById('shareModal');
+        const closeShareModal = document.getElementById('closeShareModal');
+        const shareRooms = document.getElementById('shareRooms');
+        const shareOptions = document.querySelectorAll('.share-btn');
+        const shareResult = document.getElementById('shareResult');
+        const shareLinkInput = document.getElementById('shareLinkInput');
+        const shareLinkCopyBtn = document.getElementById('shareLinkCopyBtn');
+
+        let selectedRoom = null;
+
+        // Room selection
+        shareRooms.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', () => {
+                shareRooms.querySelectorAll('.room').forEach(r => {
+                    r.style.backgroundColor = '';
+                    r.style.color = '';
+                    r.style.borderColor = '';
                 });
+                
+                room.style.backgroundColor = 'var(--primary)';
+                room.style.color = 'var(--on-primary)';
+                room.style.borderColor = 'var(--primary)';
+                
+                selectedRoom = {
+                    id: room.dataset.room,
+                    name: room.dataset.name
+                };
+                
+                shareResult.style.display = 'none';
             });
+        });
 
-            // Close modals with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    modals.forEach(modal => {
-                        modal.classList.remove('active');
-                        document.body.style.overflow = 'auto';
+        // Share options
+        shareOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (!selectedRoom) {
+                    alert('กรุณาเลือกห้องก่อน');
+                    return;
+                }
+                
+                const shareType = option.dataset.shareType;
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareUrl = `${baseUrl}?room=${selectedRoom.id}&name=${encodeURIComponent(selectedRoom.name)}`;
+                
+                if (shareType === 'link') {
+                    shareLinkInput.value = shareUrl;
+                    shareResult.style.display = 'block';
+                } else if (shareType === 'copy') {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
                     });
+                } else if (shareType === 'qr') {
+                    alert('สร้าง QR Code สำหรับห้อง ' + selectedRoom.name);
+                    // In a real app, you would generate a QR code here
                 }
             });
+        });
 
-            // Room card click
-            document.querySelectorAll('.room-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const roomId = card.dataset.room;
-                    const room = roomData[roomId];
-                    if (room) {
-                        showSnackbar(`เลือกห้อง: ${room.name} (ชั้น ${room.floor})`, 'info');
-                    }
-                });
+        // Copy link button
+        shareLinkCopyBtn.addEventListener('click', () => {
+            shareLinkInput.select();
+            document.execCommand('copy');
+            alert('คัดลอกลิงก์เรียบร้อยแล้ว');
+        });
+
+        // Open share modal
+        shareBtn.addEventListener('click', () => {
+            shareModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close share modal
+        closeShareModal.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
             });
+        });
 
-            // Initialize
+        // Close modals with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        });
+
+        // Room click navigation
+        document.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', function() {
+                const roomName = this.dataset.name;
+                const floor = this.dataset.floor;
+                alert(`ห้อง: ${roomName}\nชั้น: ${floor}\n\nระบบนำทางจะเปิดในเวอร์ชันถัดไป`);
+            });
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
             loadActivities('all');
         });
     </script>
