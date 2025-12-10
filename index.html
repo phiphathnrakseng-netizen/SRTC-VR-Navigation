@@ -66,6 +66,184 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity var(--animation-slow), visibility var(--animation-slow);
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: var(--spacing-xl);
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .loading-title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xxl);
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .loading-progress-container {
+            width: 300px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                transparent 100%);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .loading-speed-indicator {
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: var(--spacing-md);
+            text-align: center;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: var(--spacing-xl);
+        }
+
+        .loading-dot {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: loadingDot 1.4s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Network Speed Detection */
+        .network-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all var(--animation-normal);
+        }
+
+        .network-status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .network-status i {
+            font-size: 1rem;
+        }
+
+        .network-status.fast { background-color: var(--secondary); }
+        .network-status.moderate { background-color: #FF9800; }
+        .network-status.slow { background-color: #F44336; }
+
+        /* Main Content - Initially Hidden */
+        .main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--animation-normal) 0.3s, transform var(--animation-normal) 0.3s;
+        }
+
+        .main-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Existing styles from original code */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Kanit', sans-serif;
             font-weight: 500;
@@ -91,6 +269,13 @@
             box-shadow: var(--shadow-1);
             transition: all var(--animation-normal);
             border-bottom: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .app-bar.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .app-bar-container {
@@ -856,6 +1041,15 @@
                 height: 350px;
                 order: -1;
             }
+
+            .loading-logo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .loading-title {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -886,6 +1080,23 @@
             .floating-buttons {
                 bottom: var(--spacing-lg);
                 right: var(--spacing-lg);
+            }
+
+            .loading-logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .loading-title {
+                font-size: 1.75rem;
+            }
+
+            .loading-subtitle {
+                font-size: 1rem;
+            }
+
+            .loading-progress-container {
+                width: 250px;
             }
         }
 
@@ -919,16 +1130,68 @@
                 width: 48px;
                 height: 48px;
             }
+
+            .loading-logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .loading-title {
+                font-size: 1.5rem;
+            }
+
+            .loading-subtitle {
+                font-size: 0.9rem;
+                padding: 0 var(--spacing-md);
+            }
+
+            .loading-progress-container {
+                width: 200px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
+                 alt="ตราเทคนิคสุราษฎร์ธานี"
+                 onerror="this.src='https://via.placeholder.com/200/1A73E8/FFFFFF?text=SRTC'">
+        </div>
+        <h1 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
+        <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ</p>
+        
+        <div class="loading-progress-container">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
+        
+        <div class="loading-speed-indicator" id="loadingSpeedIndicator">
+            <i class="fas fa-wifi"></i>
+            <span>กำลังตรวจสอบความเร็วอินเทอร์เน็ต...</span>
+        </div>
+        
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
+    <!-- Network Status Indicator -->
+    <div class="network-status" id="networkStatus">
+        <i class="fas fa-wifi"></i>
+        <span id="networkStatusText">กำลังตรวจสอบความเร็วเน็ต...</span>
+    </div>
+
     <!-- App Bar -->
     <header class="app-bar" id="appBar">
         <div class="container app-bar-container">
             <div class="app-bar-logo">
                 <div class="logo-icon">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" alt="ตราเทคนิคสุราษฎร์ธานี">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
+                         alt="ตราเทคนิคสุราษฎร์ธานี"
+                         onerror="this.src='https://via.placeholder.com/48/1A73E8/FFFFFF?text=SRTC'">
                 </div>
                 <div class="logo-text">
                     <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
@@ -966,7 +1229,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" id="mainContent">
         <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="container">
@@ -986,7 +1249,9 @@
                         </div>
                     </div>
                     <div class="hero-image">
-                        <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี">
+                        <img src="http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg" 
+                             alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
+                             onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
                     </div>
                 </div>
             </div>
@@ -1003,7 +1268,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
-                                 alt="นายสัญญา ชูช่วย" class="teacher-img">
+                                 alt="นายสัญญา ชูช่วย" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
                             <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
                             <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
@@ -1018,7 +1284,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                                 alt="นายพนม บุญญ์ไพร" class="teacher-img">
+                                 alt="นายพนม บุญญ์ไพร" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
@@ -1036,7 +1303,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                                 alt="นางขนิษฐา สุมน" class="teacher-img">
+                                 alt="นางขนิษฐา สุมน" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
@@ -1052,7 +1320,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
-                                 alt="นางดวงฤดี เสนเรือง" class="teacher-img">
+                                 alt="นางดวงฤดี เสนเรือง" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
@@ -1068,7 +1337,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
-                                 alt="นางสาววิยะดา คงแก้ว" class="teacher-img">
+                                 alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
@@ -1083,7 +1353,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
-                                 alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img">
+                                 alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
@@ -1098,7 +1369,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
-                                 alt="นายวศิตว์ บุญเรือง" class="teacher-img">
+                                 alt="นายวศิตว์ บุญเรือง" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1113,7 +1385,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
-                                 alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img">
+                                 alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1128,7 +1401,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
-                                 alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img">
+                                 alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
@@ -1143,7 +1417,8 @@
                     <div class="card teacher-card">
                         <div class="card-body">
                             <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
-                                 alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img">
+                                 alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
+                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                             <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
                             <div class="teacher-position">ครูประจำแผนก</div>
                             <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
@@ -1487,6 +1762,160 @@
     </div>
 
     <script>
+        // Loading and Network Speed Detection
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgressBar = document.getElementById('loadingProgressBar');
+        const loadingSpeedIndicator = document.getElementById('loadingSpeedIndicator');
+        const networkStatus = document.getElementById('networkStatus');
+        const networkStatusText = document.getElementById('networkStatusText');
+        const mainContent = document.getElementById('mainContent');
+        const appBar = document.getElementById('appBar');
+
+        // Network speed categories
+        const NETWORK_SPEEDS = {
+            FAST: { min: 5, text: 'เร็วมาก', class: 'fast', icon: 'fa-bolt' },
+            MODERATE: { min: 1, text: 'ปานกลาง', class: 'moderate', icon: 'fa-wifi' },
+            SLOW: { min: 0, text: 'ช้า', class: 'slow', icon: 'fa-tachometer-alt' }
+        };
+
+        // Simulate network speed test
+        function testNetworkSpeed() {
+            return new Promise((resolve) => {
+                // In a real application, you would use the Network Information API
+                // For this demo, we'll simulate different speeds
+                
+                // Random speed between 0.5 and 10 Mbps
+                const simulatedSpeed = 0.5 + Math.random() * 9.5;
+                
+                // Add a small delay to simulate testing time
+                setTimeout(() => {
+                    resolve(simulatedSpeed);
+                }, 500);
+            });
+        }
+
+        // Determine network category based on speed
+        function getNetworkCategory(speedMbps) {
+            if (speedMbps >= NETWORK_SPEEDS.FAST.min) {
+                return NETWORK_SPEEDS.FAST;
+            } else if (speedMbps >= NETWORK_SPEEDS.MODERATE.min) {
+                return NETWORK_SPEEDS.MODERATE;
+            } else {
+                return NETWORK_SPEEDS.SLOW;
+            }
+        }
+
+        // Update loading progress
+        function updateLoadingProgress(percent, speedInfo = null) {
+            loadingProgressBar.style.width = percent + '%';
+            
+            if (speedInfo) {
+                loadingSpeedIndicator.innerHTML = `
+                    <i class="fas ${speedInfo.icon}"></i>
+                    <span>ความเร็วเน็ต: ${speedInfo.text} (${speedInfo.speed.toFixed(1)} Mbps)</span>
+                `;
+            }
+        }
+
+        // Show network status indicator
+        function showNetworkStatus(category, speed) {
+            networkStatus.className = `network-status ${category.class} show`;
+            networkStatus.innerHTML = `
+                <i class="fas ${category.icon}"></i>
+                <span>ความเร็วเน็ต: ${category.text} (${speed.toFixed(1)} Mbps)</span>
+            `;
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                networkStatus.classList.remove('show');
+            }, 5000);
+        }
+
+        // Load resources with simulated progress
+        async function loadResources() {
+            let progress = 0;
+            const totalSteps = 100;
+            
+            // Step 1: Test network speed (10%)
+            updateLoadingProgress(10);
+            const networkSpeed = await testNetworkSpeed();
+            const networkCategory = getNetworkCategory(networkSpeed);
+            
+            // Adjust loading time based on network speed
+            let loadingTime = 2000; // Base time in ms
+            if (networkCategory === NETWORK_SPEEDS.SLOW) {
+                loadingTime = 4000;
+            } else if (networkCategory === NETWORK_SPEEDS.MODERATE) {
+                loadingTime = 3000;
+            } else {
+                loadingTime = 1500;
+            }
+            
+            // Step 2: Show network info (20%)
+            progress = 20;
+            updateLoadingProgress(progress, {
+                ...networkCategory,
+                speed: networkSpeed
+            });
+            
+            // Show network status
+            showNetworkStatus(networkCategory, networkSpeed);
+            
+            // Step 3: Simulate loading images and content
+            const increment = 80 / (loadingTime / 100);
+            
+            const progressInterval = setInterval(() => {
+                progress += increment;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    completeLoading();
+                }
+                updateLoadingProgress(progress);
+            }, 100);
+            
+            // Preload important images
+            const imagesToPreload = [
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s',
+                'http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg'
+            ];
+            
+            imagesToPreload.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        // Complete loading and show main content
+        function completeLoading() {
+            // Fade out loading screen
+            loadingScreen.classList.add('fade-out');
+            
+            // Show main content with delay
+            setTimeout(() => {
+                mainContent.classList.add('show');
+                appBar.classList.add('show');
+                
+                // Hide loading screen completely
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 300);
+        }
+
+        // Start loading process
+        window.addEventListener('DOMContentLoaded', () => {
+            // Start loading resources
+            loadResources();
+            
+            // Fallback: If loading takes too long, force completion
+            setTimeout(() => {
+                if (loadingScreen.style.display !== 'none') {
+                    completeLoading();
+                }
+            }, 8000); // 8 second timeout
+        });
+
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mainNav = document.querySelector('.nav-links');
@@ -1831,10 +2260,8 @@
             });
         });
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', () => {
-            loadActivities('all');
-        });
+        // Initialize activities
+        loadActivities('all');
     </script>
 </body>
 </html>
