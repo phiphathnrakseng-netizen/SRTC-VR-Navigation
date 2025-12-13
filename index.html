@@ -292,6 +292,7 @@
             gap: var(--spacing-md);
             text-decoration: none;
             color: var(--on-surface);
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -348,6 +349,7 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -386,6 +388,20 @@
         .main-content {
             margin-top: 64px;
             padding: var(--spacing-xl) 0;
+        }
+
+        /* Content Sections - Initially Hidden */
+        .content-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--animation-normal), transform var(--animation-normal);
+        }
+
+        .content-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Hero Section */
@@ -1063,6 +1079,25 @@
             
             .nav-links {
                 display: none;
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background-color: var(--surface);
+                flex-direction: column;
+                padding: var(--spacing-md);
+                box-shadow: var(--shadow-2);
+                border-top: 1px solid var(--border);
+                z-index: 999;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-link {
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
             }
             
             .mobile-menu-btn {
@@ -1187,7 +1222,7 @@
     <!-- App Bar -->
     <header class="app-bar" id="appBar">
         <div class="container app-bar-container">
-            <div class="app-bar-logo">
+            <div class="app-bar-logo" id="homeBtn">
                 <div class="logo-icon">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
                          alt="ตราเทคนิคสุราษฎร์ธานี"
@@ -1200,26 +1235,26 @@
             </div>
             
             <nav class="nav-links">
-                <a href="#home" class="nav-link active">
+                <div class="nav-link active" data-section="home">
                     <span class="material-icons-round">home</span>
                     หน้าแรก
-                </a>
-                <a href="#teachers" class="nav-link">
+                </div>
+                <div class="nav-link" data-section="teachers">
                     <span class="material-icons-round">groups</span>
                     คณะอาจารย์
-                </a>
-                <a href="#info" class="nav-link">
+                </div>
+                <div class="nav-link" data-section="info">
                     <span class="material-icons-round">business</span>
-                    ข้อมูลอาคาร
-                </a>
-                <a href="#floor" class="nav-link">
+                    ข้อมูลแผนก
+                </div>
+                <div class="nav-link" data-section="floor">
                     <span class="material-icons-round">map</span>
                     แผนผังและแนะนำทาง
-                </a>
-                <a href="#contact" class="nav-link">
+                </div>
+                <div class="nav-link" data-section="contact">
                     <span class="material-icons-round">contact_support</span>
                     ติดต่อ
-                </a>
+                </div>
             </nav>
             
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1230,201 +1265,206 @@
 
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="container">
-                <div class="hero-container">
-                    <div class="hero-content">
-                        <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
-                        <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
-                        <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                            <a href="#teachers" class="btn btn-primary">
-                                <span class="material-icons-round">groups</span>
-                                พบกับคณะอาจารย์
-                            </a>
-                            <a href="#contact" class="btn btn-outline">
-                                <span class="material-icons-round">contact_support</span>
-                                ติดต่อเรา
-                            </a>
+        <!-- Home Section -->
+        <section class="content-section active" id="homeSection">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-container">
+                        <div class="hero-content">
+                            <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
+                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
+                            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                                <div class="btn btn-primary" data-section="teachers">
+                                    <span class="material-icons-round">groups</span>
+                                    พบกับคณะอาจารย์
+                                </div>
+                                <div class="btn btn-outline" data-section="contact">
+                                    <span class="material-icons-round">contact_support</span>
+                                    ติดต่อเรา
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
-                             alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
-                             onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
+                        <div class="hero-image">
+                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
+                                 alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
+                                 onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Teachers Section -->
-        <section class="section" id="teachers">
-            <div class="container">
-                <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
-                <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
+        <section class="content-section" id="teachersSection">
+            <div class="section" style="padding: var(--spacing-xl) 0;">
+                <div class="container">
+                    <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
+                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
 
-                <div class="teachers-grid">
-                    <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
-                                 alt="นายสัญญา ชูช่วย" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
-                            <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
-                            <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                    <div class="teachers-grid">
+                        <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
+                                     alt="นายสัญญา ชูช่วย" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
+                                <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
+                                <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                                 alt="นายพนม บุญญ์ไพร" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
--ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
--ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
-                            <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">Google certificate</span>
-                                <span class="expertise-tag">Aruba certificate</span>
+                        
+                        <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
+                                     alt="นายพนม บุญญ์ไพร" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
+        -ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
+        -ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
+                                <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">Google certificate</span>
+                                    <span class="expertise-tag">Aruba certificate</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                                 alt="นางขนิษฐา สุมน" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
-ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        
+                        <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
+                                     alt="นางขนิษฐา สุมน" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
+        ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
-                                 alt="นางดวงฤดี เสนเรือง" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
-ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        
+                        <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
+                                     alt="นางดวงฤดี เสนเรือง" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
+        ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
-                                 alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        
+                        <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
+                                     alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
-                                 alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        
+                        <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
+                                     alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
-                                 alt="นายวศิตว์ บุญเรือง" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
+                                     alt="นายวศิตว์ บุญเรือง" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
-                                 alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
+                                     alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
-                                 alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
+                                     alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
-                    <div class="card teacher-card">
-                        <div class="card-body">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
-                                 alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
-                                 onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
-                            <p>ยังไม่บันทึกในระบบ</p>
-                            <div class="teacher-expertise">
-                                <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                        
+                        <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
+                                     alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
+                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1432,121 +1472,125 @@
             </div>
         </section>
 
-        <!-- Building Info -->
-        <section class="section" id="info">
-            <div class="container">
-                <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
-                <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
-                
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <div>
-                            <h3>โครงสร้างอาคาร</h3>
-                            <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
-                        </div>
-                    </div>
+        <!-- Building Info Section -->
+        <section class="content-section" id="infoSection">
+            <div class="section" style="padding: var(--spacing-xl) 0;">
+                <div class="container">
+                    <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
+                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
                     
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <h3>โครงสร้างอาคาร</h3>
+                                <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3>ปีที่ก่อสร้าง</h3>
-                            <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <h3>ปีที่ก่อสร้าง</h3>
+                                <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="fas fa-expand-arrows-alt"></i>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </div>
+                            <div>
+                                <h3>พื้นที่ใช้สอย</h3>
+                                <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3>พื้นที่ใช้สอย</h3>
-                            <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <div>
-                            <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
-                            <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div>
+                                <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
+                                <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Floor Plan and Navigation -->
-        <section class="section" id="floor">
-            <div class="container">
-                <h2 class="section-title">แผนผังและแนะนำทาง</h2>
-                <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
-                
-                <div class="floor-container">
-                    <!-- Floor 1 -->
-                    <div class="floor">
-                        <div class="floor-header">
-                            <div class="floor-number">1</div>
-                            <h3>ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
-                        </div>
-                        <div class="floor-rooms">
-                            <span class="room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1">ห้องปฏิบัติการ 1</span>
-                            <span class="room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2">ห้องปฏิบัติการ 2</span>
-                            <span class="room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1">ห้องเรียน 1</span>
-                            <span class="room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2">ห้องเรียน 2</span>
-                            <span class="room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง">สำนักงานแผนก</span>
-                        </div>
-                    </div>
+        <!-- Floor Plan and Navigation Section -->
+        <section class="content-section" id="floorSection">
+            <div class="section" style="padding: var(--spacing-xl) 0;">
+                <div class="container">
+                    <h2 class="section-title">แผนผังและแนะนำทาง</h2>
+                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
                     
-                    <!-- Floor 2 -->
-                    <div class="floor">
-                        <div class="floor-header">
-                            <div class="floor-number">2</div>
-                            <h3>ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
+                    <div class="floor-container">
+                        <!-- Floor 1 -->
+                        <div class="floor">
+                            <div class="floor-header">
+                                <div class="floor-number">1</div>
+                                <h3>ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
+                            </div>
+                            <div class="floor-rooms">
+                                <span class="room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1">ห้องปฏิบัติการ 1</span>
+                                <span class="room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2">ห้องปฏิบัติการ 2</span>
+                                <span class="room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1">ห้องเรียน 1</span>
+                                <span class="room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2">ห้องเรียน 2</span>
+                                <span class="room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง">สำนักงานแผนก</span>
+                            </div>
                         </div>
-                        <div class="floor-rooms">
-                            <span class="room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one">ชมรม To be number one</span>
-                            <span class="room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1">ห้องอังกฤษ 1</span>
-                            <span class="room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2">ห้องอังกฤษ 2</span>
-                            <span class="room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์">แล็บวิทยาศาสตร์</span>
-                            <span class="room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์">ห้องวิทยาศาสตร์</span>
+                        
+                        <!-- Floor 2 -->
+                        <div class="floor">
+                            <div class="floor-header">
+                                <div class="floor-number">2</div>
+                                <h3>ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
+                            </div>
+                            <div class="floor-rooms">
+                                <span class="room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one">ชมรม To be number one</span>
+                                <span class="room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1">ห้องอังกฤษ 1</span>
+                                <span class="room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2">ห้องอังกฤษ 2</span>
+                                <span class="room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์">แล็บวิทยาศาสตร์</span>
+                                <span class="room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์">ห้องวิทยาศาสตร์</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Floor 3 -->
-                    <div class="floor">
-                        <div class="floor-header">
-                            <div class="floor-number">3</div>
-                            <h3>ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
+                        
+                        <!-- Floor 3 -->
+                        <div class="floor">
+                            <div class="floor-header">
+                                <div class="floor-number">3</div>
+                                <h3>ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
+                            </div>
+                            <div class="floor-rooms">
+                                <span class="room" data-room="631" data-floor="3" data-name="ห้องเรียน 631">ห้อง 631</span>
+                                <span class="room" data-room="632" data-floor="3" data-name="ห้องเรียน 632">ห้อง 632</span>
+                                <span class="room" data-room="633" data-floor="3" data-name="ห้องเรียน 633">ห้อง 633</span>
+                                <span class="room" data-room="634" data-floor="3" data-name="ห้องเรียน 634">ห้อง 634</span>
+                                <span class="room" data-room="635" data-floor="3" data-name="ห้องเรียน 635">ห้อง 635</span>
+                            </div>
                         </div>
-                        <div class="floor-rooms">
-                            <span class="room" data-room="631" data-floor="3" data-name="ห้องเรียน 631">ห้อง 631</span>
-                            <span class="room" data-room="632" data-floor="3" data-name="ห้องเรียน 632">ห้อง 632</span>
-                            <span class="room" data-room="633" data-floor="3" data-name="ห้องเรียน 633">ห้อง 633</span>
-                            <span class="room" data-room="634" data-floor="3" data-name="ห้องเรียน 634">ห้อง 634</span>
-                            <span class="room" data-room="635" data-floor="3" data-name="ห้องเรียน 635">ห้อง 635</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Floor 4 -->
-                    <div class="floor">
-                        <div class="floor-header">
-                            <div class="floor-number">4</div>
-                            <h3>ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
-                        </div>
-                        <div class="floor-rooms">
-                            <span class="room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู">ห้องพักครู</span>
-                            <span class="room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture">ห้อง Lecture</span>
-                            <span class="room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
-                            <span class="room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
-                            <span class="room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3">Lab 3</span>
-                            <span class="room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์">ห้องเซิร์ฟเวอร์</span>
+                        
+                        <!-- Floor 4 -->
+                        <div class="floor">
+                            <div class="floor-header">
+                                <div class="floor-number">4</div>
+                                <h3>ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
+                            </div>
+                            <div class="floor-rooms">
+                                <span class="room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู">ห้องพักครู</span>
+                                <span class="room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture">ห้อง Lecture</span>
+                                <span class="room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
+                                <span class="room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
+                                <span class="room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3">Lab 3</span>
+                                <span class="room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์">ห้องเซิร์ฟเวอร์</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1554,79 +1598,81 @@
         </section>
 
         <!-- Contact Section -->
-        <section class="section" id="contact">
-            <div class="container">
-                <h2 class="section-title">ติดต่อเรา</h2>
-                <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
-                
-                <div class="contact-grid">
-                    <div>
-                        <h3>ข้อมูลติดต่อ</h3>
-                        <div class="info-item" style="margin-top: var(--spacing-lg);">
-                            <div class="info-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div>
-                                <h4>ที่อยู่</h4>
-                                <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div>
-                                <h4>โทรศัพท์</h4>
-                                <p>077-272-168</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div>
-                                <h4>เว็บหลักวิทยาลัย</h4>
-                                <p>www.srtc.ac.th</p>
-                            </div>
-                        </div>
-                        
-                        <div class="social-links">
-                            <a href="https://www.facebook.com/PR.SRTC?locale=th_TH"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.youtube.com/@srtcchannel3786"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
+        <section class="content-section" id="contactSection">
+            <div class="section" style="padding: var(--spacing-xl) 0;">
+                <div class="container">
+                    <h2 class="section-title">ติดต่อเรา</h2>
+                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
                     
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>ส่งข้อความถึงเรา</h3>
-                            <form id="contactForm">
-                                <div class="form-group">
-                                    <label>ชื่อ-นามสกุล</label>
-                                    <input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required>
+                    <div class="contact-grid">
+                        <div>
+                            <h3>ข้อมูลติดต่อ</h3>
+                            <div class="info-item" style="margin-top: var(--spacing-lg);">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label>อีเมล</label>
-                                    <input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required>
+                                <div>
+                                    <h4>ที่อยู่</h4>
+                                    <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label>เรื่อง</label>
-                                    <input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone"></i>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label>ข้อความ</label>
-                                    <textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
+                                <div>
+                                    <h4>โทรศัพท์</h4>
+                                    <p>077-272-168</p>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                                    <span class="material-icons-round">send</span>
-                                    ส่งข้อความ
-                                </button>
-                            </form>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4>เว็บหลักวิทยาลัย</h4>
+                                    <p>www.srtc.ac.th</p>
+                                </div>
+                            </div>
+                            
+                            <div class="social-links">
+                                <a href="https://www.facebook.com/PR.SRTC?locale=th_TH"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://www.youtube.com/@srtcchannel3786"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>ส่งข้อความถึงเรา</h3>
+                                <form id="contactForm">
+                                    <div class="form-group">
+                                        <label>ชื่อ-นามสกุล</label>
+                                        <input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>อีเมล</label>
+                                        <input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>เรื่อง</label>
+                                        <input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>ข้อความ</label>
+                                        <textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <span class="material-icons-round">send</span>
+                                        ส่งข้อความ
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1646,10 +1692,10 @@
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
-                        <li style="margin-bottom: var(--spacing-sm);"><a href="#home" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">หน้าแรก</a></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><a href="#teachers" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">คณะอาจารย์</a></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><a href="#info" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">ข้อมูลอาคาร</a></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><a href="#floor" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem;">แผนผังและแนะนำทาง</a></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="home" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">หน้าแรก</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="teachers" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">คณะอาจารย์</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="info" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">ข้อมูลแผนก</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="floor" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">แผนผังและแนะนำทาง</div></li>
                     </ul>
                 </div>
                 
@@ -1916,39 +1962,100 @@
             }, 8000); // 8 second timeout
         });
 
+        // ===== SECTION NAVIGATION SYSTEM =====
+        // Get all sections
+        const sections = {
+            home: document.getElementById('homeSection'),
+            teachers: document.getElementById('teachersSection'),
+            info: document.getElementById('infoSection'),
+            floor: document.getElementById('floorSection'),
+            contact: document.getElementById('contactSection')
+        };
+
+        // Get all navigation links
+        const navLinks = document.querySelectorAll('.nav-link');
+        const homeBtn = document.getElementById('homeBtn');
+        const footerLinks = document.querySelectorAll('.footer-link');
+        const btnLinks = document.querySelectorAll('[data-section]');
+
+        // Function to switch to a specific section
+        function switchSection(sectionId) {
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the selected section
+            if (sections[sectionId]) {
+                sections[sectionId].classList.add('active');
+            } else {
+                sections.home.classList.add('active');
+            }
+            
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Close mobile menu if open
+            if (window.innerWidth <= 768) {
+                const mainNav = document.querySelector('.nav-links');
+                if (mainNav.classList.contains('show')) {
+                    mainNav.classList.remove('show');
+                    document.getElementById('mobileMenuBtn').querySelector('span').textContent = 'menu';
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Add click event to nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const sectionId = link.dataset.section;
+                switchSection(sectionId);
+            });
+        });
+
+        // Add click event to home logo
+        homeBtn.addEventListener('click', () => {
+            switchSection('home');
+        });
+
+        // Add click event to footer links
+        footerLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const sectionId = link.dataset.section;
+                switchSection(sectionId);
+            });
+        });
+
+        // Add click event to button links
+        btnLinks.forEach(link => {
+            if (link.dataset.section) {
+                link.addEventListener('click', () => {
+                    const sectionId = link.dataset.section;
+                    switchSection(sectionId);
+                });
+            }
+        });
+
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mainNav = document.querySelector('.nav-links');
         
         mobileMenuBtn.addEventListener('click', () => {
-            mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+            mainNav.classList.toggle('show');
             const icon = mobileMenuBtn.querySelector('span');
-            if (mainNav.style.display === 'flex') {
+            if (mainNav.classList.contains('show')) {
                 icon.textContent = 'close';
             } else {
                 icon.textContent = 'menu';
             }
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                
-                window.scrollTo({
-                    top: targetSection.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                if (window.innerWidth <= 768 && mainNav.style.display === 'flex') {
-                    mainNav.style.display = 'none';
-                    mobileMenuBtn.querySelector('span').textContent = 'menu';
-                }
-            });
         });
         
         // Form submission
@@ -1964,30 +2071,6 @@
             
             // Reset form
             contactForm.reset();
-        });
-        
-        // Add active class to nav links on scroll
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('nav a');
-            
-            let currentSection = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 100;
-                const sectionHeight = section.clientHeight;
-                
-                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-                    currentSection = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${currentSection}`) {
-                    link.classList.add('active');
-                }
-            });
         });
 
         // Activities Modal
@@ -2265,4 +2348,3 @@
     </script>
 </body>
 </html>
-
