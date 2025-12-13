@@ -395,13 +395,26 @@
             display: none;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity var(--animation-normal), transform var(--animation-normal);
+            transition: opacity var(--animation-normal) ease-out, transform var(--animation-normal) ease-out;
+            animation-fill-mode: forwards;
         }
 
         .content-section.active {
             display: block;
             opacity: 1;
             transform: translateY(0);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Hero Section */
@@ -1978,18 +1991,53 @@
         const footerLinks = document.querySelectorAll('.footer-link');
         const btnLinks = document.querySelectorAll('[data-section]');
 
-        // Function to switch to a specific section
+        // Track current active section
+        let currentSection = 'home';
+        let isAnimating = false;
+
+        // Function to switch to a specific section with smooth animation
         function switchSection(sectionId) {
-            // Hide all sections
-            Object.values(sections).forEach(section => {
-                section.classList.remove('active');
-            });
+            // Prevent multiple clicks during animation
+            if (isAnimating || sectionId === currentSection) return;
             
-            // Show the selected section
-            if (sections[sectionId]) {
-                sections[sectionId].classList.add('active');
+            isAnimating = true;
+            currentSection = sectionId;
+            
+            // Get current and new sections
+            const currentActive = document.querySelector('.content-section.active');
+            const newSection = sections[sectionId] || sections.home;
+            
+            // Fade out current section
+            if (currentActive) {
+                currentActive.style.opacity = '0';
+                currentActive.style.transform = 'translateY(-20px)';
+                
+                // Wait for fade out before switching
+                setTimeout(() => {
+                    // Hide current section
+                    currentActive.classList.remove('active');
+                    
+                    // Show new section
+                    newSection.style.display = 'block';
+                    
+                    // Force reflow to trigger animation
+                    newSection.offsetHeight;
+                    
+                    // Add active class with delay for smooth transition
+                    setTimeout(() => {
+                        newSection.classList.add('active');
+                        
+                        // Wait for animation to complete
+                        setTimeout(() => {
+                            isAnimating = false;
+                        }, 300);
+                    }, 50);
+                }, 300);
             } else {
-                sections.home.classList.add('active');
+                // If no current active, just show new section
+                newSection.style.display = 'block';
+                newSection.classList.add('active');
+                isAnimating = false;
             }
             
             // Update active nav link
@@ -2009,26 +2057,32 @@
                 }
             }
             
-            // Scroll to top
-            window.scrollTo(0, 0);
+            // Smooth scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
-        // Add click event to nav links
+        // Add click event to nav links with smooth transition
         navLinks.forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
                 const sectionId = link.dataset.section;
                 switchSection(sectionId);
             });
         });
 
         // Add click event to home logo
-        homeBtn.addEventListener('click', () => {
+        homeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             switchSection('home');
         });
 
         // Add click event to footer links
         footerLinks.forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
                 const sectionId = link.dataset.section;
                 switchSection(sectionId);
             });
@@ -2037,7 +2091,8 @@
         // Add click event to button links
         btnLinks.forEach(link => {
             if (link.dataset.section) {
-                link.addEventListener('click', () => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const sectionId = link.dataset.section;
                     switchSection(sectionId);
                 });
@@ -2064,7 +2119,7 @@
             e.preventDefault();
             
             // Get form values
-            const name = document.getElementById('name')?.value || 'ไม่ระบุชื่อ';
+            const name = this.querySelector('input[type="text"]').value || 'ไม่ระบุชื่อ';
             
             // Show success message
             alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
