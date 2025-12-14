@@ -841,6 +841,7 @@
             position: relative;
             cursor: pointer;
             transition: all var(--animation-fast);
+            min-height: 40px;
         }
 
         .editable:hover {
@@ -1880,6 +1881,16 @@
                         <input type="password" class="form-control" id="loginPassword" placeholder="กรุณากรอกรหัสผ่าน">
                     </div>
                     
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe" style="font-size: 0.85rem; color: var(--on-background);">
+                                <i class="fas fa-save"></i>
+                                จำรหัสผ่าน
+                            </label>
+                        </div>
+                    </div>
+                    
                     <div class="login-message" id="loginMessage"></div>
                 </div>
                 
@@ -1942,6 +1953,18 @@
         <button class="admin-btn" id="editRoomsBtn">
             <i class="fas fa-map"></i>
             แก้ไขข้อมูลห้อง
+        </button>
+        <button class="admin-btn" id="addTeacherBtn">
+            <i class="fas fa-user-plus"></i>
+            เพิ่มอาจารย์
+        </button>
+        <button class="admin-btn" id="addRoomBtn">
+            <i class="fas fa-plus-circle"></i>
+            เพิ่มห้อง
+        </button>
+        <button class="admin-btn" id="saveAllBtn">
+            <i class="fas fa-save"></i>
+            บันทึกทั้งหมด
         </button>
         <button class="admin-btn" id="logoutBtn">
             <i class="fas fa-sign-out-alt"></i>
@@ -2036,7 +2059,7 @@
                     <h2 class="section-title editable" data-id="teachers-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
                     <p class="section-subtitle editable" data-id="teachers-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
 
-                    <div class="teachers-grid">
+                    <div class="teachers-grid" id="teachersGrid">
                         <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
                         <div class="card teacher-card editable" data-id="teacher-1">
                             <div class="card-body">
@@ -2082,119 +2105,6 @@
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
         ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
-                        <div class="card teacher-card editable" data-id="teacher-4">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
-                                     alt="นางดวงฤดี เสนเรือง" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">นางดวงฤดี เสนเรือง</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
-        ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
-                        <div class="card teacher-card editable" data-id="teacher-5">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
-                                     alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">นางสาววิยะดา คงแก้ว</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
-                        <div class="card teacher-card editable" data-id="teacher-6">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
-                                     alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
-                        <div class="card teacher-card editable" data-id="teacher-7">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
-                                     alt="นายวศิตว์ บุญเรือง" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">นายวศิตว์ บุญเรือง</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
-                        <div class="card teacher-card editable" data-id="teacher-8">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
-                                     alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
-                        <div class="card teacher-card editable" data-id="teacher-9">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
-                                     alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
-                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
-                        <div class="card teacher-card editable" data-id="teacher-10">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
-                                     alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name" data-editable="true" data-field="name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
-                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
-                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
                                 <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
                                     <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
@@ -2272,27 +2182,9 @@
                                 <div class="floor-number">1</div>
                                 <h3 data-editable="true" data-field="title">ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
                             </div>
-                            <div class="floor-rooms">
+                            <div class="floor-rooms" id="floor-1-rooms">
                                 <span class="room editable-room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1" data-editable="true" data-field="name">ห้องปฏิบัติการ 1</span>
                                 <span class="room editable-room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2" data-editable="true" data-field="name">ห้องปฏิบัติการ 2</span>
-                                <span class="room editable-room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1" data-editable="true" data-field="name">ห้องเรียน 1</span>
-                                <span class="room editable-room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2" data-editable="true" data-field="name">ห้องเรียน 2</span>
-                                <span class="room editable-room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง" data-editable="true" data-field="name">สำนักงานแผนก</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Floor 2 -->
-                        <div class="floor editable" data-id="floor-2">
-                            <div class="floor-header">
-                                <div class="floor-number">2</div>
-                                <h3 data-editable="true" data-field="title">ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
-                            </div>
-                            <div class="floor-rooms">
-                                <span class="room editable-room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one" data-editable="true" data-field="name">ชมรม To be number one</span>
-                                <span class="room editable-room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1" data-editable="true" data-field="name">ห้องอังกฤษ 1</span>
-                                <span class="room editable-room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2" data-editable="true" data-field="name">ห้องอังกฤษ 2</span>
-                                <span class="room editable-room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์" data-editable="true" data-field="name">แล็บวิทยาศาสตร์</span>
-                                <span class="room editable-room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์" data-editable="true" data-field="name">ห้องวิทยาศาสตร์</span>
                             </div>
                         </div>
                         
@@ -2302,28 +2194,9 @@
                                 <div class="floor-number">3</div>
                                 <h3 data-editable="true" data-field="title">ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
                             </div>
-                            <div class="floor-rooms">
+                            <div class="floor-rooms" id="floor-3-rooms">
                                 <span class="room editable-room" data-room="631" data-floor="3" data-name="ห้องเรียน 631" data-editable="true" data-field="name">ห้อง 631</span>
                                 <span class="room editable-room" data-room="632" data-floor="3" data-name="ห้องเรียน 632" data-editable="true" data-field="name">ห้อง 632</span>
-                                <span class="room editable-room" data-room="633" data-floor="3" data-name="ห้องเรียน 633" data-editable="true" data-field="name">ห้อง 633</span>
-                                <span class="room editable-room" data-room="634" data-floor="3" data-name="ห้องเรียน 634" data-editable="true" data-field="name">ห้อง 634</span>
-                                <span class="room editable-room" data-room="635" data-floor="3" data-name="ห้องเรียน 635" data-editable="true" data-field="name">ห้อง 635</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Floor 4 -->
-                        <div class="floor editable" data-id="floor-4">
-                            <div class="floor-header">
-                                <div class="floor-number">4</div>
-                                <h3 data-editable="true" data-field="title">ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
-                            </div>
-                            <div class="floor-rooms">
-                                <span class="room editable-room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู" data-editable="true" data-field="name">ห้องพักครู</span>
-                                <span class="room editable-room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture" data-editable="true" data-field="name">ห้อง Lecture</span>
-                                <span class="room editable-room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1" data-editable="true" data-field="name">Lab 1</span>
-                                <span class="room editable-room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2" data-editable="true" data-field="name">Lab 2</span>
-                                <span class="room editable-room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3" data-editable="true" data-field="name">Lab 3</span>
-                                <span class="room editable-room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์" data-editable="true" data-field="name">ห้องเซิร์ฟเวอร์</span>
                             </div>
                         </div>
                     </div>
@@ -2440,7 +2313,7 @@
             </div>
             
             <div class="copyright">
-                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี สถานศึกษารางวัลพระราชทาน | แผนกเทคโนโลยีสารสนเทศ | </p>
+                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี สถานศึกษารางวัลพระราชทาน | แผนกเทคโนโลยีสารสนเทศ</p>
             </div>
         </div>
     </footer>
@@ -2498,12 +2371,6 @@
                     <div class="floor-rooms" id="shareRooms">
                         <span class="room" data-room="631" data-name="ห้องเรียน 631">ห้อง 631</span>
                         <span class="room" data-room="632" data-name="ห้องเรียน 632">ห้อง 632</span>
-                        <span class="room" data-room="633" data-name="ห้องเรียน 633">ห้อง 633</span>
-                        <span class="room" data-room="634" data-name="ห้องเรียน 634">ห้อง 634</span>
-                        <span class="room" data-room="635" data-name="ห้องเรียน 635">ห้อง 635</span>
-                        <span class="room" data-room="lab-1" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
-                        <span class="room" data-room="lab-2" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
-                        <span class="room" data-room="lecture-hall" data-name="ห้อง Lecture">ห้อง Lecture</span>
                     </div>
                 </div>
                 
@@ -2567,6 +2434,87 @@
             <div class="modal-footer">
                 <button class="btn btn-outline" id="cancelEdit">ยกเลิก</button>
                 <button class="btn btn-primary" id="saveEdit">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Teacher Modal -->
+    <div class="modal" id="addTeacherModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> เพิ่มอาจารย์ใหม่</h3>
+                <p>เพิ่มข้อมูลอาจารย์คนใหม่ลงในระบบ</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>ชื่อ-นามสกุล</label>
+                    <input type="text" class="form-control" id="newTeacherName" placeholder="กรอกชื่อ-นามสกุลอาจารย์">
+                </div>
+                
+                <div class="form-group">
+                    <label>ตำแหน่ง</label>
+                    <input type="text" class="form-control" id="newTeacherPosition" placeholder="กรอกตำแหน่ง">
+                </div>
+                
+                <div class="form-group">
+                    <label>วุฒิการศึกษา</label>
+                    <textarea class="form-control" id="newTeacherDegree" rows="3" placeholder="กรอกวุฒิการศึกษา"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>ข้อมูลเพิ่มเติม</label>
+                    <textarea class="form-control" id="newTeacherDescription" rows="3" placeholder="กรอกรายละเอียดเพิ่มเติม"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>ความเชี่ยวชาญ (กด Enter เพื่อเพิ่มแต่ละหัวข้อ)</label>
+                    <input type="text" class="form-control" id="newTeacherExpertise" placeholder="กรอกความเชี่ยวชาญ">
+                    <div id="expertiseTags" style="margin-top: var(--spacing-sm); display: flex; flex-wrap: wrap; gap: var(--spacing-xs);"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAddTeacher">ยกเลิก</button>
+                <button class="btn btn-primary" id="saveNewTeacher">บันทึกอาจารย์ใหม่</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Room Modal -->
+    <div class="modal" id="addRoomModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> เพิ่มห้องใหม่</h3>
+                <p>เพิ่มข้อมูลห้องใหม่ลงในระบบ</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>ชื่อห้อง</label>
+                    <input type="text" class="form-control" id="newRoomName" placeholder="กรอกชื่อห้อง">
+                </div>
+                
+                <div class="form-group">
+                    <label>รหัสห้อง</label>
+                    <input type="text" class="form-control" id="newRoomCode" placeholder="กรอกรหัสห้อง (เช่น 631, lab-1)">
+                </div>
+                
+                <div class="form-group">
+                    <label>ชั้น</label>
+                    <select class="form-select" id="newRoomFloor">
+                        <option value="1">ชั้น 1</option>
+                        <option value="2">ชั้น 2</option>
+                        <option value="3" selected>ชั้น 3</option>
+                        <option value="4">ชั้น 4</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>รายละเอียด</label>
+                    <textarea class="form-control" id="newRoomDescription" rows="3" placeholder="กรอกรายละเอียดห้อง"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAddRoom">ยกเลิก</button>
+                <button class="btn btn-primary" id="saveNewRoom">บันทึกห้องใหม่</button>
             </div>
         </div>
     </div>
@@ -2791,16 +2739,19 @@
             });
         }
 
-        // ===== LOGIN SYSTEM =====
+        // ===== ENHANCED LOGIN SYSTEM =====
         let isAdminLoggedIn = false;
         let currentUser = null;
         let currentEditingElement = null;
+        let teacherCount = 3; // เริ่มจาก 3 คนแรก
+        let expertiseTags = [];
 
         // User data
         const availableNames = [
             { id: 1, name: "กรดนัยจุอ่อน", username: "gradnai", isAdmin: true },
             { id: 2, name: "พิพัฒน์ รักเส้ง", username: "pipat", isAdmin: true },
-            { id: 3, name: "กฤตภาสวิจิตร", username: "krittapas", isAdmin: true }
+            { id: 3, name: "กฤตภาสวิจิตร", username: "krittapas", isAdmin: true },
+            { id: 4, name: "ผู้ดูแลระบบ", username: "admin", isAdmin: true }
         ];
 
         // Registered users (stored in localStorage)
@@ -2827,6 +2778,7 @@
         const confirmPassword = document.getElementById('confirmPassword');
         const passwordStrength = document.getElementById('passwordStrength');
         const adminControls = document.getElementById('adminControls');
+        const rememberMeCheckbox = document.getElementById('rememberMe');
 
         // Initialize login system
         function initLoginSystem() {
@@ -2889,12 +2841,17 @@
             });
             
             // Check if user is already logged in
+            checkAutoLogin();
+        }
+
+        // Check for auto-login
+        function checkAutoLogin() {
             const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            
+            if (savedUser && rememberMe) {
                 const user = JSON.parse(savedUser);
-                if (user.isAdmin) {
-                    loginAsAdmin(user);
-                }
+                loginAsAdmin(user);
             }
         }
 
@@ -2903,6 +2860,16 @@
             loginModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             switchToLoginTab();
+            
+            // Auto-fill if remember me is checked
+            const savedUser = localStorage.getItem('currentUser');
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            
+            if (savedUser && rememberMe) {
+                const user = JSON.parse(savedUser);
+                loginNameSelect.value = user.username;
+                rememberMeCheckbox.checked = true;
+            }
         });
 
         // Close login modal
@@ -2921,8 +2888,12 @@
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
+            // Enable submit button
+            submitLoginBtn.disabled = false;
+            
+            // Auto-select first registered user if exists
             if (registeredUsers.length > 0) {
-                submitBtnText.textContent = 'เข้าสู่ระบบ';
+                loginNameSelect.value = registeredUsers[0].username;
             }
         }
 
@@ -2936,6 +2907,7 @@
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
+            // Enable/disable based on registration status
             if (registeredUsers.length > 0) {
                 showMessage(registerMessage, 'error', 'ระบบได้ลงทะเบียนผู้ใช้เรียบร้อยแล้ว กรุณาใช้ปุ่มเข้าสู่ระบบ');
                 submitLoginBtn.disabled = true;
@@ -2968,6 +2940,7 @@
         function handleLogin() {
             const username = loginNameSelect.value;
             const password = document.getElementById('loginPassword').value;
+            const rememberMe = rememberMeCheckbox.checked;
             
             if (!username || !password) {
                 showMessage(loginMessage, 'error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
@@ -2986,6 +2959,9 @@
                 showMessage(loginMessage, 'error', 'รหัสผ่านไม่ถูกต้อง');
                 return;
             }
+            
+            // Save remember me preference
+            localStorage.setItem('rememberMe', rememberMe);
             
             // Login successful
             currentUser = user;
@@ -3051,6 +3027,7 @@
             // Auto login
             currentUser = newUser;
             localStorage.setItem('currentUser', JSON.stringify(newUser));
+            localStorage.setItem('rememberMe', true);
             
             if (newUser.isAdmin) {
                 loginAsAdmin(newUser);
@@ -3121,7 +3098,7 @@
             alert('ออกจากระบบสำเร็จ');
         });
 
-        // ===== CONTENT EDITING SYSTEM =====
+        // ===== ENHANCED CONTENT EDITING SYSTEM =====
         function enableContentEditing() {
             // Create edit indicators for all editable elements
             document.querySelectorAll('.editable').forEach(element => {
@@ -3219,11 +3196,11 @@
             // Load saved content if exists
             if (id && websiteContent[id]) {
                 if (element.tagName.startsWith('H')) {
-                    editTitleInput.value = websiteContent[id];
-                    editContentInput.value = '';
+                    editTitleInput.value = websiteContent[id].title || websiteContent[id] || currentTitle;
+                    editContentInput.value = websiteContent[id].content || '';
                 } else if (element.tagName === 'P') {
-                    editTitleInput.value = '';
-                    editContentInput.value = websiteContent[id];
+                    editTitleInput.value = websiteContent[id].title || '';
+                    editContentInput.value = websiteContent[id].content || websiteContent[id] || currentContent;
                 }
             } else {
                 editTitleInput.value = currentTitle;
@@ -3294,12 +3271,22 @@
             switch(type) {
                 case 'heading':
                     currentEditingElement.textContent = editTitleInput.value;
-                    if (id) websiteContent[id] = editTitleInput.value;
+                    if (id) {
+                        websiteContent[id] = {
+                            title: editTitleInput.value,
+                            content: editContentInput.value
+                        };
+                    }
                     break;
                     
                 case 'paragraph':
                     currentEditingElement.textContent = editContentInput.value;
-                    if (id) websiteContent[id] = editContentInput.value;
+                    if (id) {
+                        websiteContent[id] = {
+                            title: editTitleInput.value,
+                            content: editContentInput.value
+                        };
+                    }
                     break;
                     
                 case 'teacher':
@@ -3343,7 +3330,12 @@
                     
                 default:
                     currentEditingElement.textContent = editContentInput.value;
-                    if (id) websiteContent[id] = editContentInput.value;
+                    if (id) {
+                        websiteContent[id] = {
+                            title: editTitleInput.value,
+                            content: editContentInput.value
+                        };
+                    }
             }
             
             // Save to localStorage
@@ -3393,10 +3385,10 @@
                     // Handle regular content
                     const element = document.querySelector(`[data-id="${key}"]`);
                     if (element) {
-                        if (typeof websiteContent[key] === 'string') {
+                        if (websiteContent[key] && websiteContent[key].title) {
+                            element.textContent = websiteContent[key].title || websiteContent[key].content || '';
+                        } else if (typeof websiteContent[key] === 'string') {
                             element.textContent = websiteContent[key];
-                        } else if (websiteContent[key] && websiteContent[key].title) {
-                            element.textContent = websiteContent[key].title;
                         }
                     }
                 }
@@ -3427,6 +3419,214 @@
             }, 500);
         });
 
+        // Add Teacher functionality
+        document.getElementById('addTeacherBtn').addEventListener('click', () => {
+            const addTeacherModal = document.getElementById('addTeacherModal');
+            addTeacherModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            adminControls.classList.remove('show');
+            
+            // Clear form
+            document.getElementById('newTeacherName').value = '';
+            document.getElementById('newTeacherPosition').value = '';
+            document.getElementById('newTeacherDegree').value = '';
+            document.getElementById('newTeacherDescription').value = '';
+            document.getElementById('newTeacherExpertise').value = '';
+            document.getElementById('expertiseTags').innerHTML = '';
+            expertiseTags = [];
+        });
+
+        // Add Room functionality
+        document.getElementById('addRoomBtn').addEventListener('click', () => {
+            const addRoomModal = document.getElementById('addRoomModal');
+            addRoomModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            adminControls.classList.remove('show');
+            
+            // Clear form
+            document.getElementById('newRoomName').value = '';
+            document.getElementById('newRoomCode').value = '';
+            document.getElementById('newRoomDescription').value = '';
+        });
+
+        // Save all functionality
+        document.getElementById('saveAllBtn').addEventListener('click', () => {
+            localStorage.setItem('websiteContent', JSON.stringify(websiteContent));
+            alert('บันทึกข้อมูลทั้งหมดเรียบร้อยแล้ว');
+            adminControls.classList.remove('show');
+        });
+
+        // Cancel Add Teacher
+        document.getElementById('cancelAddTeacher').addEventListener('click', () => {
+            document.getElementById('addTeacherModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Save New Teacher
+        document.getElementById('saveNewTeacher').addEventListener('click', () => {
+            const name = document.getElementById('newTeacherName').value;
+            const position = document.getElementById('newTeacherPosition').value;
+            const degree = document.getElementById('newTeacherDegree').value;
+            const description = document.getElementById('newTeacherDescription').value;
+            
+            if (!name || !position) {
+                alert('กรุณากรอกชื่อและตำแหน่งของอาจารย์');
+                return;
+            }
+            
+            // Create new teacher card
+            teacherCount++;
+            const newTeacherId = `teacher-${teacherCount}`;
+            
+            const teachersGrid = document.getElementById('teachersGrid');
+            const newTeacherCard = document.createElement('div');
+            newTeacherCard.className = 'card teacher-card editable';
+            newTeacherCard.dataset.id = newTeacherId;
+            
+            newTeacherCard.innerHTML = `
+                <div class="card-body">
+                    <img src="https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู" alt="${name}" class="teacher-img">
+                    <h3 class="teacher-name" data-editable="true" data-field="name">${name}</h3>
+                    <div class="teacher-position" data-editable="true" data-field="position">${position}</div>
+                    <div class="teacher-degree" data-editable="true" data-field="degree">${degree}</div>
+                    <p data-editable="true" data-field="description">${description}</p>
+                    <div class="teacher-expertise">
+                        ${expertiseTags.map(tag => `<span class="expertise-tag" data-editable="true" data-field="expertise">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            teachersGrid.appendChild(newTeacherCard);
+            
+            // Save to websiteContent
+            websiteContent[newTeacherId] = {
+                title: name,
+                content: `${position}\n\n${degree}\n\n${description}`,
+                position: position,
+                degree: degree,
+                description: description,
+                expertise: expertiseTags
+            };
+            
+            localStorage.setItem('websiteContent', JSON.stringify(websiteContent));
+            
+            // Re-enable editing for new card
+            if (isAdminLoggedIn) {
+                const indicator = document.createElement('div');
+                indicator.className = 'edit-indicator';
+                indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                newTeacherCard.style.position = 'relative';
+                newTeacherCard.appendChild(indicator);
+                
+                newTeacherCard.addEventListener('click', function(e) {
+                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                        openTeacherEditModal(this);
+                    }
+                });
+            }
+            
+            // Close modal
+            document.getElementById('addTeacherModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            alert('เพิ่มอาจารย์ใหม่เรียบร้อยแล้ว');
+        });
+
+        // Cancel Add Room
+        document.getElementById('cancelAddRoom').addEventListener('click', () => {
+            document.getElementById('addRoomModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Save New Room
+        document.getElementById('saveNewRoom').addEventListener('click', () => {
+            const name = document.getElementById('newRoomName').value;
+            const code = document.getElementById('newRoomCode').value;
+            const floor = document.getElementById('newRoomFloor').value;
+            const description = document.getElementById('newRoomDescription').value;
+            
+            if (!name || !code) {
+                alert('กรุณากรอกชื่อและรหัสห้อง');
+                return;
+            }
+            
+            // Add new room to the appropriate floor
+            const floorRooms = document.getElementById(`floor-${floor}-rooms`);
+            if (floorRooms) {
+                const newRoom = document.createElement('span');
+                newRoom.className = 'room editable-room';
+                newRoom.dataset.room = code;
+                newRoom.dataset.floor = floor;
+                newRoom.dataset.name = name;
+                newRoom.dataset.editable = 'true';
+                newRoom.dataset.field = 'name';
+                newRoom.textContent = name;
+                
+                floorRooms.appendChild(newRoom);
+                
+                // Save to websiteContent
+                websiteContent[`room-${code}`] = {
+                    name: name,
+                    text: name,
+                    description: description,
+                    floor: floor
+                };
+                
+                localStorage.setItem('websiteContent', JSON.stringify(websiteContent));
+                
+                // Re-enable editing for new room
+                if (isAdminLoggedIn) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'edit-indicator';
+                    indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                    newRoom.style.position = 'relative';
+                    newRoom.appendChild(indicator);
+                    
+                    newRoom.addEventListener('click', function(e) {
+                        if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                            e.stopPropagation();
+                            openRoomEditModal(this);
+                        }
+                    });
+                }
+            }
+            
+            // Close modal
+            document.getElementById('addRoomModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            alert('เพิ่มห้องใหม่เรียบร้อยแล้ว');
+        });
+
+        // Expertise tags input handler
+        document.getElementById('newTeacherExpertise').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tag = this.value.trim();
+                if (tag && !expertiseTags.includes(tag)) {
+                    expertiseTags.push(tag);
+                    updateExpertiseTagsDisplay();
+                    this.value = '';
+                }
+            }
+        });
+
+        function updateExpertiseTagsDisplay() {
+            const tagsContainer = document.getElementById('expertiseTags');
+            tagsContainer.innerHTML = expertiseTags.map(tag => `
+                <span class="expertise-tag" style="font-size: 0.75rem;">
+                    ${tag}
+                    <i class="fas fa-times" style="margin-left: 4px; cursor: pointer;" onclick="removeExpertiseTag('${tag}')"></i>
+                </span>
+            `).join('');
+        }
+
+        // Global function to remove expertise tag
+        window.removeExpertiseTag = function(tag) {
+            expertiseTags = expertiseTags.filter(t => t !== tag);
+            updateExpertiseTagsDisplay();
+        };
+
         // ===== START LOADING PROCESS =====
         document.addEventListener('DOMContentLoaded', () => {
             // Start optimized loading immediately
@@ -3434,15 +3634,6 @@
             
             // Initialize login system
             initLoginSystem();
-            
-            // Check if user is already logged in
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                const user = JSON.parse(savedUser);
-                if (user.isAdmin) {
-                    loginAsAdmin(user);
-                }
-            }
             
             // Fallback timeout - force completion after max 2.5 seconds
             setTimeout(() => {
@@ -3645,46 +3836,6 @@
                 location: "ห้องเรียน 633 ชั้น 3",
                 type: "upcoming",
                 category: "การแข่งขัน"
-            },
-            {
-                id: 3,
-                title: "อบรมระบบเครือข่ายขั้นสูง",
-                description: "การอบรมระบบเครือข่ายสำหรับอาจารย์และนักศึกษาที่สนใจ โดยวิทยากรจากบริษัท Aruba",
-                date: "2025-03-10",
-                time: "08:30 - 16:30",
-                location: "ห้อง Lecture ชั้น 4",
-                type: "ongoing",
-                category: "การอบรม"
-            },
-            {
-                id: 4,
-                title: "โครงการจิตอาสาพัฒนาห้องปฏิบัติการ",
-                description: "กิจกรรมจิตอาสาทำความสะอาดและพัฒนาห้องปฏิบัติการคอมพิวเตอร์",
-                date: "2025-03-05",
-                time: "08:00 - 12:00",
-                location: "ห้องปฏิบัติการทุกห้อง",
-                type: "completed",
-                category: "กิจกรรมพิเศษ"
-            },
-            {
-                id: 5,
-                title: "สัมมนาเทคโนโลยี AI กับการศึกษา",
-                description: "การสัมมนาเกี่ยวกับการประยุกต์ใช้เทคโนโลยี AI ในการจัดการเรียนการสอน",
-                date: "2025-03-28",
-                time: "10:00 - 15:00",
-                location: "ห้อง Lecture ชั้น 4",
-                type: "upcoming",
-                category: "การสัมมนา"
-            },
-            {
-                id: 6,
-                title: "โครงการสอนเสริมฐานข้อมูล",
-                description: "การสอนเสริมวิชาฐานข้อมูลสำหรับนักศึกษาที่ต้องการเพิ่มความเข้าใจ",
-                date: "2025-03-12",
-                time: "16:00 - 18:00",
-                location: "ห้องเรียน 632 ชั้น 3",
-                type: "ongoing",
-                category: "การเรียนการสอน"
             }
         ];
 
