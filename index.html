@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
-        /* CSS Variables and existing styles */
         :root {
             --primary: #1A73E8;
             --primary-dark: #0D47A1;
@@ -65,6 +64,277 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== OPTIMIZED LOADING SYSTEM ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity var(--animation-slow) 0.1s, visibility var(--animation-slow) 0.1s;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: var(--spacing-lg);
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (min-width: 768px) {
+            .loading-logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-title {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .loading-title {
+                font-size: 2.25rem;
+            }
+        }
+
+        .loading-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.5;
+            padding: 0 var(--spacing-md);
+        }
+
+        @media (min-width: 768px) {
+            .loading-subtitle {
+                font-size: 1.125rem;
+            }
+        }
+
+        .loading-progress-container {
+            width: 280px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .loading-progress-container {
+                width: 320px;
+            }
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                transparent 100%);
+            animation: shimmer 1.2s infinite linear;
+        }
+
+        .loading-speed-indicator {
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0.95;
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+            min-height: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .loading-speed-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .loading-stats {
+            display: flex;
+            gap: var(--spacing-xl);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            margin-top: var(--spacing-md);
+        }
+
+        .loading-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .loading-stat i {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        .loading-stat span {
+            font-weight: 500;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: var(--spacing-xl);
+        }
+
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: loadingDot 1s infinite ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .loading-dots {
+                gap: 10px;
+            }
+            
+            .loading-dot {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Network Status Indicator */
+        .network-status {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all var(--animation-fast);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .network-status {
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+        }
+
+        .network-status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .network-status i {
+            font-size: 0.9rem;
+        }
+
+        .network-status.fast { 
+            background-color: rgba(52, 168, 83, 0.9);
+            box-shadow: 0 4px 20px rgba(52, 168, 83, 0.3);
+        }
+        .network-status.moderate { 
+            background-color: rgba(255, 152, 0, 0.9);
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
+        }
+        .network-status.slow { 
+            background-color: rgba(244, 67, 54, 0.9);
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity var(--animation-normal) 0.1s, transform var(--animation-normal) 0.1s;
+        }
+
+        .main-content.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* ===== LOGIN MODAL ===== */
@@ -455,183 +725,6 @@
         }
 
         .admin-edit-modal.active .admin-edit-content {
-            transform: translateY(0);
-        }
-
-        /* Loading Screen Styles */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity var(--animation-slow), visibility var(--animation-slow);
-        }
-
-        .loading-screen.fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loading-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: var(--spacing-xl);
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
-        }
-
-        .loading-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
-            background-color: white;
-            padding: 20px;
-        }
-
-        .loading-title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-            text-align: center;
-            font-family: 'Kanit', sans-serif;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .loading-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2rem;
-            margin-bottom: var(--spacing-xxl);
-            text-align: center;
-            max-width: 600px;
-            line-height: 1.5;
-        }
-
-        .loading-progress-container {
-            width: 300px;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            margin-bottom: var(--spacing-lg);
-            position: relative;
-        }
-
-        .loading-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.4) 50%, 
-                transparent 100%);
-            animation: shimmer 1.5s infinite;
-        }
-
-        .loading-speed-indicator {
-            color: white;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: var(--spacing-md);
-            text-align: center;
-        }
-
-        .loading-dots {
-            display: flex;
-            gap: 8px;
-            margin-top: var(--spacing-xl);
-        }
-
-        .loading-dot {
-            width: 12px;
-            height: 12px;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: loadingDot 1.4s infinite ease-in-out;
-        }
-
-        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-        .loading-dot:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes loadingDot {
-            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Network Speed Detection */
-        .network-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            z-index: 10001;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all var(--animation-normal);
-        }
-
-        .network-status.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .network-status i {
-            font-size: 1rem;
-        }
-
-        .network-status.fast { background-color: var(--secondary); }
-        .network-status.moderate { background-color: #FF9800; }
-        .network-status.slow { background-color: #F44336; }
-
-        /* Main Content - Initially Hidden */
-        .main-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity var(--animation-normal) 0.3s, transform var(--animation-normal) 0.3s;
-        }
-
-        .main-content.show {
-            opacity: 1;
             transform: translateY(0);
         }
 
@@ -1431,15 +1524,6 @@
                 height: 350px;
                 order: -1;
             }
-
-            .loading-logo {
-                width: 150px;
-                height: 150px;
-            }
-
-            .loading-title {
-                font-size: 2rem;
-            }
         }
 
         @media (max-width: 768px) {
@@ -1490,23 +1574,6 @@
                 bottom: var(--spacing-lg);
                 right: var(--spacing-lg);
             }
-
-            .loading-logo {
-                width: 120px;
-                height: 120px;
-            }
-
-            .loading-title {
-                font-size: 1.75rem;
-            }
-
-            .loading-subtitle {
-                font-size: 1rem;
-            }
-
-            .loading-progress-container {
-                width: 250px;
-            }
         }
 
         @media (max-width: 576px) {
@@ -1539,34 +1606,16 @@
                 width: 48px;
                 height: 48px;
             }
-
-            .loading-logo {
-                width: 100px;
-                height: 100px;
-            }
-
-            .loading-title {
-                font-size: 1.5rem;
-            }
-
-            .loading-subtitle {
-                font-size: 0.9rem;
-                padding: 0 var(--spacing-md);
-            }
-
-            .loading-progress-container {
-                width: 200px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- Optimized Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-logo">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
                  alt="ตราเทคนิคสุราษฎร์ธานี"
-                 onerror="this.src='https://via.placeholder.com/200/1A73E8/FFFFFF?text=SRTC'">
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iNjAiIGZpbGw9IiMxQTczRTgiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNnB4Ij5TUlRDPC90ZXh0Pjwvc3ZnPg=='">
         </div>
         <h1 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
         <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ</p>
@@ -1576,8 +1625,19 @@
         </div>
         
         <div class="loading-speed-indicator" id="loadingSpeedIndicator">
-            <i class="fas fa-wifi"></i>
-            <span>กำลังตรวจสอบความเร็วอินเทอร์เน็ต...</span>
+            <i class="fas fa-sync fa-spin"></i>
+            <span>กำลังเตรียมระบบ...</span>
+        </div>
+        
+        <div class="loading-stats" id="loadingStats">
+            <div class="loading-stat">
+                <i class="fas fa-tachometer-alt"></i>
+                <span id="networkSpeed">-</span>
+            </div>
+            <div class="loading-stat">
+                <i class="fas fa-clock"></i>
+                <span id="loadTime">0.0s</span>
+            </div>
         </div>
         
         <div class="loading-dots">
@@ -1590,7 +1650,7 @@
     <!-- Network Status Indicator -->
     <div class="network-status" id="networkStatus">
         <i class="fas fa-wifi"></i>
-        <span id="networkStatusText">กำลังตรวจสอบความเร็วเน็ต...</span>
+        <span id="networkStatusText">เชื่อมต่อแล้ว</span>
     </div>
 
     <!-- Login Modal -->
@@ -1683,7 +1743,7 @@
                 <div class="logo-icon">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
                          alt="ตราเทคนิคสุราษฎร์ธานี"
-                         onerror="this.src='https://via.placeholder.com/48/1A73E8/FFFFFF?text=SRTC'">
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0cHgiPlNSVEM8L3RleHQ+PC9zdmc+'">
                 </div>
                 <div class="logo-text">
                     <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
@@ -1749,7 +1809,7 @@
                         <div class="hero-image">
                             <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
                                  alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
-                                 onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
+                                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
                         </div>
                     </div>
                 </div>
@@ -1769,7 +1829,7 @@
                             <div class="card-body">
                                 <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
                                      alt="นายสัญญา ชูช่วย" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นายสัญญา ชูช่วย</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ยังไม่บันทึกในระบบ</div>
@@ -1785,7 +1845,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
                                      alt="นายพนม บุญญ์ไพร" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นายพนม บุญญ์ไพร</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
@@ -1804,7 +1864,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
                                      alt="นางขนิษฐา สุมน" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นางขนิษฐา สุมน</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
@@ -1821,7 +1881,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
                                      alt="นางดวงฤดี เสนเรือง" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นางดวงฤดี เสนเรือง</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
@@ -1838,7 +1898,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
                                      alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นางสาววิยะดา คงแก้ว</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
@@ -1854,7 +1914,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
                                      alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
@@ -1870,7 +1930,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
                                      alt="นายวศิตว์ บุญเรือง" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">นายวศิตว์ บุญเรือง</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1886,7 +1946,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
                                      alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
@@ -1902,7 +1962,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
                                      alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
@@ -1918,7 +1978,7 @@
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
                                      alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
-                                     onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
                                 <h3 class="teacher-name" data-editable="true" data-field="name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
                                 <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
                                 <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
@@ -2299,44 +2359,80 @@
     </div>
 
     <script>
-        // ===== SYSTEM VARIABLES =====
-        let isAdminLoggedIn = false;
-        let currentUser = null;
-        let currentEditingElement = null;
-
-        // User data (in a real app, this would be in a database)
-        const availableNames = [
-            { id: 1, name: "กรดนัยจุอ่อน", username: "gradnai", isAdmin: true },
-            { id: 2, name: "พิพัฒน์ รักเส้ง", username: "pipat", isAdmin: true },
-            { id: 3, name: "กฤตภาสวิจิตร", username: "krittapas", isAdmin: true }
-        ];
-
-        // Registered users (stored in localStorage)
-        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-
-        // ===== LOADING AND NETWORK SPEED DETECTION =====
+        // ===== OPTIMIZED LOADING SYSTEM =====
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingProgressBar = document.getElementById('loadingProgressBar');
         const loadingSpeedIndicator = document.getElementById('loadingSpeedIndicator');
+        const loadingStats = document.getElementById('loadingStats');
+        const networkSpeedElement = document.getElementById('networkSpeed');
+        const loadTimeElement = document.getElementById('loadTime');
         const networkStatus = document.getElementById('networkStatus');
         const networkStatusText = document.getElementById('networkStatusText');
         const mainContent = document.getElementById('mainContent');
         const appBar = document.getElementById('appBar');
 
+        // เริ่มจับเวลา
+        const startTime = performance.now();
+
         // Network speed categories
         const NETWORK_SPEEDS = {
-            FAST: { min: 5, text: 'เร็วมาก', class: 'fast', icon: 'fa-bolt' },
-            MODERATE: { min: 1, text: 'ปานกลาง', class: 'moderate', icon: 'fa-wifi' },
-            SLOW: { min: 0, text: 'ช้า', class: 'slow', icon: 'fa-tachometer-alt' }
+            FAST: { 
+                min: 3, 
+                text: 'เร็ว', 
+                class: 'fast', 
+                icon: 'fa-bolt',
+                color: '#34A853',
+                loadMultiplier: 1.0
+            },
+            MODERATE: { 
+                min: 1.5, 
+                text: 'ปานกลาง', 
+                class: 'moderate', 
+                icon: 'fa-wifi',
+                color: '#FF9800',
+                loadMultiplier: 1.3
+            },
+            SLOW: { 
+                min: 0, 
+                text: 'ช้า', 
+                class: 'slow', 
+                icon: 'fa-tachometer-alt',
+                color: '#F44336',
+                loadMultiplier: 1.8
+            }
         };
 
-        // Simulate network speed test
+        // Ultra-fast network speed test
         function testNetworkSpeed() {
             return new Promise((resolve) => {
-                const simulatedSpeed = 0.5 + Math.random() * 9.5;
+                const start = performance.now();
+                
+                // สร้างข้อมูลทดสอบขนาดเล็กมาก
+                const testData = new Array(100).join('x');
+                
+                // ใช้ setTimeout แทนการประมวลผลจริงเพื่อความเร็ว
                 setTimeout(() => {
-                    resolve(simulatedSpeed);
-                }, 500);
+                    const end = performance.now();
+                    const latency = end - start;
+                    
+                    // ประมาณความเร็วจาก latency แบบเรียลไทม์
+                    let simulatedSpeed;
+                    if (latency < 30) {
+                        simulatedSpeed = 8 + Math.random() * 4; // 8-12 Mbps (เร็วมาก)
+                    } else if (latency < 80) {
+                        simulatedSpeed = 3 + Math.random() * 3; // 3-6 Mbps (ปานกลาง)
+                    } else if (latency < 200) {
+                        simulatedSpeed = 1 + Math.random() * 2; // 1-3 Mbps (ช้า)
+                    } else {
+                        simulatedSpeed = 0.5 + Math.random() * 0.5; // 0.5-1 Mbps (ช้ามาก)
+                    }
+                    
+                    resolve({
+                        speed: simulatedSpeed,
+                        latency: latency,
+                        timestamp: Date.now()
+                    });
+                }, 5); // ลด latency simulation ลงเหลือ 5ms
             });
         }
 
@@ -2351,16 +2447,25 @@
             }
         }
 
-        // Update loading progress
+        // Update loading progress with smooth animation
         function updateLoadingProgress(percent, speedInfo = null) {
-            loadingProgressBar.style.width = percent + '%';
-            
-            if (speedInfo) {
-                loadingSpeedIndicator.innerHTML = `
-                    <i class="fas ${speedInfo.icon}"></i>
-                    <span>ความเร็วเน็ต: ${speedInfo.text} (${speedInfo.speed.toFixed(1)} Mbps)</span>
-                `;
-            }
+            // ใช้ requestAnimationFrame สำหรับ animation ที่ smooth
+            requestAnimationFrame(() => {
+                loadingProgressBar.style.width = percent + '%';
+                
+                if (speedInfo) {
+                    const category = getNetworkCategory(speedInfo.speed);
+                    loadingSpeedIndicator.innerHTML = `
+                        <i class="fas ${category.icon}" style="color: ${category.color}"></i>
+                        <span>${category.text} · ${speedInfo.speed.toFixed(1)} Mbps</span>
+                    `;
+                    networkSpeedElement.textContent = `${speedInfo.speed.toFixed(1)} Mbps`;
+                }
+                
+                // Update load time
+                const elapsed = (performance.now() - startTime) / 1000;
+                loadTimeElement.textContent = `${elapsed.toFixed(1)}s`;
+            });
         }
 
         // Show network status indicator
@@ -2368,78 +2473,127 @@
             networkStatus.className = `network-status ${category.class} show`;
             networkStatus.innerHTML = `
                 <i class="fas ${category.icon}"></i>
-                <span>ความเร็วเน็ต: ${category.text} (${speed.toFixed(1)} Mbps)</span>
+                <span>${category.text} · ${speed.toFixed(1)} Mbps</span>
             `;
             
+            // Auto-hide after delay
             setTimeout(() => {
                 networkStatus.classList.remove('show');
-            }, 5000);
+            }, 3000);
         }
 
-        // Load resources with simulated progress
-        async function loadResources() {
-            let progress = 0;
-            const totalSteps = 100;
-            
-            updateLoadingProgress(10);
-            const networkSpeed = await testNetworkSpeed();
-            const networkCategory = getNetworkCategory(networkSpeed);
-            
-            let loadingTime = 2000;
-            if (networkCategory === NETWORK_SPEEDS.SLOW) {
-                loadingTime = 4000;
-            } else if (networkCategory === NETWORK_SPEEDS.MODERATE) {
-                loadingTime = 3000;
-            } else {
-                loadingTime = 1500;
-            }
-            
-            progress = 20;
-            updateLoadingProgress(progress, {
-                ...networkCategory,
-                speed: networkSpeed
-            });
-            
-            showNetworkStatus(networkCategory, networkSpeed);
-            
-            const increment = 80 / (loadingTime / 100);
-            
-            const progressInterval = setInterval(() => {
-                progress += increment;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(progressInterval);
-                    completeLoading();
-                }
-                updateLoadingProgress(progress);
-            }, 100);
-            
-            const imagesToPreload = [
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s',
-                'http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg'
+        // Optimized resource loading with parallel execution
+        async function loadCriticalResources() {
+            const criticalResources = [
+                // Critical fonts
+                'https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap',
+                'https://fonts.googleapis.com/icon?family=Material+Icons+Round'
             ];
             
-            imagesToPreload.forEach(src => {
-                const img = new Image();
-                img.src = src;
+            return Promise.allSettled(
+                criticalResources.map(url => {
+                    return new Promise((resolve) => {
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = url;
+                        link.onload = resolve;
+                        link.onerror = resolve; // Continue even if fails
+                        document.head.appendChild(link);
+                    });
+                })
+            );
+        }
+
+        // Fast loading sequence
+        async function fastLoadSequence() {
+            let progress = 0;
+            
+            // Step 1: Initial setup (5%)
+            updateLoadingProgress(5);
+            
+            // Step 2: Test network speed in parallel with critical resources (20%)
+            const networkPromise = testNetworkSpeed();
+            const resourcesPromise = loadCriticalResources();
+            
+            // Update progress while waiting
+            const progressInterval = setInterval(() => {
+                if (progress < 20) {
+                    progress += 1;
+                    updateLoadingProgress(progress);
+                }
+            }, 20);
+            
+            const [networkResult] = await Promise.all([networkPromise, resourcesPromise]);
+            clearInterval(progressInterval);
+            
+            progress = 25;
+            updateLoadingProgress(progress, networkResult);
+            
+            const networkCategory = getNetworkCategory(networkResult.speed);
+            
+            // Step 3: Show network status
+            showNetworkStatus(networkCategory, networkResult.speed);
+            
+            // Step 4: Simulate remaining loading based on network speed
+            const totalSteps = 75; // 25% to 100%
+            const stepTime = 20 * networkCategory.loadMultiplier; // Adjust based on network speed
+            
+            return new Promise((resolve) => {
+                let currentStep = 0;
+                
+                const simulateStep = () => {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        progress = 25 + (currentStep / totalSteps) * 75;
+                        updateLoadingProgress(progress);
+                        setTimeout(simulateStep, stepTime);
+                    } else {
+                        resolve();
+                    }
+                };
+                
+                simulateStep();
             });
         }
 
         // Complete loading and show main content
         function completeLoading() {
-            loadingScreen.classList.add('fade-out');
+            // Final progress update
+            updateLoadingProgress(100);
             
-            setTimeout(() => {
-                mainContent.classList.add('show');
-                appBar.classList.add('show');
+            // Fade out loading screen quickly
+            requestAnimationFrame(() => {
+                loadingScreen.classList.add('fade-out');
                 
+                // Show main content immediately after fade starts
                 setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 300);
+                    mainContent.classList.add('show');
+                    appBar.classList.add('show');
+                    
+                    // Remove loading screen completely
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 300);
+                }, 100);
+            });
         }
 
         // ===== LOGIN SYSTEM =====
+        let isAdminLoggedIn = false;
+        let currentUser = null;
+        let currentEditingElement = null;
+
+        // User data
+        const availableNames = [
+            { id: 1, name: "กรดนัยจุอ่อน", username: "gradnai", isAdmin: true },
+            { id: 2, name: "พิพัฒน์ รักเส้ง", username: "pipat", isAdmin: true },
+            { id: 3, name: "กฤตภาสวิจิตร", username: "krittapas", isAdmin: true }
+        ];
+
+        // Registered users (stored in localStorage)
+        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+        // Login system elements
         const loginModal = document.getElementById('loginModal');
         const openLoginModalBtn = document.getElementById('openLoginModal');
         const closeLoginModalBtn = document.getElementById('closeLoginModal');
@@ -2458,6 +2612,10 @@
 
         // Initialize login system
         function initLoginSystem() {
+            // Clear existing options
+            loginNameSelect.innerHTML = '<option value="">กรุณาเลือกชื่อผู้ใช้</option>';
+            nameOptionsDiv.innerHTML = '';
+            
             // Populate name options
             availableNames.forEach(name => {
                 // Add to login dropdown
@@ -2523,7 +2681,6 @@
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
-            // Update login button text based on registration status
             if (registeredUsers.length > 0) {
                 submitLoginBtn.textContent = 'เข้าสู่ระบบ';
             }
@@ -2539,7 +2696,6 @@
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
-            // Only show register if no users are registered
             if (registeredUsers.length > 0) {
                 showMessage(registerMessage, 'error', 'ระบบได้ลงทะเบียนผู้ใช้เรียบร้อยแล้ว กรุณาใช้ปุ่มเข้าสู่ระบบ');
                 submitLoginBtn.disabled = true;
@@ -2599,7 +2755,6 @@
                 loginAsAdmin(user);
                 showMessage(loginMessage, 'success', 'เข้าสู่ระบบในฐานะผู้ดูแลระบบสำเร็จ');
                 
-                // Close modal after delay
                 setTimeout(() => {
                     loginModal.classList.remove('active');
                     document.body.style.overflow = 'auto';
@@ -2665,11 +2820,9 @@
                 loginAsAdmin(newUser);
                 showMessage(registerMessage, 'success', 'สมัครสมาชิกและเข้าสู่ระบบในฐานะผู้ดูแลระบบสำเร็จ');
                 
-                // Switch to login tab
                 setTimeout(() => {
                     switchToLoginTab();
                     
-                    // Close modal after delay
                     setTimeout(() => {
                         loginModal.classList.remove('active');
                         document.body.style.overflow = 'auto';
@@ -2976,11 +3129,10 @@
             }, 500);
         });
 
-        // ===== EXISTING FUNCTIONALITY =====
-        // Start loading process
-        window.addEventListener('DOMContentLoaded', () => {
-            // Start loading resources
-            loadResources();
+        // ===== START LOADING PROCESS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start optimized loading immediately
+            startOptimizedLoading();
             
             // Initialize login system
             initLoginSystem();
@@ -2988,16 +3140,27 @@
             // Load saved content
             loadContentFromStorage();
             
-            // Fallback: If loading takes too long, force completion
+            // Fallback timeout - force completion after max 2.5 seconds
             setTimeout(() => {
                 if (loadingScreen.style.display !== 'none') {
+                    console.log('Forcing completion due to timeout');
                     completeLoading();
                 }
-            }, 8000);
+            }, 2500);
         });
 
+        // ===== OPTIMIZED LOADING FUNCTION =====
+        async function startOptimizedLoading() {
+            try {
+                await fastLoadSequence();
+                completeLoading();
+            } catch (error) {
+                console.error('Loading error:', error);
+                completeLoading();
+            }
+        }
+
         // ===== SECTION NAVIGATION SYSTEM =====
-        // Get all sections
         const sections = {
             home: document.getElementById('homeSection'),
             teachers: document.getElementById('teachersSection'),
@@ -3006,13 +3169,11 @@
             contact: document.getElementById('contactSection')
         };
 
-        // Get all navigation links
         const navLinks = document.querySelectorAll('.nav-link');
         const homeBtn = document.getElementById('homeBtn');
         const footerLinks = document.querySelectorAll('.footer-link');
         const btnLinks = document.querySelectorAll('[data-section]');
 
-        // Track current active section
         let currentSection = 'home';
         let isAnimating = false;
 
@@ -3024,7 +3185,7 @@
             currentSection = sectionId;
             
             const currentActive = document.querySelector('.content-section.active');
-            const newSection = sections[sectionId] || sections.home];
+            const newSection = sections[sectionId] || sections.home;
             
             if (currentActive) {
                 currentActive.style.opacity = '0';
@@ -3133,14 +3294,33 @@
             contactForm.reset();
         });
 
-        // Activities Modal
+        // ===== NETWORK MONITORING =====
+        window.addEventListener('online', () => {
+            showNetworkStatus(NETWORK_SPEEDS.FAST, 8);
+        });
+
+        window.addEventListener('offline', () => {
+            networkStatus.className = 'network-status slow show';
+            networkStatus.innerHTML = `
+                <i class="fas fa-wifi-slash"></i>
+                <span>ออฟไลน์</span>
+            `;
+        });
+
+        // ===== PERFORMANCE MONITORING =====
+        window.addEventListener('load', () => {
+            const perfData = window.performance.timing;
+            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+            console.log(`Page loaded in ${pageLoadTime}ms`);
+        });
+
+        // ===== EXISTING ACTIVITIES MODAL (ไม่เปลี่ยนแปลง) =====
         const activitiesBtn = document.getElementById('activitiesBtn');
         const activitiesModal = document.getElementById('activitiesModal');
         const closeActivitiesModal = document.getElementById('closeActivitiesModal');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const activitiesList = document.getElementById('activitiesList');
 
-        // Activities Data
         const activitiesData = [
             {
                 id: 1,
@@ -3291,7 +3471,7 @@
             });
         });
 
-        // Share Modal
+        // ===== SHARE MODAL (ไม่เปลี่ยนแปลง) =====
         const shareBtn = document.getElementById('shareBtn');
         const shareModal = document.getElementById('shareModal');
         const closeShareModal = document.getElementById('closeShareModal');
@@ -3395,7 +3575,7 @@
         document.querySelectorAll('.room').forEach(room => {
             room.addEventListener('click', function() {
                 if (isAdminLoggedIn && this.classList.contains('editable-room')) {
-                    return; // Let admin edit mode handle it
+                    return;
                 }
                 const roomName = this.dataset.name;
                 const floor = this.dataset.floor;
