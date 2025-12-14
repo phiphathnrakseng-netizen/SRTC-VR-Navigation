@@ -337,7 +337,7 @@
             transform: translateY(0);
         }
 
-        /* ===== LOGIN MODAL ===== */
+        /* ===== LOGIN MODAL - MODERN MINIMAL DESIGN ===== */
         .login-modal {
             display: none;
             position: fixed;
@@ -345,7 +345,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -360,64 +361,100 @@
         }
 
         .login-container {
-            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
-            border-radius: var(--radius-lg);
+            background: var(--surface);
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow-5);
-            max-width: 500px;
+            max-width: 440px;
             width: 100%;
             overflow: hidden;
             transform: translateY(20px) scale(0.95);
             transition: transform var(--animation-normal);
             border: 1px solid var(--border);
+            position: relative;
         }
 
         .login-modal.active .login-container {
             transform: translateY(0) scale(1);
         }
 
+        /* Decorative gradient border */
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            z-index: 2;
+        }
+
         .login-header {
             padding: var(--spacing-xl);
-            color: var(--on-primary);
             text-align: center;
+            background: linear-gradient(135deg, #f8fafd 0%, #e8f0fe 100%);
             position: relative;
             overflow: hidden;
         }
 
-        .login-header::before {
+        .login-header::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231a73e8" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-lg);
+            box-shadow: 0 8px 24px rgba(26, 115, 232, 0.3);
+            position: relative;
             z-index: 1;
         }
 
+        .login-icon i {
+            font-size: 2.5rem;
+            color: var(--on-primary);
+        }
+
         .login-header h2 {
-            font-size: 2rem;
-            margin-bottom: var(--spacing-sm);
+            font-size: 1.75rem;
+            margin-bottom: var(--spacing-xs);
             position: relative;
-            z-index: 2;
+            z-index: 1;
             font-weight: 600;
+            color: var(--primary);
         }
 
         .login-header p {
-            opacity: 0.9;
+            opacity: 0.8;
             position: relative;
-            z-index: 2;
+            z-index: 1;
             font-size: 0.9rem;
+            color: var(--on-background);
         }
 
         .login-body {
-            background-color: var(--surface);
             padding: var(--spacing-xl);
         }
 
         .login-tabs {
             display: flex;
             margin-bottom: var(--spacing-xl);
-            border-bottom: 1px solid var(--divider);
+            border-bottom: 2px solid var(--divider);
+            position: relative;
         }
 
         .login-tab {
@@ -432,6 +469,14 @@
             cursor: pointer;
             transition: all var(--animation-fast);
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+
+        .login-tab i {
+            font-size: 1.1rem;
         }
 
         .login-tab.active {
@@ -441,16 +486,21 @@
         .login-tab.active::after {
             content: '';
             position: absolute;
-            bottom: -1px;
+            bottom: -2px;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 2px;
             background-color: var(--primary);
-            border-radius: 3px 3px 0 0;
         }
 
         .login-form {
             display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-form.hidden {
@@ -463,10 +513,18 @@
 
         .form-label {
             display: block;
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
             font-weight: 500;
             color: var(--on-surface);
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .form-label i {
+            color: var(--primary);
+            font-size: 0.8rem;
         }
 
         .form-control {
@@ -478,14 +536,39 @@
             font-size: 1rem;
             transition: all var(--animation-fast);
             background-color: var(--surface);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1), inset 0 1px 2px rgba(0,0,0,0.05);
         }
 
+        .form-select {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 1rem;
+            transition: all var(--animation-fast);
+            background-color: var(--surface);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1), inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* Name selection cards for register */
         .name-options {
             display: grid;
             grid-template-columns: 1fr;
@@ -502,24 +585,83 @@
             border-radius: var(--radius-md);
             cursor: pointer;
             transition: all var(--animation-fast);
+            position: relative;
         }
 
         .name-option:hover {
             border-color: var(--primary);
             background-color: rgba(26, 115, 232, 0.05);
+            transform: translateX(4px);
         }
 
         .name-option.selected {
             border-color: var(--primary);
             background-color: rgba(26, 115, 232, 0.1);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.15);
         }
 
-        .name-option input {
+        .name-option .checkmark {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
             margin-right: var(--spacing-md);
-            width: 18px;
-            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--animation-fast);
+            flex-shrink: 0;
         }
 
+        .name-option.selected .checkmark {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .name-option.selected .checkmark::after {
+            content: '✓';
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .name-option .user-icon {
+            margin-right: var(--spacing-sm);
+            color: var(--primary);
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .name-option .name-text {
+            flex: 1;
+        }
+
+        .name-option .name-text strong {
+            display: block;
+            font-weight: 500;
+            color: var(--on-surface);
+            margin-bottom: 2px;
+        }
+
+        .name-option .name-text span {
+            font-size: 0.8rem;
+            color: var(--on-background);
+            opacity: 0.8;
+        }
+
+        .name-option .admin-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: var(--spacing-sm);
+            white-space: nowrap;
+        }
+
+        /* Login Footer */
         .login-footer {
             padding: var(--spacing-xl);
             background-color: var(--background);
@@ -527,6 +669,7 @@
             display: flex;
             justify-content: space-between;
             gap: var(--spacing-md);
+            align-items: center;
         }
 
         .btn {
@@ -543,77 +686,110 @@
             cursor: pointer;
             transition: all var(--animation-fast);
             text-decoration: none;
+            min-height: 44px;
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: var(--on-primary);
-            box-shadow: var(--shadow-1);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
-            box-shadow: var(--shadow-2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
         }
 
         .btn-outline {
             background-color: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            border: 1.5px solid var(--border);
+            color: var(--on-background);
         }
 
         .btn-outline:hover {
-            background-color: rgba(26, 115, 232, 0.08);
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.05);
         }
 
+        /* Login Messages */
         .login-message {
             margin-top: var(--spacing-md);
             padding: var(--spacing-md);
             border-radius: var(--radius-md);
             font-size: 0.875rem;
             display: none;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid transparent;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .login-message.success {
             background-color: rgba(52, 168, 83, 0.1);
             color: var(--secondary);
-            border: 1px solid rgba(52, 168, 83, 0.2);
+            border-left-color: var(--secondary);
             display: block;
         }
 
         .login-message.error {
             background-color: rgba(220, 38, 38, 0.1);
             color: #DC2626;
-            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-left-color: #DC2626;
             display: block;
         }
 
-        /* Admin Controls */
+        /* Password strength indicator */
+        .password-strength {
+            height: 4px;
+            background-color: var(--divider);
+            border-radius: var(--radius-full);
+            margin-top: var(--spacing-xs);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: var(--radius-full);
+            transition: all var(--animation-fast);
+        }
+
+        .strength-weak { width: 33%; background-color: #F44336; }
+        .strength-medium { width: 66%; background-color: #FF9800; }
+        .strength-strong { width: 100%; background-color: #4CAF50; }
+
+        /* ===== ADMIN CONTROLS - MINIMAL DESIGN ===== */
         .admin-controls {
             position: fixed;
             top: 80px;
             right: 20px;
             z-index: 1001;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(255, 255, 255, 0.98);
             border-radius: var(--radius-lg);
             padding: var(--spacing-md);
             box-shadow: var(--shadow-3);
             display: none;
             flex-direction: column;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-xs);
             min-width: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
         }
 
         .admin-controls.show {
             display: flex;
-            animation: slideIn 0.3s ease-out;
+            animation: slideInDown 0.3s ease-out;
         }
 
-        @keyframes slideIn {
+        @keyframes slideInDown {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -622,11 +798,14 @@
         }
 
         .admin-controls h3 {
-            color: white;
-            font-size: 1rem;
+            color: var(--on-surface);
+            font-size: 0.9rem;
             margin-bottom: var(--spacing-xs);
             padding-bottom: var(--spacing-xs);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid var(--divider);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .admin-btn {
@@ -634,27 +813,30 @@
             align-items: center;
             gap: var(--spacing-sm);
             padding: var(--spacing-sm) var(--spacing-md);
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: transparent;
+            border: none;
             border-radius: var(--radius-md);
-            color: white;
+            color: var(--on-surface);
             font-size: 0.875rem;
             cursor: pointer;
             transition: all var(--animation-fast);
+            text-align: left;
         }
 
         .admin-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: var(--hover);
+            color: var(--primary);
+            transform: translateX(4px);
         }
 
         .admin-btn i {
             font-size: 1rem;
             width: 20px;
             text-align: center;
+            color: var(--primary);
         }
 
-        /* Editable Content */
+        /* Editable Content Indicators */
         .editable {
             position: relative;
             cursor: pointer;
@@ -663,14 +845,12 @@
 
         .editable:hover {
             background-color: rgba(26, 115, 232, 0.05);
-            outline: 2px dashed rgba(26, 115, 232, 0.3);
-            border-radius: var(--radius-sm);
         }
 
         .edit-indicator {
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: -8px;
+            right: -8px;
             background-color: var(--primary);
             color: white;
             width: 24px;
@@ -684,6 +864,7 @@
             transition: opacity var(--animation-fast);
             box-shadow: var(--shadow-1);
             z-index: 10;
+            cursor: pointer;
         }
 
         .editable:hover .edit-indicator {
@@ -699,6 +880,7 @@
             right: 0;
             bottom: 0;
             background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
             z-index: 2001;
             align-items: center;
             justify-content: center;
@@ -716,12 +898,13 @@
             background-color: var(--surface);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-5);
-            max-width: 600px;
+            max-width: 500px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
             transition: transform var(--animation-normal);
+            border: 1px solid var(--border);
         }
 
         .admin-edit-modal.active .admin-edit-content {
@@ -1653,32 +1836,47 @@
         <span id="networkStatusText">เชื่อมต่อแล้ว</span>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Login Modal - MODERN MINIMAL DESIGN -->
     <div class="login-modal" id="loginModal">
         <div class="login-container">
             <div class="login-header">
-                <h2>ระบบเข้าสู่ระบบ</h2>
+                <div class="login-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2>ระบบผู้ดูแล</h2>
                 <p>สำหรับผู้ดูแลระบบแผนกเทคโนโลยีสารสนเทศ</p>
             </div>
             
             <div class="login-body">
                 <div class="login-tabs">
-                    <button class="login-tab active" id="loginTab">เข้าสู่ระบบ</button>
-                    <button class="login-tab" id="registerTab">สมัครสมาชิก</button>
+                    <button class="login-tab active" id="loginTab">
+                        <i class="fas fa-sign-in-alt"></i>
+                        เข้าสู่ระบบ
+                    </button>
+                    <button class="login-tab" id="registerTab">
+                        <i class="fas fa-user-plus"></i>
+                        สมัครสมาชิก
+                    </button>
                 </div>
                 
                 <!-- Login Form -->
                 <div class="login-form" id="loginForm">
                     <div class="form-group">
-                        <label class="form-label">ชื่อผู้ใช้</label>
-                        <select class="form-control" id="loginName">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            ชื่อผู้ใช้
+                        </label>
+                        <select class="form-select" id="loginName">
                             <option value="">กรุณาเลือกชื่อผู้ใช้</option>
                             <!-- Options will be populated by JavaScript -->
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">รหัสผ่าน</label>
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            รหัสผ่าน
+                        </label>
                         <input type="password" class="form-control" id="loginPassword" placeholder="กรุณากรอกรหัสผ่าน">
                     </div>
                     
@@ -1688,19 +1886,31 @@
                 <!-- Register Form -->
                 <div class="login-form hidden" id="registerForm">
                     <div class="form-group">
-                        <label class="form-label">เลือกชื่อของคุณ</label>
+                        <label class="form-label">
+                            <i class="fas fa-id-card"></i>
+                            เลือกชื่อของคุณ
+                        </label>
                         <div class="name-options" id="nameOptions">
                             <!-- Name options will be populated by JavaScript -->
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">ตั้งรหัสผ่าน</label>
+                        <label class="form-label">
+                            <i class="fas fa-key"></i>
+                            ตั้งรหัสผ่าน
+                        </label>
                         <input type="password" class="form-control" id="registerPassword" placeholder="ตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร">
+                        <div class="password-strength">
+                            <div class="strength-bar" id="passwordStrength"></div>
+                        </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">ยืนยันรหัสผ่าน</label>
+                        <label class="form-label">
+                            <i class="fas fa-check-circle"></i>
+                            ยืนยันรหัสผ่าน
+                        </label>
                         <input type="password" class="form-control" id="confirmPassword" placeholder="กรุณากรอกรหัสผ่านอีกครั้ง">
                     </div>
                     
@@ -1710,14 +1920,17 @@
             
             <div class="login-footer">
                 <button class="btn btn-outline" id="closeLoginModal">ปิด</button>
-                <button class="btn btn-primary" id="submitLogin">เข้าสู่ระบบ</button>
+                <button class="btn btn-primary" id="submitLogin">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span id="submitBtnText">เข้าสู่ระบบ</span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Admin Controls -->
+    <!-- Admin Controls - MINIMAL DESIGN -->
     <div class="admin-controls" id="adminControls">
-        <h3>เครื่องมือผู้ดูแลระบบ</h3>
+        <h3>เครื่องมือผู้ดูแล</h3>
         <button class="admin-btn" id="editContentBtn">
             <i class="fas fa-edit"></i>
             แก้ไขเนื้อหา
@@ -2593,6 +2806,9 @@
         // Registered users (stored in localStorage)
         let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
 
+        // Content data (stored in localStorage)
+        let websiteContent = JSON.parse(localStorage.getItem('websiteContent')) || {};
+
         // Login system elements
         const loginModal = document.getElementById('loginModal');
         const openLoginModalBtn = document.getElementById('openLoginModal');
@@ -2604,10 +2820,12 @@
         const loginNameSelect = document.getElementById('loginName');
         const nameOptionsDiv = document.getElementById('nameOptions');
         const submitLoginBtn = document.getElementById('submitLogin');
+        const submitBtnText = document.getElementById('submitBtnText');
         const loginMessage = document.getElementById('loginMessage');
         const registerMessage = document.getElementById('registerMessage');
         const registerPassword = document.getElementById('registerPassword');
         const confirmPassword = document.getElementById('confirmPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
         const adminControls = document.getElementById('adminControls');
 
         // Initialize login system
@@ -2627,10 +2845,22 @@
                 // Add to register options
                 const nameOption = document.createElement('div');
                 nameOption.className = 'name-option';
+                nameOption.dataset.username = name.username;
+                nameOption.dataset.name = name.name;
+                nameOption.dataset.isAdmin = name.isAdmin;
+                
                 nameOption.innerHTML = `
-                    <input type="radio" name="selectedName" value="${name.username}" id="name-${name.id}">
-                    <label for="name-${name.id}">${name.name}</label>
+                    <div class="checkmark"></div>
+                    <div class="user-icon">
+                        <i class="fas fa-user${name.isAdmin ? '-shield' : ''}"></i>
+                    </div>
+                    <div class="name-text">
+                        <strong>${name.name}</strong>
+                        <span>@${name.username}</span>
+                    </div>
+                    ${name.isAdmin ? '<div class="admin-badge">ผู้ดูแล</div>' : ''}
                 `;
+                
                 nameOptionsDiv.appendChild(nameOption);
             });
             
@@ -2641,11 +2871,21 @@
                         opt.classList.remove('selected');
                     });
                     this.classList.add('selected');
-                    const radio = this.querySelector('input[type="radio"]');
-                    if (radio) {
-                        radio.checked = true;
-                    }
                 });
+            });
+            
+            // Password strength indicator
+            registerPassword.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 'weak';
+                
+                if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
+                    strength = 'strong';
+                } else if (password.length >= 8 && (/[A-Z]/.test(password) || /[0-9]/.test(password))) {
+                    strength = 'medium';
+                }
+                
+                passwordStrength.className = `strength-bar strength-${strength}`;
             });
             
             // Check if user is already logged in
@@ -2677,12 +2917,12 @@
             registerTab.classList.remove('active');
             loginForm.classList.remove('hidden');
             registerForm.classList.add('hidden');
-            submitLoginBtn.textContent = 'เข้าสู่ระบบ';
+            submitBtnText.textContent = 'เข้าสู่ระบบ';
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
             if (registeredUsers.length > 0) {
-                submitLoginBtn.textContent = 'เข้าสู่ระบบ';
+                submitBtnText.textContent = 'เข้าสู่ระบบ';
             }
         }
 
@@ -2692,7 +2932,7 @@
             registerTab.classList.add('active');
             loginForm.classList.add('hidden');
             registerForm.classList.remove('hidden');
-            submitLoginBtn.textContent = 'สมัครสมาชิก';
+            submitBtnText.textContent = 'สมัครสมาชิก';
             loginMessage.style.display = 'none';
             registerMessage.style.display = 'none';
             
@@ -2766,11 +3006,11 @@
 
         // Handle registration
         function handleRegister() {
-            const selectedName = document.querySelector('input[name="selectedName"]:checked');
+            const selectedOption = document.querySelector('.name-option.selected');
             const password = registerPassword.value;
             const confirm = confirmPassword.value;
             
-            if (!selectedName || !password || !confirm) {
+            if (!selectedOption || !password || !confirm) {
                 showMessage(registerMessage, 'error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
                 return;
             }
@@ -2791,22 +3031,18 @@
                 return;
             }
             
-            // Find user info
-            const username = selectedName.value;
-            const userInfo = availableNames.find(name => name.username === username);
-            
-            if (!userInfo) {
-                showMessage(registerMessage, 'error', 'ไม่พบข้อมูลผู้ใช้งาน');
-                return;
-            }
+            // Get user info
+            const username = selectedOption.dataset.username;
+            const name = selectedOption.dataset.name;
+            const isAdmin = selectedOption.dataset.isAdmin === 'true';
             
             // Register user
             const newUser = {
-                id: userInfo.id,
-                name: userInfo.name,
-                username: userInfo.username,
+                id: registeredUsers.length + 1,
+                name: name,
+                username: username,
                 password: password,
-                isAdmin: userInfo.isAdmin
+                isAdmin: isAdmin
             };
             
             registeredUsers.push(newUser);
@@ -2846,6 +3082,9 @@
             // Make content editable
             enableContentEditing();
             
+            // Load saved content
+            loadSavedContent();
+            
             // Add click handler to login button to toggle admin controls
             openLoginModalBtn.onclick = toggleAdminControls;
         }
@@ -2882,61 +3121,81 @@
             alert('ออกจากระบบสำเร็จ');
         });
 
-        // Enable content editing
+        // ===== CONTENT EDITING SYSTEM =====
         function enableContentEditing() {
-            // Add edit indicators
+            // Create edit indicators for all editable elements
             document.querySelectorAll('.editable').forEach(element => {
-                const indicator = document.createElement('div');
-                indicator.className = 'edit-indicator';
-                indicator.innerHTML = '<i class="fas fa-edit"></i>';
-                element.style.position = 'relative';
-                element.appendChild(indicator);
-                
-                element.addEventListener('click', function(e) {
-                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
-                        openEditModal(this);
-                    }
-                });
+                if (!element.querySelector('.edit-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'edit-indicator';
+                    indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                    element.style.position = 'relative';
+                    element.appendChild(indicator);
+                    
+                    element.addEventListener('click', function(e) {
+                        if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                            openEditModal(this);
+                        }
+                    });
+                }
             });
             
             // Make teacher cards editable
             document.querySelectorAll('.teacher-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
-                        openTeacherEditModal(this);
-                    }
-                });
+                if (!card.querySelector('.edit-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'edit-indicator';
+                    indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                    card.style.position = 'relative';
+                    card.appendChild(indicator);
+                    
+                    card.addEventListener('click', function(e) {
+                        if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                            openTeacherEditModal(this);
+                        }
+                    });
+                }
             });
             
             // Make rooms editable
             document.querySelectorAll('.editable-room').forEach(room => {
-                room.addEventListener('click', function(e) {
-                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
-                        e.stopPropagation();
-                        openRoomEditModal(this);
-                    }
-                });
+                if (!room.querySelector('.edit-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'edit-indicator';
+                    indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                    room.style.position = 'relative';
+                    room.appendChild(indicator);
+                    
+                    room.addEventListener('click', function(e) {
+                        if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                            e.stopPropagation();
+                            openRoomEditModal(this);
+                        }
+                    });
+                }
             });
         }
 
-        // Disable content editing
         function disableContentEditing() {
             // Remove edit indicators
             document.querySelectorAll('.edit-indicator').forEach(indicator => {
                 indicator.remove();
             });
             
-            // Remove click events
+            // Remove click events by cloning elements
             document.querySelectorAll('.editable').forEach(element => {
-                element.replaceWith(element.cloneNode(true));
+                const newElement = element.cloneNode(true);
+                element.parentNode.replaceChild(newElement, element);
             });
             
             document.querySelectorAll('.teacher-card').forEach(card => {
-                card.replaceWith(card.cloneNode(true));
+                const newCard = card.cloneNode(true);
+                card.parentNode.replaceChild(newCard, card);
             });
             
             document.querySelectorAll('.editable-room').forEach(room => {
-                room.replaceWith(room.cloneNode(true));
+                const newRoom = room.cloneNode(true);
+                room.parentNode.replaceChild(newRoom, room);
             });
         }
 
@@ -2953,34 +3212,25 @@
             currentEditingElement = element;
             
             // Get current content
-            const isHeading = element.tagName === 'H1' || element.tagName === 'H2' || 
-                            element.tagName === 'H3' || element.tagName === 'H4' || 
-                            element.tagName === 'H5' || element.tagName === 'H6';
+            const id = element.dataset.id;
+            const currentTitle = element.tagName.startsWith('H') ? element.textContent : '';
+            const currentContent = element.tagName === 'P' ? element.textContent : '';
             
-            if (isHeading) {
-                editTitleInput.value = element.textContent;
-                editContentInput.value = '';
-                editTypeInput.value = 'heading';
-            } else if (element.tagName === 'P') {
-                editTitleInput.value = '';
-                editContentInput.value = element.textContent;
-                editTypeInput.value = 'paragraph';
-            } else {
-                // For divs with multiple elements
-                const firstChild = element.firstElementChild;
-                if (firstChild && firstChild.tagName === 'H3') {
-                    editTitleInput.value = firstChild.textContent;
-                    
-                    // Find the first paragraph
-                    const paragraph = element.querySelector('p');
-                    editContentInput.value = paragraph ? paragraph.textContent : '';
-                    editTypeInput.value = 'info-item';
-                } else {
+            // Load saved content if exists
+            if (id && websiteContent[id]) {
+                if (element.tagName.startsWith('H')) {
+                    editTitleInput.value = websiteContent[id];
+                    editContentInput.value = '';
+                } else if (element.tagName === 'P') {
                     editTitleInput.value = '';
-                    editContentInput.value = element.textContent;
-                    editTypeInput.value = 'content';
+                    editContentInput.value = websiteContent[id];
                 }
+            } else {
+                editTitleInput.value = currentTitle;
+                editContentInput.value = currentContent;
             }
+            
+            editTypeInput.value = element.tagName.startsWith('H') ? 'heading' : 'paragraph';
             
             adminEditModal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -2990,13 +3240,21 @@
         function openTeacherEditModal(card) {
             currentEditingElement = card;
             
+            const id = card.dataset.id;
             const name = card.querySelector('.teacher-name').textContent;
             const position = card.querySelector('.teacher-position').textContent;
             const degree = card.querySelector('.teacher-degree').textContent;
             const description = card.querySelector('p[data-editable="true"]').textContent;
             
-            editTitleInput.value = name;
-            editContentInput.value = `${position}\n\n${degree}\n\n${description}`;
+            // Load saved content if exists
+            if (id && websiteContent[id]) {
+                editTitleInput.value = websiteContent[id].title || name;
+                editContentInput.value = websiteContent[id].content || `${position}\n\n${degree}\n\n${description}`;
+            } else {
+                editTitleInput.value = name;
+                editContentInput.value = `${position}\n\n${degree}\n\n${description}`;
+            }
+            
             editTypeInput.value = 'teacher';
             
             adminEditModal.classList.add('active');
@@ -3007,8 +3265,19 @@
         function openRoomEditModal(room) {
             currentEditingElement = room;
             
-            editTitleInput.value = room.dataset.name;
-            editContentInput.value = room.textContent;
+            const id = room.dataset.room;
+            const currentName = room.dataset.name;
+            const currentText = room.textContent;
+            
+            // Load saved content if exists
+            if (id && websiteContent[`room-${id}`]) {
+                editTitleInput.value = websiteContent[`room-${id}`].name || currentName;
+                editContentInput.value = websiteContent[`room-${id}`].text || currentText;
+            } else {
+                editTitleInput.value = currentName;
+                editContentInput.value = currentText;
+            }
+            
             editTypeInput.value = 'room';
             
             adminEditModal.classList.add('active');
@@ -3020,21 +3289,17 @@
             if (!currentEditingElement) return;
             
             const type = editTypeInput.value;
+            const id = currentEditingElement.dataset.id || currentEditingElement.dataset.room;
             
             switch(type) {
                 case 'heading':
                     currentEditingElement.textContent = editTitleInput.value;
+                    if (id) websiteContent[id] = editTitleInput.value;
                     break;
                     
                 case 'paragraph':
                     currentEditingElement.textContent = editContentInput.value;
-                    break;
-                    
-                case 'info-item':
-                    const heading = currentEditingElement.querySelector('h3');
-                    const paragraph = currentEditingElement.querySelector('p');
-                    if (heading) heading.textContent = editTitleInput.value;
-                    if (paragraph) paragraph.textContent = editContentInput.value;
+                    if (id) websiteContent[id] = editContentInput.value;
                     break;
                     
                 case 'teacher':
@@ -3043,26 +3308,46 @@
                     const teacherDegree = currentEditingElement.querySelector('.teacher-degree');
                     const teacherDesc = currentEditingElement.querySelector('p[data-editable="true"]');
                     
-                    if (teacherName) teacherName.textContent = editTitleInput.value;
-                    
                     // Parse the content
                     const lines = editContentInput.value.split('\n\n');
+                    if (teacherName) teacherName.textContent = editTitleInput.value;
                     if (lines.length >= 1 && teacherPosition) teacherPosition.textContent = lines[0];
                     if (lines.length >= 2 && teacherDegree) teacherDegree.textContent = lines[1];
                     if (lines.length >= 3 && teacherDesc) teacherDesc.textContent = lines[2];
+                    
+                    // Save structured data
+                    if (id) {
+                        websiteContent[id] = {
+                            title: editTitleInput.value,
+                            content: editContentInput.value,
+                            position: lines[0] || '',
+                            degree: lines[1] || '',
+                            description: lines[2] || ''
+                        };
+                    }
                     break;
                     
                 case 'room':
+                    const roomId = currentEditingElement.dataset.room;
                     currentEditingElement.textContent = editContentInput.value;
                     currentEditingElement.dataset.name = editTitleInput.value;
+                    
+                    // Save structured data
+                    if (roomId) {
+                        websiteContent[`room-${roomId}`] = {
+                            name: editTitleInput.value,
+                            text: editContentInput.value
+                        };
+                    }
                     break;
                     
                 default:
                     currentEditingElement.textContent = editContentInput.value;
+                    if (id) websiteContent[id] = editContentInput.value;
             }
             
             // Save to localStorage
-            saveContentToStorage();
+            localStorage.setItem('websiteContent', JSON.stringify(websiteContent));
             
             adminEditModal.classList.remove('active');
             document.body.style.overflow = 'auto';
@@ -3078,33 +3363,44 @@
             currentEditingElement = null;
         });
 
-        // Save content to localStorage
-        function saveContentToStorage() {
-            const contentData = {};
-            
-            document.querySelectorAll('.editable').forEach(element => {
-                const id = element.dataset.id;
-                if (id) {
-                    contentData[id] = element.innerHTML;
+        // Load saved content from localStorage
+        function loadSavedContent() {
+            Object.keys(websiteContent).forEach(key => {
+                if (key.startsWith('room-')) {
+                    // Handle room data
+                    const roomId = key.replace('room-', '');
+                    const room = document.querySelector(`[data-room="${roomId}"]`);
+                    if (room && websiteContent[key]) {
+                        room.textContent = websiteContent[key].text || room.textContent;
+                        room.dataset.name = websiteContent[key].name || room.dataset.name;
+                    }
+                } else if (key.startsWith('teacher-')) {
+                    // Handle teacher data
+                    const teacherCard = document.querySelector(`[data-id="${key}"]`);
+                    if (teacherCard && websiteContent[key]) {
+                        const data = websiteContent[key];
+                        const teacherName = teacherCard.querySelector('.teacher-name');
+                        const teacherPosition = teacherCard.querySelector('.teacher-position');
+                        const teacherDegree = teacherCard.querySelector('.teacher-degree');
+                        const teacherDesc = teacherCard.querySelector('p[data-editable="true"]');
+                        
+                        if (teacherName && data.title) teacherName.textContent = data.title;
+                        if (teacherPosition && data.position) teacherPosition.textContent = data.position;
+                        if (teacherDegree && data.degree) teacherDegree.textContent = data.degree;
+                        if (teacherDesc && data.description) teacherDesc.textContent = data.description;
+                    }
+                } else {
+                    // Handle regular content
+                    const element = document.querySelector(`[data-id="${key}"]`);
+                    if (element) {
+                        if (typeof websiteContent[key] === 'string') {
+                            element.textContent = websiteContent[key];
+                        } else if (websiteContent[key] && websiteContent[key].title) {
+                            element.textContent = websiteContent[key].title;
+                        }
+                    }
                 }
             });
-            
-            localStorage.setItem('websiteContent', JSON.stringify(contentData));
-        }
-
-        // Load content from localStorage
-        function loadContentFromStorage() {
-            const savedContent = localStorage.getItem('websiteContent');
-            if (savedContent) {
-                const contentData = JSON.parse(savedContent);
-                
-                Object.keys(contentData).forEach(id => {
-                    const element = document.querySelector(`[data-id="${id}"]`);
-                    if (element) {
-                        element.innerHTML = contentData[id];
-                    }
-                });
-            }
         }
 
         // ===== ADMIN CONTROL BUTTONS =====
@@ -3114,6 +3410,7 @@
         });
 
         document.getElementById('editTeachersBtn').addEventListener('click', () => {
+            // Navigate to teachers section
             switchSection('teachers');
             adminControls.classList.remove('show');
             setTimeout(() => {
@@ -3122,6 +3419,7 @@
         });
 
         document.getElementById('editRoomsBtn').addEventListener('click', () => {
+            // Navigate to floor section
             switchSection('floor');
             adminControls.classList.remove('show');
             setTimeout(() => {
@@ -3137,8 +3435,14 @@
             // Initialize login system
             initLoginSystem();
             
-            // Load saved content
-            loadContentFromStorage();
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                if (user.isAdmin) {
+                    loginAsAdmin(user);
+                }
+            }
             
             // Fallback timeout - force completion after max 2.5 seconds
             setTimeout(() => {
@@ -3314,7 +3618,7 @@
             console.log(`Page loaded in ${pageLoadTime}ms`);
         });
 
-        // ===== EXISTING ACTIVITIES MODAL (ไม่เปลี่ยนแปลง) =====
+        // ===== EXISTING ACTIVITIES MODAL =====
         const activitiesBtn = document.getElementById('activitiesBtn');
         const activitiesModal = document.getElementById('activitiesModal');
         const closeActivitiesModal = document.getElementById('closeActivitiesModal');
@@ -3471,7 +3775,7 @@
             });
         });
 
-        // ===== SHARE MODAL (ไม่เปลี่ยนแปลง) =====
+        // ===== SHARE MODAL =====
         const shareBtn = document.getElementById('shareBtn');
         const shareModal = document.getElementById('shareModal');
         const closeShareModal = document.getElementById('closeShareModal');
@@ -3568,16 +3872,14 @@
                     modal.classList.remove('active');
                     document.body.style.overflow = 'auto';
                 });
+                adminControls.classList.remove('show');
             }
         });
 
-        // Room click navigation
-        document.querySelectorAll('.room').forEach(room => {
+        // Room click navigation (for non-admin users)
+        document.querySelectorAll('.room:not(.editable-room)').forEach(room => {
             room.addEventListener('click', function() {
-                if (isAdminLoggedIn && this.classList.contains('editable-room')) {
-                    return;
-                }
-                const roomName = this.dataset.name;
+                const roomName = this.dataset.name || this.textContent;
                 const floor = this.dataset.floor;
                 alert(`ห้อง: ${roomName}\nชั้น: ${floor}\n\nระบบนำทางจะเปิดในเวอร์ชันถัดไป`);
             });
