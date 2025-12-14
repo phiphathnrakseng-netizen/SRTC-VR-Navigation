@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
+        /* CSS Variables and existing styles */
         :root {
             --primary: #1A73E8;
             --primary-dark: #0D47A1;
@@ -64,6 +65,397 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== LOGIN MODAL ===== */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            opacity: 0;
+            transition: opacity var(--animation-normal);
+        }
+
+        .login-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-5);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: transform var(--animation-normal);
+            border: 1px solid var(--border);
+        }
+
+        .login-modal.active .login-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .login-header {
+            padding: var(--spacing-xl);
+            color: var(--on-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-size: 0.9rem;
+        }
+
+        .login-body {
+            background-color: var(--surface);
+            padding: var(--spacing-xl);
+        }
+
+        .login-tabs {
+            display: flex;
+            margin-bottom: var(--spacing-xl);
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: var(--spacing-md);
+            background: none;
+            border: none;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--on-background);
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            position: relative;
+        }
+
+        .login-tab.active {
+            color: var(--primary);
+        }
+
+        .login-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .login-form {
+            display: block;
+        }
+
+        .login-form.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+            color: var(--on-surface);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 1rem;
+            transition: all var(--animation-fast);
+            background-color: var(--surface);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .name-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .name-option {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-md);
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--animation-fast);
+        }
+
+        .name-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.05);
+        }
+
+        .name-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+
+        .name-option input {
+            margin-right: var(--spacing-md);
+            width: 18px;
+            height: 18px;
+        }
+
+        .login-footer {
+            padding: var(--spacing-xl);
+            background-color: var(--background);
+            border-top: 1px solid var(--divider);
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--on-primary);
+            box-shadow: var(--shadow-1);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: var(--shadow-2);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(26, 115, 232, 0.08);
+        }
+
+        .login-message {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .login-message.success {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--secondary);
+            border: 1px solid rgba(52, 168, 83, 0.2);
+            display: block;
+        }
+
+        .login-message.error {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            display: block;
+        }
+
+        /* Admin Controls */
+        .admin-controls {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-3);
+            display: none;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            min-width: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-controls.show {
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .admin-controls h3 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xs);
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+        }
+
+        .admin-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .admin-btn i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Editable Content */
+        .editable {
+            position: relative;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+        }
+
+        .editable:hover {
+            background-color: rgba(26, 115, 232, 0.05);
+            outline: 2px dashed rgba(26, 115, 232, 0.3);
+            border-radius: var(--radius-sm);
+        }
+
+        .edit-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity var(--animation-fast);
+            box-shadow: var(--shadow-1);
+            z-index: 10;
+        }
+
+        .editable:hover .edit-indicator {
+            opacity: 1;
+        }
+
+        /* Admin Edit Modal */
+        .admin-edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2001;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            opacity: 0;
+            transition: opacity var(--animation-normal);
+        }
+
+        .admin-edit-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .admin-edit-content {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-5);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform var(--animation-normal);
+        }
+
+        .admin-edit-modal.active .admin-edit-content {
+            transform: translateY(0);
         }
 
         /* Loading Screen Styles */
@@ -336,6 +728,7 @@
         .nav-links {
             display: flex;
             gap: var(--spacing-sm);
+            align-items: center;
         }
 
         .nav-link {
@@ -364,6 +757,33 @@
 
         .nav-link .material-icons-round {
             font-size: 1.125rem;
+        }
+
+        /* Login Button in Header */
+        .login-btn {
+            margin-left: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            box-shadow: var(--shadow-1);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2);
+        }
+
+        .login-btn i {
+            font-size: 1rem;
         }
 
         .mobile-menu-btn {
@@ -531,6 +951,7 @@
 
         .teacher-card {
             text-align: center;
+            position: relative;
         }
 
         .teacher-img {
@@ -671,66 +1092,6 @@
             background-color: var(--primary);
             color: var(--on-primary);
             border-color: var(--primary);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: none;
-            border-radius: var(--radius-full);
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all var(--animation-fast);
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--on-primary);
-            box-shadow: var(--shadow-1);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            box-shadow: var(--shadow-2);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(26, 115, 232, 0.08);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Noto Sans Thai', sans-serif;
-            font-size: 1rem;
-            transition: all var(--animation-fast);
-            background-color: var(--surface);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
         }
 
         /* Contact */
@@ -1232,6 +1593,89 @@
         <span id="networkStatusText">กำลังตรวจสอบความเร็วเน็ต...</span>
     </div>
 
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>ระบบเข้าสู่ระบบ</h2>
+                <p>สำหรับผู้ดูแลระบบแผนกเทคโนโลยีสารสนเทศ</p>
+            </div>
+            
+            <div class="login-body">
+                <div class="login-tabs">
+                    <button class="login-tab active" id="loginTab">เข้าสู่ระบบ</button>
+                    <button class="login-tab" id="registerTab">สมัครสมาชิก</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">ชื่อผู้ใช้</label>
+                        <select class="form-control" id="loginName">
+                            <option value="">กรุณาเลือกชื่อผู้ใช้</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">รหัสผ่าน</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="กรุณากรอกรหัสผ่าน">
+                    </div>
+                    
+                    <div class="login-message" id="loginMessage"></div>
+                </div>
+                
+                <!-- Register Form -->
+                <div class="login-form hidden" id="registerForm">
+                    <div class="form-group">
+                        <label class="form-label">เลือกชื่อของคุณ</label>
+                        <div class="name-options" id="nameOptions">
+                            <!-- Name options will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ตั้งรหัสผ่าน</label>
+                        <input type="password" class="form-control" id="registerPassword" placeholder="ตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ยืนยันรหัสผ่าน</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="กรุณากรอกรหัสผ่านอีกครั้ง">
+                    </div>
+                    
+                    <div class="login-message" id="registerMessage"></div>
+                </div>
+            </div>
+            
+            <div class="login-footer">
+                <button class="btn btn-outline" id="closeLoginModal">ปิด</button>
+                <button class="btn btn-primary" id="submitLogin">เข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Controls -->
+    <div class="admin-controls" id="adminControls">
+        <h3>เครื่องมือผู้ดูแลระบบ</h3>
+        <button class="admin-btn" id="editContentBtn">
+            <i class="fas fa-edit"></i>
+            แก้ไขเนื้อหา
+        </button>
+        <button class="admin-btn" id="editTeachersBtn">
+            <i class="fas fa-users"></i>
+            แก้ไขข้อมูลอาจารย์
+        </button>
+        <button class="admin-btn" id="editRoomsBtn">
+            <i class="fas fa-map"></i>
+            แก้ไขข้อมูลห้อง
+        </button>
+        <button class="admin-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            ออกจากระบบ
+        </button>
+    </div>
+
     <!-- App Bar -->
     <header class="app-bar" id="appBar">
         <div class="container app-bar-container">
@@ -1268,6 +1712,10 @@
                     <span class="material-icons-round">contact_support</span>
                     ติดต่อ
                 </div>
+                <button class="login-btn" id="openLoginModal">
+                    <i class="fas fa-sign-in-alt"></i>
+                    เข้าสู่ระบบ
+                </button>
             </nav>
             
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -1285,8 +1733,8 @@
                 <div class="container">
                     <div class="hero-container">
                         <div class="hero-content">
-                            <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
-                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
+                            <h2 class="editable" data-id="hero-title">ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
+                            <p class="editable" data-id="hero-description">เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
                             <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
                                 <div class="btn btn-primary" data-section="teachers">
                                     <span class="material-icons-round">groups</span>
@@ -1312,171 +1760,171 @@
         <section class="content-section" id="teachersSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
-                    <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
-                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
+                    <h2 class="section-title editable" data-id="teachers-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
+                    <p class="section-subtitle editable" data-id="teachers-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
 
                     <div class="teachers-grid">
                         <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-1">
                             <div class="card-body">
                                 <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
                                      alt="นายสัญญา ชูช่วย" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
-                                <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
-                                <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นายสัญญา ชูช่วย</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ยังไม่บันทึกในระบบ</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-2">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
                                      alt="นายพนม บุญญ์ไพร" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นายพนม บุญญ์ไพร</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
         -ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
         -ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
-                                <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
+                                <p data-editable="true" data-field="description">ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">Google certificate</span>
-                                    <span class="expertise-tag">Aruba certificate</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">Google certificate</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">Aruba certificate</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-3">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
                                      alt="นางขนิษฐา สุมน" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นางขนิษฐา สุมน</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
         ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 4 - นางดวงฤดี เสนเรือง -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-4">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/IMG_1257-1024x683.jpeg" 
                                      alt="นางดวงฤดี เสนเรือง" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นางดวงฤดี เสนเรือง</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นางดวงฤดี เสนเรือง</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาโท = วท.ม. การจัดการเทคโนโลยีสารสนเทศ
         ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 5 - นางสาววิยะดา คงแก้ว -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-5">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01496_3-1024x683.jpg" 
                                      alt="นางสาววิยะดา คงแก้ว" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นางสาววิยะดา คงแก้ว</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นางสาววิยะดา คงแก้ว</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 6 - นายธันติวัชร์ ธนานันทน์โอฬาร -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-6">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01492_3-1024x683.jpg" 
                                      alt="นายธันติวัชร์ ธนานันทน์โอฬาร" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นายธันติวัชร์ ธนานันทน์โอฬาร</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = คบ.คอมพิวเตอร์ศึกษา</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- อาจารย์คนที่ 7 - นายวศิตว์ บุญเรือง -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-7">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01513_2-1024x683.jpg" 
                                      alt="นายวศิตว์ บุญเรือง" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายวศิตว์ บุญเรือง</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">นายวศิตว์ บุญเรือง</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- อาจารย์คนที่ 8 - น.ส.ธัญญารัตน์ ศรชนะ -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-8">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00701_-1024x683.jpg" 
                                      alt="น.ส.ธัญญารัตน์ ศรชนะ" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.ธัญญารัตน์ ศรชนะ</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วศ.บ.คอมพิวเตอร์</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- อาจารย์คนที่ 9 - น.ส.อมรพรรณ นนทฤทธิ์ -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-9">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2024/12/Aoy1-1024x683.jpg" 
                                      alt="น.ส.อมรพรรณ นนทฤทธิ์" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">น.ส.อมรพรรณ นนทฤทธิ์</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = วท.บ.เทคโนโลยีสารสนเทศ</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- อาจารย์คนที่ 10 - ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า -->
-                        <div class="card teacher-card">
+                        <div class="card teacher-card editable" data-id="teacher-10">
                             <div class="card-body">
                                 <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01505_2-1024x683.jpg" 
                                      alt="ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า" class="teacher-img"
                                      onerror="this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
+                                <h3 class="teacher-name" data-editable="true" data-field="name">ว่าที่ร.ต.ธีรยุทธ หมื่นระย้า</h3>
+                                <div class="teacher-position" data-editable="true" data-field="position">ครูประจำแผนก</div>
+                                <div class="teacher-degree" data-editable="true" data-field="degree">ปริญญาตรี = บธ.บ. คอมพิวเตอร์</div>
+                                <p data-editable="true" data-field="description">ยังไม่บันทึกในระบบ</p>
                                 <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                    <span class="expertise-tag" data-editable="true" data-field="expertise">ยังไม่บันทึกในระบบ</span>
                                 </div>
                             </div>
                         </div>
@@ -1489,47 +1937,47 @@
         <section class="content-section" id="infoSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
-                    <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
-                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
+                    <h2 class="section-title editable" data-id="info-title">ข้อมูลอาคารเรียน</h2>
+                    <p class="section-subtitle editable" data-id="info-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
                     
                     <div class="info-grid">
-                        <div class="info-item">
+                        <div class="info-item editable" data-id="info-1">
                             <div class="info-icon">
                                 <i class="fas fa-building"></i>
                             </div>
                             <div>
                                 <h3>โครงสร้างอาคาร</h3>
-                                <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
+                                <p data-editable="true" data-field="description">อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
                             </div>
                         </div>
                         
-                        <div class="info-item">
+                        <div class="info-item editable" data-id="info-2">
                             <div class="info-icon">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                             <div>
                                 <h3>ปีที่ก่อสร้าง</h3>
-                                <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
+                                <p data-editable="true" data-field="description">เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
                             </div>
                         </div>
                         
-                        <div class="info-item">
+                        <div class="info-item editable" data-id="info-3">
                             <div class="info-icon">
                                 <i class="fas fa-expand-arrows-alt"></i>
                             </div>
                             <div>
                                 <h3>พื้นที่ใช้สอย</h3>
-                                <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
+                                <p data-editable="true" data-field="description">รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
                             </div>
                         </div>
                         
-                        <div class="info-item">
+                        <div class="info-item editable" data-id="info-4">
                             <div class="info-icon">
                                 <i class="fas fa-leaf"></i>
                             </div>
                             <div>
                                 <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
-                                <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
+                                <p data-editable="true" data-field="description">ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
                             </div>
                         </div>
                     </div>
@@ -1541,68 +1989,68 @@
         <section class="content-section" id="floorSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
-                    <h2 class="section-title">แผนผังและแนะนำทาง</h2>
-                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
+                    <h2 class="section-title editable" data-id="floor-title">แผนผังและแนะนำทาง</h2>
+                    <p class="section-subtitle editable" data-id="floor-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ห้องเพื่อดูเส้นทาง</p>
                     
                     <div class="floor-container">
                         <!-- Floor 1 -->
-                        <div class="floor">
+                        <div class="floor editable" data-id="floor-1">
                             <div class="floor-header">
                                 <div class="floor-number">1</div>
-                                <h3>ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
+                                <h3 data-editable="true" data-field="title">ชั้นที่ 1: ห้องเรียนแผนกเทคโนโลยียางและพอลิเมอร์</h3>
                             </div>
                             <div class="floor-rooms">
-                                <span class="room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1">ห้องปฏิบัติการ 1</span>
-                                <span class="room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2">ห้องปฏิบัติการ 2</span>
-                                <span class="room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1">ห้องเรียน 1</span>
-                                <span class="room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2">ห้องเรียน 2</span>
-                                <span class="room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง">สำนักงานแผนก</span>
+                                <span class="room editable-room" data-room="polymer-lab-1" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 1" data-editable="true" data-field="name">ห้องปฏิบัติการ 1</span>
+                                <span class="room editable-room" data-room="polymer-lab-2" data-floor="1" data-name="ห้องปฏิบัติการยางและพอลิเมอร์ 2" data-editable="true" data-field="name">ห้องปฏิบัติการ 2</span>
+                                <span class="room editable-room" data-room="polymer-class-1" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 1" data-editable="true" data-field="name">ห้องเรียน 1</span>
+                                <span class="room editable-room" data-room="polymer-class-2" data-floor="1" data-name="ห้องเรียนเทคโนโลยียาง 2" data-editable="true" data-field="name">ห้องเรียน 2</span>
+                                <span class="room editable-room" data-room="polymer-office" data-floor="1" data-name="สำนักงานแผนกเทคโนโลยียาง" data-editable="true" data-field="name">สำนักงานแผนก</span>
                             </div>
                         </div>
                         
                         <!-- Floor 2 -->
-                        <div class="floor">
+                        <div class="floor editable" data-id="floor-2">
                             <div class="floor-header">
                                 <div class="floor-number">2</div>
-                                <h3>ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
+                                <h3 data-editable="true" data-field="title">ชั้นที่ 2: ห้องชมรม To be number one, ห้องเรียนภาษาอังกฤษ และวิทยาศาสตร์</h3>
                             </div>
                             <div class="floor-rooms">
-                                <span class="room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one">ชมรม To be number one</span>
-                                <span class="room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1">ห้องอังกฤษ 1</span>
-                                <span class="room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2">ห้องอังกฤษ 2</span>
-                                <span class="room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์">แล็บวิทยาศาสตร์</span>
-                                <span class="room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์">ห้องวิทยาศาสตร์</span>
+                                <span class="room editable-room" data-room="to-be-number-one" data-floor="2" data-name="ห้องชมรม To be number one" data-editable="true" data-field="name">ชมรม To be number one</span>
+                                <span class="room editable-room" data-room="english-class-1" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 1" data-editable="true" data-field="name">ห้องอังกฤษ 1</span>
+                                <span class="room editable-room" data-room="english-class-2" data-floor="2" data-name="ห้องเรียนภาษาอังกฤษ 2" data-editable="true" data-field="name">ห้องอังกฤษ 2</span>
+                                <span class="room editable-room" data-room="science-lab" data-floor="2" data-name="ห้องปฏิบัติการวิทยาศาสตร์" data-editable="true" data-field="name">แล็บวิทยาศาสตร์</span>
+                                <span class="room editable-room" data-room="science-class" data-floor="2" data-name="ห้องเรียนวิทยาศาสตร์" data-editable="true" data-field="name">ห้องวิทยาศาสตร์</span>
                             </div>
                         </div>
                         
                         <!-- Floor 3 -->
-                        <div class="floor">
+                        <div class="floor editable" data-id="floor-3">
                             <div class="floor-header">
                                 <div class="floor-number">3</div>
-                                <h3>ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
+                                <h3 data-editable="true" data-field="title">ชั้นที่ 3: ห้องเรียนเทคโนโลยีสารสนเทศ</h3>
                             </div>
                             <div class="floor-rooms">
-                                <span class="room" data-room="631" data-floor="3" data-name="ห้องเรียน 631">ห้อง 631</span>
-                                <span class="room" data-room="632" data-floor="3" data-name="ห้องเรียน 632">ห้อง 632</span>
-                                <span class="room" data-room="633" data-floor="3" data-name="ห้องเรียน 633">ห้อง 633</span>
-                                <span class="room" data-room="634" data-floor="3" data-name="ห้องเรียน 634">ห้อง 634</span>
-                                <span class="room" data-room="635" data-floor="3" data-name="ห้องเรียน 635">ห้อง 635</span>
+                                <span class="room editable-room" data-room="631" data-floor="3" data-name="ห้องเรียน 631" data-editable="true" data-field="name">ห้อง 631</span>
+                                <span class="room editable-room" data-room="632" data-floor="3" data-name="ห้องเรียน 632" data-editable="true" data-field="name">ห้อง 632</span>
+                                <span class="room editable-room" data-room="633" data-floor="3" data-name="ห้องเรียน 633" data-editable="true" data-field="name">ห้อง 633</span>
+                                <span class="room editable-room" data-room="634" data-floor="3" data-name="ห้องเรียน 634" data-editable="true" data-field="name">ห้อง 634</span>
+                                <span class="room editable-room" data-room="635" data-floor="3" data-name="ห้องเรียน 635" data-editable="true" data-field="name">ห้อง 635</span>
                             </div>
                         </div>
                         
                         <!-- Floor 4 -->
-                        <div class="floor">
+                        <div class="floor editable" data-id="floor-4">
                             <div class="floor-header">
                                 <div class="floor-number">4</div>
-                                <h3>ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
+                                <h3 data-editable="true" data-field="title">ชั้นที่ 4: ห้องพักครู, ห้อง Lecture, ห้องปฏิบัติการ</h3>
                             </div>
                             <div class="floor-rooms">
-                                <span class="room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู">ห้องพักครู</span>
-                                <span class="room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture">ห้อง Lecture</span>
-                                <span class="room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1">Lab 1</span>
-                                <span class="room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2">Lab 2</span>
-                                <span class="room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3">Lab 3</span>
-                                <span class="room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์">ห้องเซิร์ฟเวอร์</span>
+                                <span class="room editable-room" data-room="teacher-lounge" data-floor="4" data-name="ห้องพักครู" data-editable="true" data-field="name">ห้องพักครู</span>
+                                <span class="room editable-room" data-room="lecture-hall" data-floor="4" data-name="ห้อง Lecture" data-editable="true" data-field="name">ห้อง Lecture</span>
+                                <span class="room editable-room" data-room="lab-1" data-floor="4" data-name="ห้องปฏิบัติการ Lab 1" data-editable="true" data-field="name">Lab 1</span>
+                                <span class="room editable-room" data-room="lab-2" data-floor="4" data-name="ห้องปฏิบัติการ Lab 2" data-editable="true" data-field="name">Lab 2</span>
+                                <span class="room editable-room" data-room="lab-3" data-floor="4" data-name="ห้องปฏิบัติการ Lab 3" data-editable="true" data-field="name">Lab 3</span>
+                                <span class="room editable-room" data-room="server-room" data-floor="4" data-name="ห้องเซิร์ฟเวอร์" data-editable="true" data-field="name">ห้องเซิร์ฟเวอร์</span>
                             </div>
                         </div>
                     </div>
@@ -1614,8 +2062,8 @@
         <section class="content-section" id="contactSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
-                    <h2 class="section-title">ติดต่อเรา</h2>
-                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
+                    <h2 class="section-title editable" data-id="contact-title">ติดต่อเรา</h2>
+                    <p class="section-subtitle editable" data-id="contact-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
                     
                     <div class="contact-grid">
                         <div>
@@ -1626,7 +2074,7 @@
                                 </div>
                                 <div>
                                     <h4>ที่อยู่</h4>
-                                    <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+                                    <p class="editable" data-id="contact-address">อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
                                 </div>
                             </div>
                             
@@ -1636,7 +2084,7 @@
                                 </div>
                                 <div>
                                     <h4>โทรศัพท์</h4>
-                                    <p>077-272-168</p>
+                                    <p class="editable" data-id="contact-phone">077-272-168</p>
                                 </div>
                             </div>
                             
@@ -1646,7 +2094,7 @@
                                 </div>
                                 <div>
                                     <h4>เว็บหลักวิทยาลัย</h4>
-                                    <p>www.srtc.ac.th</p>
+                                    <p class="editable" data-id="contact-website">www.srtc.ac.th</p>
                                 </div>
                             </div>
                             
@@ -1699,7 +2147,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
+                    <p class="editable" data-id="footer-about">วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
                 </div>
                 
                 <div class="footer-section">
@@ -1714,7 +2162,7 @@
                 
                 <div class="footer-section">
                     <h3>เวลาเปิดทำการ</h3>
-                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br><br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
+                    <p class="editable" data-id="footer-hours">วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br><br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
                 </div>
             </div>
             
@@ -1820,8 +2268,53 @@
         </div>
     </div>
 
+    <!-- Admin Edit Modal -->
+    <div class="admin-edit-modal" id="adminEditModal">
+        <div class="admin-edit-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> แก้ไขเนื้อหา</h3>
+                <p>แก้ไขข้อมูลในส่วนที่เลือก</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>หัวข้อ</label>
+                    <input type="text" class="form-control" id="editTitle" placeholder="กรอกหัวข้อ">
+                </div>
+                
+                <div class="form-group">
+                    <label>รายละเอียด</label>
+                    <textarea class="form-control" id="editContent" rows="8" placeholder="กรอกรายละเอียด"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>ประเภท</label>
+                    <input type="text" class="form-control" id="editType" placeholder="ประเภท (เช่น ชื่อ, ตำแหน่ง, ความเชี่ยวชาญ)">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelEdit">ยกเลิก</button>
+                <button class="btn btn-primary" id="saveEdit">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Loading and Network Speed Detection
+        // ===== SYSTEM VARIABLES =====
+        let isAdminLoggedIn = false;
+        let currentUser = null;
+        let currentEditingElement = null;
+
+        // User data (in a real app, this would be in a database)
+        const availableNames = [
+            { id: 1, name: "กรดนัยจุอ่อน", username: "gradnai", isAdmin: true },
+            { id: 2, name: "พิพัฒน์ รักเส้ง", username: "pipat", isAdmin: true },
+            { id: 3, name: "กฤตภาสวิจิตร", username: "krittapas", isAdmin: true }
+        ];
+
+        // Registered users (stored in localStorage)
+        let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+        // ===== LOADING AND NETWORK SPEED DETECTION =====
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingProgressBar = document.getElementById('loadingProgressBar');
         const loadingSpeedIndicator = document.getElementById('loadingSpeedIndicator');
@@ -1840,13 +2333,7 @@
         // Simulate network speed test
         function testNetworkSpeed() {
             return new Promise((resolve) => {
-                // In a real application, you would use the Network Information API
-                // For this demo, we'll simulate different speeds
-                
-                // Random speed between 0.5 and 10 Mbps
                 const simulatedSpeed = 0.5 + Math.random() * 9.5;
-                
-                // Add a small delay to simulate testing time
                 setTimeout(() => {
                     resolve(simulatedSpeed);
                 }, 500);
@@ -1884,7 +2371,6 @@
                 <span>ความเร็วเน็ต: ${category.text} (${speed.toFixed(1)} Mbps)</span>
             `;
             
-            // Hide after 5 seconds
             setTimeout(() => {
                 networkStatus.classList.remove('show');
             }, 5000);
@@ -1895,13 +2381,11 @@
             let progress = 0;
             const totalSteps = 100;
             
-            // Step 1: Test network speed (10%)
             updateLoadingProgress(10);
             const networkSpeed = await testNetworkSpeed();
             const networkCategory = getNetworkCategory(networkSpeed);
             
-            // Adjust loading time based on network speed
-            let loadingTime = 2000; // Base time in ms
+            let loadingTime = 2000;
             if (networkCategory === NETWORK_SPEEDS.SLOW) {
                 loadingTime = 4000;
             } else if (networkCategory === NETWORK_SPEEDS.MODERATE) {
@@ -1910,17 +2394,14 @@
                 loadingTime = 1500;
             }
             
-            // Step 2: Show network info (20%)
             progress = 20;
             updateLoadingProgress(progress, {
                 ...networkCategory,
                 speed: networkSpeed
             });
             
-            // Show network status
             showNetworkStatus(networkCategory, networkSpeed);
             
-            // Step 3: Simulate loading images and content
             const increment = 80 / (loadingTime / 100);
             
             const progressInterval = setInterval(() => {
@@ -1933,7 +2414,6 @@
                 updateLoadingProgress(progress);
             }, 100);
             
-            // Preload important images
             const imagesToPreload = [
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s',
                 'http://it.srtc.ac.th/wp-content/uploads/2022/11/DSC00883-scaled-e1687161008442-1024x537.jpg'
@@ -1947,32 +2427,573 @@
 
         // Complete loading and show main content
         function completeLoading() {
-            // Fade out loading screen
             loadingScreen.classList.add('fade-out');
             
-            // Show main content with delay
             setTimeout(() => {
                 mainContent.classList.add('show');
                 appBar.classList.add('show');
                 
-                // Hide loading screen completely
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
                 }, 500);
             }, 300);
         }
 
+        // ===== LOGIN SYSTEM =====
+        const loginModal = document.getElementById('loginModal');
+        const openLoginModalBtn = document.getElementById('openLoginModal');
+        const closeLoginModalBtn = document.getElementById('closeLoginModal');
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginNameSelect = document.getElementById('loginName');
+        const nameOptionsDiv = document.getElementById('nameOptions');
+        const submitLoginBtn = document.getElementById('submitLogin');
+        const loginMessage = document.getElementById('loginMessage');
+        const registerMessage = document.getElementById('registerMessage');
+        const registerPassword = document.getElementById('registerPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const adminControls = document.getElementById('adminControls');
+
+        // Initialize login system
+        function initLoginSystem() {
+            // Populate name options
+            availableNames.forEach(name => {
+                // Add to login dropdown
+                const option = document.createElement('option');
+                option.value = name.username;
+                option.textContent = name.name;
+                loginNameSelect.appendChild(option);
+                
+                // Add to register options
+                const nameOption = document.createElement('div');
+                nameOption.className = 'name-option';
+                nameOption.innerHTML = `
+                    <input type="radio" name="selectedName" value="${name.username}" id="name-${name.id}">
+                    <label for="name-${name.id}">${name.name}</label>
+                `;
+                nameOptionsDiv.appendChild(nameOption);
+            });
+            
+            // Add event listeners to name options
+            document.querySelectorAll('.name-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.name-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                    }
+                });
+            });
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                if (user.isAdmin) {
+                    loginAsAdmin(user);
+                }
+            }
+        }
+
+        // Open login modal
+        openLoginModalBtn.addEventListener('click', () => {
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            switchToLoginTab();
+        });
+
+        // Close login modal
+        closeLoginModalBtn.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Switch to login tab
+        function switchToLoginTab() {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            submitLoginBtn.textContent = 'เข้าสู่ระบบ';
+            loginMessage.style.display = 'none';
+            registerMessage.style.display = 'none';
+            
+            // Update login button text based on registration status
+            if (registeredUsers.length > 0) {
+                submitLoginBtn.textContent = 'เข้าสู่ระบบ';
+            }
+        }
+
+        // Switch to register tab
+        function switchToRegisterTab() {
+            loginTab.classList.remove('active');
+            registerTab.classList.add('active');
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+            submitLoginBtn.textContent = 'สมัครสมาชิก';
+            loginMessage.style.display = 'none';
+            registerMessage.style.display = 'none';
+            
+            // Only show register if no users are registered
+            if (registeredUsers.length > 0) {
+                showMessage(registerMessage, 'error', 'ระบบได้ลงทะเบียนผู้ใช้เรียบร้อยแล้ว กรุณาใช้ปุ่มเข้าสู่ระบบ');
+                submitLoginBtn.disabled = true;
+            } else {
+                submitLoginBtn.disabled = false;
+            }
+        }
+
+        // Tab switching
+        loginTab.addEventListener('click', switchToLoginTab);
+        registerTab.addEventListener('click', switchToRegisterTab);
+
+        // Show message
+        function showMessage(element, type, text) {
+            element.textContent = text;
+            element.className = `login-message ${type}`;
+            element.style.display = 'block';
+        }
+
+        // Handle form submission
+        submitLoginBtn.addEventListener('click', () => {
+            if (loginTab.classList.contains('active')) {
+                handleLogin();
+            } else {
+                handleRegister();
+            }
+        });
+
+        // Handle login
+        function handleLogin() {
+            const username = loginNameSelect.value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                showMessage(loginMessage, 'error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+            
+            // Find user
+            const user = registeredUsers.find(u => u.username === username);
+            
+            if (!user) {
+                showMessage(loginMessage, 'error', 'ไม่พบผู้ใช้งานนี้');
+                return;
+            }
+            
+            if (user.password !== password) {
+                showMessage(loginMessage, 'error', 'รหัสผ่านไม่ถูกต้อง');
+                return;
+            }
+            
+            // Login successful
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            if (user.isAdmin) {
+                loginAsAdmin(user);
+                showMessage(loginMessage, 'success', 'เข้าสู่ระบบในฐานะผู้ดูแลระบบสำเร็จ');
+                
+                // Close modal after delay
+                setTimeout(() => {
+                    loginModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }, 1500);
+            } else {
+                showMessage(loginMessage, 'success', 'เข้าสู่ระบบสำเร็จ');
+            }
+        }
+
+        // Handle registration
+        function handleRegister() {
+            const selectedName = document.querySelector('input[name="selectedName"]:checked');
+            const password = registerPassword.value;
+            const confirm = confirmPassword.value;
+            
+            if (!selectedName || !password || !confirm) {
+                showMessage(registerMessage, 'error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage(registerMessage, 'error', 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showMessage(registerMessage, 'error', 'รหัสผ่านไม่ตรงกัน');
+                return;
+            }
+            
+            // Check if already registered
+            if (registeredUsers.length > 0) {
+                showMessage(registerMessage, 'error', 'ระบบได้ลงทะเบียนผู้ใช้เรียบร้อยแล้ว');
+                return;
+            }
+            
+            // Find user info
+            const username = selectedName.value;
+            const userInfo = availableNames.find(name => name.username === username);
+            
+            if (!userInfo) {
+                showMessage(registerMessage, 'error', 'ไม่พบข้อมูลผู้ใช้งาน');
+                return;
+            }
+            
+            // Register user
+            const newUser = {
+                id: userInfo.id,
+                name: userInfo.name,
+                username: userInfo.username,
+                password: password,
+                isAdmin: userInfo.isAdmin
+            };
+            
+            registeredUsers.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            
+            // Auto login
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            if (newUser.isAdmin) {
+                loginAsAdmin(newUser);
+                showMessage(registerMessage, 'success', 'สมัครสมาชิกและเข้าสู่ระบบในฐานะผู้ดูแลระบบสำเร็จ');
+                
+                // Switch to login tab
+                setTimeout(() => {
+                    switchToLoginTab();
+                    
+                    // Close modal after delay
+                    setTimeout(() => {
+                        loginModal.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                    }, 1000);
+                }, 1500);
+            }
+        }
+
+        // Login as admin
+        function loginAsAdmin(user) {
+            isAdminLoggedIn = true;
+            currentUser = user;
+            
+            // Update login button
+            openLoginModalBtn.innerHTML = `<i class="fas fa-user-shield"></i> ${user.name}`;
+            openLoginModalBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            
+            // Show admin controls
+            adminControls.classList.add('show');
+            
+            // Make content editable
+            enableContentEditing();
+            
+            // Add click handler to login button to toggle admin controls
+            openLoginModalBtn.onclick = toggleAdminControls;
+        }
+
+        // Toggle admin controls
+        function toggleAdminControls() {
+            if (adminControls.classList.contains('show')) {
+                adminControls.classList.remove('show');
+            } else {
+                adminControls.classList.add('show');
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            isAdminLoggedIn = false;
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            
+            // Update login button
+            openLoginModalBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ`;
+            openLoginModalBtn.style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)';
+            openLoginModalBtn.onclick = () => {
+                loginModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            // Hide admin controls
+            adminControls.classList.remove('show');
+            
+            // Disable content editing
+            disableContentEditing();
+            
+            alert('ออกจากระบบสำเร็จ');
+        });
+
+        // Enable content editing
+        function enableContentEditing() {
+            // Add edit indicators
+            document.querySelectorAll('.editable').forEach(element => {
+                const indicator = document.createElement('div');
+                indicator.className = 'edit-indicator';
+                indicator.innerHTML = '<i class="fas fa-edit"></i>';
+                element.style.position = 'relative';
+                element.appendChild(indicator);
+                
+                element.addEventListener('click', function(e) {
+                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                        openEditModal(this);
+                    }
+                });
+            });
+            
+            // Make teacher cards editable
+            document.querySelectorAll('.teacher-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                        openTeacherEditModal(this);
+                    }
+                });
+            });
+            
+            // Make rooms editable
+            document.querySelectorAll('.editable-room').forEach(room => {
+                room.addEventListener('click', function(e) {
+                    if (isAdminLoggedIn && !e.target.classList.contains('edit-indicator')) {
+                        e.stopPropagation();
+                        openRoomEditModal(this);
+                    }
+                });
+            });
+        }
+
+        // Disable content editing
+        function disableContentEditing() {
+            // Remove edit indicators
+            document.querySelectorAll('.edit-indicator').forEach(indicator => {
+                indicator.remove();
+            });
+            
+            // Remove click events
+            document.querySelectorAll('.editable').forEach(element => {
+                element.replaceWith(element.cloneNode(true));
+            });
+            
+            document.querySelectorAll('.teacher-card').forEach(card => {
+                card.replaceWith(card.cloneNode(true));
+            });
+            
+            document.querySelectorAll('.editable-room').forEach(room => {
+                room.replaceWith(room.cloneNode(true));
+            });
+        }
+
+        // ===== ADMIN EDIT MODAL =====
+        const adminEditModal = document.getElementById('adminEditModal');
+        const editTitleInput = document.getElementById('editTitle');
+        const editContentInput = document.getElementById('editContent');
+        const editTypeInput = document.getElementById('editType');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const saveEditBtn = document.getElementById('saveEdit');
+
+        // Open edit modal for general content
+        function openEditModal(element) {
+            currentEditingElement = element;
+            
+            // Get current content
+            const isHeading = element.tagName === 'H1' || element.tagName === 'H2' || 
+                            element.tagName === 'H3' || element.tagName === 'H4' || 
+                            element.tagName === 'H5' || element.tagName === 'H6';
+            
+            if (isHeading) {
+                editTitleInput.value = element.textContent;
+                editContentInput.value = '';
+                editTypeInput.value = 'heading';
+            } else if (element.tagName === 'P') {
+                editTitleInput.value = '';
+                editContentInput.value = element.textContent;
+                editTypeInput.value = 'paragraph';
+            } else {
+                // For divs with multiple elements
+                const firstChild = element.firstElementChild;
+                if (firstChild && firstChild.tagName === 'H3') {
+                    editTitleInput.value = firstChild.textContent;
+                    
+                    // Find the first paragraph
+                    const paragraph = element.querySelector('p');
+                    editContentInput.value = paragraph ? paragraph.textContent : '';
+                    editTypeInput.value = 'info-item';
+                } else {
+                    editTitleInput.value = '';
+                    editContentInput.value = element.textContent;
+                    editTypeInput.value = 'content';
+                }
+            }
+            
+            adminEditModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Open teacher edit modal
+        function openTeacherEditModal(card) {
+            currentEditingElement = card;
+            
+            const name = card.querySelector('.teacher-name').textContent;
+            const position = card.querySelector('.teacher-position').textContent;
+            const degree = card.querySelector('.teacher-degree').textContent;
+            const description = card.querySelector('p[data-editable="true"]').textContent;
+            
+            editTitleInput.value = name;
+            editContentInput.value = `${position}\n\n${degree}\n\n${description}`;
+            editTypeInput.value = 'teacher';
+            
+            adminEditModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Open room edit modal
+        function openRoomEditModal(room) {
+            currentEditingElement = room;
+            
+            editTitleInput.value = room.dataset.name;
+            editContentInput.value = room.textContent;
+            editTypeInput.value = 'room';
+            
+            adminEditModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Save edit
+        saveEditBtn.addEventListener('click', () => {
+            if (!currentEditingElement) return;
+            
+            const type = editTypeInput.value;
+            
+            switch(type) {
+                case 'heading':
+                    currentEditingElement.textContent = editTitleInput.value;
+                    break;
+                    
+                case 'paragraph':
+                    currentEditingElement.textContent = editContentInput.value;
+                    break;
+                    
+                case 'info-item':
+                    const heading = currentEditingElement.querySelector('h3');
+                    const paragraph = currentEditingElement.querySelector('p');
+                    if (heading) heading.textContent = editTitleInput.value;
+                    if (paragraph) paragraph.textContent = editContentInput.value;
+                    break;
+                    
+                case 'teacher':
+                    const teacherName = currentEditingElement.querySelector('.teacher-name');
+                    const teacherPosition = currentEditingElement.querySelector('.teacher-position');
+                    const teacherDegree = currentEditingElement.querySelector('.teacher-degree');
+                    const teacherDesc = currentEditingElement.querySelector('p[data-editable="true"]');
+                    
+                    if (teacherName) teacherName.textContent = editTitleInput.value;
+                    
+                    // Parse the content
+                    const lines = editContentInput.value.split('\n\n');
+                    if (lines.length >= 1 && teacherPosition) teacherPosition.textContent = lines[0];
+                    if (lines.length >= 2 && teacherDegree) teacherDegree.textContent = lines[1];
+                    if (lines.length >= 3 && teacherDesc) teacherDesc.textContent = lines[2];
+                    break;
+                    
+                case 'room':
+                    currentEditingElement.textContent = editContentInput.value;
+                    currentEditingElement.dataset.name = editTitleInput.value;
+                    break;
+                    
+                default:
+                    currentEditingElement.textContent = editContentInput.value;
+            }
+            
+            // Save to localStorage
+            saveContentToStorage();
+            
+            adminEditModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentEditingElement = null;
+            
+            alert('บันทึกการแก้ไขเรียบร้อยแล้ว');
+        });
+
+        // Cancel edit
+        cancelEditBtn.addEventListener('click', () => {
+            adminEditModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentEditingElement = null;
+        });
+
+        // Save content to localStorage
+        function saveContentToStorage() {
+            const contentData = {};
+            
+            document.querySelectorAll('.editable').forEach(element => {
+                const id = element.dataset.id;
+                if (id) {
+                    contentData[id] = element.innerHTML;
+                }
+            });
+            
+            localStorage.setItem('websiteContent', JSON.stringify(contentData));
+        }
+
+        // Load content from localStorage
+        function loadContentFromStorage() {
+            const savedContent = localStorage.getItem('websiteContent');
+            if (savedContent) {
+                const contentData = JSON.parse(savedContent);
+                
+                Object.keys(contentData).forEach(id => {
+                    const element = document.querySelector(`[data-id="${id}"]`);
+                    if (element) {
+                        element.innerHTML = contentData[id];
+                    }
+                });
+            }
+        }
+
+        // ===== ADMIN CONTROL BUTTONS =====
+        document.getElementById('editContentBtn').addEventListener('click', () => {
+            alert('คลิกที่เนื้อหาที่ต้องการแก้ไข');
+            adminControls.classList.remove('show');
+        });
+
+        document.getElementById('editTeachersBtn').addEventListener('click', () => {
+            switchSection('teachers');
+            adminControls.classList.remove('show');
+            setTimeout(() => {
+                alert('คลิกที่ข้อมูลอาจารย์ที่ต้องการแก้ไข');
+            }, 500);
+        });
+
+        document.getElementById('editRoomsBtn').addEventListener('click', () => {
+            switchSection('floor');
+            adminControls.classList.remove('show');
+            setTimeout(() => {
+                alert('คลิกที่ชื่อห้องที่ต้องการแก้ไข');
+            }, 500);
+        });
+
+        // ===== EXISTING FUNCTIONALITY =====
         // Start loading process
         window.addEventListener('DOMContentLoaded', () => {
             // Start loading resources
             loadResources();
+            
+            // Initialize login system
+            initLoginSystem();
+            
+            // Load saved content
+            loadContentFromStorage();
             
             // Fallback: If loading takes too long, force completion
             setTimeout(() => {
                 if (loadingScreen.style.display !== 'none') {
                     completeLoading();
                 }
-            }, 8000); // 8 second timeout
+            }, 8000);
         });
 
         // ===== SECTION NAVIGATION SYSTEM =====
@@ -1997,50 +3018,39 @@
 
         // Function to switch to a specific section with smooth animation
         function switchSection(sectionId) {
-            // Prevent multiple clicks during animation
             if (isAnimating || sectionId === currentSection) return;
             
             isAnimating = true;
             currentSection = sectionId;
             
-            // Get current and new sections
             const currentActive = document.querySelector('.content-section.active');
-            const newSection = sections[sectionId] || sections.home;
+            const newSection = sections[sectionId] || sections.home];
             
-            // Fade out current section
             if (currentActive) {
                 currentActive.style.opacity = '0';
                 currentActive.style.transform = 'translateY(-20px)';
                 
-                // Wait for fade out before switching
                 setTimeout(() => {
-                    // Hide current section
                     currentActive.classList.remove('active');
                     
-                    // Show new section
                     newSection.style.display = 'block';
                     
-                    // Force reflow to trigger animation
                     newSection.offsetHeight;
                     
-                    // Add active class with delay for smooth transition
                     setTimeout(() => {
                         newSection.classList.add('active');
                         
-                        // Wait for animation to complete
                         setTimeout(() => {
                             isAnimating = false;
                         }, 300);
                     }, 50);
                 }, 300);
             } else {
-                // If no current active, just show new section
                 newSection.style.display = 'block';
                 newSection.classList.add('active');
                 isAnimating = false;
             }
             
-            // Update active nav link
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.dataset.section === sectionId) {
@@ -2048,7 +3058,6 @@
                 }
             });
             
-            // Close mobile menu if open
             if (window.innerWidth <= 768) {
                 const mainNav = document.querySelector('.nav-links');
                 if (mainNav.classList.contains('show')) {
@@ -2057,7 +3066,6 @@
                 }
             }
             
-            // Smooth scroll to top
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -2118,13 +3126,10 @@
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form values
             const name = this.querySelector('input[type="text"]').value || 'ไม่ระบุชื่อ';
             
-            // Show success message
             alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
             
-            // Reset form
             contactForm.reset();
         });
 
@@ -2208,10 +3213,8 @@
                 filteredActivities = activitiesData.filter(activity => activity.type === filter);
             }
             
-            // Sort by date
             filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            // Create activity items
             filteredActivities.forEach(activity => {
                 const activityItem = document.createElement('div');
                 activityItem.className = 'activity-card';
@@ -2345,7 +3348,6 @@
                     });
                 } else if (shareType === 'qr') {
                     alert('สร้าง QR Code สำหรับห้อง ' + selectedRoom.name);
-                    // In a real app, you would generate a QR code here
                 }
             });
         });
@@ -2370,7 +3372,7 @@
         });
 
         // Close modals on backdrop click
-        document.querySelectorAll('.modal').forEach(modal => {
+        document.querySelectorAll('.modal, .login-modal, .admin-edit-modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.classList.remove('active');
@@ -2382,7 +3384,7 @@
         // Close modals with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.modal').forEach(modal => {
+                document.querySelectorAll('.modal, .login-modal, .admin-edit-modal').forEach(modal => {
                     modal.classList.remove('active');
                     document.body.style.overflow = 'auto';
                 });
@@ -2392,6 +3394,9 @@
         // Room click navigation
         document.querySelectorAll('.room').forEach(room => {
             room.addEventListener('click', function() {
+                if (isAdminLoggedIn && this.classList.contains('editable-room')) {
+                    return; // Let admin edit mode handle it
+                }
                 const roomName = this.dataset.name;
                 const floor = this.dataset.floor;
                 alert(`ห้อง: ${roomName}\nชั้น: ${floor}\n\nระบบนำทางจะเปิดในเวอร์ชันถัดไป`);
