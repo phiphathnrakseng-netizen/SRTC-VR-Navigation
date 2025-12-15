@@ -32,12 +32,9 @@
             --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
             --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
             --shadow-3: 0 2px 6px 2px rgba(60,64,67,0.15), 0 1px 2px 0 rgba(60,64,67,0.3);
-            --shadow-4: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px 0 rgba(60,64,67,0.3);
-            --shadow-5: 0 8px 12px 6px rgba(60,64,67,0.15), 0 4px 4px 0 rgba(60,64,67,0.3);
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
-            --radius-xl: 16px;
             --radius-full: 50px;
             --spacing-xs: 4px;
             --spacing-sm: 8px;
@@ -47,7 +44,6 @@
             --spacing-xxl: 48px;
             --animation-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
             --animation-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-            --animation-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -61,20 +57,109 @@
             line-height: 1.6;
             color: var(--on-surface);
             background-color: var(--background);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             padding-top: 64px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Header - App Bar - FIXED POSITION */
+        /* LOADING SCREEN - Minimal */
+        .loading-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: var(--spacing-md);
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+        }
+
+        .loading-title {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .loading-speed {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: var(--radius-full);
+            margin: var(--spacing-md) 0;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: white;
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* NETWORK STATUS */
+        .network-status {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .network-status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .network-status.fast { background: rgba(52, 168, 83, 0.9); }
+        .network-status.moderate { background: rgba(255, 152, 0, 0.9); }
+        .network-status.slow { background: rgba(244, 67, 54, 0.9); }
+
+        /* APP BAR */
         .app-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 64px;
-            background-color: var(--surface);
+            background: var(--surface);
             z-index: 1000;
             box-shadow: var(--shadow-1);
             border-bottom: 1px solid var(--border);
@@ -94,8 +179,6 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-md);
-            text-decoration: none;
-            color: var(--on-surface);
             cursor: pointer;
         }
 
@@ -104,23 +187,17 @@
             height: 48px;
             border-radius: var(--radius-md);
             overflow: hidden;
-            background-color: var(--surface);
+            background: var(--surface);
             border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2px;
         }
 
         .logo-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
         }
 
         .logo-text h1 {
@@ -134,7 +211,6 @@
             font-size: 0.875rem;
             color: var(--on-background);
             margin: 0;
-            opacity: 0.9;
         }
 
         .nav-links {
@@ -145,7 +221,6 @@
 
         .nav-link {
             color: var(--on-background);
-            text-decoration: none;
             padding: var(--spacing-sm) var(--spacing-md);
             border-radius: var(--radius-md);
             font-weight: 500;
@@ -157,21 +232,17 @@
             cursor: pointer;
             border: none;
             background: none;
-            font-family: 'Noto Sans Thai', 'Kanit', sans-serif;
+            font-family: inherit;
         }
 
         .nav-link:hover {
-            background-color: var(--hover);
+            background: var(--hover);
             color: var(--primary);
         }
 
         .nav-link.active {
-            background-color: rgba(26, 115, 232, 0.08);
+            background: rgba(26, 115, 232, 0.08);
             color: var(--primary);
-        }
-
-        .nav-link .material-icons-round {
-            font-size: 1.125rem;
         }
 
         .mobile-menu-btn {
@@ -185,23 +256,23 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color var(--animation-fast);
         }
 
-        .mobile-menu-btn:hover {
-            background-color: var(--hover);
-        }
-
-        /* Main Content */
+        /* MAIN CONTENT */
         .main-content {
             padding: var(--spacing-xl) 0;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            animation-delay: 0.3s;
         }
 
-        /* Content Sections - FIXED */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
         .content-section {
             display: none;
             min-height: calc(100vh - 200px);
-            padding-top: var(--spacing-xl);
         }
 
         .content-section.active {
@@ -215,14 +286,12 @@
             padding: 0 var(--spacing-md);
         }
 
-        /* Hero Section */
+        /* HERO */
         .hero {
             padding: var(--spacing-xxl) 0;
-            background-color: var(--surface);
+            background: var(--surface);
             border-radius: var(--radius-lg);
             margin-bottom: var(--spacing-xxl);
-            position: relative;
-            overflow: hidden;
             box-shadow: var(--shadow-1);
             border: 1px solid var(--border);
         }
@@ -250,7 +319,6 @@
         }
 
         .hero-image {
-            position: relative;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-3);
@@ -268,36 +336,49 @@
             transform: scale(1.05);
         }
 
-        /* Cards */
-        .card {
-            background-color: var(--surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-1);
-            transition: all var(--animation-normal);
-            overflow: hidden;
-            border: 1px solid var(--border);
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            min-height: 44px;
         }
 
-        .card:hover {
-            box-shadow: var(--shadow-2);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--on-primary);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
         }
 
-        .card-header {
-            padding: var(--spacing-xl);
-            border-bottom: 1px solid var(--divider);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
         }
 
-        .card-body {
-            padding: var(--spacing-xl);
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--on-background);
         }
 
-        /* Section */
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(26, 115, 232, 0.05);
+        }
+
+        /* SECTIONS */
         .section {
             margin-bottom: var(--spacing-xxl);
-        }
-
-        .section-header {
-            margin-bottom: var(--spacing-xl);
         }
 
         .section-title {
@@ -313,7 +394,7 @@
             max-width: 600px;
         }
 
-        /* Teachers Grid */
+        /* TEACHERS */
         .teachers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -323,6 +404,11 @@
 
         .teacher-card {
             text-align: center;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--border);
         }
 
         .teacher-img {
@@ -346,35 +432,12 @@
             font-weight: 500;
             margin-bottom: var(--spacing-md);
             padding: var(--spacing-xs) var(--spacing-md);
-            background-color: rgba(26, 115, 232, 0.08);
+            background: rgba(26, 115, 232, 0.08);
             border-radius: var(--radius-full);
             display: inline-block;
         }
 
-        .teacher-degree {
-            color: var(--on-background);
-            margin-bottom: var(--spacing-md);
-            font-size: 0.875rem;
-        }
-
-        .teacher-expertise {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-xs);
-            justify-content: center;
-        }
-
-        .expertise-tag {
-            background-color: var(--background);
-            color: var(--on-background);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 500;
-            border: 1px solid var(--border);
-        }
-
-        /* Info Grid */
+        /* INFO GRID */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -391,7 +454,7 @@
         .info-icon {
             width: 56px;
             height: 56px;
-            background-color: var(--surface);
+            background: var(--surface);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
@@ -403,7 +466,7 @@
             border: 1px solid var(--border);
         }
 
-        /* Floor Plan */
+        /* FLOOR PLAN */
         .floor-container {
             display: flex;
             flex-direction: column;
@@ -412,16 +475,11 @@
         }
 
         .floor {
-            background-color: var(--surface);
+            background: var(--surface);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-1);
             border: 1px solid var(--border);
-            transition: all var(--animation-normal);
-        }
-
-        .floor:hover {
-            box-shadow: var(--shadow-2);
         }
 
         .floor-header {
@@ -460,7 +518,7 @@
         }
 
         .room-item {
-            background-color: var(--background);
+            background: var(--background);
             border-radius: var(--radius-md);
             padding: var(--spacing-md);
             border: 1px solid var(--border);
@@ -471,7 +529,7 @@
         }
 
         .room-item:hover {
-            background-color: rgba(26, 115, 232, 0.05);
+            background: rgba(26, 115, 232, 0.05);
             border-color: var(--primary-light);
             transform: translateY(-2px);
             box-shadow: var(--shadow-1);
@@ -503,7 +561,7 @@
             box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
         }
 
-        /* Contact */
+        /* CONTACT */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -520,67 +578,58 @@
         .social-links a {
             width: 40px;
             height: 40px;
-            background-color: var(--background);
+            background: var(--background);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--on-background);
-            text-decoration: none;
             transition: all var(--animation-fast);
             border: 1px solid var(--border);
         }
 
         .social-links a:hover {
-            background-color: var(--primary);
+            background: var(--primary);
             color: var(--on-primary);
             border-color: var(--primary);
         }
 
-        /* Footer */
-        .footer {
-            background-color: var(--on-surface);
-            color: var(--surface);
-            padding: var(--spacing-xxl) 0 var(--spacing-xl);
-            margin-top: var(--spacing-xxl);
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .footer-section h3 {
-            color: var(--surface);
+        /* FORM */
+        .form-group {
             margin-bottom: var(--spacing-lg);
-            font-size: 1.125rem;
         }
 
-        .footer-section p {
-            opacity: 0.8;
-            line-height: 1.6;
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+            color: var(--on-surface);
+            font-size: 0.9rem;
         }
 
-        .copyright {
-            text-align: center;
-            padding-top: var(--spacing-xl);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
-            font-size: 0.875rem;
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 1rem;
+            transition: all var(--animation-fast);
+            background: var(--surface);
         }
 
-        /* Modals */
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
             z-index: 1100;
             align-items: center;
             justify-content: center;
@@ -592,32 +641,27 @@
         }
 
         .modal-content {
-            background-color: var(--surface);
+            background: var(--surface);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-5);
             max-width: 500px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             border: 1px solid var(--border);
             margin: auto;
+            animation: modalIn 0.3s;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-header {
             padding: var(--spacing-xl);
-            border-bottom: 1px solid var(--divider);
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: var(--on-primary);
             border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .modal-header h3 {
-            color: var(--on-primary);
-            font-size: 1.25rem;
-            margin: 0;
         }
 
         .modal-body {
@@ -630,12 +674,9 @@
             display: flex;
             justify-content: flex-end;
             gap: var(--spacing-md);
-            position: sticky;
-            bottom: 0;
-            background-color: var(--surface);
         }
 
-        /* Navigation Modal */
+        /* NAVIGATION MODAL */
         .navigation-modal {
             max-width: 800px;
             width: 90%;
@@ -676,14 +717,14 @@
         .navigation-floor {
             color: var(--on-background);
             font-size: 1rem;
-            background-color: var(--background);
+            background: var(--background);
             padding: var(--spacing-xs) var(--spacing-md);
             border-radius: var(--radius-full);
             display: inline-block;
         }
 
         .navigation-instructions {
-            background-color: var(--background);
+            background: var(--background);
             border-radius: var(--radius-md);
             padding: var(--spacing-lg);
             border-left: 4px solid var(--primary);
@@ -696,14 +737,10 @@
             margin-bottom: var(--spacing-md);
         }
 
-        .instruction-step:last-child {
-            margin-bottom: 0;
-        }
-
         .step-number {
             width: 32px;
             height: 32px;
-            background-color: var(--primary);
+            background: var(--primary);
             color: var(--on-primary);
             border-radius: 50%;
             display: flex;
@@ -721,7 +758,7 @@
         }
 
         .navigation-camera {
-            background-color: var(--background);
+            background: var(--background);
             border-radius: var(--radius-md);
             padding: var(--spacing-lg);
             text-align: center;
@@ -760,187 +797,109 @@
             box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
         }
 
-        /* Form Styles */
-        .form-group {
+        /* FOOTER */
+        .footer {
+            background: var(--on-surface);
+            color: var(--surface);
+            padding: var(--spacing-xxl) 0 var(--spacing-xl);
+            margin-top: var(--spacing-xxl);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-section h3 {
+            color: var(--surface);
             margin-bottom: var(--spacing-lg);
+            font-size: 1.125rem;
         }
 
-        .form-label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-            color: var(--on-surface);
-            font-size: 0.9rem;
+        .footer-section p {
+            opacity: 0.8;
+            line-height: 1.6;
         }
 
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Noto Sans Thai', sans-serif;
-            font-size: 1rem;
-            transition: all var(--animation-fast);
-            background-color: var(--surface);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1), inset 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: none;
-            border-radius: var(--radius-full);
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
+        .copyright {
+            text-align: center;
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
             font-size: 0.875rem;
-            cursor: pointer;
-            transition: all var(--animation-fast);
-            text-decoration: none;
-            min-height: 44px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1.5px solid var(--border);
-            color: var(--on-background);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background-color: rgba(26, 115, 232, 0.05);
-        }
-
-        /* Responsive */
+        /* RESPONSIVE */
         @media (max-width: 992px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-xl);
-            }
-            
-            .hero-content h2 {
-                font-size: 2rem;
-            }
-            
-            .hero-image {
-                height: 350px;
-                order: -1;
-            }
+            .hero-container { grid-template-columns: 1fr; gap: var(--spacing-xl); }
+            .hero-content h2 { font-size: 2rem; }
+            .hero-image { height: 350px; order: -1; }
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 56px;
-            }
-            
-            .app-bar {
-                height: 56px;
-            }
-            
+            body { padding-top: 56px; }
+            .app-bar { height: 56px; }
             .nav-links {
                 display: none;
                 position: fixed;
-                top: 56px;
-                left: 0;
-                right: 0;
-                background-color: var(--surface);
+                top: 56px; left: 0; right: 0;
+                background: var(--surface);
                 flex-direction: column;
                 padding: var(--spacing-md);
                 box-shadow: var(--shadow-2);
                 border-top: 1px solid var(--border);
                 z-index: 999;
             }
-            
-            .nav-links.show {
-                display: flex;
-            }
-            
-            .nav-link {
-                padding: var(--spacing-md);
-                border-radius: var(--radius-md);
-            }
-            
-            .mobile-menu-btn {
-                display: flex;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.75rem;
-            }
-            
-            .section-title {
-                font-size: 1.75rem;
-            }
-            
-            .content-section {
-                padding-top: var(--spacing-lg);
-            }
-            
-            .floor-rooms {
-                grid-template-columns: 1fr;
-            }
-            
-            .navigation-modal {
-                width: 95%;
-            }
+            .nav-links.show { display: flex; }
+            .nav-link { padding: var(--spacing-md); }
+            .mobile-menu-btn { display: flex; }
+            .hero-content h2 { font-size: 1.75rem; }
+            .section-title { font-size: 1.75rem; }
+            .floor-rooms { grid-template-columns: 1fr; }
+            .navigation-modal { width: 95%; }
         }
 
         @media (max-width: 576px) {
-            .container {
-                padding: 0 var(--spacing-sm);
-            }
-            
-            .hero {
-                padding: var(--spacing-xl) 0;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.5rem;
-            }
-            
-            .hero-image {
-                height: 250px;
-            }
-            
-            .teachers-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .content-section {
-                padding-top: var(--spacing-md);
-            }
+            .container { padding: 0 var(--spacing-sm); }
+            .hero { padding: var(--spacing-xl) 0; }
+            .hero-content h2 { font-size: 1.5rem; }
+            .hero-image { height: 250px; }
+            .teachers-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/th/thumb/9/91/Techno_Surat_Logo.png/1200px-Techno_Surat_Logo.png" 
+                 alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี"
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iIzFBNzNFOCIvPjxwYXRoIGQ9Ik0yOCAzOGg0djEwaC00VjM4em0yMCAwaDR2MTBoLTRWMzh6TTM0IDUyaDEydjRoLTEydi00eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
+        </div>
+        <h2 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h2>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+        <div class="loading-speed" id="loadingSpeed">กำลังโหลด...</div>
+    </div>
+
+    <!-- Network Status -->
+    <div class="network-status" id="networkStatus">
+        <i class="fas fa-wifi"></i>
+        <span id="networkText">กำลังวัดความเร็วเน็ต...</span>
+    </div>
+
     <!-- App Bar -->
-    <header class="app-bar" id="appBar">
+    <header class="app-bar">
         <div class="app-bar-container">
             <div class="app-bar-logo" id="homeBtn">
                 <div class="logo-icon">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
-                         alt="ตราเทคนิคสุราษฎร์ธานี"
-                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0cHgiPlNSVEM8L3RleHQ+PC9zdmc+'">
+                    <img src="https://upload.wikimedia.org/wikipedia/th/thumb/9/91/Techno_Surat_Logo.png/1200px-Techno_Surat_Logo.png" 
+                         alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjxwYXRoIGQ9Ik0xNiAyOGg0djZoLTR2LTZ6bTEyIDBoNHY2aC00di02ek0yMiAzOGg0djRoLTR2LTR6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg=='">
                 </div>
                 <div class="logo-text">
                     <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
@@ -981,13 +940,12 @@
     <main class="main-content" id="mainContent">
         <!-- Home Section -->
         <section class="content-section active" id="homeSection">
-            <!-- Hero Section -->
             <div class="hero">
                 <div class="container">
                     <div class="hero-container">
                         <div class="hero-content">
                             <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
-                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
+                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ</p>
                             <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
                                 <button class="btn btn-primary" data-section="teachers">
                                     <span class="material-icons-round">groups</span>
@@ -1000,8 +958,8 @@
                             </div>
                         </div>
                         <div class="hero-image">
-                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
-                                 alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
+                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg" 
+                                 alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ"
                                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
                         </div>
                     </div>
@@ -1014,270 +972,130 @@
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
-                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
+                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ</p>
 
-                    <div class="teachers-grid" id="teachersGrid">
-                        <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
-                        <div class="card teacher-card">
-                            <div class="card-body">
-                                <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
-                                     alt="นายสัญญา ชูช่วย" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
-                                <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
-                                <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
+                    <div class="teachers-grid">
+                        <div class="teacher-card">
+                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg" 
+                                 alt="นายสัญญา ชูช่วย" class="teacher-img"
+                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                            <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
+                            <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
+                            <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
                         </div>
                         
-                        <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
-                        <div class="card teacher-card">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                                     alt="นายพนม บุญญ์ไพร" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
-        -ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
-        -ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
-                                <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag">Google certificate</span>
-                                    <span class="expertise-tag">Aruba certificate</span>
-                                </div>
-                            </div>
+                        <div class="teacher-card">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
+                                 alt="นายพนม บุญญ์ไพร" class="teacher-img"
+                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                            <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)</div>
                         </div>
                         
-                        <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
-                        <div class="card teacher-card">
-                            <div class="card-body">
-                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                                     alt="นางขนิษฐา สุมน" class="teacher-img"
-                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                                <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
-                                <div class="teacher-position">ครูประจำแผนก</div>
-                                <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
-        ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
-                                <p>ยังไม่บันทึกในระบบ</p>
-                                <div class="teacher-expertise">
-                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
-                                </div>
-                            </div>
+                        <div class="teacher-card">
+                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
+                                 alt="นางขนิษฐา สุมน" class="teacher-img"
+                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                            <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
+                            <div class="teacher-position">ครูประจำแผนก</div>
+                            <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Building Info Section -->
+        <!-- Info Section -->
         <section class="content-section" id="infoSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
-                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
+                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร</p>
                     
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <div>
-                                <h3>โครงสร้างอาคาร</h3>
-                                <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
-                            </div>
+                            <div class="info-icon"><i class="fas fa-building"></i></div>
+                            <div><h3>โครงสร้างอาคาร</h3><p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติ</p></div>
                         </div>
-                        
                         <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div>
-                                <h3>ปีที่ก่อสร้าง</h3>
-                                <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
-                            </div>
+                            <div class="info-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div><h3>ปีที่ก่อสร้าง</h3><p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานในปี 2563</p></div>
                         </div>
-                        
                         <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-expand-arrows-alt"></i>
-                            </div>
-                            <div>
-                                <h3>พื้นที่ใช้สอย</h3>
-                                <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
-                            </div>
+                            <div class="info-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                            <div><h3>พื้นที่ใช้สอย</h3><p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร</p></div>
                         </div>
-                        
                         <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-leaf"></i>
-                            </div>
-                            <div>
-                                <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
-                                <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
-                            </div>
+                            <div class="info-icon"><i class="fas fa-leaf"></i></div>
+                            <div><h3>เป็นมิตรต่อสิ่งแวดล้อม</h3><p>ออกแบบให้มีแสงธรรมชาติเพียงพอ</p></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Floor Plan and Navigation Section -->
+        <!-- Floor Section -->
         <section class="content-section" id="floorSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">แผนผังและแนะนำทาง</h2>
-                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ปุ่ม "ดูเส้นทาง" เพื่อเปิดระบบนำทาง</p>
+                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ</p>
                     
                     <div class="floor-container">
-                        <!-- Floor 1 -->
-                        <div class="floor" data-floor="1">
+                        <!-- ชั้น 1 -->
+                        <div class="floor">
                             <div class="floor-header">
                                 <div class="floor-number">1</div>
-                                <div>
-                                    <h3 class="floor-title">ชั้นที่ 1</h3>
-                                    <p>แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</p>
-                                </div>
+                                <div><h3 class="floor-title">ชั้นที่ 1</h3><p>แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</p></div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item">
-                                    <span class="room-name">แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</span>
-                                    <button class="btn-view-route" data-room="polymer-department" data-floor="1">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ลานต้านภัยยาเสพติด</span>
-                                    <button class="btn-view-route" data-room="drug-prevention-area" data-floor="1">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
+                                <div class="room-item"><span class="room-name">แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</span><button class="btn-view-route" data-room="polymer-department" data-floor="1"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ลานต้านภัยยาเสพติด</span><button class="btn-view-route" data-room="drug-prevention-area" data-floor="1"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
                             </div>
                         </div>
                         
-                        <!-- Floor 2 -->
-                        <div class="floor" data-floor="2">
+                        <!-- ชั้น 2 -->
+                        <div class="floor">
                             <div class="floor-header">
                                 <div class="floor-number">2</div>
-                                <div>
-                                    <h3 class="floor-title">ชั้นที่ 2</h3>
-                                    <p>ห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ</p>
-                                </div>
+                                <div><h3 class="floor-title">ชั้นที่ 2</h3><p>ห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ</p></div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียนวิทยาศาสตร์</span>
-                                    <button class="btn-view-route" data-room="science-room" data-floor="2">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียนภาษาอังกฤษ</span>
-                                    <button class="btn-view-route" data-room="english-room" data-floor="2">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องชมรม To Be Numberone</span>
-                                    <button class="btn-view-route" data-room="to-be-numberone" data-floor="2">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องผลิตยางและพอลิเมอร์</span>
-                                    <button class="btn-view-route" data-room="polymer-production" data-floor="2">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
+                                <div class="room-item"><span class="room-name">ห้องเรียนวิทยาศาสตร์</span><button class="btn-view-route" data-room="science-room" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องเรียนภาษาอังกฤษ</span><button class="btn-view-route" data-room="english-room" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องชมรม To Be Numberone</span><button class="btn-view-route" data-room="to-be-numberone" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องผลิตยางและพอลิเมอร์</span><button class="btn-view-route" data-room="polymer-production" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
                             </div>
                         </div>
                         
-                        <!-- Floor 3 -->
-                        <div class="floor" data-floor="3">
+                        <!-- ชั้น 3 -->
+                        <div class="floor">
                             <div class="floor-header">
                                 <div class="floor-number">3</div>
-                                <div>
-                                    <h3 class="floor-title">ชั้นที่ 3</h3>
-                                    <p>ห้องเรียนเทคโนโลยีสารสนเทศ</p>
-                                </div>
+                                <div><h3 class="floor-title">ชั้นที่ 3</h3><p>ห้องเรียนเทคโนโลยีสารสนเทศ</p></div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียน 631</span>
-                                    <button class="btn-view-route" data-room="631" data-floor="3">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียน 632</span>
-                                    <button class="btn-view-route" data-room="632" data-floor="3">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียน 633</span>
-                                    <button class="btn-view-route" data-room="633" data-floor="3">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียน 634</span>
-                                    <button class="btn-view-route" data-room="634" data-floor="3">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้องเรียน 635</span>
-                                    <button class="btn-view-route" data-room="635" data-floor="3">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
+                                <div class="room-item"><span class="room-name">ห้องเรียน 631</span><button class="btn-view-route" data-room="631" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องเรียน 632</span><button class="btn-view-route" data-room="632" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องเรียน 633</span><button class="btn-view-route" data-room="633" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องเรียน 634</span><button class="btn-view-route" data-room="634" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้องเรียน 635</span><button class="btn-view-route" data-room="635" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
                             </div>
                         </div>
                         
-                        <!-- Floor 4 -->
-                        <div class="floor" data-floor="4">
+                        <!-- ชั้น 4 -->
+                        <div class="floor">
                             <div class="floor-header">
                                 <div class="floor-number">4</div>
-                                <div>
-                                    <h3 class="floor-title">ชั้นที่ 4</h3>
-                                    <p>ห้องพักครู ห้อง Lecture และห้องปฏิบัติการ</p>
-                                </div>
+                                <div><h3 class="floor-title">ชั้นที่ 4</h3><p>ห้องพักครู ห้อง Lecture และห้องปฏิบัติการ</p></div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item">
-                                    <span class="room-name">ห้องพักครู</span>
-                                    <button class="btn-view-route" data-room="teacher-lounge" data-floor="4">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้อง Lecture</span>
-                                    <button class="btn-view-route" data-room="lecture-room" data-floor="4">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้อง Lab 1</span>
-                                    <button class="btn-view-route" data-room="lab-1" data-floor="4">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้อง Lab 2</span>
-                                    <button class="btn-view-route" data-room="lab-2" data-floor="4">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
-                                <div class="room-item">
-                                    <span class="room-name">ห้อง Lab 3</span>
-                                    <button class="btn-view-route" data-room="lab-3" data-floor="4">
-                                        <i class="fas fa-route"></i> ดูเส้นทาง
-                                    </button>
-                                </div>
+                                <div class="room-item"><span class="room-name">ห้องพักครู</span><button class="btn-view-route" data-room="teacher-lounge" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้อง Lecture</span><button class="btn-view-route" data-room="lecture-room" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้อง Lab 1</span><button class="btn-view-route" data-room="lab-1" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้อง Lab 2</span><button class="btn-view-route" data-room="lab-2" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item"><span class="room-name">ห้อง Lab 3</span><button class="btn-view-route" data-room="lab-3" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
                             </div>
                         </div>
                     </div>
@@ -1290,77 +1108,38 @@
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">ติดต่อเรา</h2>
-                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
+                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ</p>
                     
                     <div class="contact-grid">
                         <div>
                             <h3>ข้อมูลติดต่อ</h3>
                             <div class="info-item" style="margin-top: var(--spacing-lg);">
-                                <div class="info-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div>
-                                    <h4>ที่อยู่</h4>
-                                    <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
-                                </div>
+                                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div><h4>ที่อยู่</h4><p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p></div>
                             </div>
-                            
                             <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-phone"></i>
-                                </div>
-                                <div>
-                                    <h4>โทรศัพท์</h4>
-                                    <p>077-272-168</p>
-                                </div>
+                                <div class="info-icon"><i class="fas fa-phone"></i></div>
+                                <div><h4>โทรศัพท์</h4><p>077-272-168</p></div>
                             </div>
-                            
                             <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div>
-                                    <h4>เว็บหลักวิทยาลัย</h4>
-                                    <p>www.srtc.ac.th</p>
-                                </div>
+                                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                                <div><h4>เว็บหลักวิทยาลัย</h4><p>www.srtc.ac.th</p></div>
                             </div>
-                            
                             <div class="social-links">
                                 <a href="https://www.facebook.com/PR.SRTC?locale=th_TH" target="_blank"><i class="fab fa-facebook-f"></i></a>
                                 <a href="https://www.youtube.com/@srtcchannel3786" target="_blank"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                         
-                        <div class="card">
-                            <div class="card-body">
-                                <h3>ส่งข้อความถึงเรา</h3>
-                                <form id="contactForm">
-                                    <div class="form-group">
-                                        <label>ชื่อ-นามสกุล</label>
-                                        <input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>อีเมล</label>
-                                        <input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>เรื่อง</label>
-                                        <input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label>ข้อความ</label>
-                                        <textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
-                                    </div>
-                                    
-                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                                        <span class="material-icons-round">send</span>
-                                        ส่งข้อความ
-                                    </button>
-                                </form>
-                            </div>
+                        <div class="card" style="padding: var(--spacing-xl);">
+                            <h3>ส่งข้อความถึงเรา</h3>
+                            <form id="contactForm">
+                                <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required></div>
+                                <div class="form-group"><label>อีเมล</label><input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required></div>
+                                <div class="form-group"><label>เรื่อง</label><input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required></div>
+                                <div class="form-group"><label>ข้อความ</label><textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความ" required></textarea></div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;"><span class="material-icons-round">send</span> ส่งข้อความ</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -1374,27 +1153,24 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
+                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย</p>
                 </div>
-                
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
                     </ul>
                 </div>
-                
                 <div class="footer-section">
                     <h3>เวลาเปิดทำการ</h3>
-                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br><br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
+                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
                 </div>
             </div>
-            
             <div class="copyright">
-                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี สถานศึกษารางวัลพระราชทาน | แผนกเทคโนโลยีสารสนเทศ</p>
+                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี | แผนกเทคโนโลยีสารสนเทศ</p>
             </div>
         </div>
     </footer>
@@ -1411,48 +1187,100 @@
                     <h3 class="navigation-room" id="navRoomName">ห้อง</h3>
                     <div class="navigation-floor" id="navRoomFloor">ชั้นที่</div>
                 </div>
-                
                 <div class="navigation-instructions">
-                    <h4 style="margin-bottom: var(--spacing-md); color: var(--on-surface);">คำแนะนำการเดินทาง:</h4>
-                    <div class="instruction-step">
-                        <div class="step-number">1</div>
-                        <div class="step-text" id="navStep1">ข้อมูลกำลังโหลด...</div>
-                    </div>
-                    <div class="instruction-step">
-                        <div class="step-number">2</div>
-                        <div class="step-text" id="navStep2"></div>
-                    </div>
-                    <div class="instruction-step">
-                        <div class="step-number">3</div>
-                        <div class="step-text" id="navStep3"></div>
-                    </div>
-                    <div class="instruction-step">
-                        <div class="step-number">4</div>
-                        <div class="step-text" id="navStep4"></div>
-                    </div>
+                    <h4 style="margin-bottom: var(--spacing-md);">คำแนะนำการเดินทาง:</h4>
+                    <div class="instruction-step"><div class="step-number">1</div><div class="step-text" id="navStep1">ข้อมูลกำลังโหลด...</div></div>
+                    <div class="instruction-step"><div class="step-number">2</div><div class="step-text" id="navStep2"></div></div>
+                    <div class="instruction-step"><div class="step-number">3</div><div class="step-text" id="navStep3"></div></div>
+                    <div class="instruction-step"><div class="step-number">4</div><div class="step-text" id="navStep4"></div></div>
                 </div>
-                
                 <div class="navigation-camera">
-                    <div class="camera-icon">
-                        <i class="fas fa-camera"></i>
-                    </div>
+                    <div class="camera-icon"><i class="fas fa-camera"></i></div>
                     <p class="camera-message">ระบบนำทางต้องการเข้าถึงกล้องเพื่อแนะนำทางผ่าน AR</p>
-                    <button class="btn-open-camera" id="openCameraBtn">
-                        <i class="fas fa-video"></i>
-                        เปิดกล้อง
-                    </button>
+                    <button class="btn-open-camera" id="openCameraBtn"><i class="fas fa-video"></i> เปิดกล้อง</button>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="closeNavModal">
-                    <i class="fas fa-check"></i> ปิด
-                </button>
+                <button class="btn btn-primary" id="closeNavModal"><i class="fas fa-check"></i> ปิด</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== SECTION NAVIGATION SYSTEM =====
+        // ===== LOADING & NETWORK SPEED =====
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgress = document.getElementById('loadingProgress');
+        const loadingSpeed = document.getElementById('loadingSpeed');
+        const networkStatus = document.getElementById('networkStatus');
+        const networkText = document.getElementById('networkText');
+        const mainContent = document.getElementById('mainContent');
+
+        let startTime = performance.now();
+        let loadProgress = 0;
+
+        // Test network speed
+        function testNetworkSpeed() {
+            return new Promise((resolve) => {
+                const start = performance.now();
+                const testSize = 50; // KB
+                setTimeout(() => {
+                    const latency = performance.now() - start;
+                    // Simulate speed based on latency
+                    let speed;
+                    if (latency < 50) speed = 10 + Math.random() * 5; // 10-15 Mbps
+                    else if (latency < 150) speed = 5 + Math.random() * 5; // 5-10 Mbps
+                    else if (latency < 300) speed = 2 + Math.random() * 3; // 2-5 Mbps
+                    else speed = 0.5 + Math.random() * 1.5; // 0.5-2 Mbps
+                    
+                    resolve({ speed: speed.toFixed(1), latency: latency.toFixed(0) });
+                }, 100);
+            });
+        }
+
+        // Update loading progress
+        function updateProgress(percent) {
+            loadProgress = percent;
+            loadingProgress.style.width = percent + '%';
+        }
+
+        // Show network status
+        function showNetworkStatus(speed) {
+            let status = 'slow', icon = 'fa-tachometer-alt', text = 'ช้า';
+            if (speed >= 10) { status = 'fast'; icon = 'fa-bolt'; text = 'เร็วมาก'; }
+            else if (speed >= 5) { status = 'moderate'; icon = 'fa-wifi'; text = 'ปานกลาง'; }
+            
+            networkStatus.className = `network-status ${status} show`;
+            networkStatus.innerHTML = `<i class="fas ${icon}"></i><span>ความเร็วเน็ต: ${speed} Mbps (${text})</span>`;
+            
+            setTimeout(() => networkStatus.classList.remove('show'), 3000);
+        }
+
+        // Load sequence
+        async function loadSequence() {
+            updateProgress(20);
+            loadingSpeed.textContent = 'กำลังวัดความเร็วเน็ต...';
+            
+            // Test network
+            const networkResult = await testNetworkSpeed();
+            updateProgress(40);
+            loadingSpeed.textContent = `ความเร็ว: ${networkResult.speed} Mbps • Latency: ${networkResult.latency}ms`;
+            showNetworkStatus(networkResult.speed);
+            
+            // Simulate loading
+            for (let i = 40; i <= 100; i += 20) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                updateProgress(i);
+            }
+            
+            // Complete
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 300);
+        }
+
+        // ===== SECTION NAVIGATION =====
         const sections = {
             home: document.getElementById('homeSection'),
             teachers: document.getElementById('teachersSection'),
@@ -1466,27 +1294,15 @@
         const footerLinks = document.querySelectorAll('.footer-link');
         const btnLinks = document.querySelectorAll('[data-section]');
 
-        // Function to switch to a specific section
         function switchSection(sectionId) {
-            // ซ่อนทุก section
-            Object.values(sections).forEach(section => {
-                section.classList.remove('active');
-            });
+            Object.values(sections).forEach(section => section.classList.remove('active'));
+            if (sections[sectionId]) sections[sectionId].classList.add('active');
             
-            // แสดง section ที่เลือก
-            if (sections[sectionId]) {
-                sections[sectionId].classList.add('active');
-            }
-            
-            // Update active nav links
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.dataset.section === sectionId) {
-                    link.classList.add('active');
-                }
+                if (link.dataset.section === sectionId) link.classList.add('active');
             });
             
-            // ปิด mobile menu ถ้าเปิดอยู่
             if (window.innerWidth <= 768) {
                 const mainNav = document.querySelector('.nav-links');
                 if (mainNav.classList.contains('show')) {
@@ -1495,276 +1311,78 @@
                 }
             }
             
-            // เลื่อนไปด้านบนของหน้า
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Add click event to nav links
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const sectionId = link.dataset.section;
-                switchSection(sectionId);
-            });
-        });
-
-        // Add click event to home logo
-        homeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            switchSection('home');
-        });
-
-        // Add click event to footer links
-        footerLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const sectionId = link.dataset.section;
-                switchSection(sectionId);
-            });
-        });
-
-        // Add click event to button links
+        // Event listeners
+        navLinks.forEach(link => link.addEventListener('click', (e) => {
+            e.preventDefault(); switchSection(link.dataset.section);
+        }));
+        homeBtn.addEventListener('click', (e) => { e.preventDefault(); switchSection('home'); });
+        footerLinks.forEach(link => link.addEventListener('click', (e) => {
+            e.preventDefault(); switchSection(link.dataset.section);
+        }));
         btnLinks.forEach(link => {
-            if (link.dataset.section) {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const sectionId = link.dataset.section;
-                    switchSection(sectionId);
-                });
-            }
+            if (link.dataset.section) link.addEventListener('click', (e) => {
+                e.preventDefault(); switchSection(link.dataset.section);
+            });
         });
 
-        // Mobile menu toggle
+        // Mobile menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mainNav = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        mobileMenuBtn.addEventListener('click', () => {
             mainNav.classList.toggle('show');
-            const icon = mobileMenuBtn.querySelector('span');
-            if (mainNav.classList.contains('show')) {
-                icon.textContent = 'close';
-            } else {
-                icon.textContent = 'menu';
-            }
+            mobileMenuBtn.querySelector('span').textContent = mainNav.classList.contains('show') ? 'close' : 'menu';
         });
 
-        // ปิด mobile menu เมื่อคลิกที่อื่น
         document.addEventListener('click', (e) => {
-            if (mainNav.classList.contains('show') && 
-                !e.target.closest('.nav-links') && 
-                !e.target.closest('.mobile-menu-btn')) {
+            if (mainNav.classList.contains('show') && !e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
                 mainNav.classList.remove('show');
                 mobileMenuBtn.querySelector('span').textContent = 'menu';
             }
         });
-        
-        // Form submission
-        const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', function(e) {
+
+        // Form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const name = this.querySelector('input[type="text"]').value || 'ไม่ระบุชื่อ';
-            
-            alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
-            
-            contactForm.reset();
+            alert('ขอบคุณสำหรับข้อความ! เราจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้');
+            this.reset();
         });
 
-        // ===== NAVIGATION SYSTEM =====
+        // ===== NAVIGATION MODAL =====
         const navigationModal = document.getElementById('navigationModal');
         const navRoomName = document.getElementById('navRoomName');
         const navRoomFloor = document.getElementById('navRoomFloor');
-        const navStep1 = document.getElementById('navStep1');
-        const navStep2 = document.getElementById('navStep2');
-        const navStep3 = document.getElementById('navStep3');
-        const navStep4 = document.getElementById('navStep4');
+        const navSteps = [document.getElementById('navStep1'), document.getElementById('navStep2'), document.getElementById('navStep3'), document.getElementById('navStep4')];
         const closeNavModal = document.getElementById('closeNavModal');
         const openCameraBtn = document.getElementById('openCameraBtn');
 
-        // Navigation instructions data
         const navigationData = {
-            'polymer-department': {
-                name: 'แผนกวิชาเทคโนโลยียางและพอลิเลมอร์',
-                floor: 'ชั้นที่ 1',
-                steps: [
-                    'จากทางเข้าหลักอาคาร เดินตรงไปทางโถงกลาง',
-                    'เลี้ยวซ้ายที่ป้ายบอกทาง "แผนกยางและพอลิเมอร์"',
-                    'เดินไปตามทางเดินจนสุดทาง',
-                    'แผนกจะอยู่ทางด้านซ้ายมือ'
-                ]
-            },
-            'drug-prevention-area': {
-                name: 'ลานต้านภัยยาเสพติด',
-                floor: 'ชั้นที่ 1',
-                steps: [
-                    'จากทางเข้าหลักอาคาร เดินออกไปยังลานด้านนอก',
-                    'เดินตรงไปทางสวนหย่อมด้านหน้า',
-                    'ลานต้านภัยยาเสพติดจะอยู่บริเวณลานกิจกรรมกลางแจ้ง',
-                    'มองหาป้ายกิจกรรมต้านภัยยาเสพติด'
-                ]
-            },
-            'science-room': {
-                name: 'ห้องเรียนวิทยาศาสตร์',
-                floor: 'ชั้นที่ 2',
-                steps: [
-                    'จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางซ้าย',
-                    'เดินไปตามทางเดินประมาณ 20 เมตร',
-                    'ห้องเรียนวิทยาศาสตร์จะอยู่ทางขวามือ',
-                    'มองหาป้าย "ห้องวิทยาศาสตร์" สีน้ำเงิน'
-                ]
-            },
-            'english-room': {
-                name: 'ห้องเรียนภาษาอังกฤษ',
-                floor: 'ชั้นที่ 2',
-                steps: [
-                    'จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางขวา',
-                    'เดินไปตามทางเดินประมาณ 15 เมตร',
-                    'ห้องเรียนภาษาอังกฤษจะอยู่ทางซ้ายมือ',
-                    'มองหาป้าย "English Room" สีแดง'
-                ]
-            },
-            'to-be-numberone': {
-                name: 'ห้องชมรม To Be Numberone',
-                floor: 'ชั้นที่ 2',
-                steps: [
-                    'จากลิฟต์หรือบันไดชั้น 2 เดินตรงไป',
-                    'เลี้ยวขวาที่ทางแยกแรก',
-                    'เดินไปอีกประมาณ 10 เมตร',
-                    'ห้องชมรมจะอยู่ท้ายทางเดิน'
-                ]
-            },
-            'polymer-production': {
-                name: 'ห้องผลิตยางและพอลิเมอร์',
-                floor: 'ชั้นที่ 2',
-                steps: [
-                    'จากทางเดินหลักชั้น 2 เลี้ยวซ้ายที่ห้องชมรม',
-                    'เดินไปตามทางเดินทางซ้ายมือ',
-                    'ห้องผลิตจะอยู่ตรงกลางระหว่างห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ',
-                    'มองหาป้าย "Production Room"'
-                ]
-            },
-            '631': {
-                name: 'ห้องเรียน 631',
-                floor: 'ชั้นที่ 3',
-                steps: [
-                    'จากลิฟต์ชั้น 3 เดินออกมาทางขวา',
-                    'เดินตรงไปตามทางเดินหลัก',
-                    'ห้อง 631 จะเป็นห้องแรกทางซ้ายมือ',
-                    'มองหาเลข 631 ที่ประตู'
-                ]
-            },
-            '632': {
-                name: 'ห้องเรียน 632',
-                floor: 'ชั้นที่ 3',
-                steps: [
-                    'จากลิฟต์ชั้น 3 เดินออกมาทางซ้าย',
-                    'เดินตรงไปประมาณ 10 เมตร',
-                    'ห้อง 632 จะอยู่ถัดจากห้อง 631',
-                    'มองหาเลข 632 ที่ประตู'
-                ]
-            },
-            '633': {
-                name: 'ห้องเรียน 633',
-                floor: 'ชั้นที่ 3',
-                steps: [
-                    'จากบันไดกลางชั้น 3 เดินออกมาทางซ้าย',
-                    'เดินไปตามทางเดินด้านใน',
-                    'ห้อง 633 จะอยู่ตรงกลางระหว่างห้อง 632 และ 634',
-                    'มองหาเลข 633 ที่ประตูสีเขียว'
-                ]
-            },
-            '634': {
-                name: 'ห้องเรียน 634',
-                floor: 'ชั้นที่ 3',
-                steps: [
-                    'จากบันไดกลางชั้น 3 เดินออกมาทางขวา',
-                    'เดินตรงไปประมาณ 15 เมตร',
-                    'ห้อง 634 จะอยู่ทางขวามือก่อนถึงห้อง 635',
-                    'มองหาเลข 634 ที่ประตู'
-                ]
-            },
-            '635': {
-                name: 'ห้องเรียน 635',
-                floor: 'ชั้นที่ 3',
-                steps: [
-                    'จากทางเดินหลักชั้น 3 เดินไปจนสุดทาง',
-                    'เลี้ยวซ้ายที่ทางแยก',
-                    'ห้อง 635 จะอยู่ท้ายทางเดิน',
-                    'มองหาเลข 635 ที่ประตูสีน้ำเงิน'
-                ]
-            },
-            'teacher-lounge': {
-                name: 'ห้องพักครู',
-                floor: 'ชั้นที่ 4',
-                steps: [
-                    'จากลิฟต์ชั้น 4 เดินออกมาทางขวา',
-                    'เดินตรงไปตามทางเดินประมาณ 5 เมตร',
-                    'ห้องพักครูจะอยู่ทางซ้ายมือ',
-                    'มองหาป้าย "ครูผู้สอน"'
-                ]
-            },
-            'lecture-room': {
-                name: 'ห้อง Lecture',
-                floor: 'ชั้นที่ 4',
-                steps: [
-                    'จากบันไดกลางชั้น 4 เดินออกมาทางซ้าย',
-                    'เดินตรงไปยังส่วนหน้าของอาคาร',
-                    'ห้อง Lecture จะอยู่ตรงกลางชั้น 4',
-                    'มองหาป้าย "Lecture Hall" ขนาดใหญ่'
-                ]
-            },
-            'lab-1': {
-                name: 'ห้อง Lab 1',
-                floor: 'ชั้นที่ 4',
-                steps: [
-                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกซ้าย',
-                    'ห้อง Lab 1 จะอยู่เป็นห้องแรกในโซนปฏิบัติการ',
-                    'มองหาป้าย "Lab 1 - Computer Laboratory"'
-                ]
-            },
-            'lab-2': {
-                name: 'ห้อง Lab 2',
-                floor: 'ชั้นที่ 4',
-                steps: [
-                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกขวา',
-                    'ห้อง Lab 2 จะอยู่ถัดจากห้อง Lecture',
-                    'มองหาป้าย "Lab 2 - Network Laboratory"'
-                ]
-            },
-            'lab-3': {
-                name: 'ห้อง Lab 3',
-                floor: 'ชั้นที่ 4',
-                steps: [
-                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกหลัง',
-                    'ห้อง Lab 3 จะอยู่ท้ายสุดของทางเดิน',
-                    'มองหาป้าย "Lab 3 - Multimedia Laboratory"'
-                ]
-            }
+            'polymer-department': { name: 'แผนกวิชาเทคโนโลยียางและพอลิเลมอร์', floor: 'ชั้นที่ 1', steps: ['จากทางเข้าหลักอาคาร เดินตรงไปทางโถงกลาง', 'เลี้ยวซ้ายที่ป้ายบอกทาง "แผนกยางและพอลิเมอร์"', 'เดินไปตามทางเดินจนสุดทาง', 'แผนกจะอยู่ทางด้านซ้ายมือ'] },
+            'drug-prevention-area': { name: 'ลานต้านภัยยาเสพติด', floor: 'ชั้นที่ 1', steps: ['จากทางเข้าหลักอาคาร เดินออกไปยังลานด้านนอก', 'เดินตรงไปทางสวนหย่อมด้านหน้า', 'ลานต้านภัยยาเสพติดจะอยู่บริเวณลานกิจกรรมกลางแจ้ง', 'มองหาป้ายกิจกรรมต้านภัยยาเสพติด'] },
+            'science-room': { name: 'ห้องเรียนวิทยาศาสตร์', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางซ้าย', 'เดินไปตามทางเดินประมาณ 20 เมตร', 'ห้องเรียนวิทยาศาสตร์จะอยู่ทางขวามือ', 'มองหาป้าย "ห้องวิทยาศาสตร์" สีน้ำเงิน'] },
+            'english-room': { name: 'ห้องเรียนภาษาอังกฤษ', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางขวา', 'เดินไปตามทางเดินประมาณ 15 เมตร', 'ห้องเรียนภาษาอังกฤษจะอยู่ทางซ้ายมือ', 'มองหาป้าย "English Room" สีแดง'] },
+            'to-be-numberone': { name: 'ห้องชมรม To Be Numberone', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินตรงไป', 'เลี้ยวขวาที่ทางแยกแรก', 'เดินไปอีกประมาณ 10 เมตร', 'ห้องชมรมจะอยู่ท้ายทางเดิน'] },
+            'polymer-production': { name: 'ห้องผลิตยางและพอลิเมอร์', floor: 'ชั้นที่ 2', steps: ['จากทางเดินหลักชั้น 2 เลี้ยวซ้ายที่ห้องชมรม', 'เดินไปตามทางเดินทางซ้ายมือ', 'ห้องผลิตจะอยู่ตรงกลางระหว่างห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ', 'มองหาป้าย "Production Room"'] },
+            '631': { name: 'ห้องเรียน 631', floor: 'ชั้นที่ 3', steps: ['จากลิฟต์ชั้น 3 เดินออกมาทางขวา', 'เดินตรงไปตามทางเดินหลัก', 'ห้อง 631 จะเป็นห้องแรกทางซ้ายมือ', 'มองหาเลข 631 ที่ประตู'] },
+            '632': { name: 'ห้องเรียน 632', floor: 'ชั้นที่ 3', steps: ['จากลิฟต์ชั้น 3 เดินออกมาทางซ้าย', 'เดินตรงไปประมาณ 10 เมตร', 'ห้อง 632 จะอยู่ถัดจากห้อง 631', 'มองหาเลข 632 ที่ประตู'] },
+            '633': { name: 'ห้องเรียน 633', floor: 'ชั้นที่ 3', steps: ['จากบันไดกลางชั้น 3 เดินออกมาทางซ้าย', 'เดินไปตามทางเดินด้านใน', 'ห้อง 633 จะอยู่ตรงกลางระหว่างห้อง 632 และ 634', 'มองหาเลข 633 ที่ประตูสีเขียว'] },
+            '634': { name: 'ห้องเรียน 634', floor: 'ชั้นที่ 3', steps: ['จากบันไดกลางชั้น 3 เดินออกมาทางขวา', 'เดินตรงไปประมาณ 15 เมตร', 'ห้อง 634 จะอยู่ทางขวามือก่อนถึงห้อง 635', 'มองหาเลข 634 ที่ประตู'] },
+            '635': { name: 'ห้องเรียน 635', floor: 'ชั้นที่ 3', steps: ['จากทางเดินหลักชั้น 3 เดินไปจนสุดทาง', 'เลี้ยวซ้ายที่ทางแยก', 'ห้อง 635 จะอยู่ท้ายทางเดิน', 'มองหาเลข 635 ที่ประตูสีน้ำเงิน'] },
+            'teacher-lounge': { name: 'ห้องพักครู', floor: 'ชั้นที่ 4', steps: ['จากลิฟต์ชั้น 4 เดินออกมาทางขวา', 'เดินตรงไปตามทางเดินประมาณ 5 เมตร', 'ห้องพักครูจะอยู่ทางซ้ายมือ', 'มองหาป้าย "ครูผู้สอน"'] },
+            'lecture-room': { name: 'ห้อง Lecture', floor: 'ชั้นที่ 4', steps: ['จากบันไดกลางชั้น 4 เดินออกมาทางซ้าย', 'เดินตรงไปยังส่วนหน้าของอาคาร', 'ห้อง Lecture จะอยู่ตรงกลางชั้น 4', 'มองหาป้าย "Lecture Hall" ขนาดใหญ่'] },
+            'lab-1': { name: 'ห้อง Lab 1', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกซ้าย', 'ห้อง Lab 1 จะอยู่เป็นห้องแรกในโซนปฏิบัติการ', 'มองหาป้าย "Lab 1 - Computer Laboratory"'] },
+            'lab-2': { name: 'ห้อง Lab 2', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกขวา', 'ห้อง Lab 2 จะอยู่ถัดจากห้อง Lecture', 'มองหาป้าย "Lab 2 - Network Laboratory"'] },
+            'lab-3': { name: 'ห้อง Lab 3', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกหลัง', 'ห้อง Lab 3 จะอยู่ท้ายสุดของทางเดิน', 'มองหาป้าย "Lab 3 - Multimedia Laboratory"'] }
         };
 
         // Open navigation modal
         function openNavigationModal(roomId) {
-            const roomData = navigationData[roomId] || {
-                name: 'ห้อง',
-                floor: 'ชั้นที่',
-                steps: ['ข้อมูลกำลังอัปเดต...', '', '', '']
-            };
-            
+            const roomData = navigationData[roomId] || { name: 'ห้อง', floor: 'ชั้นที่', steps: ['ข้อมูลกำลังอัปเดต...', '', '', ''] };
             navRoomName.textContent = roomData.name;
             navRoomFloor.textContent = roomData.floor;
-            navStep1.textContent = roomData.steps[0];
-            navStep2.textContent = roomData.steps[1];
-            navStep3.textContent = roomData.steps[2];
-            navStep4.textContent = roomData.steps[3];
-            
+            navSteps.forEach((step, i) => step.textContent = roomData.steps[i] || '');
             navigationModal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1773,8 +1391,7 @@
         document.querySelectorAll('.btn-view-route').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const roomId = this.dataset.room;
-                openNavigationModal(roomId);
+                openNavigationModal(this.dataset.room);
             });
         });
 
@@ -1786,16 +1403,10 @@
 
         // Open camera
         openCameraBtn.addEventListener('click', () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            if (navigator.mediaDevices?.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        alert('กล้องเปิดใช้งานสำเร็จ! ระบบนำทาง AR พร้อมใช้งาน');
-                        // ในเวอร์ชันจริงจะต้องปิด stream หลังจากใช้งานเสร็จ
-                        // stream.getTracks().forEach(track => track.stop());
-                    })
-                    .catch(function(err) {
-                        alert('ไม่สามารถเปิดกล้องได้: ' + err.message);
-                    });
+                    .then(() => alert('กล้องเปิดใช้งานสำเร็จ! ระบบนำทาง AR พร้อมใช้งาน'))
+                    .catch(err => alert('ไม่สามารถเปิดกล้องได้: ' + err.message));
             } else {
                 alert('เบราว์เซอร์ของคุณไม่รองรับการเข้าถึงกล้อง');
             }
@@ -1817,17 +1428,18 @@
             }
         });
 
-        // Initialize
+        // ===== INITIALIZE =====
         document.addEventListener('DOMContentLoaded', () => {
+            loadSequence();
+            
             // Check for room parameter in URL
             const urlParams = new URLSearchParams(window.location.search);
             const roomParam = urlParams.get('room');
             if (roomParam && navigationData[roomParam]) {
-                // Switch to floor section and open navigation
-                switchSection('floor');
                 setTimeout(() => {
-                    openNavigationModal(roomParam);
-                }, 100);
+                    switchSection('floor');
+                    setTimeout(() => openNavigationModal(roomParam), 100);
+                }, 500);
             }
         });
     </script>
