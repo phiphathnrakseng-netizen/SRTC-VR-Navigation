@@ -313,6 +313,262 @@
             max-width: 600px;
         }
 
+        /* INTERNET SPEED TEST STYLES */
+        .speed-test-section {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xxl);
+            box-shadow: var(--shadow-1);
+            border: 1px solid var(--border);
+        }
+
+        .speed-test-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xl);
+        }
+
+        .speed-test-header {
+            text-align: center;
+            padding-bottom: var(--spacing-xl);
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .speed-test-header h2 {
+            font-size: 2rem;
+            color: var(--on-surface);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .speed-test-header p {
+            color: var(--on-background);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .speed-test-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .speed-stat {
+            background-color: var(--background);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all var(--animation-normal);
+        }
+
+        .speed-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-2);
+        }
+
+        .speed-stat.ping {
+            border-top: 4px solid var(--primary);
+        }
+
+        .speed-stat.download {
+            border-top: 4px solid var(--secondary);
+        }
+
+        .speed-stat.upload {
+            border-top: 4px solid var(--accent);
+        }
+
+        .speed-stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .speed-stat.ping .speed-stat-value {
+            color: var(--primary);
+        }
+
+        .speed-stat.download .speed-stat-value {
+            color: var(--secondary);
+        }
+
+        .speed-stat.upload .speed-stat-value {
+            color: var(--accent);
+        }
+
+        .speed-stat-label {
+            color: var(--on-background);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .speed-test-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .btn-start-test {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--on-primary);
+            border: none;
+            border-radius: var(--radius-full);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            min-width: 200px;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-start-test:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(26, 115, 232, 0.4);
+        }
+
+        .btn-start-test:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-reset-test {
+            background-color: var(--surface);
+            border: 2px solid var(--border);
+            color: var(--on-background);
+            border-radius: var(--radius-full);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-reset-test:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.05);
+        }
+
+        .speed-test-progress {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .progress-container {
+            background-color: var(--background);
+            border-radius: var(--radius-full);
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-sm);
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: var(--radius-full);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            color: var(--on-background);
+            font-size: 0.875rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .speed-test-graph {
+            background-color: var(--background);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            border: 1px solid var(--border);
+        }
+
+        .graph-container {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding: var(--spacing-md) 0;
+        }
+
+        .graph-bar {
+            flex: 1;
+            background-color: var(--primary-light);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            min-height: 1px;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+
+        .graph-bar.download {
+            background-color: var(--secondary-light);
+        }
+
+        .graph-bar.upload {
+            background-color: var(--accent-light);
+        }
+
+        .graph-labels {
+            display: flex;
+            justify-content: space-between;
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid var(--divider);
+            color: var(--on-background);
+            font-size: 0.75rem;
+        }
+
+        .speed-test-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .result-card {
+            background-color: var(--background);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border);
+        }
+
+        .result-card h4 {
+            color: var(--on-surface);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .result-card p {
+            color: var(--on-background);
+            line-height: 1.6;
+            font-size: 0.875rem;
+        }
+
         /* Teachers Grid */
         .teachers-grid {
             display: grid;
@@ -846,6 +1102,10 @@
                 height: 350px;
                 order: -1;
             }
+            
+            .speed-test-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
@@ -903,6 +1163,20 @@
             .navigation-modal {
                 width: 95%;
             }
+            
+            .speed-test-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .speed-test-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-start-test, .btn-reset-test {
+                width: 100%;
+                max-width: 300px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -929,6 +1203,10 @@
             .content-section {
                 padding-top: var(--spacing-md);
             }
+            
+            .speed-test-results {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -952,6 +1230,10 @@
                 <button class="nav-link active" data-section="home">
                     <span class="material-icons-round">home</span>
                     หน้าแรก
+                </button>
+                <button class="nav-link" data-section="speedtest">
+                    <span class="material-icons-round">speed</span>
+                    ทดสอบความเร็ว
                 </button>
                 <button class="nav-link" data-section="teachers">
                     <span class="material-icons-round">groups</span>
@@ -1003,6 +1285,92 @@
                             <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
                                  alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
                                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Internet Speed Test Section -->
+        <section class="content-section" id="speedtestSection">
+            <div class="container">
+                <div class="speed-test-section">
+                    <div class="speed-test-container">
+                        <div class="speed-test-header">
+                            <h2><i class="fas fa-tachometer-alt"></i> ระบบทดสอบความเร็วอินเทอร์เน็ต</h2>
+                            <p>ทดสอบความเร็วอินเทอร์เน็ตของวิทยาลัยเทคนิคสุราษฎร์ธานี วัดความเร็ว Ping, Download และ Upload</p>
+                        </div>
+                        
+                        <div class="speed-test-stats">
+                            <div class="speed-stat ping">
+                                <div class="speed-stat-value" id="pingValue">--</div>
+                                <div class="speed-stat-label">Ping (ms)</div>
+                                <div class="speed-stat-desc">ความหน่วง</div>
+                            </div>
+                            
+                            <div class="speed-stat download">
+                                <div class="speed-stat-value" id="downloadValue">--</div>
+                                <div class="speed-stat-label">Download (Mbps)</div>
+                                <div class="speed-stat-desc">ความเร็วดาวน์โหลด</div>
+                            </div>
+                            
+                            <div class="speed-stat upload">
+                                <div class="speed-stat-value" id="uploadValue">--</div>
+                                <div class="speed-stat-label">Upload (Mbps)</div>
+                                <div class="speed-stat-desc">ความเร็วอัปโหลด</div>
+                            </div>
+                        </div>
+                        
+                        <div class="speed-test-controls">
+                            <button class="btn-start-test" id="startTestBtn">
+                                <i class="fas fa-play"></i>
+                                เริ่มทดสอบความเร็ว
+                            </button>
+                            <button class="btn-reset-test" id="resetTestBtn">
+                                <i class="fas fa-redo"></i>
+                                รีเซ็ต
+                            </button>
+                        </div>
+                        
+                        <div class="speed-test-progress">
+                            <div class="progress-container">
+                                <div class="progress-bar" id="progressBar"></div>
+                            </div>
+                            <div class="progress-label">
+                                <span>สถานะ: <span id="progressStatus">พร้อมทดสอบ</span></span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="speed-test-graph">
+                            <h3 style="margin-bottom: var(--spacing-lg); color: var(--on-surface);">
+                                <i class="fas fa-chart-line"></i> กราฟแสดงความเร็ว
+                            </h3>
+                            <div class="graph-container" id="graphContainer">
+                                <!-- Graph bars will be generated by JavaScript -->
+                            </div>
+                            <div class="graph-labels">
+                                <span>เริ่มต้น</span>
+                                <span>ระหว่างการทดสอบ</span>
+                                <span>สิ้นสุด</span>
+                            </div>
+                        </div>
+                        
+                        <div class="speed-test-results">
+                            <div class="result-card">
+                                <h4><i class="fas fa-info-circle" style="color: var(--primary);"></i> การตีความผลลัพธ์</h4>
+                                <p><strong>Ping (ความหน่วง):</strong> ค่าที่ดีควรต่ำกว่า 50ms, ค่ายอมรับได้ 50-100ms, ค่าสูงเกิน 150ms อาจมีปัญหา</p>
+                                <p><strong>Download (ดาวน์โหลด):</strong> สำหรับใช้งานทั่วไปควรได้ 25 Mbps ขึ้นไป, สำหรับสตรีมมิง 4K ควรได้ 50 Mbps ขึ้นไป</p>
+                                <p><strong>Upload (อัปโหลด):</strong> สำหรับการประชุมออนไลน์ควรได้ 10 Mbps ขึ้นไป, สำหรับอัปโหลดไฟล์ใหญ่ควรได้ 25 Mbps ขึ้นไป</p>
+                            </div>
+                            
+                            <div class="result-card">
+                                <h4><i class="fas fa-bolt" style="color: var(--accent);"></i> ข้อแนะนำ</h4>
+                                <p>• ปิดแอปพลิเคชันและแท็บเบราว์เซอร์ที่ไม่จำเป็นระหว่างทดสอบ</p>
+                                <p>• ใช้การเชื่อมต่อแบบมีสาย (Ethernet) เพื่อผลลัพธ์ที่แม่นยำที่สุด</p>
+                                <p>• ทดสอบในเวลาที่ไม่มีการใช้งานเครือข่ายหนักในวิทยาลัย</p>
+                                <p>• ทดสอบหลายครั้งเพื่อหาค่าเฉลี่ยที่แม่นยำ</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1381,6 +1749,7 @@
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
                         <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="speedtest" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ทดสอบความเร็ว</button></li>
                         <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
                         <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
                         <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
@@ -1455,6 +1824,7 @@
         // ===== SECTION NAVIGATION SYSTEM =====
         const sections = {
             home: document.getElementById('homeSection'),
+            speedtest: document.getElementById('speedtestSection'),
             teachers: document.getElementById('teachersSection'),
             info: document.getElementById('infoSection'),
             floor: document.getElementById('floorSection'),
@@ -1576,6 +1946,274 @@
             alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
             
             contactForm.reset();
+        });
+
+        // ===== INTERNET SPEED TEST SYSTEM =====
+        const startTestBtn = document.getElementById('startTestBtn');
+        const resetTestBtn = document.getElementById('resetTestBtn');
+        const pingValue = document.getElementById('pingValue');
+        const downloadValue = document.getElementById('downloadValue');
+        const uploadValue = document.getElementById('uploadValue');
+        const progressBar = document.getElementById('progressBar');
+        const progressStatus = document.getElementById('progressStatus');
+        const progressPercent = document.getElementById('progressPercent');
+        const graphContainer = document.getElementById('graphContainer');
+        
+        let isTesting = false;
+        let testResults = {
+            ping: null,
+            download: null,
+            upload: null
+        };
+        
+        let graphData = {
+            ping: [],
+            download: [],
+            upload: []
+        };
+        
+        // Initialize graph
+        function initializeGraph() {
+            graphContainer.innerHTML = '';
+            
+            // Create 20 bars for the graph
+            for (let i = 0; i < 20; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'graph-bar';
+                bar.style.height = '1px';
+                bar.dataset.index = i;
+                graphContainer.appendChild(bar);
+            }
+            
+            graphData = {
+                ping: Array(20).fill(0),
+                download: Array(20).fill(0),
+                upload: Array(20).fill(0)
+            };
+        }
+        
+        // Update graph with new data
+        function updateGraph(type, value, index) {
+            const bars = document.querySelectorAll('.graph-bar');
+            if (index < bars.length) {
+                const bar = bars[index];
+                
+                // Set appropriate class based on test type
+                bar.className = 'graph-bar ' + type;
+                
+                // Calculate height based on value (normalize to fit graph)
+                let height = 1;
+                if (type === 'ping') {
+                    // Ping: 0-100ms = 0-100% height
+                    height = Math.min(value / 100 * 100, 100);
+                } else if (type === 'download' || type === 'upload') {
+                    // Download/Upload: 0-100 Mbps = 0-100% height
+                    height = Math.min(value / 100 * 100, 100);
+                }
+                
+                bar.style.height = height + '%';
+                
+                // Store data
+                graphData[type][index] = value;
+            }
+        }
+        
+        // Simulate ping test
+        function testPing() {
+            return new Promise((resolve) => {
+                progressStatus.textContent = 'กำลังทดสอบ Ping...';
+                
+                // Simulate network latency with random value
+                let ping = 15 + Math.random() * 30; // 15-45ms
+                
+                // Add some variation to simulate realistic ping
+                let currentPing = 0;
+                const steps = 10;
+                const stepTime = 100;
+                
+                let step = 0;
+                const pingInterval = setInterval(() => {
+                    currentPing = (step / steps) * ping;
+                    pingValue.textContent = currentPing.toFixed(1);
+                    updateGraph('ping', currentPing, step);
+                    
+                    // Update progress
+                    const progress = (step / steps) * 15; // Ping takes 15% of total test
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = Math.round(progress) + '%';
+                    
+                    step++;
+                    if (step > steps) {
+                        clearInterval(pingInterval);
+                        pingValue.textContent = ping.toFixed(1);
+                        testResults.ping = ping;
+                        resolve();
+                    }
+                }, stepTime);
+            });
+        }
+        
+        // Simulate download speed test
+        function testDownload() {
+            return new Promise((resolve) => {
+                progressStatus.textContent = 'กำลังทดสอบความเร็วดาวน์โหลด...';
+                
+                // Simulate download speed (typical college WiFi: 50-150 Mbps)
+                let downloadSpeed = 80 + Math.random() * 70; // 80-150 Mbps
+                
+                let currentSpeed = 0;
+                const steps = 20;
+                const stepTime = 150;
+                
+                let step = 0;
+                const downloadInterval = setInterval(() => {
+                    // Simulate speed increasing
+                    currentSpeed = (step / steps) * downloadSpeed;
+                    
+                    // Add some random fluctuation
+                    currentSpeed += (Math.random() - 0.5) * 10;
+                    currentSpeed = Math.max(0, currentSpeed);
+                    
+                    downloadValue.textContent = currentSpeed.toFixed(1);
+                    updateGraph('download', currentSpeed, step);
+                    
+                    // Update progress
+                    const progress = 15 + (step / steps) * 45; // Download takes 45% of total test
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = Math.round(progress) + '%';
+                    
+                    step++;
+                    if (step > steps) {
+                        clearInterval(downloadInterval);
+                        downloadValue.textContent = downloadSpeed.toFixed(1);
+                        testResults.download = downloadSpeed;
+                        resolve();
+                    }
+                }, stepTime);
+            });
+        }
+        
+        // Simulate upload speed test
+        function testUpload() {
+            return new Promise((resolve) => {
+                progressStatus.textContent = 'กำลังทดสอบความเร็วอัปโหลด...';
+                
+                // Simulate upload speed (typically slower than download)
+                let uploadSpeed = 30 + Math.random() * 40; // 30-70 Mbps
+                
+                let currentSpeed = 0;
+                const steps = 20;
+                const stepTime = 150;
+                
+                let step = 0;
+                const uploadInterval = setInterval(() => {
+                    // Simulate speed increasing
+                    currentSpeed = (step / steps) * uploadSpeed;
+                    
+                    // Add some random fluctuation
+                    currentSpeed += (Math.random() - 0.5) * 5;
+                    currentSpeed = Math.max(0, currentSpeed);
+                    
+                    uploadValue.textContent = currentSpeed.toFixed(1);
+                    updateGraph('upload', currentSpeed, step);
+                    
+                    // Update progress
+                    const progress = 60 + (step / steps) * 40; // Upload takes 40% of total test
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = Math.round(progress) + '%';
+                    
+                    step++;
+                    if (step > steps) {
+                        clearInterval(uploadInterval);
+                        uploadValue.textContent = uploadSpeed.toFixed(1);
+                        testResults.upload = uploadSpeed;
+                        resolve();
+                    }
+                }, stepTime);
+            });
+        }
+        
+        // Start speed test
+        async function startSpeedTest() {
+            if (isTesting) return;
+            
+            isTesting = true;
+            startTestBtn.disabled = true;
+            startTestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังทดสอบ...';
+            
+            // Reset values
+            pingValue.textContent = '--';
+            downloadValue.textContent = '--';
+            uploadValue.textContent = '--';
+            
+            // Initialize graph
+            initializeGraph();
+            
+            // Reset progress
+            progressBar.style.width = '0%';
+            progressPercent.textContent = '0%';
+            
+            // Run tests
+            try {
+                await testPing();
+                await testDownload();
+                await testUpload();
+                
+                // Test complete
+                progressStatus.textContent = 'การทดสอบเสร็จสมบูรณ์!';
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                
+                // Show results summary
+                setTimeout(() => {
+                    const pingStatus = testResults.ping < 50 ? 'ดีมาก' : testResults.ping < 100 ? 'ดี' : 'ปานกลาง';
+                    const downloadStatus = testResults.download > 100 ? 'ดีมาก' : testResults.download > 50 ? 'ดี' : 'ปานกลาง';
+                    const uploadStatus = testResults.upload > 50 ? 'ดีมาก' : testResults.upload > 25 ? 'ดี' : 'ปานกลาง';
+                    
+                    alert(`การทดสอบความเร็วเสร็จสมบูรณ์!\n\nผลลัพธ์:\n- Ping: ${testResults.ping.toFixed(1)} ms (${pingStatus})\n- Download: ${testResults.download.toFixed(1)} Mbps (${downloadStatus})\n- Upload: ${testResults.upload.toFixed(1)} Mbps (${uploadStatus})`);
+                }, 500);
+                
+            } catch (error) {
+                progressStatus.textContent = 'เกิดข้อผิดพลาดในการทดสอบ';
+                alert('เกิดข้อผิดพลาดในการทดสอบความเร็วอินเทอร์เน็ต');
+            } finally {
+                isTesting = false;
+                startTestBtn.disabled = false;
+                startTestBtn.innerHTML = '<i class="fas fa-play"></i> เริ่มทดสอบความเร็ว';
+            }
+        }
+        
+        // Reset speed test
+        function resetSpeedTest() {
+            if (isTesting) {
+                alert('กรุณารอให้การทดสอบปัจจุบันเสร็จสิ้นก่อน');
+                return;
+            }
+            
+            pingValue.textContent = '--';
+            downloadValue.textContent = '--';
+            uploadValue.textContent = '--';
+            
+            progressBar.style.width = '0%';
+            progressStatus.textContent = 'พร้อมทดสอบ';
+            progressPercent.textContent = '0%';
+            
+            testResults = {
+                ping: null,
+                download: null,
+                upload: null
+            };
+            
+            initializeGraph();
+        }
+        
+        // Event listeners for speed test
+        startTestBtn.addEventListener('click', startSpeedTest);
+        resetTestBtn.addEventListener('click', resetSpeedTest);
+        
+        // Initialize graph on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGraph();
         });
 
         // ===== NAVIGATION SYSTEM =====
@@ -1829,6 +2467,9 @@
                     openNavigationModal(roomParam);
                 }, 100);
             }
+            
+            // Initialize speed test graph
+            initializeGraph();
         });
     </script>
 </body>
