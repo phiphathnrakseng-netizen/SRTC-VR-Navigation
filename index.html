@@ -67,20 +67,34 @@
             padding-top: 64px;
         }
 
-        /* Loading Screen */
+        /* Loading Screen - Redesigned */
         .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            background: linear-gradient(135deg, #0D47A1 0%, #1A73E8 50%, #4285F4 100%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            overflow: hidden;
+        }
+
+        .loading-screen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.1;
         }
 
         .loading-screen.hidden {
@@ -91,77 +105,147 @@
         .loading-container {
             text-align: center;
             color: var(--on-primary);
-            max-width: 500px;
+            max-width: 600px;
             padding: var(--spacing-xl);
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        .loading-logo {
-            width: 120px;
-            height: 120px;
+        .loading-logo-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
             margin: 0 auto var(--spacing-xl);
-            animation: pulse 2s infinite;
-            border-radius: var(--radius-lg);
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: var(--spacing-md);
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .loading-logo-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            animation: rotateLogo 15s linear infinite;
+        }
+
+        .loading-logo-inner {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.3), rgba(13, 71, 161, 0.5));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 40px rgba(66, 133, 244, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .loading-logo {
+            width: 60%;
+            height: 60%;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .loading-logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: brightness(0) invert(1);
         }
 
         .loading-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            margin-bottom: var(--spacing-md);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: var(--spacing-sm);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             font-family: 'Kanit', sans-serif;
+            background: linear-gradient(to right, #FFFFFF, #E3F2FD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
         }
 
         .loading-subtitle {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             opacity: 0.9;
             margin-bottom: var(--spacing-xxl);
-            max-width: 400px;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
             line-height: 1.6;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
         }
 
-        .loading-progress {
+        .loading-progress-container {
             width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
+            max-width: 400px;
+            margin: 0 auto var(--spacing-lg);
+            position: relative;
         }
 
         .progress-bar-container {
             width: 100%;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.2);
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-full);
             overflow: hidden;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .progress-bar {
             height: 100%;
-            background-color: var(--surface);
+            background: linear-gradient(90deg, 
+                #34A853 0%, 
+                #1A73E8 50%, 
+                #4285F4 100%);
             width: 0%;
             border-radius: var(--radius-full);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            animation: shimmer 2s infinite;
         }
 
         .loading-text {
-            font-size: 0.875rem;
-            opacity: 0.8;
+            font-size: 1rem;
+            opacity: 0.9;
             margin-bottom: var(--spacing-xl);
             font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            min-height: 24px;
         }
 
         .loading-stats {
@@ -169,81 +253,161 @@
             justify-content: center;
             gap: var(--spacing-xl);
             margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .loading-stat {
             text-align: center;
+            flex: 1;
+            max-width: 120px;
         }
 
         .loading-stat-value {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: var(--spacing-xs);
             font-family: 'Kanit', sans-serif;
+            color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .loading-stat-label {
             font-size: 0.875rem;
             opacity: 0.8;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
         }
 
         .loading-animation {
             display: flex;
             justify-content: center;
             gap: var(--spacing-sm);
-            margin: var(--spacing-xl) 0;
+            margin: var(--spacing-xl) 0 var(--spacing-lg);
         }
 
         .loading-dot {
-            width: 12px;
-            height: 12px;
-            background-color: var(--surface);
+            width: 14px;
+            height: 14px;
+            background-color: #FFFFFF;
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .loading-dot:nth-child(1) {
             animation-delay: -0.32s;
+            background: #34A853;
         }
 
         .loading-dot:nth-child(2) {
             animation-delay: -0.16s;
+            background: #1A73E8;
         }
 
         .loading-dot:nth-child(3) {
             animation-delay: 0s;
+            background: #FF6D00;
         }
 
+        /* Floating elements animation */
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        .floating-element:nth-child(4) {
+            width: 30px;
+            height: 30px;
+            bottom: 25%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+
+        /* Animations */
         @keyframes bounce {
             0%, 80%, 100% { 
-                transform: scale(0);
-                opacity: 0.5;
+                transform: scale(0.8);
+                opacity: 0.6;
             } 
             40% { 
-                transform: scale(1);
+                transform: scale(1.2);
                 opacity: 1;
             }
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+        @keyframes rotateLogo {
+            from {
+                transform: rotate(0deg);
             }
-            70% {
-                transform: scale(1.05);
-                box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
             }
             100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+                left: 100%;
+            }
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
             }
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -251,8 +415,20 @@
             }
         }
 
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+            }
+            70% {
+                box-shadow: 0 0 0 30px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
         .loading-content {
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeInUp 1s ease-out;
         }
 
         /* Header - App Bar - FIXED POSITION */
@@ -1157,7 +1333,12 @@
             }
             
             .loading-title {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+            
+            .loading-logo-container {
+                width: 150px;
+                height: 150px;
             }
         }
 
@@ -1218,12 +1399,20 @@
             }
             
             .loading-title {
-                font-size: 1.75rem;
+                font-size: 1.9rem;
             }
             
-            .loading-logo {
-                width: 100px;
-                height: 100px;
+            .loading-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .loading-logo-container {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .loading-stats {
+                gap: var(--spacing-lg);
             }
         }
 
@@ -1253,37 +1442,52 @@
             }
             
             .loading-title {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
             
             .loading-subtitle {
                 font-size: 1rem;
             }
             
-            .loading-logo {
-                width: 80px;
-                height: 80px;
+            .loading-logo-container {
+                width: 110px;
+                height: 110px;
             }
             
             .loading-stats {
                 flex-direction: column;
                 gap: var(--spacing-md);
             }
+            
+            .loading-stat {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- Loading Screen - Redesigned -->
     <div class="loading-screen" id="loadingScreen">
+        <!-- Floating elements for background animation -->
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        
         <div class="loading-container">
             <div class="loading-content">
-                <div class="loading-logo">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
-                         alt="ตราเทคนิคสุราษฎร์ธานี"
-                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0cHgiPlNSVEM8L3RleHQ+PC9zdmc+'">
+                <div class="loading-logo-container">
+                    <div class="loading-logo-outer"></div>
+                    <div class="loading-logo-inner"></div>
+                    <div class="loading-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/th/thumb/0/0e/%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B9%80%E0%B8%97%E0%B8%84%E0%B8%99%E0%B8%B4%E0%B8%84%E0%B8%AA%E0%B8%B8%E0%B8%A3%E0%B8%B2%E0%B8%A9%E0%B8%90%E0%B8%A3%E0%B8%B2%E0%B8%93%E0%B8%B5.svg/1200px-%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B9%80%E0%B8%97%E0%B8%84%E0%B8%99%E0%B8%B4%E0%B8%84%E0%B8%AA%E0%B8%B8%E0%B8%A3%E0%B8%B2%E0%B8%A9%E0%B8%90%E0%B8%A3%E0%B8%B2%E0%B8%93%E0%B8%B5.svg.png" 
+                             alt="ตราสัญลักษณ์วิทยาลัยเทคนิคสุราษฎร์ธานี"
+                             onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5MCIgZmlsbD0iIzFBNzNFOCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTcwIDEwMEgxMzBNMTAwIDcwVjEzMCIgc3Ryb2tlPSIjMUE3M0U4IiBzdHJva2Utd2lkdGg9IjgiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjMwIiBmaWxsPSIjMUE3M0U4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjRweCI+U1JUQzwvdGV4dD48L3N2Zz4='">
+                    </div>
                 </div>
+                
                 <h1 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
-                <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ - กำลังโหลดข้อมูล กรุณารอสักครู่...</p>
+                <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ - กำลังเตรียมความพร้อมสำหรับการใช้งาน</p>
                 
                 <div class="loading-animation">
                     <div class="loading-dot"></div>
@@ -1291,11 +1495,11 @@
                     <div class="loading-dot"></div>
                 </div>
                 
-                <div class="loading-progress">
+                <div class="loading-progress-container">
                     <div class="progress-bar-container">
                         <div class="progress-bar" id="loadingProgressBar"></div>
                     </div>
-                    <div class="loading-text" id="loadingText">กำลังเตรียมระบบ...</div>
+                    <div class="loading-text" id="loadingText">กำลังเริ่มต้นระบบ...</div>
                 </div>
                 
                 <div class="loading-stats">
@@ -1305,7 +1509,7 @@
                     </div>
                     <div class="loading-stat">
                         <div class="loading-stat-value" id="loadingTime">0</div>
-                        <div class="loading-stat-label">วินาที</div>
+                        <div class="loading-stat-label">เวลาที่ใช้</div>
                     </div>
                     <div class="loading-stat">
                         <div class="loading-stat-value" id="loadingPercent">0%</div>
@@ -1835,7 +2039,7 @@
     </div>
 
     <script>
-        // ===== LOADING SCREEN SYSTEM =====
+        // ===== LOADING SCREEN SYSTEM - ENHANCED =====
         const loadingScreen = document.getElementById('loadingScreen');
         const loadingProgressBar = document.getElementById('loadingProgressBar');
         const loadingText = document.getElementById('loadingText');
@@ -1849,49 +2053,80 @@
         let loadingTimer = 0;
         let loadingInterval;
 
-        // Simulated loading tasks with descriptions
+        // Enhanced loading tasks with more descriptive text
         const loadingTasks = [
-            { percent: 10, text: "กำลังเตรียมระบบ..." },
-            { percent: 20, text: "กำลังโหลดข้อมูลพื้นฐาน..." },
-            { percent: 35, text: "กำลังเชื่อมต่อฐานข้อมูล..." },
-            { percent: 50, text: "กำลังดึงข้อมูลคณะอาจารย์..." },
-            { percent: 65, text: "กำลังโหลดภาพและสื่อ..." },
-            { percent: 80, text: "กำลังเตรียมแผนผังอาคาร..." },
-            { percent: 90, text: "กำลังเตรียมระบบนำทาง..." },
-            { percent: 95, text: "กำลังทำการตรวจสอบความเร็วอินเทอร์เน็ต..." },
-            { percent: 100, text: "พร้อมใช้งาน!" }
+            { percent: 5, text: "กำลังเริ่มต้นระบบวิทยาลัยเทคนิคสุราษฎร์ธานี..." },
+            { percent: 15, text: "กำลังตรวจสอบความพร้อมของเบราว์เซอร์..." },
+            { percent: 25, text: "กำลังโหลดข้อมูลพื้นฐานแผนกเทคโนโลยีสารสนเทศ..." },
+            { percent: 35, text: "กำลังเชื่อมต่อกับฐานข้อมูลวิทยาลัย..." },
+            { percent: 45, text: "กำลังดึงข้อมูลคณะอาจารย์ผู้สอน..." },
+            { percent: 55, text: "กำลังประมวลผลข้อมูลอาคารเรียน..." },
+            { percent: 65, text: "กำลังโหลดภาพและสื่อมัลติมีเดีย..." },
+            { percent: 75, text: "กำลังเตรียมแผนผังอาคารและระบบนำทาง..." },
+            { percent: 85, text: "กำลังทำการตรวจสอบความเร็วอินเทอร์เน็ต..." },
+            { percent: 92, text: "กำลังปรับแต่งการแสดงผลให้เหมาะสม..." },
+            { percent: 97, text: "กำลังตรวจสอบความสมบูรณ์ของระบบ..." },
+            { percent: 100, text: "พร้อมใช้งาน! กําลังเข้าสู่หน้าเว็บหลัก..." }
         ];
 
-        // Simulate internet speed test
+        // Simulate internet speed test with more realistic values
         function simulateSpeedTest() {
-            // Random speed between 50-150 Mbps
-            const speed = 50 + Math.random() * 100;
-            return speed.toFixed(1);
+            // Simulate different speed tiers
+            const tiers = [25, 50, 100, 150, 200];
+            const tier = Math.floor(Math.random() * tiers.length);
+            const variation = Math.random() * 20 - 10; // -10 to +10 variation
+            return (tiers[tier] + variation).toFixed(1);
         }
 
-        // Update loading progress
+        // Update loading progress with smooth transitions
         function updateLoadingProgress(taskIndex) {
             if (taskIndex < loadingTasks.length) {
                 const task = loadingTasks[taskIndex];
                 loadingProgress = task.percent;
-                loadingProgressBar.style.width = loadingProgress + '%';
-                loadingText.textContent = task.text;
+                
+                // Smooth progress bar animation
+                let currentWidth = parseFloat(loadingProgressBar.style.width) || 0;
+                const interval = setInterval(() => {
+                    if (currentWidth >= loadingProgress) {
+                        clearInterval(interval);
+                    } else {
+                        currentWidth += 0.5;
+                        loadingProgressBar.style.width = currentWidth + '%';
+                    }
+                }, 10);
+                
+                // Update text with typing effect
+                typeText(loadingText, task.text, 30);
                 loadingPercent.textContent = loadingProgress + '%';
                 
-                // Update speed occasionally
+                // Update speed occasionally (every 2-3 tasks)
                 if (taskIndex % 3 === 0) {
                     loadingSpeed.textContent = simulateSpeedTest() + ' Mbps';
                 }
                 
                 // If this is the last task, finish loading
                 if (taskIndex === loadingTasks.length - 1) {
-                    setTimeout(finishLoading, 800);
+                    setTimeout(finishLoading, 1000);
                 } else {
-                    // Schedule next update with random delay
-                    const delay = 300 + Math.random() * 500;
+                    // Schedule next update with varying delay for realism
+                    const delay = 400 + Math.random() * 600;
                     setTimeout(() => updateLoadingProgress(taskIndex + 1), delay);
                 }
             }
+        }
+
+        // Typing effect for loading text
+        function typeText(element, text, speed) {
+            let i = 0;
+            element.textContent = '';
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, speed);
         }
 
         // Start loading timer
@@ -1906,7 +2141,12 @@
         function finishLoading() {
             clearInterval(loadingInterval);
             
-            // Hide loading screen
+            // Final updates
+            loadingText.textContent = "ระบบพร้อมใช้งาน!";
+            loadingPercent.textContent = "100%";
+            loadingSpeed.textContent = simulateSpeedTest() + ' Mbps';
+            
+            // Hide loading screen with smooth transition
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
                 
@@ -1917,13 +2157,13 @@
                     
                     // Add animation classes to elements
                     animatePageElements();
-                }, 300);
-            }, 500);
+                }, 400);
+            }, 800);
         }
 
         // Animate page elements after loading
         function animatePageElements() {
-            // Animate teacher cards
+            // Animate teacher cards with staggered delay
             const teacherCards = document.querySelectorAll('.teacher-card');
             teacherCards.forEach((card, index) => {
                 setTimeout(() => {
@@ -1936,7 +2176,7 @@
             infoItems.forEach((item, index) => {
                 setTimeout(() => {
                     item.classList.add('show');
-                }, 100 * index);
+                }, 80 * index);
             });
             
             // Animate floor sections
@@ -1950,22 +2190,23 @@
                     roomItems.forEach((room, roomIndex) => {
                         setTimeout(() => {
                             room.classList.add('show');
-                        }, 50 * roomIndex);
+                        }, 40 * roomIndex);
                     });
-                }, 150 * index);
+                }, 120 * index);
             });
         }
 
-        // Initialize loading
+        // Initialize loading with enhanced experience
         function initLoading() {
+            // Initial updates
+            loadingText.textContent = "กำลังเตรียมความพร้อม...";
+            loadingSpeed.textContent = simulateSpeedTest() + ' Mbps';
+            
             // Start timer
             startLoadingTimer();
             
-            // Start progress updates
-            setTimeout(() => updateLoadingProgress(0), 500);
-            
-            // Initial speed test
-            loadingSpeed.textContent = simulateSpeedTest() + ' Mbps';
+            // Start progress updates after a brief pause
+            setTimeout(() => updateLoadingProgress(0), 800);
         }
 
         // ===== SECTION NAVIGATION SYSTEM =====
@@ -2335,7 +2576,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            // Start loading screen
+            // Start enhanced loading screen
             initLoading();
             
             // Check for room parameter in URL
@@ -2348,7 +2589,7 @@
                     setTimeout(() => {
                         openNavigationModal(roomParam);
                     }, 100);
-                }, 2000);
+                }, 2500);
             }
         });
     </script>
