@@ -32,9 +32,12 @@
             --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
             --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
             --shadow-3: 0 2px 6px 2px rgba(60,64,67,0.15), 0 1px 2px 0 rgba(60,64,67,0.3);
+            --shadow-4: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px 0 rgba(60,64,67,0.3);
+            --shadow-5: 0 8px 12px 6px rgba(60,64,67,0.15), 0 4px 4px 0 rgba(60,64,67,0.3);
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
+            --radius-xl: 16px;
             --radius-full: 50px;
             --spacing-xs: 4px;
             --spacing-sm: 8px;
@@ -44,6 +47,7 @@
             --spacing-xxl: 48px;
             --animation-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
             --animation-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --animation-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -57,28 +61,46 @@
             line-height: 1.6;
             color: var(--on-surface);
             background-color: var(--background);
-            padding-top: 64px;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-top: 64px;
         }
 
-        /* LOADING SCREEN - Minimal */
+        /* ===== OPTIMIZED LOADING SYSTEM ===== */
         .loading-screen {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            transition: opacity 0.3s;
+            align-items: center;
+            transition: opacity var(--animation-slow) 0.1s, visibility var(--animation-slow) 0.1s;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .loading-logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: var(--spacing-md);
+            width: 120px;
+            height: 120px;
+            margin-bottom: var(--spacing-lg);
             animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (min-width: 768px) {
+            .loading-logo {
+                width: 150px;
+                height: 150px;
+            }
         }
 
         .loading-logo img {
@@ -86,51 +108,177 @@
             height: 100%;
             object-fit: contain;
             border-radius: 50%;
-            background: white;
-            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         .loading-title {
             color: white;
-            font-size: 1.5rem;
-            margin-bottom: var(--spacing-md);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
             text-align: center;
+            font-family: 'Kanit', sans-serif;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .loading-speed {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.9rem;
-            text-align: center;
+        @media (min-width: 768px) {
+            .loading-title {
+                font-size: 2.25rem;
+            }
         }
 
-        .loading-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
+        .loading-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.5;
+            padding: 0 var(--spacing-md);
+        }
+
+        @media (min-width: 768px) {
+            .loading-subtitle {
+                font-size: 1.125rem;
+            }
+        }
+
+        .loading-progress-container {
+            width: 280px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
             border-radius: var(--radius-full);
-            margin: var(--spacing-md) 0;
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .loading-progress-container {
+                width: 320px;
+            }
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.2s ease;
+            position: relative;
             overflow: hidden;
         }
 
-        .loading-progress {
+        .loading-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background: white;
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.2s;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                transparent 100%);
+            animation: shimmer 1.2s infinite linear;
         }
+
+        .loading-speed-indicator {
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0.95;
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+            min-height: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .loading-speed-indicator {
+                font-size: 1rem;
+            }
+        }
+
+        .loading-stats {
+            display: flex;
+            gap: var(--spacing-xl);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.85rem;
+            margin-top: var(--spacing-md);
+        }
+
+        .loading-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .loading-stat i {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        .loading-stat span {
+            font-weight: 500;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: var(--spacing-xl);
+        }
+
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: loadingDot 1s infinite ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .loading-dots {
+                gap: 10px;
+            }
+            
+            .loading-dot {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
         }
 
-        /* NETWORK STATUS */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Network Status Indicator */
         .network-status {
             position: fixed;
             top: 15px;
             right: 15px;
-            background: rgba(0,0,0,0.85);
+            background-color: rgba(0, 0, 0, 0.85);
             color: white;
             padding: 8px 16px;
             border-radius: var(--radius-full);
@@ -141,8 +289,19 @@
             gap: 8px;
             opacity: 0;
             transform: translateY(-10px);
-            transition: all 0.3s;
+            transition: all var(--animation-fast);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .network-status {
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
         }
 
         .network-status.show {
@@ -150,19 +309,68 @@
             transform: translateY(0);
         }
 
-        .network-status.fast { background: rgba(52, 168, 83, 0.9); }
-        .network-status.moderate { background: rgba(255, 152, 0, 0.9); }
-        .network-status.slow { background: rgba(244, 67, 54, 0.9); }
+        .network-status i {
+            font-size: 0.9rem;
+        }
 
-        /* APP BAR */
+        .network-status.fast { 
+            background-color: rgba(52, 168, 83, 0.9);
+            box-shadow: 0 4px 20px rgba(52, 168, 83, 0.3);
+        }
+        .network-status.moderate { 
+            background-color: rgba(255, 152, 0, 0.9);
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
+        }
+        .network-status.slow { 
+            background-color: rgba(244, 67, 54, 0.9);
+            box-shadow: 0 4px 20px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity var(--animation-normal) 0.1s, transform var(--animation-normal) 0.1s;
+        }
+
+        .main-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Existing styles from original code */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            color: var(--on-surface);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* Header - App Bar - FIXED POSITION */
         .app-bar {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 64px;
-            background: var(--surface);
+            background-color: var(--surface);
             z-index: 1000;
             box-shadow: var(--shadow-1);
+            transition: all var(--animation-normal);
             border-bottom: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .app-bar.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .app-bar-container {
@@ -171,14 +379,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 var(--spacing-md);
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .app-bar-logo {
             display: flex;
             align-items: center;
             gap: var(--spacing-md);
+            text-decoration: none;
+            color: var(--on-surface);
             cursor: pointer;
         }
 
@@ -187,17 +395,23 @@
             height: 48px;
             border-radius: var(--radius-md);
             overflow: hidden;
-            background: var(--surface);
+            background-color: var(--surface);
             border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 2px;
         }
 
         .logo-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
         }
 
         .logo-text h1 {
@@ -211,6 +425,7 @@
             font-size: 0.875rem;
             color: var(--on-background);
             margin: 0;
+            opacity: 0.9;
         }
 
         .nav-links {
@@ -221,6 +436,7 @@
 
         .nav-link {
             color: var(--on-background);
+            text-decoration: none;
             padding: var(--spacing-sm) var(--spacing-md);
             border-radius: var(--radius-md);
             font-weight: 500;
@@ -232,17 +448,21 @@
             cursor: pointer;
             border: none;
             background: none;
-            font-family: inherit;
+            font-family: 'Noto Sans Thai', 'Kanit', sans-serif;
         }
 
         .nav-link:hover {
-            background: var(--hover);
+            background-color: var(--hover);
             color: var(--primary);
         }
 
         .nav-link.active {
-            background: rgba(26, 115, 232, 0.08);
+            background-color: rgba(26, 115, 232, 0.08);
             color: var(--primary);
+        }
+
+        .nav-link .material-icons-round {
+            font-size: 1.125rem;
         }
 
         .mobile-menu-btn {
@@ -256,42 +476,54 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: background-color var(--animation-fast);
         }
 
-        /* MAIN CONTENT */
+        .mobile-menu-btn:hover {
+            background-color: var(--hover);
+        }
+
+        /* Main Content */
         .main-content {
+            margin-top: 0;
             padding: var(--spacing-xl) 0;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-            animation-delay: 0.3s;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
+        /* Content Sections - FIXED SCROLLING ISSUE */
         .content-section {
             display: none;
+            opacity: 0;
+            transform: translateY(0);
+            transition: opacity var(--animation-normal) ease-out, transform var(--animation-normal) ease-out;
+            animation-fill-mode: forwards;
             min-height: calc(100vh - 200px);
+            padding-top: var(--spacing-xl);
         }
 
         .content-section.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-md);
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        /* HERO */
+        /* Hero Section */
         .hero {
             padding: var(--spacing-xxl) 0;
-            background: var(--surface);
+            background-color: var(--surface);
             border-radius: var(--radius-lg);
             margin-bottom: var(--spacing-xxl);
+            position: relative;
+            overflow: hidden;
             box-shadow: var(--shadow-1);
             border: 1px solid var(--border);
         }
@@ -319,6 +551,7 @@
         }
 
         .hero-image {
+            position: relative;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-3);
@@ -336,49 +569,42 @@
             transform: scale(1.05);
         }
 
-        /* BUTTONS */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: none;
-            border-radius: var(--radius-full);
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all var(--animation-fast);
-            min-height: 44px;
+        /* Cards */
+        .card {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-1);
+            transition: all var(--animation-normal);
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+        .card:hover {
+            box-shadow: var(--shadow-2);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+        .card-header {
+            padding: var(--spacing-xl);
+            border-bottom: 1px solid var(--divider);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--border);
-            color: var(--on-background);
+        .card-body {
+            padding: var(--spacing-xl);
         }
 
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(26, 115, 232, 0.05);
+        .card-footer {
+            padding: var(--spacing-xl);
+            border-top: 1px solid var(--divider);
+            background-color: var(--background);
         }
 
-        /* SECTIONS */
+        /* Section */
         .section {
             margin-bottom: var(--spacing-xxl);
+        }
+
+        .section-header {
+            margin-bottom: var(--spacing-xl);
         }
 
         .section-title {
@@ -394,7 +620,7 @@
             max-width: 600px;
         }
 
-        /* TEACHERS */
+        /* Teachers Grid */
         .teachers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -404,11 +630,6 @@
 
         .teacher-card {
             text-align: center;
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow-1);
-            border: 1px solid var(--border);
         }
 
         .teacher-img {
@@ -432,12 +653,35 @@
             font-weight: 500;
             margin-bottom: var(--spacing-md);
             padding: var(--spacing-xs) var(--spacing-md);
-            background: rgba(26, 115, 232, 0.08);
+            background-color: rgba(26, 115, 232, 0.08);
             border-radius: var(--radius-full);
             display: inline-block;
         }
 
-        /* INFO GRID */
+        .teacher-degree {
+            color: var(--on-background);
+            margin-bottom: var(--spacing-md);
+            font-size: 0.875rem;
+        }
+
+        .teacher-expertise {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            justify-content: center;
+        }
+
+        .expertise-tag {
+            background-color: var(--background);
+            color: var(--on-background);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+        }
+
+        /* Info Grid */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -454,7 +698,7 @@
         .info-icon {
             width: 56px;
             height: 56px;
-            background: var(--surface);
+            background-color: var(--surface);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
@@ -466,7 +710,7 @@
             border: 1px solid var(--border);
         }
 
-        /* FLOOR PLAN */
+        /* Floor Plan - UPDATED STYLES */
         .floor-container {
             display: flex;
             flex-direction: column;
@@ -475,11 +719,16 @@
         }
 
         .floor {
-            background: var(--surface);
+            background-color: var(--surface);
             border-radius: var(--radius-lg);
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-1);
             border: 1px solid var(--border);
+            transition: all var(--animation-normal);
+        }
+
+        .floor:hover {
+            box-shadow: var(--shadow-2);
         }
 
         .floor-header {
@@ -518,7 +767,7 @@
         }
 
         .room-item {
-            background: var(--background);
+            background-color: var(--background);
             border-radius: var(--radius-md);
             padding: var(--spacing-md);
             border: 1px solid var(--border);
@@ -529,7 +778,7 @@
         }
 
         .room-item:hover {
-            background: rgba(26, 115, 232, 0.05);
+            background-color: rgba(26, 115, 232, 0.05);
             border-color: var(--primary-light);
             transform: translateY(-2px);
             box-shadow: var(--shadow-1);
@@ -561,7 +810,7 @@
             box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
         }
 
-        /* CONTACT */
+        /* Contact */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -578,228 +827,26 @@
         .social-links a {
             width: 40px;
             height: 40px;
-            background: var(--background);
+            background-color: var(--background);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--on-background);
+            text-decoration: none;
             transition: all var(--animation-fast);
             border: 1px solid var(--border);
         }
 
         .social-links a:hover {
-            background: var(--primary);
+            background-color: var(--primary);
             color: var(--on-primary);
             border-color: var(--primary);
         }
 
-        /* FORM */
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-            color: var(--on-surface);
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Noto Sans Thai', sans-serif;
-            font-size: 1rem;
-            transition: all var(--animation-fast);
-            background: var(--surface);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
-        }
-
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1100;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-md);
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            margin: auto;
-            animation: modalIn 0.3s;
-        }
-
-        @keyframes modalIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-header {
-            padding: var(--spacing-xl);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .modal-body {
-            padding: var(--spacing-xl);
-        }
-
-        .modal-footer {
-            padding: var(--spacing-xl);
-            border-top: 1px solid var(--divider);
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--spacing-md);
-        }
-
-        /* NAVIGATION MODAL */
-        .navigation-modal {
-            max-width: 800px;
-            width: 90%;
-        }
-
-        .navigation-content {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .navigation-header {
-            padding: var(--spacing-xl);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .navigation-body {
-            flex: 1;
-            padding: var(--spacing-xl);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xl);
-        }
-
-        .navigation-info {
-            text-align: center;
-        }
-
-        .navigation-room {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--on-surface);
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .navigation-floor {
-            color: var(--on-background);
-            font-size: 1rem;
-            background: var(--background);
-            padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--radius-full);
-            display: inline-block;
-        }
-
-        .navigation-instructions {
-            background: var(--background);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            border-left: 4px solid var(--primary);
-        }
-
-        .instruction-step {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
-            color: var(--on-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            flex: 1;
-            color: var(--on-surface);
-            padding-top: 4px;
-        }
-
-        .navigation-camera {
-            background: var(--background);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            text-align: center;
-        }
-
-        .camera-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .camera-message {
-            color: var(--on-surface);
-            margin-bottom: var(--spacing-md);
-            font-weight: 500;
-        }
-
-        .btn-open-camera {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            border: none;
-            border-radius: var(--radius-full);
-            padding: var(--spacing-md) var(--spacing-xl);
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all var(--animation-fast);
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .btn-open-camera:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
-        }
-
-        /* FOOTER */
+        /* Footer */
         .footer {
-            background: var(--on-surface);
+            background-color: var(--on-surface);
             color: var(--surface);
             padding: var(--spacing-xxl) 0 var(--spacing-xl);
             margin-top: var(--spacing-xxl);
@@ -827,79 +874,638 @@
         .copyright {
             text-align: center;
             padding-top: var(--spacing-xl);
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0.7;
             font-size: 0.875rem;
         }
 
-        /* RESPONSIVE */
+        /* Floating Action Buttons - FIXED POSITION */
+        .floating-buttons {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            right: var(--spacing-xl);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            align-items: flex-end;
+        }
+
+        .floating-button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            box-shadow: var(--shadow-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--animation-normal);
+            position: relative;
+        }
+
+        .floating-button:hover {
+            background-color: var(--primary-dark);
+            box-shadow: var(--shadow-4);
+            transform: translateY(-2px);
+        }
+
+        .floating-button.share {
+            background-color: #9C27B0;
+        }
+
+        .floating-button.share:hover {
+            background-color: #7B1FA2;
+        }
+
+        .floating-button.events {
+            background-color: var(--secondary);
+        }
+
+        .floating-button.events:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .floating-button-label {
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--on-surface);
+            color: var(--surface);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--animation-normal);
+            box-shadow: var(--shadow-2);
+            pointer-events: none;
+        }
+
+        .floating-button:hover .floating-button-label {
+            opacity: 1;
+            visibility: visible;
+            right: 65px;
+        }
+
+        /* Modals - FIXED POSITION */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            opacity: 0;
+            transition: opacity var(--animation-normal);
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-5);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform var(--animation-normal);
+            border: 1px solid var(--border);
+            margin: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: var(--spacing-xl);
+            border-bottom: 1px solid var(--divider);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--on-primary);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .modal-header h3 {
+            color: var(--on-primary);
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: var(--spacing-xl);
+        }
+
+        .modal-footer {
+            padding: var(--spacing-xl);
+            border-top: 1px solid var(--divider);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+            position: sticky;
+            bottom: 0;
+            background-color: var(--surface);
+        }
+
+        /* MINIMAL NAVIGATION MODAL */
+        .minimal-navigation {
+            max-width: 400px;
+        }
+
+        .nav-room-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .nav-room-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-3);
+        }
+
+        .nav-room-icon i {
+            font-size: 2rem;
+            color: var(--on-primary);
+        }
+
+        .nav-room-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--on-surface);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .nav-room-floor {
+            color: var(--on-background);
+            font-size: 0.875rem;
+            background-color: var(--background);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-full);
+            display: inline-block;
+        }
+
+        .nav-instructions {
+            background-color: var(--background);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .nav-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-step-number {
+            width: 28px;
+            height: 28px;
+            background-color: var(--primary);
+            color: var(--on-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .nav-step-text {
+            flex: 1;
+            color: var(--on-surface);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+        }
+
+        /* Share Modal */
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .share-btn {
+            padding: var(--spacing-lg);
+            background-color: var(--background);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+            text-align: center;
+        }
+
+        .share-btn:hover {
+            border-color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.08);
+        }
+
+        .share-btn i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Activities Modal */
+        .activities-filter {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            color: var(--on-background);
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            font-size: 0.875rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--on-primary);
+        }
+
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .activity-card {
+            padding: var(--spacing-lg);
+            background-color: var(--background);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .activity-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+
+        .activity-badge {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-upcoming {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--secondary);
+            border: 1px solid rgba(52, 168, 83, 0.2);
+        }
+
+        .badge-ongoing {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        .badge-completed {
+            background-color: rgba(158, 158, 158, 0.1);
+            color: var(--on-background);
+            border: 1px solid rgba(158, 158, 158, 0.2);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+            color: var(--on-surface);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: 'Noto Sans Thai', sans-serif;
+            font-size: 1rem;
+            transition: all var(--animation-fast);
+            background-color: var(--surface);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1), inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--animation-fast);
+            text-decoration: none;
+            min-height: 44px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--on-primary);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--on-background);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.05);
+        }
+
+        /* Responsive */
         @media (max-width: 992px) {
-            .hero-container { grid-template-columns: 1fr; gap: var(--spacing-xl); }
-            .hero-content h2 { font-size: 2rem; }
-            .hero-image { height: 350px; order: -1; }
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-image {
+                height: 350px;
+                order: -1;
+            }
         }
 
         @media (max-width: 768px) {
-            body { padding-top: 56px; }
-            .app-bar { height: 56px; }
+            body {
+                padding-top: 56px;
+            }
+            
+            .app-bar {
+                height: 56px;
+            }
+            
+            .main-content {
+                margin-top: 0;
+            }
+            
             .nav-links {
                 display: none;
                 position: fixed;
-                top: 56px; left: 0; right: 0;
-                background: var(--surface);
+                top: 56px;
+                left: 0;
+                right: 0;
+                background-color: var(--surface);
                 flex-direction: column;
                 padding: var(--spacing-md);
                 box-shadow: var(--shadow-2);
                 border-top: 1px solid var(--border);
                 z-index: 999;
             }
-            .nav-links.show { display: flex; }
-            .nav-link { padding: var(--spacing-md); }
-            .mobile-menu-btn { display: flex; }
-            .hero-content h2 { font-size: 1.75rem; }
-            .section-title { font-size: 1.75rem; }
-            .floor-rooms { grid-template-columns: 1fr; }
-            .navigation-modal { width: 95%; }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-link {
+                padding: var(--spacing-md);
+                border-radius: var(--radius-md);
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .hero-content h2 {
+                font-size: 1.75rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .floating-buttons {
+                bottom: var(--spacing-lg);
+                right: var(--spacing-lg);
+            }
+            
+            .content-section {
+                padding-top: var(--spacing-lg);
+            }
+            
+            .floor-rooms {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 576px) {
-            .container { padding: 0 var(--spacing-sm); }
-            .hero { padding: var(--spacing-xl) 0; }
-            .hero-content h2 { font-size: 1.5rem; }
-            .hero-image { height: 250px; }
-            .teachers-grid { grid-template-columns: 1fr; }
+            .container {
+                padding: 0 var(--spacing-sm);
+            }
+            
+            .hero {
+                padding: var(--spacing-xl) 0;
+            }
+            
+            .hero-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-image {
+                height: 250px;
+            }
+            
+            .teachers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-buttons {
+                bottom: var(--spacing-md);
+                right: var(--spacing-md);
+            }
+            
+            .floating-button {
+                width: 48px;
+                height: 48px;
+            }
+            
+            .content-section {
+                padding-top: var(--spacing-md);
+            }
+            
+            .nav-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- Optimized Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-logo">
-            <img src="https://upload.wikimedia.org/wikipedia/th/thumb/9/91/Techno_Surat_Logo.png/1200px-Techno_Surat_Logo.png" 
-                 alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี"
-                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iIzFBNzNFOCIvPjxwYXRoIGQ9Ik0yOCAzOGg0djEwaC00VjM4em0yMCAwaDR2MTBoLTRWMzh6TTM0IDUyaDEydjRoLTEydi00eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
+                 alt="ตราเทคนิคสุราษฎร์ธานี"
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iNjAiIGZpbGw9IiMxQTczRTgiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNnB4Ij5TUlRDPC90ZXh0Pjwvc3ZnPg=='">
         </div>
-        <h2 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h2>
-        <div class="loading-bar">
-            <div class="loading-progress" id="loadingProgress"></div>
+        <h1 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
+        <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ</p>
+        
+        <div class="loading-progress-container">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
         </div>
-        <div class="loading-speed" id="loadingSpeed">กำลังโหลด...</div>
+        
+        <div class="loading-speed-indicator" id="loadingSpeedIndicator">
+            <i class="fas fa-sync fa-spin"></i>
+            <span>กำลังเตรียมระบบ...</span>
+        </div>
+        
+        <div class="loading-stats" id="loadingStats">
+            <div class="loading-stat">
+                <i class="fas fa-tachometer-alt"></i>
+                <span id="networkSpeed">-</span>
+            </div>
+            <div class="loading-stat">
+                <i class="fas fa-clock"></i>
+                <span id="loadTime">0.0s</span>
+            </div>
+        </div>
+        
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
     </div>
 
-    <!-- Network Status -->
+    <!-- Network Status Indicator -->
     <div class="network-status" id="networkStatus">
         <i class="fas fa-wifi"></i>
-        <span id="networkText">กำลังวัดความเร็วเน็ต...</span>
+        <span id="networkStatusText">เชื่อมต่อแล้ว</span>
     </div>
 
     <!-- App Bar -->
-    <header class="app-bar">
-        <div class="app-bar-container">
+    <header class="app-bar" id="appBar">
+        <div class="container app-bar-container">
             <div class="app-bar-logo" id="homeBtn">
                 <div class="logo-icon">
-                    <img src="https://upload.wikimedia.org/wikipedia/th/thumb/9/91/Techno_Surat_Logo.png/1200px-Techno_Surat_Logo.png" 
-                         alt="ตราวิทยาลัยเทคนิคสุราษฎร์ธานี"
-                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjxwYXRoIGQ9Ik0xNiAyOGg0djZoLTR2LTZ6bTEyIDBoNHY2aC00di02ek0yMiAzOGg0djRoLTR2LTR6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg=='">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
+                         alt="ตราเทคนิคสุราษฎร์ธานี"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIyNCIgZmlsbD0iIzFBNzNFOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0cHgiPlNSVEM8L3RleHQ+PC9zdmc+'">
                 </div>
                 <div class="logo-text">
                     <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
@@ -940,12 +1546,13 @@
     <main class="main-content" id="mainContent">
         <!-- Home Section -->
         <section class="content-section active" id="homeSection">
+            <!-- Hero Section -->
             <div class="hero">
                 <div class="container">
                     <div class="hero-container">
                         <div class="hero-content">
                             <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
-                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ</p>
+                            <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
                             <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
                                 <button class="btn btn-primary" data-section="teachers">
                                     <span class="material-icons-round">groups</span>
@@ -958,8 +1565,8 @@
                             </div>
                         </div>
                         <div class="hero-image">
-                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg" 
-                                 alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ"
+                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/576169680_3354026818107913_4625425987177551345_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeH9lEa6i_SVomImIsPwIW8AL8y5jLeVRh0vzLmMt5VGHcTu4WoL-QYQiYOqQAHQTruGcw0gJNCsL67Yim_og6Q2&_nc_ohc=zajH22a6kIgQ7kNvwGlbepN&_nc_oc=AdkjBv-NSRnOgICH5GsXHFpumvcbgZzEa60OveIr3x0xY6Wb-CcbjhmzKmm283Bg-4xVP3uP-CBTF0_9jHWTmHVx&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=SziBB2yzt69sjxYo2sTJcg&oh=00_AfmJ2mpjWWc_XgyrNpL4olsocVZT0KhMqaLvdBdN3T0Jvg&oe=693F4F9F" 
+                                 alt="อาคารเรียนแผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี"
                                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">
                         </div>
                     </div>
@@ -972,130 +1579,270 @@
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">คณะอาจารย์แผนกเทคโนโลยีสารสนเทศ</h2>
-                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ</p>
+                    <p class="section-subtitle">ทีมอาจารย์ผู้มีความเชี่ยวชาญและประสบการณ์ในการสอนด้านเทคโนโลยีสารสนเทศ พร้อมพัฒนาศักยภาพนักศึกษาในยุคดิจิทัล</p>
 
-                    <div class="teachers-grid">
-                        <div class="teacher-card">
-                            <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg" 
-                                 alt="นายสัญญา ชูช่วย" class="teacher-img"
-                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
-                            <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
-                            <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
+                    <div class="teachers-grid" id="teachersGrid">
+                        <!-- อาจารย์คนที่ 1 - นายสัญญา ชูช่วย -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://scontent.furt2-1.fna.fbcdn.net/v/t39.30808-6/516523094_3222838821226714_1840660001706732412_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=f727a1&_nc_eui2=AeGSMcrq2hpbIX19SH57a-GZIw-sjIBNHAojD6yMgE0cCnerkbGNx_6IXd3VoXYUaz5xnpEu5Gi5_eZ3MxJFzrCO&_nc_ohc=UnCGQGIk0lcQ7kNvwHsH7iY&_nc_oc=AdkjCF751-lSp-vD-ckp-KJXH42FMCW_2x4WsIXm9CHZwCohMGR5ljh-1L5tkeJpxRTH4Nj6S18CRaA54V1j7wMa&_nc_zt=23&_nc_ht=scontent.furt2-1.fna&_nc_gid=Ka1hiUfKZyOilR52NjmmLQ&oh=00_AfmaH-TBydiztxTmMwz-0Tbfce5l0kQySm9F0CnvJzYI4Q&oe=693E0CE7" 
+                                     alt="นายสัญญา ชูช่วย" class="teacher-img"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายสัญญา ชูช่วย</h3>
+                                <div class="teacher-position">หัวหน้าแผนกเทคโนโลยีสารสนเทศและรองฝ่ายวิชาการ วท.สฎ</div>
+                                <div class="teacher-degree">ยังไม่บันทึกในระบบ</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="teacher-card">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
-                                 alt="นายพนม บุญญ์ไพร" class="teacher-img"
-                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)</div>
+                        <!-- อาจารย์คนที่ 2 - นายพนม บุญญ์ไพร -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC01511_2-1024x683.jpg" 
+                                     alt="นายพนม บุญญ์ไพร" class="teacher-img"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นายพนม บุญญ์ไพร</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">-ปริญญาโท วท.ม.(เทคโนโลยีอินเตอร์เน็ตและสารสนเทศ)
+        -ปริญญาตรี ปทส.(ครูเทคนิคไฟฟ้ากำลัง)
+        -ปริญญาตรี ศศ.บ.(สารสนเทศศาสตร์)</div>
+                                <p>ตำแหน่ง ครู ชำนาญการพิเศษ (คศ.3)</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">Google certificate</span>
+                                    <span class="expertise-tag">Aruba certificate</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="teacher-card">
-                            <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
-                                 alt="นางขนิษฐา สุมน" class="teacher-img"
-                                 onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
-                            <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
-                            <div class="teacher-position">ครูประจำแผนก</div>
-                            <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ</div>
+                        <!-- อาจารย์คนที่ 3 - นางขนิษฐา สุมน -->
+                        <div class="card teacher-card">
+                            <div class="card-body">
+                                <img src="https://it.srtc.ac.th/wp-content/uploads/2022/11/DSC02469-683x1024.jpg" 
+                                     alt="นางขนิษฐา สุมน" class="teacher-img"
+                                     onerror="this.onerror=null;this.src='https://via.placeholder.com/150/1A73E8/FFFFFF?text=ครู'">
+                                <h3 class="teacher-name">นางขนิษฐา สุมน</h3>
+                                <div class="teacher-position">ครูประจำแผนก</div>
+                                <div class="teacher-degree">ปริญญาโท = วท.ม. เทคโนโลยีอินเทอร์เน็ตและสารสนเทศ
+        ปริญญาตรี = บธ.บ.คอมพิวเตอร์</div>
+                                <p>ยังไม่บันทึกในระบบ</p>
+                                <div class="teacher-expertise">
+                                    <span class="expertise-tag">ยังไม่บันทึกในระบบ</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Info Section -->
+        <!-- Building Info Section -->
         <section class="content-section" id="infoSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">ข้อมูลอาคารเรียน</h2>
-                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร</p>
+                    <p class="section-subtitle">อาคารเรียน 5 ชั้น ขนาดพื้นที่ใช้สอย 8,000 ตารางเมตร ออกแบบโดยคำนึงถึงการประหยัดพลังงานและการใช้งานที่เหมาะสม</p>
                     
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-icon"><i class="fas fa-building"></i></div>
-                            <div><h3>โครงสร้างอาคาร</h3><p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติ</p></div>
+                            <div class="info-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div>
+                                <h3>โครงสร้างอาคาร</h3>
+                                <p>อาคารคอนกรีตเสริมเหล็ก 5 ชั้น พร้อมระบบควบคุมอุณหภูมิอัตโนมัติและระบบรักษาความปลอดภัยครบวงจร</p>
+                            </div>
                         </div>
+                        
                         <div class="info-item">
-                            <div class="info-icon"><i class="fas fa-calendar-alt"></i></div>
-                            <div><h3>ปีที่ก่อสร้าง</h3><p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานในปี 2563</p></div>
+                            <div class="info-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <h3>ปีที่ก่อสร้าง</h3>
+                                <p>เริ่มก่อสร้างในปี 2561 และเปิดใช้งานอย่างเป็นทางการในปี 2563 พร้อมอุปกรณ์การเรียนการสอนที่ทันสมัย</p>
+                            </div>
                         </div>
+                        
                         <div class="info-item">
-                            <div class="info-icon"><i class="fas fa-expand-arrows-alt"></i></div>
-                            <div><h3>พื้นที่ใช้สอย</h3><p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร</p></div>
+                            <div class="info-icon">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </div>
+                            <div>
+                                <h3>พื้นที่ใช้สอย</h3>
+                                <p>รวมพื้นที่ใช้สอยทั้งหมด 8,000 ตารางเมตร แบ่งเป็นห้องเรียน 25 ห้อง ห้องปฏิบัติการ 12 ห้อง และพื้นที่ส่วนกลาง</p>
+                            </div>
                         </div>
+                        
                         <div class="info-item">
-                            <div class="info-icon"><i class="fas fa-leaf"></i></div>
-                            <div><h3>เป็นมิตรต่อสิ่งแวดล้อม</h3><p>ออกแบบให้มีแสงธรรมชาติเพียงพอ</p></div>
+                            <div class="info-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div>
+                                <h3>เป็นมิตรต่อสิ่งแวดล้อม</h3>
+                                <p>ออกแบบให้มีแสงธรรมชาติเพียงพอ ติดตั้งระบบบำบัดน้ำและระบบจัดการขยะภายในอาคาร</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Floor Section -->
+        <!-- Floor Plan and Navigation Section - UPDATED -->
         <section class="content-section" id="floorSection">
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">แผนผังและแนะนำทาง</h2>
-                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ</p>
+                    <p class="section-subtitle">ข้อมูลแต่ละชั้นของอาคารและระบบนำทางไปยังห้องต่างๆ คลิกที่ปุ่ม "ดูเส้นทาง" เพื่อเปิดระบบนำทางแบบ Minimal</p>
                     
                     <div class="floor-container">
-                        <!-- ชั้น 1 -->
-                        <div class="floor">
+                        <!-- Floor 1 - UPDATED -->
+                        <div class="floor" data-floor="1">
                             <div class="floor-header">
                                 <div class="floor-number">1</div>
-                                <div><h3 class="floor-title">ชั้นที่ 1</h3><p>แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</p></div>
+                                <div>
+                                    <h3 class="floor-title">ชั้นที่ 1</h3>
+                                    <p>แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</p>
+                                </div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item"><span class="room-name">แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</span><button class="btn-view-route" data-room="polymer-department" data-floor="1"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ลานต้านภัยยาเสพติด</span><button class="btn-view-route" data-room="drug-prevention-area" data-floor="1"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item">
+                                    <span class="room-name">แผนกวิชาเทคโนโลยียางและพอลิเลมอร์</span>
+                                    <button class="btn-view-route" data-room="polymer-department" data-floor="1">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ลานต้านภัยยาเสพติด</span>
+                                    <button class="btn-view-route" data-room="drug-prevention-area" data-floor="1">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- ชั้น 2 -->
-                        <div class="floor">
+                        <!-- Floor 2 - NEW -->
+                        <div class="floor" data-floor="2">
                             <div class="floor-header">
                                 <div class="floor-number">2</div>
-                                <div><h3 class="floor-title">ชั้นที่ 2</h3><p>ห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ</p></div>
+                                <div>
+                                    <h3 class="floor-title">ชั้นที่ 2</h3>
+                                    <p>ห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ</p>
+                                </div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item"><span class="room-name">ห้องเรียนวิทยาศาสตร์</span><button class="btn-view-route" data-room="science-room" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องเรียนภาษาอังกฤษ</span><button class="btn-view-route" data-room="english-room" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องชมรม To Be Numberone</span><button class="btn-view-route" data-room="to-be-numberone" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องผลิตยางและพอลิเมอร์</span><button class="btn-view-route" data-room="polymer-production" data-floor="2"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียนวิทยาศาสตร์</span>
+                                    <button class="btn-view-route" data-room="science-room" data-floor="2">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียนภาษาอังกฤษ</span>
+                                    <button class="btn-view-route" data-room="english-room" data-floor="2">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องชมรม To Be Numberone</span>
+                                    <button class="btn-view-route" data-room="to-be-numberone" data-floor="2">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องผลิตยางและพอลิเมอร์</span>
+                                    <button class="btn-view-route" data-room="polymer-production" data-floor="2">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- ชั้น 3 -->
-                        <div class="floor">
+                        <!-- Floor 3 - UPDATED -->
+                        <div class="floor" data-floor="3">
                             <div class="floor-header">
                                 <div class="floor-number">3</div>
-                                <div><h3 class="floor-title">ชั้นที่ 3</h3><p>ห้องเรียนเทคโนโลยีสารสนเทศ</p></div>
+                                <div>
+                                    <h3 class="floor-title">ชั้นที่ 3</h3>
+                                    <p>ห้องเรียนเทคโนโลยีสารสนเทศ</p>
+                                </div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item"><span class="room-name">ห้องเรียน 631</span><button class="btn-view-route" data-room="631" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องเรียน 632</span><button class="btn-view-route" data-room="632" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องเรียน 633</span><button class="btn-view-route" data-room="633" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องเรียน 634</span><button class="btn-view-route" data-room="634" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้องเรียน 635</span><button class="btn-view-route" data-room="635" data-floor="3"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียน 631</span>
+                                    <button class="btn-view-route" data-room="631" data-floor="3">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียน 632</span>
+                                    <button class="btn-view-route" data-room="632" data-floor="3">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียน 633</span>
+                                    <button class="btn-view-route" data-room="633" data-floor="3">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียน 634</span>
+                                    <button class="btn-view-route" data-room="634" data-floor="3">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องเรียน 635</span>
+                                    <button class="btn-view-route" data-room="635" data-floor="3">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- ชั้น 4 -->
-                        <div class="floor">
+                        <!-- Floor 4 - NEW -->
+                        <div class="floor" data-floor="4">
                             <div class="floor-header">
                                 <div class="floor-number">4</div>
-                                <div><h3 class="floor-title">ชั้นที่ 4</h3><p>ห้องพักครู ห้อง Lecture และห้องปฏิบัติการ</p></div>
+                                <div>
+                                    <h3 class="floor-title">ชั้นที่ 4</h3>
+                                    <p>ห้องพักครู ห้อง Lecture และห้องปฏิบัติการ</p>
+                                </div>
                             </div>
                             <div class="floor-rooms">
-                                <div class="room-item"><span class="room-name">ห้องพักครู</span><button class="btn-view-route" data-room="teacher-lounge" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้อง Lecture</span><button class="btn-view-route" data-room="lecture-room" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้อง Lab 1</span><button class="btn-view-route" data-room="lab-1" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้อง Lab 2</span><button class="btn-view-route" data-room="lab-2" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
-                                <div class="room-item"><span class="room-name">ห้อง Lab 3</span><button class="btn-view-route" data-room="lab-3" data-floor="4"><i class="fas fa-route"></i> ดูเส้นทาง</button></div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้องพักครู</span>
+                                    <button class="btn-view-route" data-room="teacher-lounge" data-floor="4">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้อง Lecture</span>
+                                    <button class="btn-view-route" data-room="lecture-room" data-floor="4">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้อง Lab 1</span>
+                                    <button class="btn-view-route" data-room="lab-1" data-floor="4">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้อง Lab 2</span>
+                                    <button class="btn-view-route" data-room="lab-2" data-floor="4">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
+                                <div class="room-item">
+                                    <span class="room-name">ห้อง Lab 3</span>
+                                    <button class="btn-view-route" data-room="lab-3" data-floor="4">
+                                        <i class="fas fa-route"></i> ดูเส้นทาง
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1108,38 +1855,77 @@
             <div class="section" style="padding: var(--spacing-xl) 0;">
                 <div class="container">
                     <h2 class="section-title">ติดต่อเรา</h2>
-                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ</p>
+                    <p class="section-subtitle">หากคุณมีคำถามหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับอาคารเรียนแผนกเทคโนโลยีสารสนเทศ กรุณาติดต่อเราได้ที่นี่</p>
                     
                     <div class="contact-grid">
                         <div>
                             <h3>ข้อมูลติดต่อ</h3>
                             <div class="info-item" style="margin-top: var(--spacing-lg);">
-                                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                                <div><h4>ที่อยู่</h4><p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p></div>
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4>ที่อยู่</h4>
+                                    <p>อาคาร 6 แผนกเทคโนโลยีสารสนเทศ<br>วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+                                </div>
                             </div>
+                            
                             <div class="info-item">
-                                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                                <div><h4>โทรศัพท์</h4><p>077-272-168</p></div>
+                                <div class="info-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4>โทรศัพท์</h4>
+                                    <p>077-272-168</p>
+                                </div>
                             </div>
+                            
                             <div class="info-item">
-                                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                                <div><h4>เว็บหลักวิทยาลัย</h4><p>www.srtc.ac.th</p></div>
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4>เว็บหลักวิทยาลัย</h4>
+                                    <p>www.srtc.ac.th</p>
+                                </div>
                             </div>
+                            
                             <div class="social-links">
                                 <a href="https://www.facebook.com/PR.SRTC?locale=th_TH" target="_blank"><i class="fab fa-facebook-f"></i></a>
                                 <a href="https://www.youtube.com/@srtcchannel3786" target="_blank"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                         
-                        <div class="card" style="padding: var(--spacing-xl);">
-                            <h3>ส่งข้อความถึงเรา</h3>
-                            <form id="contactForm">
-                                <div class="form-group"><label>ชื่อ-นามสกุล</label><input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required></div>
-                                <div class="form-group"><label>อีเมล</label><input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required></div>
-                                <div class="form-group"><label>เรื่อง</label><input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required></div>
-                                <div class="form-group"><label>ข้อความ</label><textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความ" required></textarea></div>
-                                <button type="submit" class="btn btn-primary" style="width: 100%;"><span class="material-icons-round">send</span> ส่งข้อความ</button>
-                            </form>
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>ส่งข้อความถึงเรา</h3>
+                                <form id="contactForm">
+                                    <div class="form-group">
+                                        <label>ชื่อ-นามสกุล</label>
+                                        <input type="text" class="form-control" placeholder="กรุณากรอกชื่อและนามสกุล" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>อีเมล</label>
+                                        <input type="email" class="form-control" placeholder="กรุณากรอกอีเมล" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>เรื่อง</label>
+                                        <input type="text" class="form-control" placeholder="หัวข้อที่ต้องการติดต่อ" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>ข้อความ</label>
+                                        <textarea class="form-control" rows="5" placeholder="กรุณากรอกข้อความที่ต้องการติดต่อ" required></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <span class="material-icons-round">send</span>
+                                        ส่งข้อความ
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1153,134 +1939,397 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>แผนกเทคโนโลยีสารสนเทศ</h3>
-                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย</p>
+                    <p>วิทยาลัยเทคนิคสุราษฎร์ธานี ศูนย์กลางการเรียนรู้ด้านเทคโนโลยีสารสนเทศที่ทันสมัย มุ่งพัฒนาบุคลากรให้มีความรู้ความสามารถในยุคดิจิทัล</p>
                 </div>
+                
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
                     <h3>เวลาเปิดทำการ</h3>
-                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
+                    <p>วันจันทร์ - ศุกร์: 08:00 - 20:00 น.<br><br>วันเสาร์และอาทิตย์: ปิดทำการ</p>
                 </div>
             </div>
+            
             <div class="copyright">
-                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี | แผนกเทคโนโลยีสารสนเทศ</p>
+                <p>© 2025 วิทยาลัยเทคนิคสุราษฎร์ธานี สถานศึกษารางวัลพระราชทาน | แผนกเทคโนโลยีสารสนเทศ</p>
             </div>
         </div>
     </footer>
 
-    <!-- Navigation Modal -->
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <!-- Activities Button -->
+        <button class="floating-button events" id="activitiesBtn">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="floating-button-label">กิจกรรม Upcoming</span>
+        </button>
+        
+        <!-- Share Position Button -->
+        <button class="floating-button share" id="shareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span class="floating-button-label">แชร์ตำแหน่งห้อง</span>
+        </button>
+    </div>
+
+    <!-- Navigation Modal - Minimal Design -->
     <div class="modal" id="navigationModal">
-        <div class="modal-content navigation-modal">
-            <div class="navigation-header">
+        <div class="modal-content minimal-navigation">
+            <div class="modal-header">
                 <h3><i class="fas fa-route"></i> ระบบนำทาง</h3>
-                <p>คำแนะนำเส้นทางไปยังห้องที่เลือก</p>
+                <p>คำแนะนำเส้นทางแบบ Minimal</p>
             </div>
-            <div class="navigation-body">
-                <div class="navigation-info">
-                    <h3 class="navigation-room" id="navRoomName">ห้อง</h3>
-                    <div class="navigation-floor" id="navRoomFloor">ชั้นที่</div>
+            <div class="modal-body">
+                <div class="nav-room-info">
+                    <div class="nav-room-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <h3 class="nav-room-name" id="navRoomName">ห้อง</h3>
+                    <div class="nav-room-floor" id="navRoomFloor">ชั้นที่</div>
                 </div>
-                <div class="navigation-instructions">
-                    <h4 style="margin-bottom: var(--spacing-md);">คำแนะนำการเดินทาง:</h4>
-                    <div class="instruction-step"><div class="step-number">1</div><div class="step-text" id="navStep1">ข้อมูลกำลังโหลด...</div></div>
-                    <div class="instruction-step"><div class="step-number">2</div><div class="step-text" id="navStep2"></div></div>
-                    <div class="instruction-step"><div class="step-number">3</div><div class="step-text" id="navStep3"></div></div>
-                    <div class="instruction-step"><div class="step-number">4</div><div class="step-text" id="navStep4"></div></div>
+                
+                <div class="nav-instructions">
+                    <h4 style="margin-bottom: var(--spacing-md); color: var(--on-surface);">คำแนะนำการเดินทาง:</h4>
+                    <div class="nav-step">
+                        <div class="nav-step-number">1</div>
+                        <div class="nav-step-text" id="navStep1">จากทางเข้าหลักอาคาร เดินตรงไปยังลิฟต์หรือบันได</div>
+                    </div>
+                    <div class="nav-step">
+                        <div class="nav-step-number">2</div>
+                        <div class="nav-step-text" id="navStep2">ขึ้นไปยังชั้นที่กำหนด (ใช้ลิฟต์ A หรือบันไดกลาง)</div>
+                    </div>
+                    <div class="nav-step">
+                        <div class="nav-step-number">3</div>
+                        <div class="nav-step-text" id="navStep3">เดินตามป้ายบอกทางไปยังโซนของห้อง</div>
+                    </div>
+                    <div class="nav-step">
+                        <div class="nav-step-number">4</div>
+                        <div class="nav-step-text" id="navStep4">ห้องที่คุณต้องการจะอยู่ทางด้านขวา/ซ้าย ตามป้ายบอกทาง</div>
+                    </div>
                 </div>
-                <div class="navigation-camera">
-                    <div class="camera-icon"><i class="fas fa-camera"></i></div>
-                    <p class="camera-message">ระบบนำทางต้องการเข้าถึงกล้องเพื่อแนะนำทางผ่าน AR</p>
-                    <button class="btn-open-camera" id="openCameraBtn"><i class="fas fa-video"></i> เปิดกล้อง</button>
+                
+                <div class="nav-tips">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+                        <i class="fas fa-lightbulb" style="color: var(--accent);"></i>
+                        <span style="font-weight: 500; color: var(--on-surface);">เคล็ดลับ:</span>
+                    </div>
+                    <p style="color: var(--on-background); font-size: 0.875rem;" id="navTips">หากพบปัญหาในการค้นหาห้อง สามารถสอบถามได้ที่ห้องประชาสัมพันธ์ ชั้น 1</p>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="closeNavModal"><i class="fas fa-check"></i> ปิด</button>
+                <div class="nav-actions">
+                    <button class="btn btn-primary" id="closeNavModal">
+                        <i class="fas fa-check"></i> เข้าใจแล้ว
+                    </button>
+                    <button class="btn btn-outline" id="shareRoomBtn">
+                        <i class="fas fa-share-alt"></i> แชร์เส้นทาง
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities Modal -->
+    <div class="modal" id="activitiesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-alt"></i> กิจกรรม Upcoming</h3>
+                <p>กิจกรรมที่น่าสนใจและกำลังจะมาถึงของแผนกเทคโนโลยีสารสนเทศ</p>
+            </div>
+            <div class="modal-body">
+                <div class="activities-filter">
+                    <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+                    <button class="filter-btn" data-filter="upcoming">กำลังจะมาถึง</button>
+                    <button class="filter-btn" data-filter="ongoing">กำลังจัด</button>
+                    <button class="filter-btn" data-filter="completed">จบแล้ว</button>
+                </div>
+                
+                <div class="activities-list" id="activitiesList">
+                    <!-- Activities will be populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeActivitiesModal">ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Position Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-share-alt"></i> แชร์ตำแหน่งห้องกับเพื่อน</h3>
+                <p>เลือกห้องและวิธีการแชร์ตำแหน่งกับเพื่อนของคุณ</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>เลือกห้องที่ต้องการแชร์</label>
+                    <div class="floor-rooms" id="shareRooms">
+                        <span class="room" data-room="631" data-name="ห้องเรียน 631">ห้อง 631</span>
+                        <span class="room" data-room="632" data-name="ห้องเรียน 632">ห้อง 632</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>วิธีการแชร์</label>
+                    <div class="share-options">
+                        <div class="share-btn" data-share-type="link">
+                            <i class="fas fa-link"></i>
+                            <span>สร้างลิงก์แชร์</span>
+                        </div>
+                        <div class="share-btn" data-share-type="copy">
+                            <i class="fas fa-copy"></i>
+                            <span>คัดลอกข้อมูล</span>
+                        </div>
+                        <div class="share-btn" data-share-type="qr">
+                            <i class="fas fa-qrcode"></i>
+                            <span>สร้าง QR Code</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="shareResult" style="display: none; margin-top: var(--spacing-xl);">
+                    <div class="form-group">
+                        <label>ลิงก์สำหรับแชร์:</label>
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" class="form-control" id="shareLinkInput" readonly>
+                            <button class="btn btn-primary" id="shareLinkCopyBtn">คัดลอก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeShareModal">ปิด</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== LOADING & NETWORK SPEED =====
+        // ===== OPTIMIZED LOADING SYSTEM =====
         const loadingScreen = document.getElementById('loadingScreen');
-        const loadingProgress = document.getElementById('loadingProgress');
-        const loadingSpeed = document.getElementById('loadingSpeed');
+        const loadingProgressBar = document.getElementById('loadingProgressBar');
+        const loadingSpeedIndicator = document.getElementById('loadingSpeedIndicator');
+        const loadingStats = document.getElementById('loadingStats');
+        const networkSpeedElement = document.getElementById('networkSpeed');
+        const loadTimeElement = document.getElementById('loadTime');
         const networkStatus = document.getElementById('networkStatus');
-        const networkText = document.getElementById('networkText');
         const mainContent = document.getElementById('mainContent');
+        const appBar = document.getElementById('appBar');
 
-        let startTime = performance.now();
-        let loadProgress = 0;
+        // เริ่มจับเวลา
+        const startTime = performance.now();
 
-        // Test network speed
+        // Network speed categories
+        const NETWORK_SPEEDS = {
+            FAST: { 
+                min: 3, 
+                text: 'เร็ว', 
+                class: 'fast', 
+                icon: 'fa-bolt',
+                color: '#34A853',
+                loadMultiplier: 1.0
+            },
+            MODERATE: { 
+                min: 1.5, 
+                text: 'ปานกลาง', 
+                class: 'moderate', 
+                icon: 'fa-wifi',
+                color: '#FF9800',
+                loadMultiplier: 1.3
+            },
+            SLOW: { 
+                min: 0, 
+                text: 'ช้า', 
+                class: 'slow', 
+                icon: 'fa-tachometer-alt',
+                color: '#F44336',
+                loadMultiplier: 1.8
+            }
+        };
+
+        // Ultra-fast network speed test
         function testNetworkSpeed() {
             return new Promise((resolve) => {
                 const start = performance.now();
-                const testSize = 50; // KB
+                
+                // สร้างข้อมูลทดสอบขนาดเล็กมาก
+                const testData = new Array(100).join('x');
+                
+                // ใช้ setTimeout แทนการประมวลผลจริงเพื่อความเร็ว
                 setTimeout(() => {
-                    const latency = performance.now() - start;
-                    // Simulate speed based on latency
-                    let speed;
-                    if (latency < 50) speed = 10 + Math.random() * 5; // 10-15 Mbps
-                    else if (latency < 150) speed = 5 + Math.random() * 5; // 5-10 Mbps
-                    else if (latency < 300) speed = 2 + Math.random() * 3; // 2-5 Mbps
-                    else speed = 0.5 + Math.random() * 1.5; // 0.5-2 Mbps
+                    const end = performance.now();
+                    const latency = end - start;
                     
-                    resolve({ speed: speed.toFixed(1), latency: latency.toFixed(0) });
+                    // ประมาณความเร็วจาก latency แบบเรียลไทม์
+                    let simulatedSpeed;
+                    if (latency < 30) {
+                        simulatedSpeed = 8 + Math.random() * 4; // 8-12 Mbps (เร็วมาก)
+                    } else if (latency < 80) {
+                        simulatedSpeed = 3 + Math.random() * 3; // 3-6 Mbps (ปานกลาง)
+                    } else if (latency < 200) {
+                        simulatedSpeed = 1 + Math.random() * 2; // 1-3 Mbps (ช้า)
+                    } else {
+                        simulatedSpeed = 0.5 + Math.random() * 0.5; // 0.5-1 Mbps (ช้ามาก)
+                    }
+                    
+                    resolve({
+                        speed: simulatedSpeed,
+                        latency: latency,
+                        timestamp: Date.now()
+                    });
+                }, 5);
+            });
+        }
+
+        // Determine network category based on speed
+        function getNetworkCategory(speedMbps) {
+            if (speedMbps >= NETWORK_SPEEDS.FAST.min) {
+                return NETWORK_SPEEDS.FAST;
+            } else if (speedMbps >= NETWORK_SPEEDS.MODERATE.min) {
+                return NETWORK_SPEEDS.MODERATE;
+            } else {
+                return NETWORK_SPEEDS.SLOW;
+            }
+        }
+
+        // Update loading progress with smooth animation
+        function updateLoadingProgress(percent, speedInfo = null) {
+            requestAnimationFrame(() => {
+                loadingProgressBar.style.width = percent + '%';
+                
+                if (speedInfo) {
+                    const category = getNetworkCategory(speedInfo.speed);
+                    loadingSpeedIndicator.innerHTML = `
+                        <i class="fas ${category.icon}" style="color: ${category.color}"></i>
+                        <span>${category.text} · ${speedInfo.speed.toFixed(1)} Mbps</span>
+                    `;
+                    networkSpeedElement.textContent = `${speedInfo.speed.toFixed(1)} Mbps`;
+                }
+                
+                // Update load time
+                const elapsed = (performance.now() - startTime) / 1000;
+                loadTimeElement.textContent = `${elapsed.toFixed(1)}s`;
+            });
+        }
+
+        // Show network status indicator
+        function showNetworkStatus(category, speed) {
+            networkStatus.className = `network-status ${category.class} show`;
+            networkStatus.innerHTML = `
+                <i class="fas ${category.icon}"></i>
+                <span>${category.text} · ${speed.toFixed(1)} Mbps</span>
+            `;
+            
+            // Auto-hide after delay
+            setTimeout(() => {
+                networkStatus.classList.remove('show');
+            }, 3000);
+        }
+
+        // Optimized resource loading with parallel execution
+        async function loadCriticalResources() {
+            const criticalResources = [
+                // Critical fonts
+                'https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap',
+                'https://fonts.googleapis.com/icon?family=Material+Icons+Round'
+            ];
+            
+            return Promise.allSettled(
+                criticalResources.map(url => {
+                    return new Promise((resolve) => {
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = url;
+                        link.onload = resolve;
+                        link.onerror = resolve;
+                        document.head.appendChild(link);
+                    });
+                })
+            );
+        }
+
+        // Fast loading sequence
+        async function fastLoadSequence() {
+            let progress = 0;
+            
+            // Step 1: Initial setup (5%)
+            updateLoadingProgress(5);
+            
+            // Step 2: Test network speed in parallel with critical resources (20%)
+            const networkPromise = testNetworkSpeed();
+            const resourcesPromise = loadCriticalResources();
+            
+            // Update progress while waiting
+            const progressInterval = setInterval(() => {
+                if (progress < 20) {
+                    progress += 1;
+                    updateLoadingProgress(progress);
+                }
+            }, 20);
+            
+            const [networkResult] = await Promise.all([networkPromise, resourcesPromise]);
+            clearInterval(progressInterval);
+            
+            progress = 25;
+            updateLoadingProgress(progress, networkResult);
+            
+            const networkCategory = getNetworkCategory(networkResult.speed);
+            
+            // Step 3: Show network status
+            showNetworkStatus(networkCategory, networkResult.speed);
+            
+            // Step 4: Simulate remaining loading based on network speed
+            const totalSteps = 75;
+            const stepTime = 20 * networkCategory.loadMultiplier;
+            
+            return new Promise((resolve) => {
+                let currentStep = 0;
+                
+                const simulateStep = () => {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        progress = 25 + (currentStep / totalSteps) * 75;
+                        updateLoadingProgress(progress);
+                        setTimeout(simulateStep, stepTime);
+                    } else {
+                        resolve();
+                    }
+                };
+                
+                simulateStep();
+            });
+        }
+
+        // Complete loading and show main content
+        function completeLoading() {
+            // Final progress update
+            updateLoadingProgress(100);
+            
+            // Fade out loading screen quickly
+            requestAnimationFrame(() => {
+                loadingScreen.classList.add('fade-out');
+                
+                // Show main content immediately after fade starts
+                setTimeout(() => {
+                    mainContent.classList.add('show');
+                    appBar.classList.add('show');
+                    
+                    // Remove loading screen completely
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 300);
                 }, 100);
             });
         }
 
-        // Update loading progress
-        function updateProgress(percent) {
-            loadProgress = percent;
-            loadingProgress.style.width = percent + '%';
-        }
-
-        // Show network status
-        function showNetworkStatus(speed) {
-            let status = 'slow', icon = 'fa-tachometer-alt', text = 'ช้า';
-            if (speed >= 10) { status = 'fast'; icon = 'fa-bolt'; text = 'เร็วมาก'; }
-            else if (speed >= 5) { status = 'moderate'; icon = 'fa-wifi'; text = 'ปานกลาง'; }
-            
-            networkStatus.className = `network-status ${status} show`;
-            networkStatus.innerHTML = `<i class="fas ${icon}"></i><span>ความเร็วเน็ต: ${speed} Mbps (${text})</span>`;
-            
-            setTimeout(() => networkStatus.classList.remove('show'), 3000);
-        }
-
-        // Load sequence
-        async function loadSequence() {
-            updateProgress(20);
-            loadingSpeed.textContent = 'กำลังวัดความเร็วเน็ต...';
-            
-            // Test network
-            const networkResult = await testNetworkSpeed();
-            updateProgress(40);
-            loadingSpeed.textContent = `ความเร็ว: ${networkResult.speed} Mbps • Latency: ${networkResult.latency}ms`;
-            showNetworkStatus(networkResult.speed);
-            
-            // Simulate loading
-            for (let i = 40; i <= 100; i += 20) {
-                await new Promise(resolve => setTimeout(resolve, 200));
-                updateProgress(i);
-            }
-            
-            // Complete
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                mainContent.style.display = 'block';
-            }, 300);
-        }
-
-        // ===== SECTION NAVIGATION =====
+        // ===== IMPROVED SECTION NAVIGATION SYSTEM =====
         const sections = {
             home: document.getElementById('homeSection'),
             teachers: document.getElementById('teachersSection'),
@@ -1294,15 +2343,62 @@
         const footerLinks = document.querySelectorAll('.footer-link');
         const btnLinks = document.querySelectorAll('[data-section]');
 
-        function switchSection(sectionId) {
-            Object.values(sections).forEach(section => section.classList.remove('active'));
-            if (sections[sectionId]) sections[sectionId].classList.add('active');
+        let currentSection = 'home';
+        let isAnimating = false;
+
+        // Function to switch to a specific section with improved animation
+        function switchSection(sectionId, animate = true) {
+            // ถ้ากดปุ่มเดิมซ้ำ ไม่ต้องทำอะไร
+            if (isAnimating || sectionId === currentSection) return;
             
+            isAnimating = true;
+            currentSection = sectionId;
+            
+            const currentActive = document.querySelector('.content-section.active');
+            const newSection = sections[sectionId] || sections.home;
+            
+            // ปิด modal ถ้ามีการเปิดอยู่
+            closeAllModals();
+            
+            if (currentActive) {
+                if (animate) {
+                    currentActive.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        currentActive.classList.remove('active');
+                        
+                        newSection.style.display = 'block';
+                        
+                        // ใช้ requestAnimationFrame เพื่อให้ animation smooth
+                        requestAnimationFrame(() => {
+                            newSection.classList.add('active');
+                            
+                            setTimeout(() => {
+                                isAnimating = false;
+                            }, 300);
+                        });
+                    }, 300);
+                } else {
+                    currentActive.classList.remove('active');
+                    newSection.style.display = 'block';
+                    newSection.classList.add('active');
+                    isAnimating = false;
+                }
+            } else {
+                newSection.style.display = 'block';
+                newSection.classList.add('active');
+                isAnimating = false;
+            }
+            
+            // Update active nav links
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.dataset.section === sectionId) link.classList.add('active');
+                if (link.dataset.section === sectionId) {
+                    link.classList.add('active');
+                }
             });
             
+            // ปิด mobile menu ถ้าเปิดอยู่
             if (window.innerWidth <= 768) {
                 const mainNav = document.querySelector('.nav-links');
                 if (mainNav.classList.contains('show')) {
@@ -1311,87 +2407,333 @@
                 }
             }
             
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // ไม่เลื่อนหน้าเมื่อกดปุ่มเดิมซ้ำ
+            // แต่เลื่อนไปที่ด้านบนของ section เมื่อเปลี่ยน section ใหม่
+            if (animate) {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         }
 
-        // Event listeners
-        navLinks.forEach(link => link.addEventListener('click', (e) => {
-            e.preventDefault(); switchSection(link.dataset.section);
-        }));
-        homeBtn.addEventListener('click', (e) => { e.preventDefault(); switchSection('home'); });
-        footerLinks.forEach(link => link.addEventListener('click', (e) => {
-            e.preventDefault(); switchSection(link.dataset.section);
-        }));
-        btnLinks.forEach(link => {
-            if (link.dataset.section) link.addEventListener('click', (e) => {
-                e.preventDefault(); switchSection(link.dataset.section);
+        // Function to close all modals
+        function closeAllModals() {
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.body.style.overflow = 'auto';
+        }
+
+        // Add click event to nav links with improved handling
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const sectionId = link.dataset.section;
+                switchSection(sectionId);
             });
         });
 
-        // Mobile menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mainNav = document.querySelector('.nav-links');
-        mobileMenuBtn.addEventListener('click', () => {
-            mainNav.classList.toggle('show');
-            mobileMenuBtn.querySelector('span').textContent = mainNav.classList.contains('show') ? 'close' : 'menu';
+        // Add click event to home logo
+        homeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            switchSection('home');
         });
 
+        // Add click event to footer links (เปลี่ยนเป็น button)
+        footerLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const sectionId = link.dataset.section;
+                switchSection(sectionId);
+            });
+        });
+
+        // Add click event to button links (เปลี่ยนเป็น button)
+        btnLinks.forEach(link => {
+            if (link.dataset.section) {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const sectionId = link.dataset.section;
+                    switchSection(sectionId);
+                });
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mainNav.classList.toggle('show');
+            const icon = mobileMenuBtn.querySelector('span');
+            if (mainNav.classList.contains('show')) {
+                icon.textContent = 'close';
+            } else {
+                icon.textContent = 'menu';
+            }
+        });
+
+        // ปิด mobile menu เมื่อคลิกที่อื่น
         document.addEventListener('click', (e) => {
-            if (mainNav.classList.contains('show') && !e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
+            if (mainNav.classList.contains('show') && 
+                !e.target.closest('.nav-links') && 
+                !e.target.closest('.mobile-menu-btn')) {
                 mainNav.classList.remove('show');
                 mobileMenuBtn.querySelector('span').textContent = 'menu';
             }
         });
-
-        // Form
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('ขอบคุณสำหรับข้อความ! เราจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้');
-            this.reset();
+            
+            const name = this.querySelector('input[type="text"]').value || 'ไม่ระบุชื่อ';
+            
+            alert(`ขอบคุณสำหรับข้อความ ${name}! เราได้รับข้อความของคุณแล้วและจะตอบกลับไปที่อีเมลของคุณในเร็วๆ นี้`);
+            
+            contactForm.reset();
         });
 
-        // ===== NAVIGATION MODAL =====
+        // ===== NETWORK MONITORING =====
+        window.addEventListener('online', () => {
+            showNetworkStatus(NETWORK_SPEEDS.FAST, 8);
+        });
+
+        window.addEventListener('offline', () => {
+            networkStatus.className = 'network-status slow show';
+            networkStatus.innerHTML = `
+                <i class="fas fa-wifi-slash"></i>
+                <span>ออฟไลน์</span>
+            `;
+        });
+
+        // ===== MINIMAL NAVIGATION SYSTEM =====
         const navigationModal = document.getElementById('navigationModal');
         const navRoomName = document.getElementById('navRoomName');
         const navRoomFloor = document.getElementById('navRoomFloor');
-        const navSteps = [document.getElementById('navStep1'), document.getElementById('navStep2'), document.getElementById('navStep3'), document.getElementById('navStep4')];
+        const navStep1 = document.getElementById('navStep1');
+        const navStep2 = document.getElementById('navStep2');
+        const navStep3 = document.getElementById('navStep3');
+        const navStep4 = document.getElementById('navStep4');
+        const navTips = document.getElementById('navTips');
         const closeNavModal = document.getElementById('closeNavModal');
-        const openCameraBtn = document.getElementById('openCameraBtn');
+        const shareRoomBtn = document.getElementById('shareRoomBtn');
 
+        // Navigation instructions data
         const navigationData = {
-            'polymer-department': { name: 'แผนกวิชาเทคโนโลยียางและพอลิเลมอร์', floor: 'ชั้นที่ 1', steps: ['จากทางเข้าหลักอาคาร เดินตรงไปทางโถงกลาง', 'เลี้ยวซ้ายที่ป้ายบอกทาง "แผนกยางและพอลิเมอร์"', 'เดินไปตามทางเดินจนสุดทาง', 'แผนกจะอยู่ทางด้านซ้ายมือ'] },
-            'drug-prevention-area': { name: 'ลานต้านภัยยาเสพติด', floor: 'ชั้นที่ 1', steps: ['จากทางเข้าหลักอาคาร เดินออกไปยังลานด้านนอก', 'เดินตรงไปทางสวนหย่อมด้านหน้า', 'ลานต้านภัยยาเสพติดจะอยู่บริเวณลานกิจกรรมกลางแจ้ง', 'มองหาป้ายกิจกรรมต้านภัยยาเสพติด'] },
-            'science-room': { name: 'ห้องเรียนวิทยาศาสตร์', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางซ้าย', 'เดินไปตามทางเดินประมาณ 20 เมตร', 'ห้องเรียนวิทยาศาสตร์จะอยู่ทางขวามือ', 'มองหาป้าย "ห้องวิทยาศาสตร์" สีน้ำเงิน'] },
-            'english-room': { name: 'ห้องเรียนภาษาอังกฤษ', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางขวา', 'เดินไปตามทางเดินประมาณ 15 เมตร', 'ห้องเรียนภาษาอังกฤษจะอยู่ทางซ้ายมือ', 'มองหาป้าย "English Room" สีแดง'] },
-            'to-be-numberone': { name: 'ห้องชมรม To Be Numberone', floor: 'ชั้นที่ 2', steps: ['จากลิฟต์หรือบันไดชั้น 2 เดินตรงไป', 'เลี้ยวขวาที่ทางแยกแรก', 'เดินไปอีกประมาณ 10 เมตร', 'ห้องชมรมจะอยู่ท้ายทางเดิน'] },
-            'polymer-production': { name: 'ห้องผลิตยางและพอลิเมอร์', floor: 'ชั้นที่ 2', steps: ['จากทางเดินหลักชั้น 2 เลี้ยวซ้ายที่ห้องชมรม', 'เดินไปตามทางเดินทางซ้ายมือ', 'ห้องผลิตจะอยู่ตรงกลางระหว่างห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ', 'มองหาป้าย "Production Room"'] },
-            '631': { name: 'ห้องเรียน 631', floor: 'ชั้นที่ 3', steps: ['จากลิฟต์ชั้น 3 เดินออกมาทางขวา', 'เดินตรงไปตามทางเดินหลัก', 'ห้อง 631 จะเป็นห้องแรกทางซ้ายมือ', 'มองหาเลข 631 ที่ประตู'] },
-            '632': { name: 'ห้องเรียน 632', floor: 'ชั้นที่ 3', steps: ['จากลิฟต์ชั้น 3 เดินออกมาทางซ้าย', 'เดินตรงไปประมาณ 10 เมตร', 'ห้อง 632 จะอยู่ถัดจากห้อง 631', 'มองหาเลข 632 ที่ประตู'] },
-            '633': { name: 'ห้องเรียน 633', floor: 'ชั้นที่ 3', steps: ['จากบันไดกลางชั้น 3 เดินออกมาทางซ้าย', 'เดินไปตามทางเดินด้านใน', 'ห้อง 633 จะอยู่ตรงกลางระหว่างห้อง 632 และ 634', 'มองหาเลข 633 ที่ประตูสีเขียว'] },
-            '634': { name: 'ห้องเรียน 634', floor: 'ชั้นที่ 3', steps: ['จากบันไดกลางชั้น 3 เดินออกมาทางขวา', 'เดินตรงไปประมาณ 15 เมตร', 'ห้อง 634 จะอยู่ทางขวามือก่อนถึงห้อง 635', 'มองหาเลข 634 ที่ประตู'] },
-            '635': { name: 'ห้องเรียน 635', floor: 'ชั้นที่ 3', steps: ['จากทางเดินหลักชั้น 3 เดินไปจนสุดทาง', 'เลี้ยวซ้ายที่ทางแยก', 'ห้อง 635 จะอยู่ท้ายทางเดิน', 'มองหาเลข 635 ที่ประตูสีน้ำเงิน'] },
-            'teacher-lounge': { name: 'ห้องพักครู', floor: 'ชั้นที่ 4', steps: ['จากลิฟต์ชั้น 4 เดินออกมาทางขวา', 'เดินตรงไปตามทางเดินประมาณ 5 เมตร', 'ห้องพักครูจะอยู่ทางซ้ายมือ', 'มองหาป้าย "ครูผู้สอน"'] },
-            'lecture-room': { name: 'ห้อง Lecture', floor: 'ชั้นที่ 4', steps: ['จากบันไดกลางชั้น 4 เดินออกมาทางซ้าย', 'เดินตรงไปยังส่วนหน้าของอาคาร', 'ห้อง Lecture จะอยู่ตรงกลางชั้น 4', 'มองหาป้าย "Lecture Hall" ขนาดใหญ่'] },
-            'lab-1': { name: 'ห้อง Lab 1', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกซ้าย', 'ห้อง Lab 1 จะอยู่เป็นห้องแรกในโซนปฏิบัติการ', 'มองหาป้าย "Lab 1 - Computer Laboratory"'] },
-            'lab-2': { name: 'ห้อง Lab 2', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกขวา', 'ห้อง Lab 2 จะอยู่ถัดจากห้อง Lecture', 'มองหาป้าย "Lab 2 - Network Laboratory"'] },
-            'lab-3': { name: 'ห้อง Lab 3', floor: 'ชั้นที่ 4', steps: ['จากทางเดินหลักชั้น 4 เดินไปทางปีกหลัง', 'ห้อง Lab 3 จะอยู่ท้ายสุดของทางเดิน', 'มองหาป้าย "Lab 3 - Multimedia Laboratory"'] }
+            'polymer-department': {
+                name: 'แผนกวิชาเทคโนโลยียางและพอลิเลมอร์',
+                floor: 'ชั้นที่ 1',
+                steps: [
+                    'จากทางเข้าหลักอาคาร เดินตรงไปทางโถงกลาง',
+                    'เลี้ยวซ้ายที่ป้ายบอกทาง "แผนกยางและพอลิเมอร์"',
+                    'เดินไปตามทางเดินจนสุดทาง',
+                    'แผนกจะอยู่ทางด้านซ้ายมือ'
+                ],
+                tips: 'แผนกนี้อยู่ติดกับลานกิจกรรมกลางแจ้ง'
+            },
+            'drug-prevention-area': {
+                name: 'ลานต้านภัยยาเสพติด',
+                floor: 'ชั้นที่ 1',
+                steps: [
+                    'จากทางเข้าหลักอาคาร เดินออกไปยังลานด้านนอก',
+                    'เดินตรงไปทางสวนหย่อมด้านหน้า',
+                    'ลานต้านภัยยาเสพติดจะอยู่บริเวณลานกิจกรรมกลางแจ้ง',
+                    'มองหาป้ายกิจกรรมต้านภัยยาเสพติด'
+                ],
+                tips: 'ลานนี้จัดกิจกรรมต้านภัยยาเสพติดทุกวันพุธ'
+            },
+            'science-room': {
+                name: 'ห้องเรียนวิทยาศาสตร์',
+                floor: 'ชั้นที่ 2',
+                steps: [
+                    'จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางซ้าย',
+                    'เดินไปตามทางเดินประมาณ 20 เมตร',
+                    'ห้องเรียนวิทยาศาสตร์จะอยู่ทางขวามือ',
+                    'มองหาป้าย "ห้องวิทยาศาสตร์" สีน้ำเงิน'
+                ],
+                tips: 'ห้องนี้มีอุปกรณ์ทดลองวิทยาศาสตร์ครบครัน'
+            },
+            'english-room': {
+                name: 'ห้องเรียนภาษาอังกฤษ',
+                floor: 'ชั้นที่ 2',
+                steps: [
+                    'จากลิฟต์หรือบันไดชั้น 2 เดินออกมาทางขวา',
+                    'เดินไปตามทางเดินประมาณ 15 เมตร',
+                    'ห้องเรียนภาษาอังกฤษจะอยู่ทางซ้ายมือ',
+                    'มองหาป้าย "English Room" สีแดง'
+                ],
+                tips: 'ห้องนี้มีอุปกรณ์มัลติมีเดียสำหรับเรียนภาษา'
+            },
+            'to-be-numberone': {
+                name: 'ห้องชมรม To Be Numberone',
+                floor: 'ชั้นที่ 2',
+                steps: [
+                    'จากลิฟต์หรือบันไดชั้น 2 เดินตรงไป',
+                    'เลี้ยวขวาที่ทางแยกแรก',
+                    'เดินไปอีกประมาณ 10 เมตร',
+                    'ห้องชมรมจะอยู่ท้ายทางเดิน'
+                ],
+                tips: 'ชมรมนี้จัดกิจกรรมทุกวันศุกร์บ่าย'
+            },
+            'polymer-production': {
+                name: 'ห้องผลิตยางและพอลิเมอร์',
+                floor: 'ชั้นที่ 2',
+                steps: [
+                    'จากทางเดินหลักชั้น 2 เลี้ยวซ้ายที่ห้องชมรม',
+                    'เดินไปตามทางเดินทางซ้ายมือ',
+                    'ห้องผลิตจะอยู่ตรงกลางระหว่างห้องเรียนวิทยาศาสตร์และภาษาอังกฤษ',
+                    'มองหาป้าย "Production Room"'
+                ],
+                tips: 'ห้องนี้มีอุปกรณ์ผลิตยางสำหรับนักศึกษา'
+            },
+            '631': {
+                name: 'ห้องเรียน 631',
+                floor: 'ชั้นที่ 3',
+                steps: [
+                    'จากลิฟต์ชั้น 3 เดินออกมาทางขวา',
+                    'เดินตรงไปตามทางเดินหลัก',
+                    'ห้อง 631 จะเป็นห้องแรกทางซ้ายมือ',
+                    'มองหาเลข 631 ที่ประตู'
+                ],
+                tips: 'ห้องนี้ใช้สำหรับเรียนวิชาโปรแกรมมิ่งพื้นฐาน'
+            },
+            '632': {
+                name: 'ห้องเรียน 632',
+                floor: 'ชั้นที่ 3',
+                steps: [
+                    'จากลิฟต์ชั้น 3 เดินออกมาทางซ้าย',
+                    'เดินตรงไปประมาณ 10 เมตร',
+                    'ห้อง 632 จะอยู่ถัดจากห้อง 631',
+                    'มองหาเลข 632 ที่ประตู'
+                ],
+                tips: 'ห้องนี้มีคอมพิวเตอร์สำหรับเรียนปฏิบัติการ'
+            },
+            '633': {
+                name: 'ห้องเรียน 633',
+                floor: 'ชั้นที่ 3',
+                steps: [
+                    'จากบันไดกลางชั้น 3 เดินออกมาทางซ้าย',
+                    'เดินไปตามทางเดินด้านใน',
+                    'ห้อง 633 จะอยู่ตรงกลางระหว่างห้อง 632 และ 634',
+                    'มองหาเลข 633 ที่ประตูสีเขียว'
+                ],
+                tips: 'ห้องนี้ใช้สำหรับเรียนเครือข่ายคอมพิวเตอร์'
+            },
+            '634': {
+                name: 'ห้องเรียน 634',
+                floor: 'ชั้นที่ 3',
+                steps: [
+                    'จากบันไดกลางชั้น 3 เดินออกมาทางขวา',
+                    'เดินตรงไปประมาณ 15 เมตร',
+                    'ห้อง 634 จะอยู่ทางขวามือก่อนถึงห้อง 635',
+                    'มองหาเลข 634 ที่ประตู'
+                ],
+                tips: 'ห้องนี้มีโปรเจคเตอร์สำหรับเรียนกลุ่มใหญ่'
+            },
+            '635': {
+                name: 'ห้องเรียน 635',
+                floor: 'ชั้นที่ 3',
+                steps: [
+                    'จากทางเดินหลักชั้น 3 เดินไปจนสุดทาง',
+                    'เลี้ยวซ้ายที่ทางแยก',
+                    'ห้อง 635 จะอยู่ท้ายทางเดิน',
+                    'มองหาเลข 635 ที่ประตูสีน้ำเงิน'
+                ],
+                tips: 'ห้องนี้เป็นห้องเรียนกลุ่มใหญ่สำหรับวิชาพิเศษ'
+            },
+            'teacher-lounge': {
+                name: 'ห้องพักครู',
+                floor: 'ชั้นที่ 4',
+                steps: [
+                    'จากลิฟต์ชั้น 4 เดินออกมาทางขวา',
+                    'เดินตรงไปตามทางเดินประมาณ 5 เมตร',
+                    'ห้องพักครูจะอยู่ทางซ้ายมือ',
+                    'มองหาป้าย "ครูผู้สอน"'
+                ],
+                tips: 'ห้องนี้มีพื้นที่นั่งเล่นและห้องครัวเล็ก'
+            },
+            'lecture-room': {
+                name: 'ห้อง Lecture',
+                floor: 'ชั้นที่ 4',
+                steps: [
+                    'จากบันไดกลางชั้น 4 เดินออกมาทางซ้าย',
+                    'เดินตรงไปยังส่วนหน้าของอาคาร',
+                    'ห้อง Lecture จะอยู่ตรงกลางชั้น 4',
+                    'มองหาป้าย "Lecture Hall" ขนาดใหญ่'
+                ],
+                tips: 'ห้องนี้จุได้ 80 คน มีระบบเสียงครบครัน'
+            },
+            'lab-1': {
+                name: 'ห้อง Lab 1',
+                floor: 'ชั้นที่ 4',
+                steps: [
+                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกซ้าย',
+                    'ห้อง Lab 1 จะอยู่เป็นห้องแรกในโซนปฏิบัติการ',
+                    'มองหาป้าย "Lab 1 - Computer Laboratory"'
+                ],
+                tips: 'ห้องนี้มีคอมพิวเตอร์ 40 เครื่องสำหรับเรียนปฏิบัติการ'
+            },
+            'lab-2': {
+                name: 'ห้อง Lab 2',
+                floor: 'ชั้นที่ 4',
+                steps: [
+                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกขวา',
+                    'ห้อง Lab 2 จะอยู่ถัดจากห้อง Lecture',
+                    'มองหาป้าย "Lab 2 - Network Laboratory"'
+                ],
+                tips: 'ห้องนี้มีอุปกรณ์เครือข่ายสำหรับเรียน CCNA'
+            },
+            'lab-3': {
+                name: 'ห้อง Lab 3',
+                floor: 'ชั้นที่ 4',
+                steps: [
+                    'จากทางเดินหลักชั้น 4 เดินไปทางปีกหลัง',
+                    'ห้อง Lab 3 จะอยู่ท้ายสุดของทางเดิน',
+                    'มองหาป้าย "Lab 3 - Multimedia Laboratory"'
+                ],
+                tips: 'ห้องนี้มีอุปกรณ์ตัดต่อวิดีโอและกราฟิก'
+            }
         };
 
         // Open navigation modal
         function openNavigationModal(roomId) {
-            const roomData = navigationData[roomId] || { name: 'ห้อง', floor: 'ชั้นที่', steps: ['ข้อมูลกำลังอัปเดต...', '', '', ''] };
+            const roomData = navigationData[roomId] || {
+                name: 'ห้อง',
+                floor: 'ชั้นที่',
+                steps: ['ข้อมูลกำลังอัปเดต...', '', '', ''],
+                tips: 'กรุณาติดต่อเจ้าหน้าที่สำหรับข้อมูลเพิ่มเติม'
+            };
+            
             navRoomName.textContent = roomData.name;
             navRoomFloor.textContent = roomData.floor;
-            navSteps.forEach((step, i) => step.textContent = roomData.steps[i] || '');
+            navStep1.textContent = roomData.steps[0];
+            navStep2.textContent = roomData.steps[1];
+            navStep3.textContent = roomData.steps[2];
+            navStep4.textContent = roomData.steps[3];
+            navTips.textContent = roomData.tips;
+            
             navigationModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // Store current room for sharing
+            navigationModal.dataset.currentRoom = roomId;
         }
 
         // Add event listeners to view route buttons
         document.querySelectorAll('.btn-view-route').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
-                openNavigationModal(this.dataset.room);
+                const roomId = this.dataset.room;
+                const floor = this.dataset.floor;
+                openNavigationModal(roomId);
             });
         });
 
@@ -1401,45 +2743,405 @@
             document.body.style.overflow = 'auto';
         });
 
-        // Open camera
-        openCameraBtn.addEventListener('click', () => {
-            if (navigator.mediaDevices?.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(() => alert('กล้องเปิดใช้งานสำเร็จ! ระบบนำทาง AR พร้อมใช้งาน'))
-                    .catch(err => alert('ไม่สามารถเปิดกล้องได้: ' + err.message));
+        // Share room navigation
+        shareRoomBtn.addEventListener('click', () => {
+            const roomId = navigationModal.dataset.currentRoom;
+            if (roomId && navigationData[roomId]) {
+                const roomData = navigationData[roomId];
+                const shareText = `ห้อง: ${roomData.name} (${roomData.floor})\n\nเส้นทาง:\n1. ${roomData.steps[0]}\n2. ${roomData.steps[1]}\n3. ${roomData.steps[2]}\n4. ${roomData.steps[3]}\n\nเคล็ดลับ: ${roomData.tips}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: `เส้นทางไปยัง ${roomData.name}`,
+                        text: shareText,
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        alert('คัดลอกข้อมูลเส้นทางเรียบร้อยแล้ว!');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        // Fallback
+                        const textArea = document.createElement('textarea');
+                        textArea.value = shareText;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        alert('คัดลอกข้อมูลเส้นทางเรียบร้อยแล้ว!');
+                    });
+                }
+            }
+        });
+
+        // ===== IMPROVED ACTIVITIES MODAL =====
+        const activitiesBtn = document.getElementById('activitiesBtn');
+        const activitiesModal = document.getElementById('activitiesModal');
+        const closeActivitiesModal = document.getElementById('closeActivitiesModal');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const activitiesList = document.getElementById('activitiesList');
+
+        const activitiesData = [
+            {
+                id: 1,
+                title: "ค่ายพัฒนาโปรแกรมขั้นสูง",
+                description: "ค่ายพัฒนาโปรแกรมสำหรับนักศึกษาชั้นปีที่ 3-4 เพื่อเรียนรู้เทคโนโลยีใหม่ๆ และพัฒนาทักษะการเขียนโปรแกรม",
+                date: "2025-03-15",
+                time: "09:00 - 16:00",
+                location: "ห้อง Lab 1 ชั้น 4",
+                type: "upcoming",
+                category: "การเรียนการสอน"
+            },
+            {
+                id: 2,
+                title: "แข่งขันโปรแกรมมิ่ง IT Contest 2025",
+                description: "การแข่งขันเขียนโปรแกรมระดับแผนก โดยมีรางวัลสำหรับทีมที่ชนะเลิศ",
+                date: "2025-03-22",
+                time: "13:00 - 17:00",
+                location: "ห้องเรียน 633 ชั้น 3",
+                type: "upcoming",
+                category: "การแข่งขัน"
+            },
+            {
+                id: 3,
+                title: "สัมมนาเทคโนโลยีคลาวด์",
+                description: "สัมมนาเกี่ยวกับการประยุกต์ใช้เทคโนโลยีคลาวด์ในองค์กร",
+                date: "2025-02-28",
+                time: "10:00 - 12:00",
+                location: "ห้องประชุมใหญ่",
+                type: "completed",
+                category: "สัมมนา"
+            },
+            {
+                id: 4,
+                title: "อบรมการเขียนเว็บด้วย React",
+                description: "การอบรมการเขียนเว็บแอปพลิเคชันด้วย React Framework",
+                date: "2025-03-10",
+                time: "13:00 - 16:00",
+                location: "ห้องคอมพิวเตอร์ 2",
+                type: "ongoing",
+                category: "การอบรม"
+            }
+        ];
+
+        // Load activities
+        function loadActivities(filter = 'all') {
+            activitiesList.innerHTML = '';
+            
+            let filteredActivities = activitiesData;
+            if (filter !== 'all') {
+                filteredActivities = activitiesData.filter(activity => activity.type === filter);
+            }
+            
+            filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            if (filteredActivities.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'activity-card';
+                emptyMessage.innerHTML = `
+                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--on-background);">
+                        <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: var(--spacing-md); opacity: 0.5;"></i>
+                        <h4>ไม่มีกิจกรรมในหมวดนี้</h4>
+                        <p>กรุณาเลือกหมวดอื่นหรือตรวจสอบอีกครั้งในภายหลัง</p>
+                    </div>
+                `;
+                activitiesList.appendChild(emptyMessage);
             } else {
-                alert('เบราว์เซอร์ของคุณไม่รองรับการเข้าถึงกล้อง');
+                filteredActivities.forEach(activity => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-card';
+                    activityItem.innerHTML = `
+                        <div class="activity-header">
+                            <div>
+                                <h4 class="activity-title">${activity.title}</h4>
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: 0.875rem; color: var(--on-background);">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${formatDate(activity.date)} | ${activity.time}</span>
+                                </div>
+                            </div>
+                            <span class="activity-badge badge-${activity.type}">
+                                ${getTypeText(activity.type)}
+                            </span>
+                        </div>
+                        <p style="margin: var(--spacing-sm) 0; color: var(--on-background);">${activity.description}</p>
+                        <div style="display: flex; gap: var(--spacing-lg); flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${activity.location}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                                <i class="fas fa-tag"></i>
+                                <span>${activity.category}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    activitiesList.appendChild(activityItem);
+                });
             }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Get type text
+        function getTypeText(type) {
+            const types = {
+                'upcoming': 'กำลังจะมาถึง',
+                'ongoing': 'กำลังจัด',
+                'completed': 'จบแล้ว'
+            };
+            return types[type] || type;
+        }
+
+        // Open activities modal
+        activitiesBtn.addEventListener('click', () => {
+            activitiesModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            loadActivities('all');
         });
 
-        // Close modal on backdrop click
-        navigationModal.addEventListener('click', (e) => {
-            if (e.target === navigationModal) {
-                navigationModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
+        // Close activities modal
+        closeActivitiesModal.addEventListener('click', () => {
+            activitiesModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
         });
 
-        // Close modal with Escape key
+        // Filter activities
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                loadActivities(filter);
+            });
+        });
+
+        // ===== IMPROVED SHARE MODAL =====
+        const shareBtn = document.getElementById('shareBtn');
+        const shareModal = document.getElementById('shareModal');
+        const closeShareModal = document.getElementById('closeShareModal');
+        const shareRooms = document.getElementById('shareRooms');
+        const shareOptions = document.querySelectorAll('.share-btn');
+        const shareResult = document.getElementById('shareResult');
+        const shareLinkInput = document.getElementById('shareLinkInput');
+        const shareLinkCopyBtn = document.getElementById('shareLinkCopyBtn');
+
+        let selectedRoom = null;
+
+        // Room selection
+        shareRooms.querySelectorAll('.room').forEach(room => {
+            room.addEventListener('click', () => {
+                shareRooms.querySelectorAll('.room').forEach(r => {
+                    r.style.backgroundColor = '';
+                    r.style.color = '';
+                    r.style.borderColor = '';
+                });
+                
+                room.style.backgroundColor = 'var(--primary)';
+                room.style.color = 'var(--on-primary)';
+                room.style.borderColor = 'var(--primary)';
+                
+                selectedRoom = {
+                    id: room.dataset.room,
+                    name: room.dataset.name
+                };
+                
+                shareResult.style.display = 'none';
+            });
+        });
+
+        // Share options
+        shareOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (!selectedRoom) {
+                    alert('กรุณาเลือกห้องก่อน');
+                    return;
+                }
+                
+                const shareType = option.dataset.shareType;
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareUrl = `${baseUrl}?room=${selectedRoom.id}&name=${encodeURIComponent(selectedRoom.name)}`;
+                
+                if (shareType === 'link') {
+                    shareLinkInput.value = shareUrl;
+                    shareResult.style.display = 'block';
+                    
+                    // Auto-scroll to result
+                    setTimeout(() => {
+                        shareResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                } else if (shareType === 'copy') {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        // Fallback for older browsers
+                        shareLinkInput.value = shareUrl;
+                        shareLinkInput.select();
+                        document.execCommand('copy');
+                        alert('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว');
+                    });
+                } else if (shareType === 'qr') {
+                    // ในที่นี้เราจะแสดงเป็น alert แทนการสร้าง QR Code จริง
+                    alert(`สร้าง QR Code สำหรับห้อง: ${selectedRoom.name}\n\nลิงก์: ${shareUrl}\n\n(ในเวอร์ชันจริงจะสร้าง QR Code จริงๆ)`);
+                }
+            });
+        });
+
+        // Copy link button
+        shareLinkCopyBtn.addEventListener('click', () => {
+            shareLinkInput.select();
+            document.execCommand('copy');
+            alert('คัดลอกลิงก์เรียบร้อยแล้ว');
+        });
+
+        // Open share modal
+        shareBtn.addEventListener('click', () => {
+            shareModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Reset selection
+            shareRooms.querySelectorAll('.room').forEach(r => {
+                r.style.backgroundColor = '';
+                r.style.color = '';
+                r.style.borderColor = '';
+            });
+            selectedRoom = null;
+            shareResult.style.display = 'none';
+        });
+
+        // Close share modal
+        closeShareModal.addEventListener('click', () => {
+            shareModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // Close modals with Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navigationModal.classList.contains('active')) {
-                navigationModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
+            if (e.key === 'Escape') {
+                closeAllModals();
             }
         });
 
-        // ===== INITIALIZE =====
+        // Initialize activities
+        loadActivities('all');
+
+        // ===== START LOADING PROCESS =====
         document.addEventListener('DOMContentLoaded', () => {
-            loadSequence();
+            // Start optimized loading immediately
+            startOptimizedLoading();
+            
+            // Fallback timeout - force completion after max 2.5 seconds
+            setTimeout(() => {
+                if (loadingScreen.style.display !== 'none') {
+                    console.log('Forcing completion due to timeout');
+                    completeLoading();
+                }
+            }, 2500);
             
             // Check for room parameter in URL
             const urlParams = new URLSearchParams(window.location.search);
             const roomParam = urlParams.get('room');
             if (roomParam && navigationData[roomParam]) {
+                // Switch to floor section and open navigation
                 setTimeout(() => {
-                    switchSection('floor');
-                    setTimeout(() => openNavigationModal(roomParam), 100);
-                }, 500);
+                    switchSection('floor', false);
+                    setTimeout(() => {
+                        openNavigationModal(roomParam);
+                    }, 500);
+                }, 1000);
+            }
+        });
+
+        // ===== OPTIMIZED LOADING FUNCTION =====
+        async function startOptimizedLoading() {
+            try {
+                await fastLoadSequence();
+                completeLoading();
+            } catch (error) {
+                console.error('Loading error:', error);
+                completeLoading();
+            }
+        }
+
+        // ===== ADDITIONAL IMPROVEMENTS =====
+        
+        // เพิ่ม ripple effect สำหรับปุ่ม
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn') || e.target.closest('.btn')) {
+                const btn = e.target.classList.contains('btn') ? e.target : e.target.closest('.btn');
+                btn.focus();
+            }
+        });
+
+        // ป้องกันการสครอลล์เมื่อ modal เปิดอยู่
+        document.addEventListener('wheel', function(e) {
+            if (document.querySelector('.modal.active')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // เพิ่ม touch event สำหรับ mobile
+        document.addEventListener('touchstart', function(e) {
+            // Handle touch events for buttons
+            if (e.target.classList.contains('btn') || e.target.closest('.btn')) {
+                const btn = e.target.classList.contains('btn') ? e.target : e.target.closest('.btn');
+                btn.style.transform = 'scale(0.98)';
+                
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 150);
+            }
+        });
+
+        // ตรวจสอบและแก้ไขภาพที่โหลดไม่สำเร็จ
+        document.addEventListener('error', function(e) {
+            if (e.target.tagName === 'IMG') {
+                console.log('ภาพโหลดไม่สำเร็จ:', e.target.src);
+                // คุณสามารถเพิ่มการจัดการภาพที่โหลดไม่สำเร็จได้ที่นี่
+            }
+        }, true);
+
+        // Add keyboard navigation for accessibility
+        document.addEventListener('keydown', function(e) {
+            // Tab navigation for modals
+            if (document.querySelector('.modal.active')) {
+                const modal = document.querySelector('.modal.active .modal-content');
+                const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+                
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstFocusable) {
+                            e.preventDefault();
+                            lastFocusable.focus();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusable) {
+                            e.preventDefault();
+                            firstFocusable.focus();
+                        }
+                    }
+                }
             }
         });
     </script>
