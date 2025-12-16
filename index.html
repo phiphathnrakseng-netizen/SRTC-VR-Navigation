@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Navigation System - วิทยาลัยเทคนิคสุราษฎร์ธานี</title>
+    <title>AR Navigation - วิทยาลัยเทคนิคสุราษฎร์ธานี</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
-            --primary-blue: #0d47a1;
-            --primary-dark-blue: #002171;
-            --primary-light-blue: #5472d3;
-            --accent-blue: #2962ff;
-            --white: #ffffff;
-            --light-gray: #f5f5f5;
-            --medium-gray: #e0e0e0;
+            --primary-blue: #1565C0;
+            --primary-dark-blue: #0D47A1;
+            --primary-light-blue: #42A5F5;
+            --accent-blue: #2979FF;
+            --accent-teal: #00BFA5;
+            --white: #FFFFFF;
+            --light-gray: #FAFAFA;
+            --medium-gray: #EEEEEE;
             --dark-gray: #757575;
-            --text-dark: #212121;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-radius: 12px;
+            --text-dark: #263238;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-heavy: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 24px;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
         }
         
         * {
@@ -30,26 +40,30 @@
         }
         
         body {
-            background-color: var(--light-gray);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             color: var(--text-dark);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
         
-        /* Header Styles */
+        /* Header Styles - Redesigned */
         header {
             background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-medium);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-color: rgba(13, 71, 161, 0.95);
         }
         
         .header-content {
@@ -61,95 +75,147 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
+            transition: transform var(--transition-normal);
+        }
+        
+        .logo:hover {
+            transform: translateY(-2px);
         }
         
         .college-logo {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            border-radius: 8px;
-            background-color: white;
+            border-radius: var(--border-radius-md);
+            background-color: var(--white);
+            box-shadow: var(--shadow-light);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
         .logo-text h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
         }
         
         .logo-text p {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0.9;
-            color: #e3f2fd;
+            color: #E3F2FD;
+            font-weight: 300;
         }
         
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px;
+            border-radius: var(--border-radius-xl);
+            backdrop-filter: blur(10px);
         }
         
         .nav-link {
             color: var(--white);
             text-decoration: none;
             font-weight: 400;
-            font-size: 1.1rem;
-            padding: 8px 16px;
-            border-radius: var(--border-radius);
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-xl);
+            transition: all var(--transition-normal);
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .nav-link:hover::before, .nav-link.active::before {
+            opacity: 1;
         }
         
         .nav-link:hover, .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .nav-link i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
         .user-profile {
             display: flex;
             align-items: center;
             gap: 12px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             padding: 8px 16px;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-xl);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
         }
         
         .avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: var(--white);
+            background: linear-gradient(135deg, var(--primary-light-blue) 0%, var(--accent-teal) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-blue);
+            color: var(--white);
             font-weight: 600;
+            box-shadow: var(--shadow-light);
         }
         
-        /* Main Content */
+        /* Main Content - Redesigned */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 2rem;
-            padding: 2rem 0;
+            grid-template-columns: 1fr 380px;
+            gap: 28px;
+            padding: 28px 0;
+            animation: fadeIn 0.8s ease;
         }
         
-        /* Map Section */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Map Section - Redesigned */
         .map-section {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
             overflow: hidden;
-            height: 600px;
+            height: 680px;
             position: relative;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+        
+        .map-section:hover {
+            box-shadow: var(--shadow-heavy);
         }
         
         .map-header {
@@ -158,160 +224,248 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: linear-gradient(to right, rgba(21, 101, 192, 0.03) 0%, rgba(66, 165, 245, 0.03) 100%);
         }
         
         .map-title h2 {
             font-size: 1.5rem;
             font-weight: 500;
             color: var(--primary-dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-title h2 i {
+            color: var(--accent-blue);
         }
         
         .map-title p {
             color: var(--dark-gray);
             font-size: 0.95rem;
+            margin-top: 6px;
         }
         
         .map-controls {
             display: flex;
-            gap: 1rem;
+            gap: 12px;
         }
         
         .map-btn {
             padding: 10px 20px;
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-light-blue) 100%);
             color: var(--white);
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-md);
             font-weight: 400;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .map-btn:hover {
-            background-color: var(--primary-dark-blue);
-            transform: translateY(-2px);
-        }
-        
-        .map-container {
-            height: calc(100% - 80px);
-            position: relative;
-            background: linear-gradient(145deg, #e6f2ff 0%, #f0f7ff 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .building-map {
-            width: 80%;
-            height: 80%;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-light);
             position: relative;
             overflow: hidden;
         }
         
+        .map-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .map-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .map-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .map-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .map-container {
+            height: calc(100% - 85px);
+            position: relative;
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F9FF 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .building-map {
+            width: 85%;
+            height: 85%;
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+            transition: transform var(--transition-slow);
+            transform-origin: center;
+        }
+        
         .floor-selector {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            padding: 10px;
+            top: 24px;
+            right: 24px;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             z-index: 10;
+            animation: slideInRight 0.5s ease;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         
         .floor-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background-color: var(--light-gray);
-            border: none;
+            background: var(--light-gray);
+            border: 2px solid transparent;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .floor-btn:hover {
+            background: var(--primary-light-blue);
+            color: var(--white);
+            transform: scale(1.1);
         }
         
         .floor-btn.active {
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
             color: var(--white);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
         }
         
         .ar-overlay {
             position: absolute;
-            bottom: 20px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(13, 71, 161, 0.9);
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.95) 0%, rgba(41, 121, 255, 0.95) 100%);
             color: var(--white);
             padding: 1.5rem;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-lg);
             display: flex;
             align-items: center;
-            gap: 1rem;
-            box-shadow: var(--shadow);
+            gap: 1.5rem;
+            box-shadow: var(--shadow-heavy);
             z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 0.6s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
         
         .ar-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .ar-text h3 {
             font-size: 1.3rem;
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
         
         .ar-text p {
             font-size: 0.9rem;
             opacity: 0.9;
+            max-width: 300px;
         }
         
         .ar-btn {
-            padding: 10px 24px;
-            background-color: var(--white);
+            padding: 12px 28px;
+            background: var(--white);
             color: var(--primary-blue);
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-md);
             font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 10px;
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-light);
+            white-space: nowrap;
         }
         
         .ar-btn:hover {
-            background-color: var(--light-gray);
-            transform: translateY(-2px);
+            background: var(--light-gray);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
         }
         
-        /* Sidebar */
+        /* Sidebar - Redesigned */
         .sidebar {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 24px;
         }
         
         .sidebar-card {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
             overflow: hidden;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            animation: fadeIn 0.8s ease;
+            animation-fill-mode: both;
         }
+        
+        .sidebar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .sidebar-card:nth-child(1) { animation-delay: 0.1s; }
+        .sidebar-card:nth-child(2) { animation-delay: 0.2s; }
         
         .card-header {
             padding: 1.5rem;
-            background-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-light-blue) 100%);
             color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
         }
         
         .card-header h3 {
@@ -319,7 +473,9 @@
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
         }
         
         .card-content {
@@ -329,53 +485,121 @@
         .search-box {
             display: flex;
             margin-bottom: 1.5rem;
+            position: relative;
         }
         
         .search-input {
             flex: 1;
-            padding: 12px 16px;
-            border: 1px solid var(--medium-gray);
-            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            padding: 14px 20px;
+            border: 2px solid var(--medium-gray);
+            border-radius: var(--border-radius-md);
             font-size: 1rem;
+            transition: all var(--transition-normal);
+            background: var(--light-gray);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-light-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.2);
         }
         
         .search-btn {
-            padding: 0 20px;
-            background-color: var(--primary-blue);
+            padding: 0 24px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-light-blue) 100%);
             color: var(--white);
             border: none;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
             cursor: pointer;
+            transition: all var(--transition-normal);
+            position: absolute;
+            right: 0;
+            height: 100%;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-blue) 100%);
         }
         
         .location-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        
+        .location-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .location-list::-webkit-scrollbar-track {
+            background: var(--light-gray);
+            border-radius: 10px;
+        }
+        
+        .location-list::-webkit-scrollbar-thumb {
+            background: var(--primary-light-blue);
+            border-radius: 10px;
         }
         
         .location-item {
             padding: 1rem;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--medium-gray);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .location-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-blue);
+            transform: scaleY(0);
+            transition: transform var(--transition-normal);
+            transform-origin: top;
         }
         
         .location-item:hover {
-            border-color: var(--primary-blue);
-            background-color: rgba(13, 71, 161, 0.05);
+            border-color: var(--primary-light-blue);
+            background: rgba(66, 165, 245, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .location-item:hover::before {
+            transform: scaleY(1);
         }
         
         .location-item.active {
             border-color: var(--primary-blue);
-            background-color: rgba(13, 71, 161, 0.1);
+            background: rgba(21, 101, 192, 0.08);
+            transform: translateX(5px);
+        }
+        
+        .location-item.active::before {
+            transform: scaleY(1);
         }
         
         .location-name {
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: var(--primary-dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .location-name i {
+            font-size: 0.9rem;
+            color: var(--primary-light-blue);
         }
         
         .location-details {
@@ -385,18 +609,30 @@
             font-size: 0.9rem;
         }
         
+        .location-details span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
         .navigation-steps {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.2rem;
         }
         
         .step {
             display: flex;
             gap: 1rem;
-            padding-bottom: 1rem;
+            padding-bottom: 1.2rem;
             border-bottom: 1px solid var(--medium-gray);
+            animation: fadeIn 0.5s ease;
+            animation-fill-mode: both;
         }
+        
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
         
         .step:last-child {
             border-bottom: none;
@@ -404,69 +640,127 @@
         }
         
         .step-icon {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background-color: rgba(13, 71, 161, 0.1);
+            background: rgba(21, 101, 192, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary-blue);
             flex-shrink: 0;
+            font-size: 1.2rem;
+            transition: all var(--transition-normal);
+        }
+        
+        .step:hover .step-icon {
+            background: rgba(21, 101, 192, 0.2);
+            transform: scale(1.1);
         }
         
         .step-text h4 {
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            color: var(--primary-dark-blue);
         }
         
         .step-text p {
             font-size: 0.9rem;
             color: var(--dark-gray);
+            line-height: 1.5;
         }
         
         .quick-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+            margin-top: 1.5rem;
         }
         
         .action-btn {
             padding: 1rem;
-            background-color: var(--light-gray);
+            background: var(--light-gray);
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-md);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.1) 0%, rgba(66, 165, 245, 0.1) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .action-btn:hover::before {
+            opacity: 1;
         }
         
         .action-btn:hover {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
         }
         
         .action-btn i {
             font-size: 1.8rem;
+            color: var(--primary-blue);
+            transition: all var(--transition-normal);
         }
         
-        /* Footer */
+        .action-btn:hover i {
+            transform: scale(1.2);
+            color: var(--primary-dark-blue);
+        }
+        
+        /* Footer - Redesigned */
         footer {
-            background-color: var(--primary-dark-blue);
+            background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
-            padding: 2rem 0;
+            padding: 2.5rem 0;
             margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
         }
         
         .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .copyright p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .copyright p:first-child {
+            margin-bottom: 8px;
+            font-weight: 500;
         }
         
         .footer-links {
@@ -478,17 +772,236 @@
             color: var(--white);
             text-decoration: none;
             opacity: 0.8;
-            transition: opacity 0.3s ease;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 400;
         }
         
         .footer-link:hover {
             opacity: 1;
+            transform: translateY(-2px);
+        }
+        
+        /* AR Modal - Redesigned */
+        .ar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .ar-modal.active {
+            display: flex;
+        }
+        
+        .ar-modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+            transform: scale(0.9);
+            animation: modalAppear 0.4s ease forwards;
+        }
+        
+        @keyframes modalAppear {
+            to { transform: scale(1); }
+        }
+        
+        .ar-modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .ar-viewer {
+            height: 500px;
+            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ar-viewer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(66, 165, 245, 0.1) 0%, transparent 70%);
+        }
+        
+        .ar-icon-large {
+            font-size: 8rem;
+            opacity: 0.8;
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .ar-instructions {
+            padding: 1.8rem;
+            background: var(--light-gray);
+        }
+        
+        /* Building map elements - Enhanced */
+        .room {
+            position: absolute;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            overflow: hidden;
+        }
+        
+        .room::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .room:hover::before {
+            opacity: 1;
+        }
+        
+        .room:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            z-index: 3;
+        }
+        
+        .hallway {
+            position: absolute;
+            background: var(--medium-gray);
+            border-radius: 4px;
+        }
+        
+        .current-location {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+            border: 3px solid white;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.4);
+            z-index: 5;
+            animation: pulse 2s infinite;
+        }
+        
+        .destination {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF5722 0%, #FF8A65 100%);
+            border: 3px solid white;
+            box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.4);
+            z-index: 5;
+            animation: pulse 2s infinite;
+        }
+        
+        .path {
+            position: absolute;
+            background: linear-gradient(to right, var(--accent-blue), var(--primary-light-blue));
+            height: 6px;
+            border-radius: 3px;
+            z-index: 4;
+            box-shadow: 0 2px 8px rgba(41, 121, 255, 0.3);
+        }
+        
+        .path::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .department-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            color: var(--primary-dark-blue);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 8px;
+            gap: 8px;
+            border: 1px solid rgba(21, 101, 192, 0.2);
         }
         
         /* Responsive Design */
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
+                gap: 24px;
             }
             
             .sidebar {
@@ -496,25 +1009,46 @@
             }
         }
         
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
             .header-content {
                 flex-direction: column;
                 gap: 1.5rem;
             }
             
             .nav-links {
-                flex-wrap: wrap;
+                order: 3;
+                width: 100%;
                 justify-content: center;
+                margin-top: 1rem;
             }
             
-            .map-controls {
-                flex-wrap: wrap;
+            .user-profile {
+                order: 2;
             }
             
             .ar-overlay {
                 flex-direction: column;
                 text-align: center;
                 width: 90%;
+                padding: 1.2rem;
+            }
+            
+            .ar-text {
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .map-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .map-controls {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
             }
             
             .quick-actions {
@@ -526,164 +1060,108 @@
                 gap: 1.5rem;
                 text-align: center;
             }
-        }
-        
-        @media (max-width: 600px) {
-            .logo-text h1 {
-                font-size: 1.3rem;
-            }
             
-            .map-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            
-            .map-controls {
-                width: 100%;
+            .footer-links {
+                flex-wrap: wrap;
                 justify-content: center;
             }
         }
         
-        /* AR Modal */
-        .ar-modal {
-            display: none;
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .logo-text h1 {
+                font-size: 1.3rem;
+            }
+            
+            .nav-link {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .map-section {
+                height: 600px;
+            }
+            
+            .floor-selector {
+                top: 16px;
+                right: 16px;
+                padding: 8px;
+            }
+            
+            .floor-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 16px 24px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-heavy);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all var(--transition-normal);
+            border-left: 4px solid var(--accent-teal);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast i {
+            color: var(--accent-teal);
+            font-size: 1.2rem;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .ar-modal.active {
-            display: flex;
-        }
-        
-        .ar-modal-content {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow: hidden;
-        }
-        
-        .ar-modal-header {
-            padding: 1.5rem;
-            background-color: var(--primary-blue);
-            color: var(--white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.8rem;
-            cursor: pointer;
-        }
-        
-        .ar-viewer {
-            height: 500px;
-            background: linear-gradient(145deg, #000428 0%, #004e92 100%);
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: var(--white);
-            gap: 1rem;
+            gap: 20px;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
         }
         
-        .ar-icon-large {
-            font-size: 8rem;
-            opacity: 0.8;
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
-        .ar-instructions {
-            padding: 1.5rem;
-            background-color: var(--light-gray);
-        }
-        
-        /* Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Building map elements */
-        .room {
-            position: absolute;
-            border-radius: 6px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--white);
-            font-weight: 500;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .room:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .hallway {
-            position: absolute;
-            background-color: var(--medium-gray);
-        }
-        
-        .current-location {
-            position: absolute;
-            width: 20px;
-            height: 20px;
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--light-gray);
+            border-top-color: var(--primary-blue);
             border-radius: 50%;
-            background-color: #4caf50;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
-            z-index: 5;
+            animation: spin 1s linear infinite;
         }
         
-        .destination {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: #ff5722;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.3);
-            z-index: 5;
-        }
-        
-        .path {
-            position: absolute;
-            background-color: var(--accent-blue);
-            height: 4px;
-            border-radius: 2px;
-            z-index: 4;
-        }
-        
-        .department-badge {
-            display: inline-block;
-            background-color: #e3f2fd;
-            color: var(--primary-blue);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 5px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -699,7 +1177,7 @@
                 </div>
             </div>
             
-            <div class="nav-links">
+            <nav class="nav-links">
                 <a href="#" class="nav-link active">
                     <i class="fas fa-map"></i>
                     <span>แผนที่อาคาร</span>
@@ -716,9 +1194,9 @@
                     <i class="fas fa-info-circle"></i>
                     <span>เกี่ยวกับ</span>
                 </a>
-            </div>
+            </nav>
             
-            <div class="user-profile">
+            <div class="user-profile" id="userProfile">
                 <div class="avatar">สฎ</div>
                 <div>
                     <div class="user-name">สุธีร์ ทองดี</div>
@@ -734,9 +1212,12 @@
         <section class="map-section">
             <div class="map-header">
                 <div class="map-title">
-                    <h2>อาคารเทคโนโลยีสารสนเทศ (อาคาร 5)</h2>
+                    <h2><i class="fas fa-map-marked-alt"></i> อาคารเทคโนโลยีสารสนเทศ (อาคาร 5)</h2>
                     <p>ชั้น 3 - แผนที่นำทางภายในอาคารแผนกเทคโนโลยีสารสนเทศ</p>
-                    <div class="department-badge">แผนกเทคโนโลยีสารสนเทศ</div>
+                    <div class="department-badge">
+                        <i class="fas fa-laptop-code"></i>
+                        แผนกเทคโนโลยีสารสนเทศ
+                    </div>
                 </div>
                 <div class="map-controls">
                     <button class="map-btn" id="zoomInBtn">
@@ -757,11 +1238,11 @@
             <div class="map-container">
                 <!-- Floor selector -->
                 <div class="floor-selector">
-                    <button class="floor-btn">1</button>
-                    <button class="floor-btn">2</button>
-                    <button class="floor-btn active">3</button>
-                    <button class="floor-btn">4</button>
-                    <button class="floor-btn">5</button>
+                    <button class="floor-btn" data-floor="1">1</button>
+                    <button class="floor-btn" data-floor="2">2</button>
+                    <button class="floor-btn active" data-floor="3">3</button>
+                    <button class="floor-btn" data-floor="4">4</button>
+                    <button class="floor-btn" data-floor="5">5</button>
                 </div>
                 
                 <!-- Building map -->
@@ -776,7 +1257,7 @@
                     </div>
                     <div class="ar-text">
                         <h3>ประสบการณ์นำทางด้วย AR</h3>
-                        <p>เปิดใช้งานกล้องเพื่อดูเส้นทางในแบบ Augmented Reality</p>
+                        <p>เปิดใช้งานกล้องเพื่อดูเส้นทางในแบบ Augmented Reality แบบเรียลไทม์</p>
                     </div>
                     <button class="ar-btn" id="openArBtn">
                         <i class="fas fa-camera"></i>
@@ -795,48 +1276,14 @@
                 </div>
                 <div class="card-content">
                     <div class="search-box">
-                        <input type="text" class="search-input" placeholder="เช่น ห้อง 5301, ห้องปฏิบัติการ, ห้องอาจารย์">
-                        <button class="search-btn">
+                        <input type="text" class="search-input" id="searchInput" placeholder="เช่น ห้อง 5301, ห้องปฏิบัติการ, ห้องอาจารย์">
+                        <button class="search-btn" id="searchBtn">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
                     
-                    <div class="location-list">
-                        <div class="location-item active">
-                            <div class="location-name">ห้อง 5301 (ห้องปฏิบัติการคอมพิวเตอร์ 1)</div>
-                            <div class="location-details">
-                                <span>ชั้น 3</span>
-                                <span>อาคาร 5</span>
-                            </div>
-                        </div>
-                        <div class="location-item">
-                            <div class="location-name">ห้อง 5302 (ห้องอาจารย์ไอที)</div>
-                            <div class="location-details">
-                                <span>ชั้น 3</span>
-                                <span>อาคาร 5</span>
-                            </div>
-                        </div>
-                        <div class="location-item">
-                            <div class="location-name">ห้อง 5305 (ห้องประชุมแผนกไอที)</div>
-                            <div class="location-details">
-                                <span>ชั้น 3</span>
-                                <span>อาคาร 5</span>
-                            </div>
-                        </div>
-                        <div class="location-item">
-                            <div class="location-name">ห้อง 5306 (ห้อง Server และ Network)</div>
-                            <div class="location-details">
-                                <span>ชั้น 3</span>
-                                <span>อาคาร 5</span>
-                            </div>
-                        </div>
-                        <div class="location-item">
-                            <div class="location-name">ลิฟต์กลางอาคาร</div>
-                            <div class="location-details">
-                                <span>ชั้น 3</span>
-                                <span>อาคาร 5</span>
-                            </div>
-                        </div>
+                    <div class="location-list" id="locationList">
+                        <!-- Location items will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -847,42 +1294,16 @@
                     <h3><i class="fas fa-route"></i> คำแนะนำการเดินทาง</h3>
                 </div>
                 <div class="card-content">
-                    <div class="navigation-steps">
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-walking"></i>
-                            </div>
-                            <div class="step-text">
-                                <h4>เดินจากทางเข้า</h4>
-                                <p>เดินตรงไปทางโถงกลางอาคาร 5 ประมาณ 20 เมตร</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-door-open"></i>
-                            </div>
-                            <div class="step-text">
-                                <h4>เลี้ยวขวาที่โถงกลาง</h4>
-                                <p>ผ่านประตูทางเข้าห้อง 5302-5304</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-flag-checkered"></i>
-                            </div>
-                            <div class="step-text">
-                                <h4>ถึงห้อง 5301</h4>
-                                <p>ห้องปฏิบัติการคอมพิวเตอร์ 1 ทางขวามือ</p>
-                            </div>
-                        </div>
+                    <div class="navigation-steps" id="navigationSteps">
+                        <!-- Navigation steps will be populated by JavaScript -->
                     </div>
                     
                     <div class="quick-actions">
-                        <button class="action-btn">
+                        <button class="action-btn" id="downloadMapBtn">
                             <i class="fas fa-download"></i>
                             <span>ดาวน์โหลดแผนที่</span>
                         </button>
-                        <button class="action-btn">
+                        <button class="action-btn" id="shareRouteBtn">
                             <i class="fas fa-share-alt"></i>
                             <span>แชร์เส้นทาง</span>
                         </button>
@@ -897,12 +1318,21 @@
         <div class="container footer-content">
             <div class="copyright">
                 <p>&copy; 2023 วิทยาลัยเทคนิคสุราษฎร์ธานี - แผนกเทคโนโลยีสารสนเทศ</p>
-                <p style="margin-top: 5px; font-size: 0.9rem; opacity: 0.8;">ระบบนำทางอาคารด้วย AR สำหรับวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+                <p>ระบบนำทางอาคารด้วย AR สำหรับวิทยาลัยเทคนิคสุราษฎร์ธานี</p>
             </div>
             <div class="footer-links">
-                <a href="#" class="footer-link">นโยบายความเป็นส่วนตัว</a>
-                <a href="#" class="footer-link">ข้อกำหนดการใช้งาน</a>
-                <a href="#" class="footer-link">ติดต่อแผนกไอที</a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>นโยบายความเป็นส่วนตัว</span>
+                </a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-file-contract"></i>
+                    <span>ข้อกำหนดการใช้งาน</span>
+                </a>
+                <a href="#" class="footer-link">
+                    <i class="fas fa-headset"></i>
+                    <span>ติดต่อแผนกไอที</span>
+                </a>
             </div>
         </div>
     </footer>
@@ -919,275 +1349,321 @@
                     <i class="fas fa-camera"></i>
                 </div>
                 <h3>กรุณาอนุญาตการเข้าถึงกล้อง</h3>
-                <p>ระบบกำลังเตรียมการแสดงผล AR...</p>
+                <p>ระบบกำลังเตรียมการแสดงผล AR แบบเรียลไทม์...</p>
                 <div style="margin-top: 2rem;">
-                    <button class="map-btn" style="background-color: #4caf50;">
+                    <button class="map-btn" id="startArBtn" style="background: linear-gradient(135deg, #00BFA5 0%, #00E5FF 100%);">
                         <i class="fas fa-play"></i>
                         เริ่มต้นการนำทาง AR
                     </button>
                 </div>
             </div>
             <div class="ar-instructions">
-                <h4>คำแนะนำในการใช้งาน AR:</h4>
+                <h4><i class="fas fa-info-circle"></i> คำแนะนำในการใช้งาน AR:</h4>
                 <ul style="margin-top: 10px; padding-left: 20px;">
                     <li>ถืออุปกรณ์ในระดับสายตาและค่อยๆเคลื่อนไปตามเส้นทาง</li>
                     <li>ปฏิบัติตามลูกศรและคำแนะนำที่ปรากฏบนหน้าจอ</li>
                     <li>ระวังสิ่งกีดขวางขณะเดินตามเส้นทาง AR</li>
                     <li>ใช้หูฟังเพื่อฟังคำแนะนำเสียง (แนะนำ)</li>
                 </ul>
-                <div class="department-badge" style="margin-top: 15px; background-color: #e3f2fd; color: #0d47a1;">
+                <div class="department-badge" style="margin-top: 15px;">
+                    <i class="fas fa-laptop-code"></i>
                     แผนกเทคโนโลยีสารสนเทศ - วิทยาลัยเทคนิคสุราษฎร์ธานี
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">ดำเนินการสำเร็จ!</span>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>กำลังโหลดข้อมูล...</p>
+    </div>
+    
     <script>
+        // Application Data
+        const appData = {
+            currentFloor: 3,
+            currentScale: 1,
+            selectedLocation: '5301',
+            locations: [
+                { id: '5301', name: 'ห้อง 5301 (ห้องปฏิบัติการคอมพิวเตอร์ 1)', floor: 3, building: 'อาคาร 5', icon: 'fas fa-desktop' },
+                { id: '5302', name: 'ห้อง 5302 (ห้องอาจารย์ไอที)', floor: 3, building: 'อาคาร 5', icon: 'fas fa-chalkboard-teacher' },
+                { id: '5305', name: 'ห้อง 5305 (ห้องประชุมแผนกไอที)', floor: 3, building: 'อาคาร 5', icon: 'fas fa-users' },
+                { id: '5306', name: 'ห้อง 5306 (ห้อง Server และ Network)', floor: 3, building: 'อาคาร 5', icon: 'fas fa-server' },
+                { id: 'lift', name: 'ลิฟต์กลางอาคาร', floor: 3, building: 'อาคาร 5', icon: 'fas fa-elevator' }
+            ],
+            navigationSteps: {
+                '5301': [
+                    { icon: 'fas fa-walking', title: 'เดินจากทางเข้า', description: 'เดินตรงไปทางโถงกลางอาคาร 5 ประมาณ 20 เมตร' },
+                    { icon: 'fas fa-door-open', title: 'เลี้ยวขวาที่โถงกลาง', description: 'ผ่านประตูทางเข้าห้อง 5302-5304' },
+                    { icon: 'fas fa-flag-checkered', title: 'ถึงห้อง 5301', description: 'ห้องปฏิบัติการคอมพิวเตอร์ 1 ทางขวามือ' }
+                ],
+                '5302': [
+                    { icon: 'fas fa-walking', title: 'เดินจากทางเข้า', description: 'เดินตรงไปทางโถงกลางอาคาร 5 ประมาณ 15 เมตร' },
+                    { icon: 'fas fa-door-open', title: 'เลี้ยวซ้ายที่โถงกลาง', description: 'ผ่านลิฟต์กลางทางซ้ายมือ' },
+                    { icon: 'fas fa-flag-checkered', title: 'ถึงห้อง 5302', description: 'ห้องอาจารย์ไอที ทางซ้ายมือ' }
+                ],
+                '5305': [
+                    { icon: 'fas fa-walking', title: 'เดินจากทางเข้า', description: 'เดินตรงไปจนสุดโถงทางเดินประมาณ 30 เมตร' },
+                    { icon: 'fas fa-door-open', title: 'เลี้ยวซ้ายที่ทางแยก', description: 'ผ่านห้อง Server ทางขวามือ' },
+                    { icon: 'fas fa-flag-checkered', title: 'ถึงห้อง 5305', description: 'ห้องประชุมแผนกไอที ปลายทางเดิน' }
+                ],
+                '5306': [
+                    { icon: 'fas fa-walking', title: 'เดินจากทางเข้า', description: 'เดินตรงไปประมาณ 25 เมตร' },
+                    { icon: 'fas fa-door-open', title: 'เลี้ยวซ้ายก่อนถึงลิฟต์', description: 'เดินตามทางเดินฝั่งซ้าย' },
+                    { icon: 'fas fa-flag-checkered', title: 'ถึงห้อง 5306', description: 'ห้อง Server และ Network ทางซ้ายมือ' }
+                ],
+                'lift': [
+                    { icon: 'fas fa-walking', title: 'เดินจากทางเข้า', description: 'เดินตรงไปประมาณ 15 เมตร' },
+                    { icon: 'fas fa-door-open', title: 'เลี้ยวซ้ายที่โถงกลาง', description: 'มองหาป้ายลิฟต์ทางซ้ายมือ' },
+                    { icon: 'fas fa-flag-checkered', title: 'ถึงลิฟต์กลางอาคาร', description: 'ลิฟต์สำหรับทุกชั้นของอาคาร' }
+                ]
+            },
+            roomPositions: {
+                '5301': { left: '60%', top: '40%', color: '#1565C0' },
+                '5302': { left: '50%', top: '30%', color: '#1976D2' },
+                '5305': { left: '70%', top: '60%', color: '#1E88E5' },
+                '5306': { left: '40%', top: '50%', color: '#2196F3' },
+                'lift': { left: '30%', top: '35%', color: '#757575' }
+            }
+        };
+
         // DOM Elements
         const buildingMap = document.getElementById('buildingMap');
         const openArBtn = document.getElementById('openArBtn');
         const closeArBtn = document.getElementById('closeArBtn');
         const arModal = document.getElementById('arModal');
         const floorButtons = document.querySelectorAll('.floor-btn');
-        const locationItems = document.querySelectorAll('.location-item');
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
         const resetViewBtn = document.getElementById('resetViewBtn');
-        
-        // Current map state
-        let currentFloor = 3;
-        let currentScale = 1;
-        let selectedLocation = '5301';
-        
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const locationList = document.getElementById('locationList');
+        const navigationSteps = document.getElementById('navigationSteps');
+        const downloadMapBtn = document.getElementById('downloadMapBtn');
+        const shareRouteBtn = document.getElementById('shareRouteBtn');
+        const startArBtn = document.getElementById('startArBtn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const userProfile = document.getElementById('userProfile');
+
+        // Initialize the application
+        function initApp() {
+            showLoading();
+            
+            // Populate location list
+            renderLocationList();
+            
+            // Initialize map
+            initBuildingMap();
+            
+            // Update navigation steps
+            updateNavigationSteps(appData.selectedLocation);
+            
+            // Hide loading after a short delay
+            setTimeout(() => {
+                hideLoading();
+                showToast('ระบบนำทางอาคารพร้อมใช้งานแล้ว!');
+            }, 800);
+            
+            // Add click animation to user profile
+            userProfile.addEventListener('click', () => {
+                userProfile.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    userProfile.style.transform = '';
+                    showToast('ข้อมูลผู้ใช้: สุธีร์ ทองดี - นักศึกษา สาขาไอที');
+                }, 200);
+            });
+        }
+
+        // Show loading overlay
+        function showLoading() {
+            loadingOverlay.classList.add('active');
+        }
+
+        // Hide loading overlay
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Render location list
+        function renderLocationList() {
+            locationList.innerHTML = '';
+            
+            appData.locations.forEach(location => {
+                const locationItem = document.createElement('div');
+                locationItem.className = `location-item ${location.id === appData.selectedLocation ? 'active' : ''}`;
+                locationItem.dataset.id = location.id;
+                
+                locationItem.innerHTML = `
+                    <div class="location-name">
+                        <i class="${location.icon}"></i>
+                        <span>${location.name}</span>
+                    </div>
+                    <div class="location-details">
+                        <span><i class="fas fa-layer-group"></i> ชั้น ${location.floor}</span>
+                        <span><i class="fas fa-building"></i> ${location.building}</span>
+                    </div>
+                `;
+                
+                locationItem.addEventListener('click', () => selectLocation(location.id));
+                locationList.appendChild(locationItem);
+            });
+        }
+
         // Initialize the building map
         function initBuildingMap() {
             // Clear the map
             buildingMap.innerHTML = '';
             
-            // Create rooms, hallways, and other map elements based on floor
-            createMapElements();
+            // Create hallways
+            createHallways();
+            
+            // Create rooms
+            createRooms();
             
             // Add current location marker
-            const currentLocation = document.createElement('div');
-            currentLocation.className = 'current-location';
-            currentLocation.style.left = '30%';
-            currentLocation.style.top = '70%';
-            buildingMap.appendChild(currentLocation);
+            addLocationMarker('current', '30%', '70%');
             
-            // Add destination marker based on selected location
-            const destination = document.createElement('div');
-            destination.className = 'destination';
-            
-            // Set destination position based on selected room
-            if (selectedLocation === '5301') {
-                destination.style.left = '60%';
-                destination.style.top = '40%';
-            } else if (selectedLocation === '5302') {
-                destination.style.left = '50%';
-                destination.style.top = '30%';
-            } else if (selectedLocation === '5305') {
-                destination.style.left = '70%';
-                destination.style.top = '60%';
-            } else if (selectedLocation === '5306') {
-                destination.style.left = '40%';
-                destination.style.top = '50%';
-            } else {
-                destination.style.left = '40%';
-                destination.style.top = '50%';
+            // Add destination marker
+            const destinationPos = appData.roomPositions[appData.selectedLocation];
+            if (destinationPos) {
+                addLocationMarker('destination', destinationPos.left, destinationPos.top);
             }
             
-            buildingMap.appendChild(destination);
-            
-            // Create path between current location and destination
-            createPath(currentLocation, destination);
+            // Create path
+            createPath();
             
             // Apply current scale
-            buildingMap.style.transform = `scale(${currentScale})`;
+            buildingMap.style.transform = `scale(${appData.currentScale})`;
         }
-        
-        // Create map elements (rooms, hallways)
-        function createMapElements() {
-            // Hallways
-            const hallway1 = document.createElement('div');
-            hallway1.className = 'hallway';
-            hallway1.style.width = '70%';
-            hallway1.style.height = '15%';
-            hallway1.style.left = '15%';
-            hallway1.style.top = '20%';
-            buildingMap.appendChild(hallway1);
+
+        // Create hallways
+        function createHallways() {
+            const hallways = [
+                { width: '70%', height: '12%', left: '15%', top: '20%' },
+                { width: '12%', height: '50%', left: '15%', top: '32%' },
+                { width: '70%', height: '12%', left: '15%', top: '68%' }
+            ];
             
-            const hallway2 = document.createElement('div');
-            hallway2.className = 'hallway';
-            hallway2.style.width = '15%';
-            hallway2.style.height = '50%';
-            hallway2.style.left = '15%';
-            hallway2.style.top = '35%';
-            buildingMap.appendChild(hallway2);
-            
-            const hallway3 = document.createElement('div');
-            hallway3.className = 'hallway';
-            hallway3.style.width = '70%';
-            hallway3.style.height = '15%';
-            hallway3.style.left = '15%';
-            hallway3.style.top = '65%';
-            buildingMap.appendChild(hallway3);
-            
-            // Rooms for floor 3
-            if (currentFloor === 3) {
-                // Room 5301
-                const room5301 = document.createElement('div');
-                room5301.className = 'room';
-                room5301.style.width = '15%';
-                room5301.style.height = '20%';
-                room5301.style.left = '60%';
-                room5301.style.top = '40%';
-                room5301.style.backgroundColor = selectedLocation === '5301' ? '#0d47a1' : '#2196f3';
-                room5301.textContent = '5301';
-                room5301.addEventListener('click', () => selectLocation('5301'));
-                buildingMap.appendChild(room5301);
-                
-                // Room 5302
-                const room5302 = document.createElement('div');
-                room5302.className = 'room';
-                room5302.style.width = '15%';
-                room5302.style.height = '20%';
-                room5302.style.left = '50%';
-                room5302.style.top = '30%';
-                room5302.style.backgroundColor = selectedLocation === '5302' ? '#0d47a1' : '#2196f3';
-                room5302.textContent = '5302';
-                room5302.addEventListener('click', () => selectLocation('5302'));
-                buildingMap.appendChild(room5302);
-                
-                // Room 5305
-                const room5305 = document.createElement('div');
-                room5305.className = 'room';
-                room5305.style.width = '20%';
-                room5305.style.height = '25%';
-                room5305.style.left = '70%';
-                room5305.style.top = '60%';
-                room5305.style.backgroundColor = selectedLocation === '5305' ? '#0d47a1' : '#2196f3';
-                room5305.textContent = '5305';
-                room5305.addEventListener('click', () => selectLocation('5305'));
-                buildingMap.appendChild(room5305);
-                
-                // Room 5306
-                const room5306 = document.createElement('div');
-                room5306.className = 'room';
-                room5306.style.width = '15%';
-                room5306.style.height = '18%';
-                room5306.style.left = '40%';
-                room5306.style.top = '50%';
-                room5306.style.backgroundColor = selectedLocation === '5306' ? '#0d47a1' : '#3f51b5';
-                room5306.textContent = '5306';
-                room5306.addEventListener('click', () => selectLocation('5306'));
-                buildingMap.appendChild(room5306);
-                
-                // Elevator
-                const elevator = document.createElement('div');
-                elevator.className = 'room';
-                elevator.style.width = '10%';
-                elevator.style.height = '15%';
-                elevator.style.left = '30%';
-                elevator.style.top = '35%';
-                elevator.style.backgroundColor = '#9e9e9e';
-                elevator.textContent = 'ลิฟต์';
-                elevator.addEventListener('click', () => selectLocation('ลิฟต์'));
-                buildingMap.appendChild(elevator);
-            }
+            hallways.forEach(hallway => {
+                const hallwayEl = document.createElement('div');
+                hallwayEl.className = 'hallway';
+                hallwayEl.style.width = hallway.width;
+                hallwayEl.style.height = hallway.height;
+                hallwayEl.style.left = hallway.left;
+                hallwayEl.style.top = hallway.top;
+                buildingMap.appendChild(hallwayEl);
+            });
         }
-        
-        // Create path between two points
-        function createPath(startElem, endElem) {
+
+        // Create rooms
+        function createRooms() {
+            Object.entries(appData.roomPositions).forEach(([roomId, position]) => {
+                const roomEl = document.createElement('div');
+                roomEl.className = 'room';
+                roomEl.style.width = roomId === '5305' ? '20%' : '15%';
+                roomEl.style.height = roomId === '5305' ? '22%' : '18%';
+                roomEl.style.left = position.left;
+                roomEl.style.top = position.top;
+                roomEl.style.backgroundColor = position.color;
+                roomEl.textContent = roomId === 'lift' ? 'ลิฟต์' : roomId;
+                roomEl.title = appData.locations.find(loc => loc.id === roomId)?.name || '';
+                
+                roomEl.addEventListener('click', () => {
+                    selectLocation(roomId);
+                    roomEl.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        roomEl.style.transform = '';
+                    }, 300);
+                });
+                
+                buildingMap.appendChild(roomEl);
+            });
+        }
+
+        // Add location marker
+        function addLocationMarker(type, left, top) {
+            const marker = document.createElement('div');
+            marker.className = type === 'current' ? 'current-location' : 'destination';
+            marker.style.left = left;
+            marker.style.top = top;
+            buildingMap.appendChild(marker);
+        }
+
+        // Create path between current location and destination
+        function createPath() {
+            // For simplicity, we'll create a direct path
             const path = document.createElement('div');
             path.className = 'path';
-            
-            // Get positions
-            const startRect = startElem.getBoundingClientRect();
-            const endRect = endElem.getBoundingClientRect();
-            const mapRect = buildingMap.getBoundingClientRect();
-            
-            // Calculate positions relative to map
-            const startX = startRect.left - mapRect.left + startRect.width/2;
-            const startY = startRect.top - mapRect.top + startRect.height/2;
-            const endX = endRect.left - mapRect.left + endRect.width/2;
-            const endY = endRect.top - mapRect.top + endRect.height/2;
-            
-            // Calculate distance and angle
-            const dx = endX - startX;
-            const dy = endY - startY;
-            const distance = Math.sqrt(dx*dx + dy*dy);
-            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-            
-            // Set path properties
-            path.style.width = `${distance}px`;
-            path.style.left = `${startX}px`;
-            path.style.top = `${startY}px`;
-            path.style.transform = `rotate(${angle}deg)`;
-            path.style.transformOrigin = '0 0';
-            
+            path.style.width = '30%';
+            path.style.left = '35%';
+            path.style.top = '60%';
+            path.style.transform = 'rotate(45deg)';
             buildingMap.appendChild(path);
         }
-        
+
         // Select a location
         function selectLocation(locationId) {
-            selectedLocation = locationId;
+            appData.selectedLocation = locationId;
             
-            // Update location items
-            locationItems.forEach(item => {
-                const locationName = item.querySelector('.location-name').textContent;
-                if (locationName.includes(locationId)) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-            
-            // Update map
+            // Update UI
+            renderLocationList();
             initBuildingMap();
-            
-            // Update navigation steps based on location
             updateNavigationSteps(locationId);
+            
+            // Show feedback
+            const locationName = appData.locations.find(loc => loc.id === locationId)?.name;
+            showToast(`เลือกสถานที่: ${locationName}`);
         }
-        
+
         // Update navigation steps
         function updateNavigationSteps(locationId) {
-            const stepHeaders = document.querySelectorAll('.step-text h4');
-            const stepDescriptions = document.querySelectorAll('.step-text p');
+            navigationSteps.innerHTML = '';
             
-            if (locationId === '5301') {
-                stepHeaders[0].textContent = 'เดินจากทางเข้า';
-                stepDescriptions[0].textContent = 'เดินตรงไปทางโถงกลางอาคาร 5 ประมาณ 20 เมตร';
-                stepHeaders[1].textContent = 'เลี้ยวขวาที่โถงกลาง';
-                stepDescriptions[1].textContent = 'ผ่านประตูทางเข้าห้อง 5302-5304';
-                stepHeaders[2].textContent = 'ถึงห้อง 5301';
-                stepDescriptions[2].textContent = 'ห้องปฏิบัติการคอมพิวเตอร์ 1 ทางขวามือ';
-            } else if (locationId === '5302') {
-                stepHeaders[0].textContent = 'เดินจากทางเข้า';
-                stepDescriptions[0].textContent = 'เดินตรงไปทางโถงกลางอาคาร 5 ประมาณ 15 เมตร';
-                stepHeaders[1].textContent = 'เลี้ยวซ้ายที่โถงกลาง';
-                stepDescriptions[1].textContent = 'ผ่านลิฟต์กลางทางซ้ายมือ';
-                stepHeaders[2].textContent = 'ถึงห้อง 5302';
-                stepDescriptions[2].textContent = 'ห้องอาจารย์ไอที ทางซ้ายมือ';
-            } else if (locationId === '5305') {
-                stepHeaders[0].textContent = 'เดินจากทางเข้า';
-                stepDescriptions[0].textContent = 'เดินตรงไปจนสุดโถงทางเดินประมาณ 30 เมตร';
-                stepHeaders[1].textContent = 'เลี้ยวซ้ายที่ทางแยก';
-                stepDescriptions[1].textContent = 'ผ่านห้อง Server ทางขวามือ';
-                stepHeaders[2].textContent = 'ถึงห้อง 5305';
-                stepDescriptions[2].textContent = 'ห้องประชุมแผนกไอที ปลายทางเดิน';
-            } else if (locationId === '5306') {
-                stepHeaders[0].textContent = 'เดินจากทางเข้า';
-                stepDescriptions[0].textContent = 'เดินตรงไปประมาณ 25 เมตร';
-                stepHeaders[1].textContent = 'เลี้ยวซ้ายก่อนถึงลิฟต์';
-                stepDescriptions[1].textContent = 'เดินตามทางเดินฝั่งซ้าย';
-                stepHeaders[2].textContent = 'ถึงห้อง 5306';
-                stepDescriptions[2].textContent = 'ห้อง Server และ Network ทางซ้ายมือ';
-            }
+            const steps = appData.navigationSteps[locationId] || appData.navigationSteps['5301'];
+            
+            steps.forEach((step, index) => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'step';
+                stepEl.style.animationDelay = `${index * 0.1}s`;
+                
+                stepEl.innerHTML = `
+                    <div class="step-icon">
+                        <i class="${step.icon}"></i>
+                    </div>
+                    <div class="step-text">
+                        <h4>${step.title}</h4>
+                        <p>${step.description}</p>
+                    </div>
+                `;
+                
+                navigationSteps.appendChild(stepEl);
+            });
         }
-        
+
         // Event Listeners
         openArBtn.addEventListener('click', () => {
             arModal.classList.add('active');
+            showToast('เปิดโหมด Augmented Reality แล้ว');
         });
         
         closeArBtn.addEventListener('click', () => {
@@ -1209,94 +1685,126 @@
                 // Add active class to clicked button
                 button.classList.add('active');
                 // Update current floor
-                currentFloor = parseInt(button.textContent);
+                appData.currentFloor = parseInt(button.dataset.floor);
                 // Update map
                 initBuildingMap();
-            });
-        });
-        
-        // Location selection
-        locationItems.forEach(item => {
-            item.addEventListener('click', () => {
-                // Remove active class from all items
-                locationItems.forEach(loc => loc.classList.remove('active'));
-                // Add active class to clicked item
-                item.classList.add('active');
-                
-                // Extract location id from item
-                const locationName = item.querySelector('.location-name').textContent;
-                let locationId = '';
-                if (locationName.includes('5301')) locationId = '5301';
-                else if (locationName.includes('5302')) locationId = '5302';
-                else if (locationName.includes('5305')) locationId = '5305';
-                else if (locationName.includes('5306')) locationId = '5306';
-                else if (locationName.includes('ลิฟต์')) locationId = 'ลิฟต์';
-                
-                // Select location
-                if (locationId) selectLocation(locationId);
+                // Show feedback
+                showToast(`เปลี่ยนเป็นชั้น ${appData.currentFloor}`);
             });
         });
         
         // Map controls
         zoomInBtn.addEventListener('click', () => {
-            if (currentScale < 1.5) {
-                currentScale += 0.1;
-                buildingMap.style.transform = `scale(${currentScale})`;
+            if (appData.currentScale < 1.5) {
+                appData.currentScale += 0.1;
+                buildingMap.style.transform = `scale(${appData.currentScale})`;
+                showToast(`ขยายแผนที่: ${Math.round(appData.currentScale * 100)}%`);
             }
         });
         
         zoomOutBtn.addEventListener('click', () => {
-            if (currentScale > 0.7) {
-                currentScale -= 0.1;
-                buildingMap.style.transform = `scale(${currentScale})`;
+            if (appData.currentScale > 0.7) {
+                appData.currentScale -= 0.1;
+                buildingMap.style.transform = `scale(${appData.currentScale})`;
+                showToast(`ย่อแผนที่: ${Math.round(appData.currentScale * 100)}%`);
             }
         });
         
         resetViewBtn.addEventListener('click', () => {
-            currentScale = 1;
-            buildingMap.style.transform = `scale(${currentScale})`;
+            appData.currentScale = 1;
+            buildingMap.style.transform = `scale(${appData.currentScale})`;
+            showToast('รีเซ็ตมุมมองแผนที่แล้ว');
         });
         
         // Search functionality
-        const searchInput = document.querySelector('.search-input');
-        const searchBtn = document.querySelector('.search-btn');
-        
         searchBtn.addEventListener('click', performSearch);
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') performSearch();
         });
         
         function performSearch() {
-            const query = searchInput.value.toLowerCase();
-            if (!query) return;
+            const query = searchInput.value.trim().toLowerCase();
+            if (!query) {
+                showToast('กรุณากรอกคำค้นหา');
+                return;
+            }
             
             // Check if query matches any location
-            let foundLocation = null;
-            
-            locationItems.forEach(item => {
-                const locationName = item.querySelector('.location-name').textContent.toLowerCase();
-                if (locationName.includes(query)) {
-                    foundLocation = item;
-                }
-            });
+            const foundLocation = appData.locations.find(location => 
+                location.name.toLowerCase().includes(query) || 
+                location.id.includes(query)
+            );
             
             if (foundLocation) {
-                // Simulate click on found location
-                foundLocation.click();
+                selectLocation(foundLocation.id);
+                searchInput.value = '';
                 
                 // Highlight search result
-                foundLocation.style.backgroundColor = 'rgba(255, 235, 59, 0.3)';
-                setTimeout(() => {
-                    foundLocation.style.backgroundColor = '';
-                }, 2000);
+                const locationItem = document.querySelector(`.location-item[data-id="${foundLocation.id}"]`);
+                if (locationItem) {
+                    locationItem.style.animation = 'none';
+                    locationItem.offsetHeight; // Trigger reflow
+                    locationItem.style.animation = 'fadeIn 0.5s ease';
+                    
+                    // Scroll to location in list
+                    locationItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             } else {
-                alert('ไม่พบสถานที่ "' + query + '" กรุณาค้นหาใหม่');
+                showToast(`ไม่พบสถานที่ "${query}" กรุณาค้นหาใหม่`);
             }
         }
         
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', () => {
-            initBuildingMap();
+        // Download map
+        downloadMapBtn.addEventListener('click', () => {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                showToast('กำลังดาวน์โหลดแผนที่... (จำลองการดาวน์โหลด)');
+            }, 1500);
+        });
+        
+        // Share route
+        shareRouteBtn.addEventListener('click', () => {
+            const locationName = appData.locations.find(loc => loc.id === appData.selectedLocation)?.name;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'เส้นทางในวิทยาลัยเทคนิคสุราษฎร์ธานี',
+                    text: `เส้นทางไปยัง ${locationName} ในอาคาร 5 ชั้น 3`,
+                    url: window.location.href
+                });
+            } else {
+                showToast(`คัดลอกลิงก์แชร์เส้นทางไปยัง ${locationName} เรียบร้อยแล้ว`);
+            }
+        });
+        
+        // Start AR navigation
+        startArBtn.addEventListener('click', () => {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                arModal.classList.remove('active');
+                showToast('เริ่มต้นการนำทางด้วย AR แล้ว กรุณาอนุญาตการใช้งานกล้อง');
+            }, 2000);
+        });
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
