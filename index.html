@@ -64,7 +64,6 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            padding-top: 64px; /* เพิ่ม padding-top เพื่อรองรับ fixed header */
         }
 
         /* ===== OPTIMIZED LOADING SYSTEM ===== */
@@ -352,7 +351,7 @@
             padding: 0 var(--spacing-md);
         }
 
-        /* Header - App Bar - FIXED POSITION */
+        /* Header - App Bar */
         .app-bar {
             position: fixed;
             top: 0;
@@ -482,34 +481,34 @@
 
         /* Main Content */
         .main-content {
-            margin-top: 0; /* ลบ margin-top เพราะเราใช้ padding-top ใน body แทน */
+            margin-top: 64px;
             padding: var(--spacing-xl) 0;
         }
 
-        /* Content Sections - FIXED SCROLLING ISSUE */
+        /* Content Sections - Initially Hidden */
         .content-section {
             display: none;
             opacity: 0;
-            transform: translateY(0); /* เปลี่ยนจาก 20px เป็น 0 */
+            transform: translateY(20px);
             transition: opacity var(--animation-normal) ease-out, transform var(--animation-normal) ease-out;
             animation-fill-mode: forwards;
-            min-height: calc(100vh - 200px); /* กำหนดความสูงขั้นต่ำ */
-            padding-top: var(--spacing-xl); /* เพิ่ม padding-top */
         }
 
         .content-section.active {
             display: block;
             opacity: 1;
             transform: translateY(0);
-            animation: fadeIn 0.5s ease-out; /* เปลี่ยน animation */
+            animation: fadeInUp 0.5s ease-out;
         }
 
-        @keyframes fadeIn {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -838,7 +837,7 @@
             font-size: 0.875rem;
         }
 
-        /* Floating Action Buttons - FIXED POSITION */
+        /* Floating Action Buttons */
         .floating-buttons {
             position: fixed;
             bottom: var(--spacing-xl);
@@ -863,7 +862,6 @@
             align-items: center;
             justify-content: center;
             transition: all var(--animation-normal);
-            position: relative;
         }
 
         .floating-button:hover {
@@ -904,7 +902,6 @@
             visibility: hidden;
             transition: all var(--animation-normal);
             box-shadow: var(--shadow-2);
-            pointer-events: none;
         }
 
         .floating-button:hover .floating-button-label {
@@ -913,7 +910,7 @@
             right: 65px;
         }
 
-        /* Modals - FIXED POSITION */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -928,7 +925,6 @@
             padding: var(--spacing-md);
             opacity: 0;
             transition: opacity var(--animation-normal);
-            overflow-y: auto;
         }
 
         .modal.active {
@@ -947,7 +943,6 @@
             transform: translateY(20px);
             transition: transform var(--animation-normal);
             border: 1px solid var(--border);
-            margin: auto;
         }
 
         .modal.active .modal-content {
@@ -960,9 +955,6 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: var(--on-primary);
             border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            position: sticky;
-            top: 0;
-            z-index: 1;
         }
 
         .modal-header h3 {
@@ -981,9 +973,6 @@
             display: flex;
             justify-content: flex-end;
             gap: var(--spacing-md);
-            position: sticky;
-            bottom: 0;
-            background-color: var(--surface);
         }
 
         /* Share Modal */
@@ -1147,37 +1136,6 @@
             transition: all var(--animation-fast);
             text-decoration: none;
             min-height: 44px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        .btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(20, 20);
-                opacity: 0;
-            }
         }
 
         .btn-primary {
@@ -1221,16 +1179,12 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 56px;
-            }
-            
             .app-bar {
                 height: 56px;
             }
             
             .main-content {
-                margin-top: 0;
+                margin-top: 56px;
             }
             
             .nav-links {
@@ -1272,10 +1226,6 @@
                 bottom: var(--spacing-lg);
                 right: var(--spacing-lg);
             }
-            
-            .content-section {
-                padding-top: var(--spacing-lg);
-            }
         }
 
         @media (max-width: 576px) {
@@ -1307,10 +1257,6 @@
             .floating-button {
                 width: 48px;
                 height: 48px;
-            }
-            
-            .content-section {
-                padding-top: var(--spacing-md);
             }
         }
     </style>
@@ -1415,14 +1361,14 @@
                             <h2>ยินดีต้อนรับสู่<br>แผนกเทคโนโลยีสารสนเทศ</h2>
                             <p>เทคโนโลยีสารสนเทศ (Information Technology: IT) คือ การนำระบบคอมพิวเตอร์ ซอฟต์แวร์ เครือข่าย และอุปกรณ์ดิจิทัลมาใช้ในการจัดการข้อมูล ทั้งการจัดเก็บ เรียกค้น ประมวลผล ส่งผ่าน และเผยแพร่ เพื่อเพิ่มประสิทธิภาพและความสะดวกในการทำงาน การตัดสินใจ และการสื่อสารในทุกด้านของชีวิตและธุรกิจ ตั้งแต่ฮาร์ดแวร์, ซอฟต์แวร์, อินเทอร์เน็ต, โซเชียลมีเดีย ไปจนถึงเทคโนโลยีใหม่ๆ อย่าง AI และ Big Data</p>
                             <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                                <button class="btn btn-primary" data-section="teachers">
+                                <div class="btn btn-primary" data-section="teachers">
                                     <span class="material-icons-round">groups</span>
                                     พบกับคณะอาจารย์
-                                </button>
-                                <button class="btn btn-outline" data-section="contact">
+                                </div>
+                                <div class="btn btn-outline" data-section="contact">
                                     <span class="material-icons-round">contact_support</span>
                                     ติดต่อเรา
-                                </button>
+                                </div>
                             </div>
                         </div>
                         <div class="hero-image">
@@ -1628,8 +1574,8 @@
                             </div>
                             
                             <div class="social-links">
-                                <a href="https://www.facebook.com/PR.SRTC?locale=th_TH" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                <a href="https://www.youtube.com/@srtcchannel3786" target="_blank"><i class="fab fa-youtube"></i></a>
+                                <a href="https://www.facebook.com/PR.SRTC?locale=th_TH"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://www.youtube.com/@srtcchannel3786"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                         
@@ -1682,10 +1628,10 @@
                 <div class="footer-section">
                     <h3>ลิงก์ด่วน</h3>
                     <ul style="list-style: none;">
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="home" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">หน้าแรก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="teachers" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">คณะอาจารย์</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="info" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">ข้อมูลแผนก</button></li>
-                        <li style="margin-bottom: var(--spacing-sm);"><button class="footer-link" data-section="floor" style="background: none; border: none; color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer; padding: 0; text-align: left;">แผนผังและแนะนำทาง</button></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="home" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">หน้าแรก</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="teachers" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">คณะอาจารย์</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="info" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">ข้อมูลแผนก</div></li>
+                        <li style="margin-bottom: var(--spacing-sm);"><div class="footer-link" data-section="floor" style="color: var(--surface); text-decoration: none; opacity: 0.9; font-size: 0.875rem; cursor: pointer;">แผนผังและแนะนำทาง</div></li>
                     </ul>
                 </div>
                 
@@ -1800,6 +1746,7 @@
         const networkSpeedElement = document.getElementById('networkSpeed');
         const loadTimeElement = document.getElementById('loadTime');
         const networkStatus = document.getElementById('networkStatus');
+        const networkStatusText = document.getElementById('networkStatusText');
         const mainContent = document.getElementById('mainContent');
         const appBar = document.getElementById('appBar');
 
@@ -1864,7 +1811,7 @@
                         latency: latency,
                         timestamp: Date.now()
                     });
-                }, 5);
+                }, 5); // ลด latency simulation ลงเหลือ 5ms
             });
         }
 
@@ -1881,6 +1828,7 @@
 
         // Update loading progress with smooth animation
         function updateLoadingProgress(percent, speedInfo = null) {
+            // ใช้ requestAnimationFrame สำหรับ animation ที่ smooth
             requestAnimationFrame(() => {
                 loadingProgressBar.style.width = percent + '%';
                 
@@ -1928,7 +1876,7 @@
                         link.rel = 'stylesheet';
                         link.href = url;
                         link.onload = resolve;
-                        link.onerror = resolve;
+                        link.onerror = resolve; // Continue even if fails
                         document.head.appendChild(link);
                     });
                 })
@@ -1966,8 +1914,8 @@
             showNetworkStatus(networkCategory, networkResult.speed);
             
             // Step 4: Simulate remaining loading based on network speed
-            const totalSteps = 75;
-            const stepTime = 20 * networkCategory.loadMultiplier;
+            const totalSteps = 75; // 25% to 100%
+            const stepTime = 20 * networkCategory.loadMultiplier; // Adjust based on network speed
             
             return new Promise((resolve) => {
                 let currentStep = 0;
@@ -2009,7 +1957,7 @@
             });
         }
 
-        // ===== IMPROVED SECTION NAVIGATION SYSTEM =====
+        // ===== SECTION NAVIGATION SYSTEM =====
         const sections = {
             home: document.getElementById('homeSection'),
             teachers: document.getElementById('teachersSection'),
@@ -2026,8 +1974,8 @@
         let currentSection = 'home';
         let isAnimating = false;
 
-        // Function to switch to a specific section with improved animation
-        function switchSection(sectionId, animate = true) {
+        // Function to switch to a specific section with smooth animation
+        function switchSection(sectionId) {
             if (isAnimating || sectionId === currentSection) return;
             
             isAnimating = true;
@@ -2036,40 +1984,31 @@
             const currentActive = document.querySelector('.content-section.active');
             const newSection = sections[sectionId] || sections.home;
             
-            // ปิด modal ถ้ามีการเปิดอยู่
-            closeAllModals();
-            
             if (currentActive) {
-                if (animate) {
-                    currentActive.style.opacity = '0';
+                currentActive.style.opacity = '0';
+                currentActive.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    currentActive.classList.remove('active');
+                    
+                    newSection.style.display = 'block';
+                    
+                    newSection.offsetHeight;
                     
                     setTimeout(() => {
-                        currentActive.classList.remove('active');
+                        newSection.classList.add('active');
                         
-                        newSection.style.display = 'block';
-                        
-                        // ใช้ requestAnimationFrame เพื่อให้ animation smooth
-                        requestAnimationFrame(() => {
-                            newSection.classList.add('active');
-                            
-                            setTimeout(() => {
-                                isAnimating = false;
-                            }, 300);
-                        });
-                    }, 300);
-                } else {
-                    currentActive.classList.remove('active');
-                    newSection.style.display = 'block';
-                    newSection.classList.add('active');
-                    isAnimating = false;
-                }
+                        setTimeout(() => {
+                            isAnimating = false;
+                        }, 300);
+                    }, 50);
+                }, 300);
             } else {
                 newSection.style.display = 'block';
                 newSection.classList.add('active');
                 isAnimating = false;
             }
             
-            // Update active nav links
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.dataset.section === sectionId) {
@@ -2077,7 +2016,6 @@
                 }
             });
             
-            // ปิด mobile menu ถ้าเปิดอยู่
             if (window.innerWidth <= 768) {
                 const mainNav = document.querySelector('.nav-links');
                 if (mainNav.classList.contains('show')) {
@@ -2086,26 +2024,16 @@
                 }
             }
             
-            // Scroll to top of the section (not page)
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         }
 
-        // Function to close all modals
-        function closeAllModals() {
-            document.querySelectorAll('.modal.active').forEach(modal => {
-                modal.classList.remove('active');
-            });
-            document.body.style.overflow = 'auto';
-        }
-
-        // Add click event to nav links with improved handling
+        // Add click event to nav links with smooth transition
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
                 const sectionId = link.dataset.section;
                 switchSection(sectionId);
             });
@@ -2114,26 +2042,23 @@
         // Add click event to home logo
         homeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation();
             switchSection('home');
         });
 
-        // Add click event to footer links (เปลี่ยนเป็น button)
+        // Add click event to footer links
         footerLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
                 const sectionId = link.dataset.section;
                 switchSection(sectionId);
             });
         });
 
-        // Add click event to button links (เปลี่ยนเป็น button)
+        // Add click event to button links
         btnLinks.forEach(link => {
             if (link.dataset.section) {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    e.stopPropagation();
                     const sectionId = link.dataset.section;
                     switchSection(sectionId);
                 });
@@ -2144,24 +2069,13 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mainNav = document.querySelector('.nav-links');
         
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        mobileMenuBtn.addEventListener('click', () => {
             mainNav.classList.toggle('show');
             const icon = mobileMenuBtn.querySelector('span');
             if (mainNav.classList.contains('show')) {
                 icon.textContent = 'close';
             } else {
                 icon.textContent = 'menu';
-            }
-        });
-
-        // ปิด mobile menu เมื่อคลิกที่อื่น
-        document.addEventListener('click', (e) => {
-            if (mainNav.classList.contains('show') && 
-                !e.target.closest('.nav-links') && 
-                !e.target.closest('.mobile-menu-btn')) {
-                mainNav.classList.remove('show');
-                mobileMenuBtn.querySelector('span').textContent = 'menu';
             }
         });
         
@@ -2190,7 +2104,14 @@
             `;
         });
 
-        // ===== IMPROVED ACTIVITIES MODAL =====
+        // ===== PERFORMANCE MONITORING =====
+        window.addEventListener('load', () => {
+            const perfData = window.performance.timing;
+            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+            console.log(`Page loaded in ${pageLoadTime}ms`);
+        });
+
+        // ===== EXISTING ACTIVITIES MODAL =====
         const activitiesBtn = document.getElementById('activitiesBtn');
         const activitiesModal = document.getElementById('activitiesModal');
         const closeActivitiesModal = document.getElementById('closeActivitiesModal');
@@ -2217,26 +2138,6 @@
                 location: "ห้องเรียน 633 ชั้น 3",
                 type: "upcoming",
                 category: "การแข่งขัน"
-            },
-            {
-                id: 3,
-                title: "สัมมนาเทคโนโลยีคลาวด์",
-                description: "สัมมนาเกี่ยวกับการประยุกต์ใช้เทคโนโลยีคลาวด์ในองค์กร",
-                date: "2025-02-28",
-                time: "10:00 - 12:00",
-                location: "ห้องประชุมใหญ่",
-                type: "completed",
-                category: "สัมมนา"
-            },
-            {
-                id: 4,
-                title: "อบรมการเขียนเว็บด้วย React",
-                description: "การอบรมการเขียนเว็บแอปพลิเคชันด้วย React Framework",
-                date: "2025-03-10",
-                time: "13:00 - 16:00",
-                location: "ห้องคอมพิวเตอร์ 2",
-                type: "ongoing",
-                category: "การอบรม"
             }
         ];
 
@@ -2251,50 +2152,37 @@
             
             filteredActivities.sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            if (filteredActivities.length === 0) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'activity-card';
-                emptyMessage.innerHTML = `
-                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--on-background);">
-                        <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: var(--spacing-md); opacity: 0.5;"></i>
-                        <h4>ไม่มีกิจกรรมในหมวดนี้</h4>
-                        <p>กรุณาเลือกหมวดอื่นหรือตรวจสอบอีกครั้งในภายหลัง</p>
+            filteredActivities.forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-card';
+                activityItem.innerHTML = `
+                    <div class="activity-header">
+                        <div>
+                            <h4 class="activity-title">${activity.title}</h4>
+                            <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: 0.875rem; color: var(--on-background);">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(activity.date)} | ${activity.time}</span>
+                            </div>
+                        </div>
+                        <span class="activity-badge badge-${activity.type}">
+                            ${getTypeText(activity.type)}
+                        </span>
+                    </div>
+                    <p style="margin: var(--spacing-sm) 0; color: var(--on-background);">${activity.description}</p>
+                    <div style="display: flex; gap: var(--spacing-lg); flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${activity.location}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
+                            <i class="fas fa-tag"></i>
+                            <span>${activity.category}</span>
+                        </div>
                     </div>
                 `;
-                activitiesList.appendChild(emptyMessage);
-            } else {
-                filteredActivities.forEach(activity => {
-                    const activityItem = document.createElement('div');
-                    activityItem.className = 'activity-card';
-                    activityItem.innerHTML = `
-                        <div class="activity-header">
-                            <div>
-                                <h4 class="activity-title">${activity.title}</h4>
-                                <div style="display: flex; align-items: center; gap: var(--spacing-sm); font-size: 0.875rem; color: var(--on-background);">
-                                    <i class="fas fa-calendar"></i>
-                                    <span>${formatDate(activity.date)} | ${activity.time}</span>
-                                </div>
-                            </div>
-                            <span class="activity-badge badge-${activity.type}">
-                                ${getTypeText(activity.type)}
-                            </span>
-                        </div>
-                        <p style="margin: var(--spacing-sm) 0; color: var(--on-background);">${activity.description}</p>
-                        <div style="display: flex; gap: var(--spacing-lg); flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>${activity.location}</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.875rem; color: var(--on-background);">
-                                <i class="fas fa-tag"></i>
-                                <span>${activity.category}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    activitiesList.appendChild(activityItem);
-                });
-            }
+                
+                activitiesList.appendChild(activityItem);
+            });
         }
 
         // Format date
@@ -2340,7 +2228,7 @@
             });
         });
 
-        // ===== IMPROVED SHARE MODAL =====
+        // ===== SHARE MODAL =====
         const shareBtn = document.getElementById('shareBtn');
         const shareModal = document.getElementById('shareModal');
         const closeShareModal = document.getElementById('closeShareModal');
@@ -2389,25 +2277,14 @@
                 if (shareType === 'link') {
                     shareLinkInput.value = shareUrl;
                     shareResult.style.display = 'block';
-                    
-                    // Auto-scroll to result
-                    setTimeout(() => {
-                        shareResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }, 100);
                 } else if (shareType === 'copy') {
                     navigator.clipboard.writeText(shareUrl).then(() => {
                         alert('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว');
                     }).catch(err => {
                         console.error('Failed to copy: ', err);
-                        // Fallback for older browsers
-                        shareLinkInput.value = shareUrl;
-                        shareLinkInput.select();
-                        document.execCommand('copy');
-                        alert('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว');
                     });
                 } else if (shareType === 'qr') {
-                    // ในที่นี้เราจะแสดงเป็น alert แทนการสร้าง QR Code จริง
-                    alert(`สร้าง QR Code สำหรับห้อง: ${selectedRoom.name}\n\nลิงก์: ${shareUrl}\n\n(ในเวอร์ชันจริงจะสร้าง QR Code จริงๆ)`);
+                    alert('สร้าง QR Code สำหรับห้อง ' + selectedRoom.name);
                 }
             });
         });
@@ -2423,15 +2300,6 @@
         shareBtn.addEventListener('click', () => {
             shareModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            // Reset selection
-            shareRooms.querySelectorAll('.room').forEach(r => {
-                r.style.backgroundColor = '';
-                r.style.color = '';
-                r.style.borderColor = '';
-            });
-            selectedRoom = null;
-            shareResult.style.display = 'none';
         });
 
         // Close share modal
@@ -2453,7 +2321,10 @@
         // Close modals with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                closeAllModals();
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
             }
         });
 
@@ -2493,44 +2364,6 @@
                 completeLoading();
             }
         }
-
-        // ===== ADDITIONAL IMPROVEMENTS =====
-        
-        // เพิ่ม ripple effect สำหรับปุ่ม
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn') || e.target.closest('.btn')) {
-                const btn = e.target.classList.contains('btn') ? e.target : e.target.closest('.btn');
-                btn.focus();
-            }
-        });
-
-        // ป้องกันการสครอลล์เมื่อ modal เปิดอยู่
-        document.addEventListener('wheel', function(e) {
-            if (document.querySelector('.modal.active')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // เพิ่ม touch event สำหรับ mobile
-        document.addEventListener('touchstart', function(e) {
-            // Handle touch events for buttons
-            if (e.target.classList.contains('btn') || e.target.closest('.btn')) {
-                const btn = e.target.classList.contains('btn') ? e.target : e.target.closest('.btn');
-                btn.style.transform = 'scale(0.98)';
-                
-                setTimeout(() => {
-                    btn.style.transform = '';
-                }, 150);
-            }
-        });
-
-        // ตรวจสอบและแก้ไขภาพที่โหลดไม่สำเร็จ
-        document.addEventListener('error', function(e) {
-            if (e.target.tagName === 'IMG') {
-                console.log('ภาพโหลดไม่สำเร็จ:', e.target.src);
-                // คุณสามารถเพิ่มการจัดการภาพที่โหลดไม่สำเร็จได้ที่นี่
-            }
-        }, true);
     </script>
 </body>
 </html>
