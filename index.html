@@ -1,3 +1,4 @@
+แก้ไขต่อให้ หน้าวเ็บผู้ดูแลสามารถเลือกผู้ใช้ได้ และ ให้ผู้ดูแลตั้งรหัสผ่านเอง 
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -1269,80 +1270,6 @@
             color: var(--admin-dark);
         }
 
-        /* User Selection */
-        .user-selection {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .user-checkbox {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md);
-            background-color: var(--background);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .user-checkbox:hover {
-            border-color: var(--admin);
-            background-color: var(--admin-light);
-        }
-
-        .user-checkbox input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-weight: 500;
-            color: var(--on-surface);
-        }
-
-        .user-role {
-            font-size: 0.875rem;
-            color: var(--on-background);
-        }
-
-        /* Password Change Form */
-        .password-change-form {
-            background-color: var(--background);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            border: 2px solid var(--admin);
-            margin-top: var(--spacing-xl);
-        }
-
-        .password-strength {
-            margin-top: var(--spacing-sm);
-            font-size: 0.875rem;
-        }
-
-        .strength-meter {
-            height: 4px;
-            background-color: var(--border);
-            border-radius: var(--radius-full);
-            margin-top: var(--spacing-xs);
-            overflow: hidden;
-        }
-
-        .strength-fill {
-            height: 100%;
-            border-radius: var(--radius-full);
-            transition: width 0.3s, background-color 0.3s;
-            width: 0%;
-        }
-
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -1508,8 +1435,10 @@
                 <div class="admin-info" style="margin-bottom: var(--spacing-xl);">
                     <div class="admin-info-card">
                         <h3><i class="fas fa-users"></i> ผู้ดูแลที่ได้รับอนุญาต</h3>
-                        <ul class="admin-list" id="allowedUsersList">
-                            <!-- Allowed users will be loaded here -->
+                        <ul class="admin-list">
+                            <li><i class="fas fa-user-check"></i> พิพัฒน์ รักส้ง</li>
+                            <li><i class="fas fa-user-check"></i> กรดนัย จุอ่อน</li>
+                            <li><i class="fas fa-user-check"></i> กฤตภาสวิจิตร</li>
                         </ul>
                     </div>
                 </div>
@@ -1518,7 +1447,7 @@
                     <label for="adminPassword"><i class="fas fa-key"></i> รหัสผ่านผู้ดูแล</label>
                     <input type="password" id="adminPassword" class="form-control" placeholder="กรุณากรอกรหัสผ่าน" autocomplete="off">
                     <small style="color: var(--on-background); margin-top: var(--spacing-xs);">
-                        <i class="fas fa-info-circle"></i> กรุณากรอกรหัสผ่านที่ตั้งไว้
+                        <i class="fas fa-info-circle"></i> รหัสผ่าน: "ภาวร"
                     </small>
                 </div>
                 
@@ -1611,9 +1540,6 @@
                 </button>
                 <button class="admin-nav-btn" data-admin-section="activities">
                     <i class="fas fa-calendar-alt"></i> จัดการกิจกรรม
-                </button>
-                <button class="admin-nav-btn" data-admin-section="settings">
-                    <i class="fas fa-cog"></i> การตั้งค่าผู้ดูแล
                 </button>
             </div>
             
@@ -1809,80 +1735,6 @@
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Admin Settings Section -->
-            <div class="admin-section" id="adminSettingsSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-cog"></i> การตั้งค่าผู้ดูแล</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">จัดการผู้ใช้ที่สามารถเข้าถึงระบบและตั้งค่ารหัสผ่าน</p>
-                    
-                    <div class="admin-content" style="background-color: var(--admin-light); border: 2px solid var(--admin);">
-                        <h3><i class="fas fa-users-cog"></i> การเลือกผู้ดูแล</h3>
-                        <p style="color: var(--on-background); margin-bottom: var(--spacing-lg);">เลือกผู้ใช้ที่สามารถเข้าถึงระบบผู้ดูแลเว็บไซต์ (เลือกได้มากกว่า 1 คน)</p>
-                        
-                        <div class="user-selection" id="userSelection">
-                            <!-- User checkboxes will be loaded here -->
-                        </div>
-                        
-                        <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                            <button class="btn btn-admin" id="saveUserSettingsBtn">
-                                <i class="fas fa-save"></i> บันทึกการเลือกผู้ใช้
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="password-change-form">
-                        <h3><i class="fas fa-key"></i> เปลี่ยนรหัสผ่านผู้ดูแล</h3>
-                        <p style="color: var(--on-background); margin-bottom: var(--spacing-lg);">ตั้งค่ารหัสผ่านใหม่สำหรับเข้าสู่ระบบผู้ดูแล</p>
-                        
-                        <form class="admin-form" id="passwordChangeForm">
-                            <div class="form-group">
-                                <label for="newPassword"><i class="fas fa-lock"></i> รหัสผ่านใหม่</label>
-                                <input type="password" id="newPassword" class="form-control" placeholder="กรอกรหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)" autocomplete="new-password">
-                                <div class="password-strength">
-                                    <div>ความแข็งแรงของรหัสผ่าน:</div>
-                                    <div class="strength-meter">
-                                        <div class="strength-fill" id="passwordStrengthFill"></div>
-                                    </div>
-                                    <div id="passwordStrengthText" style="margin-top: var(--spacing-xs);">-</div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="confirmPassword"><i class="fas fa-lock"></i> ยืนยันรหัสผ่านใหม่</label>
-                                <input type="password" id="confirmPassword" class="form-control" placeholder="กรอกรหัสผ่านใหม่อีกครั้ง" autocomplete="new-password">
-                                <div id="passwordMatchError" style="color: #F44336; margin-top: var(--spacing-xs); display: none;">
-                                    <i class="fas fa-exclamation-circle"></i> รหัสผ่านไม่ตรงกัน
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                                <button type="button" class="btn btn-admin" id="savePasswordBtn">
-                                    <i class="fas fa-save"></i> บันทึกรหัสผ่านใหม่
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border);">
-                        <h3><i class="fas fa-info-circle"></i> ข้อมูลระบบ</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
-                            <div style="background-color: var(--background); padding: var(--spacing-md); border-radius: var(--radius-md); border: 1px solid var(--border);">
-                                <div style="font-size: 0.875rem; color: var(--on-background);">ผู้ดูแลที่เลือก</div>
-                                <div style="font-weight: 500; margin-top: var(--spacing-xs);" id="selectedUsersCount">0 คน</div>
-                            </div>
-                            <div style="background-color: var(--background); padding: var(--spacing-md); border-radius: var(--radius-md); border: 1px solid var(--border);">
-                                <div style="font-size: 0.875rem; color: var(--on-background);">รหัสผ่านตั้งค่าแล้ว</div>
-                                <div style="font-weight: 500; margin-top: var(--spacing-xs);" id="passwordStatus">ยังไม่ตั้งค่า</div>
-                            </div>
-                            <div style="background-color: var(--background); padding: var(--spacing-md); border-radius: var(--radius-md); border: 1px solid var(--border);">
-                                <div style="font-size: 0.875rem; color: var(--on-background);">เวอร์ชันระบบ</div>
-                                <div style="font-weight: 500; margin-top: var(--spacing-xs);">2.0</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -2227,7 +2079,6 @@
             
             // Load data from localStorage
             loadWebsiteData();
-            loadAdminSettings();
         });
 
         // ===== ADMIN SYSTEM =====
@@ -2241,77 +2092,17 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const previewWebsiteBtn = document.getElementById('previewWebsiteBtn');
         const saveAllChangesBtn = document.getElementById('saveAllChangesBtn');
-        const allowedUsersList = document.getElementById('allowedUsersList');
 
-        // Default admin settings
-        const defaultAdminSettings = {
-            password: null, // No password set initially
-            allowedUsers: [
-                { id: 1, name: "พิพัฒน์ รักส้ง", role: "ผู้ดูแลระบบ", allowed: true },
-                { id: 2, name: "กรดนัย จุอ่อน", role: "ผู้ดูแลระบบ", allowed: true },
-                { id: 3, name: "กฤตภาสวิจิตร", role: "ผู้ดูแลระบบ", allowed: true }
-            ]
-        };
-
-        // Current admin settings
-        let adminSettings = null;
+        // Admin credentials
+        const ADMIN_PASSWORD = "ภาวร";
+        const ADMIN_USERS = ["พิพัฒน์ รักส้ง", "กรดนัย จุอ่อน", "กฤตภาสวิจิตร"];
 
         // Check if admin is logged in
         let isAdminLoggedIn = false;
 
-        // Load admin settings
-        function loadAdminSettings() {
-            const savedSettings = localStorage.getItem('adminSettings');
-            if (savedSettings) {
-                adminSettings = JSON.parse(savedSettings);
-            } else {
-                adminSettings = defaultAdminSettings;
-                localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
-            }
-            
-            // Update login modal with allowed users
-            updateAllowedUsersList();
-        }
-
-        // Update allowed users list in login modal
-        function updateAllowedUsersList() {
-            allowedUsersList.innerHTML = '';
-            
-            adminSettings.allowedUsers.forEach(user => {
-                if (user.allowed) {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<i class="fas fa-user-check"></i> ${user.name}`;
-                    allowedUsersList.appendChild(li);
-                }
-            });
-            
-            // If no users are selected, show a message
-            if (allowedUsersList.children.length === 0) {
-                const li = document.createElement('li');
-                li.innerHTML = '<i class="fas fa-exclamation-circle"></i> ไม่มีผู้ใช้ที่ได้รับอนุญาต';
-                allowedUsersList.appendChild(li);
-            }
-        }
-
-        // Check if any users are allowed
-        function hasAllowedUsers() {
-            return adminSettings.allowedUsers.some(user => user.allowed);
-        }
-
-        // Check if password is set
-        function isPasswordSet() {
-            return adminSettings.password !== null && adminSettings.password !== '';
-        }
-
         // Open admin login modal
         adminBtn.addEventListener('click', () => {
             if (!isAdminLoggedIn) {
-                // Check if password is set
-                if (!isPasswordSet()) {
-                    alert('ยังไม่ได้ตั้งรหัสผ่าน กรุณาเข้าสู่ระบบด้วยรหัสผ่านชั่วคราว "admin123" เพื่อตั้งรหัสผ่านใหม่');
-                    adminPassword.value = 'admin123';
-                }
-                
                 adminLoginModal.classList.add('active');
                 adminPassword.focus();
                 document.body.style.overflow = 'hidden';
@@ -2332,31 +2123,7 @@
         loginBtn.addEventListener('click', () => {
             const password = adminPassword.value.trim();
             
-            // Check if any users are allowed
-            if (!hasAllowedUsers()) {
-                alert('ไม่มีผู้ใช้ที่ได้รับอนุญาต กรุณาเลือกผู้ใช้ในหน้าแอดมินก่อน');
-                return;
-            }
-            
-            // First time login with temporary password
-            if (!isPasswordSet() && password === 'admin123') {
-                // Successful login with temporary password
-                isAdminLoggedIn = true;
-                adminLoginModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                adminPassword.value = '';
-                loginError.style.display = 'none';
-                
-                // Show success message
-                showNotification('เข้าสู่ระบบสำเร็จ โปรดตั้งรหัสผ่านใหม่ในหน้าแอดมิน', 'success');
-                
-                // Show admin page
-                showAdminPage();
-                return;
-            }
-            
-            // Check password
-            if (isPasswordSet() && password === adminSettings.password) {
+            if (password === ADMIN_PASSWORD) {
                 // Successful login
                 isAdminLoggedIn = true;
                 adminLoginModal.classList.remove('active');
@@ -2441,176 +2208,6 @@
         saveAllChangesBtn.addEventListener('click', () => {
             saveAllChanges();
             showNotification('บันทึกการเปลี่ยนแปลงทั้งหมดสำเร็จ', 'success');
-        });
-
-        // ===== ADMIN SETTINGS MANAGEMENT =====
-        const userSelection = document.getElementById('userSelection');
-        const saveUserSettingsBtn = document.getElementById('saveUserSettingsBtn');
-        const newPasswordInput = document.getElementById('newPassword');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const savePasswordBtn = document.getElementById('savePasswordBtn');
-        const passwordStrengthFill = document.getElementById('passwordStrengthFill');
-        const passwordStrengthText = document.getElementById('passwordStrengthText');
-        const passwordMatchError = document.getElementById('passwordMatchError');
-        const selectedUsersCount = document.getElementById('selectedUsersCount');
-        const passwordStatus = document.getElementById('passwordStatus');
-
-        // Load user selection
-        function loadUserSelection() {
-            userSelection.innerHTML = '';
-            
-            adminSettings.allowedUsers.forEach(user => {
-                const userCheckbox = document.createElement('div');
-                userCheckbox.className = 'user-checkbox';
-                userCheckbox.innerHTML = `
-                    <input type="checkbox" id="user-${user.id}" ${user.allowed ? 'checked' : ''} data-id="${user.id}">
-                    <div class="user-info">
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-role">${user.role}</div>
-                    </div>
-                `;
-                
-                userSelection.appendChild(userCheckbox);
-            });
-            
-            // Update counts
-            updateSettingsCounts();
-        }
-
-        // Update settings counts
-        function updateSettingsCounts() {
-            // Count selected users
-            const selectedCount = adminSettings.allowedUsers.filter(user => user.allowed).length;
-            selectedUsersCount.textContent = `${selectedCount} คน`;
-            
-            // Update password status
-            passwordStatus.textContent = isPasswordSet() ? 'ตั้งค่าแล้ว' : 'ยังไม่ตั้งค่า';
-            passwordStatus.style.color = isPasswordSet() ? 'var(--secondary)' : '#F44336';
-        }
-
-        // Save user settings
-        saveUserSettingsBtn.addEventListener('click', () => {
-            // Update allowed users from checkboxes
-            adminSettings.allowedUsers.forEach(user => {
-                const checkbox = document.getElementById(`user-${user.id}`);
-                user.allowed = checkbox.checked;
-            });
-            
-            // Save to localStorage
-            localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
-            
-            // Update login modal
-            updateAllowedUsersList();
-            
-            // Update counts
-            updateSettingsCounts();
-            
-            showNotification('บันทึกการเลือกผู้ใช้สำเร็จ', 'success');
-        });
-
-        // Password strength checker
-        newPasswordInput.addEventListener('input', () => {
-            const password = newPasswordInput.value;
-            let strength = 0;
-            let text = '';
-            let color = '#F44336';
-            
-            // Check password length
-            if (password.length >= 6) strength += 1;
-            
-            // Check for uppercase letters
-            if (/[A-Z]/.test(password)) strength += 1;
-            
-            // Check for lowercase letters
-            if (/[a-z]/.test(password)) strength += 1;
-            
-            // Check for numbers
-            if (/[0-9]/.test(password)) strength += 1;
-            
-            // Check for special characters
-            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-            
-            // Update strength meter
-            const percentage = (strength / 5) * 100;
-            passwordStrengthFill.style.width = `${percentage}%`;
-            
-            // Update text and color
-            switch(strength) {
-                case 0:
-                    text = 'ยังไม่กรอกรหัสผ่าน';
-                    color = '#F44336';
-                    break;
-                case 1:
-                    text = 'อ่อนมาก';
-                    color = '#F44336';
-                    break;
-                case 2:
-                    text = 'อ่อน';
-                    color = '#FF9800';
-                    break;
-                case 3:
-                    text = 'ปานกลาง';
-                    color = '#FFC107';
-                    break;
-                case 4:
-                    text = 'แข็งแรง';
-                    color = '#8BC34A';
-                    break;
-                case 5:
-                    text = 'แข็งแรงมาก';
-                    color = '#4CAF50';
-                    break;
-            }
-            
-            passwordStrengthFill.style.backgroundColor = color;
-            passwordStrengthText.textContent = text;
-            passwordStrengthText.style.color = color;
-        });
-
-        // Check password match
-        confirmPasswordInput.addEventListener('input', () => {
-            const password = newPasswordInput.value;
-            const confirm = confirmPasswordInput.value;
-            
-            if (confirm !== '' && password !== confirm) {
-                passwordMatchError.style.display = 'block';
-            } else {
-                passwordMatchError.style.display = 'none';
-            }
-        });
-
-        // Save new password
-        savePasswordBtn.addEventListener('click', () => {
-            const password = newPasswordInput.value;
-            const confirm = confirmPasswordInput.value;
-            
-            // Validate password
-            if (password.length < 6) {
-                alert('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
-                newPasswordInput.focus();
-                return;
-            }
-            
-            if (password !== confirm) {
-                alert('รหัสผ่านไม่ตรงกัน');
-                confirmPasswordInput.focus();
-                return;
-            }
-            
-            // Save new password
-            adminSettings.password = password;
-            localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
-            
-            // Clear form
-            newPasswordInput.value = '';
-            confirmPasswordInput.value = '';
-            passwordStrengthFill.style.width = '0%';
-            passwordStrengthText.textContent = '-';
-            
-            // Update counts
-            updateSettingsCounts();
-            
-            showNotification('บันทึกรหัสผ่านใหม่สำเร็จ', 'success');
         });
 
         // ===== DATA MANAGEMENT SYSTEM =====
@@ -2748,10 +2345,6 @@
             
             // Load activities for editing
             loadActivitiesEdit(data.activities);
-            
-            // Load admin settings
-            loadUserSelection();
-            updateSettingsCounts();
         }
 
         // Save all changes
@@ -2945,6 +2538,7 @@
 
         // Save teachers changes
         function saveTeachersChanges() {
+            // This function is called by saveAllChanges
             const data = JSON.parse(localStorage.getItem('websiteData'));
             const teacherInputs = document.querySelectorAll('.teacher-name');
             
@@ -3395,6 +2989,8 @@
 
         // Save activities changes
         function saveActivitiesChanges() {
+            // This would need to be implemented based on the edit functionality
+            // For now, we'll just reload from localStorage
             const data = JSON.parse(localStorage.getItem('websiteData'));
             localStorage.setItem('websiteData', JSON.stringify(data));
         }
