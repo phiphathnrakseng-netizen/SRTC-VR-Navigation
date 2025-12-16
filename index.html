@@ -3,465 +3,1243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Indoor Navigation UI</title>
-    <!-- Google Fonts: Roboto for Material feel, Kanit for Thai -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    
+    <title>AR Navigation System - วิทยาลัยเทคโนโลยี</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2563EB; /* Bright Blue */
-            --accent-color: #F43F5E; /* Rose/Red for markers */
-            --surface-color: rgba(255, 255, 255, 0.95);
-            --glass-color: rgba(255, 255, 255, 0.7);
-            --text-main: #1F2937;
-            --text-sec: #6B7280;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
-            --shadow-hard: 0 4px 12px rgba(0,0,0,0.15);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Kanit', 'Roboto', sans-serif;
-            background-color: #111;
-            overflow: hidden; /* Prevent scroll on mobile */
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* --- Main Container (Mobile Screen Simulation) --- */
-        .app-container {
-            width: 100%;
-            max-width: 480px; /* Mobile max width */
-            height: 100%;
-            background: #333;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* --- Simulated AR Camera Background --- */
-        .ar-view {
-            width: 100%;
-            height: 100%;
-            /* Placeholder Image imitating a building hallway */
-            background-image: url('https://images.unsplash.com/photo-1505566938927-2c93d9326e5a?q=80&w=1000&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            transition: var(--transition);
+            --primary-blue: #0d47a1;
+            --primary-dark-blue: #002171;
+            --primary-light-blue: #5472d3;
+            --accent-blue: #2962ff;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #757575;
+            --text-dark: #212121;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
         }
         
-        /* Simulated 2D Map (Hidden by default) */
-        .map-view {
-            width: 100%;
-            height: 100%;
-            background-color: #f0f2f5;
-            position: absolute;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
             top: 0;
-            left: 0;
-            z-index: 1;
-            opacity: 0;
-            pointer-events: none;
-            transition: var(--transition);
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            font-size: 2.2rem;
+            color: var(--white);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 20px 20px;
+            color: var(--primary-blue);
+            font-weight: 600;
         }
         
-        .map-view.active {
-            opacity: 1;
-            pointer-events: auto;
-            z-index: 2; /* Bring above AR */
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            padding: 2rem 0;
         }
-
-        /* --- UI Layers --- */
-        .ui-layer {
+        
+        /* Map Section */
+        .map-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            height: 600px;
+            position: relative;
+        }
+        
+        .map-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--medium-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .map-title h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--primary-dark-blue);
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .map-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 400;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .map-btn:hover {
+            background-color: var(--primary-dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        .map-container {
+            height: calc(100% - 80px);
+            position: relative;
+            background: linear-gradient(145deg, #e6f2ff 0%, #f0f7ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .building-map {
+            width: 80%;
+            height: 80%;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floor-selector {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none; /* Let clicks pass through to map/ar */
+            top: 20px;
+            right: 20px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
+            gap: 8px;
+            z-index: 10;
         }
-
-        /* --- Top Bar --- */
-        .top-bar {
-            pointer-events: auto;
+        
+        .floor-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .floor-btn.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+        
+        .ar-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(13, 71, 161, 0.9);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+        
+        .ar-icon {
+            font-size: 2.5rem;
+        }
+        
+        .ar-text h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .ar-btn {
+            padding: 10px 24px;
+            background-color: var(--white);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .ar-btn:hover {
+            background-color: var(--light-gray);
+            transform: translateY(-2px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .sidebar-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+        
+        .card-header h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .search-box {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            padding: 0 20px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+        }
+        
+        .location-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding-top: 20px;
         }
-
-        .search-box {
-            background: var(--surface-color);
-            padding: 12px 20px;
-            border-radius: 50px;
+        
+        .location-item {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .location-item:hover {
+            border-color: var(--primary-blue);
+            background-color: rgba(13, 71, 161, 0.05);
+        }
+        
+        .location-item.active {
+            border-color: var(--primary-blue);
+            background-color: rgba(13, 71, 161, 0.1);
+        }
+        
+        .location-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--primary-dark-blue);
+        }
+        
+        .location-details {
+            display: flex;
+            justify-content: space-between;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .navigation-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .step {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .step:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(13, 71, 161, 0.1);
             display: flex;
             align-items: center;
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(10px);
+            justify-content: center;
+            color: var(--primary-blue);
+            flex-shrink: 0;
         }
-
-        .search-box input {
+        
+        .step-text h4 {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .step-text p {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            padding: 1rem;
+            background-color: var(--light-gray);
             border: none;
-            background: transparent;
-            margin-left: 10px;
-            font-family: 'Kanit';
-            font-size: 1rem;
-            width: 100%;
-            outline: none;
-            color: var(--text-main);
-        }
-
-        .chips-container {
+            border-radius: var(--border-radius);
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            /* Hide scrollbar */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .chips-container::-webkit-scrollbar { display: none; }
-
-        .chip {
-            background: var(--glass-color);
-            backdrop-filter: blur(5px);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            white-space: nowrap;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: var(--transition);
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
         }
-
-        .chip.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+        
+        .action-btn:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-3px);
         }
-
-        /* --- AR Markers (Floating Pins) --- */
-        .ar-markers-container {
-            position: absolute;
+        
+        .action-btn i {
+            font-size: 1.8rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark-blue);
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            opacity: 1;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                grid-row: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .map-controls {
+                flex-wrap: wrap;
+            }
+            
+            .ar-overlay {
+                flex-direction: column;
+                text-align: center;
+                width: 90%;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+        
+        /* AR Modal */
+        .ar-modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-        }
-
-        .ar-pin {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
             align-items: center;
-            cursor: pointer;
-            pointer-events: auto;
-            transition: transform 0.3s ease;
         }
         
-        /* Positioning example */
-        .pin-1 { top: 40%; left: 30%; }
-        .pin-2 { top: 35%; left: 70%; transform: scale(0.8); opacity: 0.8; }
-
-        .pin-card {
-            background: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            box-shadow: var(--shadow-hard);
-            margin-bottom: 8px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: var(--transition);
+        .ar-modal.active {
+            display: flex;
         }
-
-        .ar-pin:hover .pin-card, .ar-pin.active .pin-card {
-            opacity: 1;
-            transform: translateY(0);
+        
+        .ar-modal-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
         }
-
-        .pin-dot {
-            width: 24px;
-            height: 24px;
-            background: var(--accent-color);
-            border: 3px solid white;
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.3);
+        
+        .ar-modal-header {
+            padding: 1.5rem;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        
+        .ar-viewer {
+            height: 500px;
+            background: linear-gradient(145deg, #000428 0%, #004e92 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            gap: 1rem;
+        }
+        
+        .ar-icon-large {
+            font-size: 8rem;
+            opacity: 0.8;
+        }
+        
+        .ar-instructions {
+            padding: 1.5rem;
+            background-color: var(--light-gray);
+        }
+        
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
             animation: pulse 2s infinite;
         }
         
-        .nav-line {
-            /* Simulated AR Path line */
+        /* Building map elements */
+        .room {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 4px;
-            height: 300px;
-            background: linear-gradient(to top, var(--primary-color), transparent);
-            transform: translateX(-50%) perspective(500px) rotateX(60deg);
-            opacity: 0.8;
-            pointer-events: none;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(244, 63, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
-        }
-
-        /* --- Bottom Sheet & Controls --- */
-        .bottom-ui {
-            pointer-events: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            align-items: flex-end; /* Align FAB to right */
-        }
-
-        .view-toggle-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: var(--text-main);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-soft);
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-        
-        .view-toggle-btn:active {
-            transform: scale(0.95);
-        }
-
-        .info-card {
-            width: 100%;
-            background: var(--surface-color);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-soft);
-            animation: slideUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .location-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .location-meta {
-            font-size: 0.9rem;
-            color: var(--text-sec);
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .distance-badge {
-            background: #E0F2FE;
-            color: #0284C7;
-            padding: 4px 8px;
             border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .action-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            font-family: 'Kanit';
-            font-size: 1rem;
-            font-weight: 500;
-            margin-top: 16px;
-            cursor: pointer;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: background 0.2s;
+            align-items: center;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .action-btn:hover {
-            background: #1d4ed8;
+        .room:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
         }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        
+        .hallway {
+            position: absolute;
+            background-color: var(--medium-gray);
         }
-
-        /* SVG Map Placeholder Style */
-        .map-svg {
-            width: 80%;
-            opacity: 0.5;
+        
+        .current-location {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #4caf50;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+            z-index: 5;
+        }
+        
+        .destination {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ff5722;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.3);
+            z-index: 5;
+        }
+        
+        .path {
+            position: absolute;
+            background-color: var(--accent-blue);
+            height: 4px;
+            border-radius: 2px;
+            z-index: 4;
         }
     </style>
 </head>
 <body>
-
-    <div class="app-container">
-        
-        <!-- Layer 1: Simulated AR Camera View -->
-        <div class="ar-view" id="arView">
-            <div class="nav-line"></div> <!-- Simulated path on floor -->
-        </div>
-
-        <!-- Layer 2: 2D Map View (Hidden initially) -->
-        <div class="map-view" id="mapView">
-            <!-- Simple SVG Floorplan Placeholder -->
-            <svg class="map-svg" viewBox="0 0 200 200">
-                <path d="M20,20 L180,20 L180,180 L20,180 Z" fill="none" stroke="#94a3b8" stroke-width="4"/>
-                <path d="M20,80 L180,80" stroke="#94a3b8" stroke-width="2"/>
-                <path d="M100,20 L100,180" stroke="#94a3b8" stroke-width="2"/>
-                <circle cx="100" cy="130" r="5" fill="#2563EB"/> <!-- User pos -->
-                <circle cx="60" cy="50" r="5" fill="#F43F5E"/> <!-- Target -->
-                <path d="M100,130 L100,80 L60,80 L60,50" stroke="#2563EB" stroke-width="2" stroke-dasharray="4"/>
-            </svg>
-        </div>
-
-        <!-- Layer 3: Floating UI Elements -->
-        <div class="ui-layer">
-            
-            <!-- Header Section -->
-            <header class="top-bar">
-                <div class="search-box">
-                    <span class="material-icons-round" style="color:var(--text-sec)">search</span>
-                    <input type="text" placeholder="ค้นหาห้อง, ร้านค้า, หรือแผนก...">
-                    <span class="material-icons-round" style="color:var(--primary-color)">mic</span>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-university"></i>
                 </div>
-                
-                <div class="chips-container">
-                    <div class="chip active">ทั้งหมด</div>
-                    <div class="chip">ห้องน้ำ</div>
-                    <div class="chip">ร้านกาแฟ</div>
-                    <div class="chip">บันไดเลื่อน</div>
-                    <div class="chip">ทางออก</div>
-                </div>
-            </header>
-
-            <!-- AR Markers Layer (Only visible in AR mode) -->
-            <div class="ar-markers-container" id="arMarkers">
-                <!-- Example Pin 1 -->
-                <div class="ar-pin pin-1 active" onclick="selectPin('ห้องประชุม A01', '50 ม.')">
-                    <div class="pin-card">ห้องประชุม A01</div>
-                    <div class="pin-dot"></div>
-                </div>
-                
-                <!-- Example Pin 2 -->
-                <div class="ar-pin pin-2" onclick="selectPin('Starbucks', '120 ม.')">
-                    <div class="pin-card">Starbucks</div>
-                    <div class="pin-dot" style="background: #059669; border-color:white;"></div>
+                <div class="logo-text">
+                    <h1>วิทยาลัยเทคโนโลยีแห่งชาติ</h1>
+                    <p>ระบบนำทางอาคารด้วย AR</p>
                 </div>
             </div>
-
-            <!-- Bottom Section -->
-            <footer class="bottom-ui">
-                <!-- Toggle Button (AR vs Map) -->
-                <button class="view-toggle-btn" onclick="toggleView()" id="toggleBtn">
-                    <span class="material-icons-round">map</span>
-                </button>
-
-                <!-- Information Card -->
-                <div class="info-card">
-                    <div class="card-header">
-                        <div>
-                            <h2 class="location-title" id="targetName">ห้องประชุม A01</h2>
-                            <div class="location-meta">
-                                <span class="material-icons-round" style="font-size:16px;">layers</span>
-                                ชั้น 2 • โซนการศึกษา
-                            </div>
-                        </div>
-                        <div class="distance-badge" id="targetDist">50 ม.</div>
-                    </div>
-                    <p style="font-size:0.9rem; color:var(--text-sec); line-height:1.5;">
-                        เดินตรงไป 30 เมตร แล้วเลี้ยวซ้าย ห้องจะอยู่ทางขวามือของคุณ
-                    </p>
-                    <button class="action-btn">
-                        <span class="material-icons-round">navigation</span>
-                        เริ่มนำทาง
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-map"></i>
+                    <span>แผนที่อาคาร</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-directions"></i>
+                    <span>การนำทาง</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-building"></i>
+                    <span>รายการอาคาร</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    <span>เกี่ยวกับ</span>
+                </a>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">วท</div>
+                <div>
+                    <div class="user-name">วรวิทย์ ใจดี</div>
+                    <div class="user-role">นักศึกษา</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Map Section -->
+        <section class="map-section">
+            <div class="map-header">
+                <div class="map-title">
+                    <h2>อาคารวิศวกรรมศาสตร์ (อาคาร 4)</h2>
+                    <p>ชั้น 3 - แผนที่นำทางภายในอาคาร</p>
+                </div>
+                <div class="map-controls">
+                    <button class="map-btn" id="zoomInBtn">
+                        <i class="fas fa-search-plus"></i>
+                        ขยาย
+                    </button>
+                    <button class="map-btn" id="zoomOutBtn">
+                        <i class="fas fa-search-minus"></i>
+                        ย่อ
+                    </button>
+                    <button class="map-btn" id="resetViewBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        รีเซ็ต
                     </button>
                 </div>
-            </footer>
-        </div>
-
-    </div>
-
-    <script>
-        let isMapView = false;
-        
-        function toggleView() {
-            const arView = document.getElementById('arView');
-            const mapView = document.getElementById('mapView');
-            const arMarkers = document.getElementById('arMarkers');
-            const btnIcon = document.querySelector('#toggleBtn span');
-
-            if (isMapView) {
-                // Switch to AR
-                mapView.classList.remove('active');
-                arMarkers.style.opacity = '1';
-                btnIcon.textContent = 'map';
-            } else {
-                // Switch to Map
-                mapView.classList.add('active');
-                arMarkers.style.opacity = '0';
-                btnIcon.textContent = 'view_in_ar';
-            }
-            isMapView = !isMapView;
-        }
-
-        function selectPin(name, distance) {
-            // Simple interaction to update text
-            document.getElementById('targetName').textContent = name;
-            document.getElementById('targetDist').textContent = distance;
+            </div>
             
-            // Visual feedback on pins
-            document.querySelectorAll('.ar-pin').forEach(p => p.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            <div class="map-container">
+                <!-- Floor selector -->
+                <div class="floor-selector">
+                    <button class="floor-btn">1</button>
+                    <button class="floor-btn">2</button>
+                    <button class="floor-btn active">3</button>
+                    <button class="floor-btn">4</button>
+                    <button class="floor-btn">5</button>
+                </div>
+                
+                <!-- Building map -->
+                <div class="building-map" id="buildingMap">
+                    <!-- Map elements will be generated by JavaScript -->
+                </div>
+                
+                <!-- AR Overlay -->
+                <div class="ar-overlay">
+                    <div class="ar-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <div class="ar-text">
+                        <h3>ประสบการณ์นำทางด้วย AR</h3>
+                        <p>เปิดใช้งานกล้องเพื่อดูเส้นทางในแบบ Augmented Reality</p>
+                    </div>
+                    <button class="ar-btn" id="openArBtn">
+                        <i class="fas fa-camera"></i>
+                        เปิด AR
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Search Card -->
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-search"></i> ค้นหาห้องหรือสถานที่</h3>
+                </div>
+                <div class="card-content">
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="เช่น ห้อง 4301, ห้องสมุด, ห้องประชุม">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="location-list">
+                        <div class="location-item active">
+                            <div class="location-name">ห้อง 4301 (ห้องปฏิบัติการคอมพิวเตอร์)</div>
+                            <div class="location-details">
+                                <span>ชั้น 3</span>
+                                <span>อาคาร 4</span>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-name">ห้อง 4302 (ห้องอาจารย์วิศวกรรม)</div>
+                            <div class="location-details">
+                                <span>ชั้น 3</span>
+                                <span>อาคาร 4</span>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-name">ห้อง 4305 (ห้องประชุมใหญ่)</div>
+                            <div class="location-details">
+                                <span>ชั้น 3</span>
+                                <span>อาคาร 4</span>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-name">ห้องน้ำชาย</div>
+                            <div class="location-details">
+                                <span>ชั้น 3</span>
+                                <span>อาคาร 4</span>
+                            </div>
+                        </div>
+                        <div class="location-item">
+                            <div class="location-name">ลิฟต์กลาง</div>
+                            <div class="location-details">
+                                <span>ชั้น 3</span>
+                                <span>อาคาร 4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Card -->
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-route"></i> คำแนะนำการเดินทาง</h3>
+                </div>
+                <div class="card-content">
+                    <div class="navigation-steps">
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-walking"></i>
+                            </div>
+                            <div class="step-text">
+                                <h4>เดินจากทางเข้า</h4>
+                                <p>เดินตรงไปทางโถงกลางประมาณ 20 เมตร</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <div class="step-text">
+                                <h4>เลี้ยวขวาที่โถงกลาง</h4>
+                                <p>ผ่านประตูทางเข้าห้อง 4302-4304</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <div class="step-text">
+                                <h4>ถึงห้อง 4301</h4>
+                                <p>ห้องปฏิบัติการคอมพิวเตอร์ ทางขวามือ</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-download"></i>
+                            <span>ดาวน์โหลดแผนที่</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-share-alt"></i>
+                            <span>แชร์เส้นทาง</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="copyright">
+                <p>&copy; 2023 วิทยาลัยเทคโนโลยีแห่งชาติ - ระบบนำทางอาคารด้วย AR</p>
+            </div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">นโยบายความเป็นส่วนตัว</a>
+                <a href="#" class="footer-link">ข้อกำหนดการใช้งาน</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AR Modal -->
+    <div class="ar-modal" id="arModal">
+        <div class="ar-modal-content">
+            <div class="ar-modal-header">
+                <h2><i class="fas fa-vr-cardboard"></i> โหมด Augmented Reality</h2>
+                <button class="close-modal" id="closeArBtn">&times;</button>
+            </div>
+            <div class="ar-viewer">
+                <div class="ar-icon-large pulse">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>กรุณาอนุญาตการเข้าถึงกล้อง</h3>
+                <p>ระบบกำลังเตรียมการแสดงผล AR...</p>
+                <div style="margin-top: 2rem;">
+                    <button class="map-btn" style="background-color: #4caf50;">
+                        <i class="fas fa-play"></i>
+                        เริ่มต้นการนำทาง AR
+                    </button>
+                </div>
+            </div>
+            <div class="ar-instructions">
+                <h4>คำแนะนำในการใช้งาน AR:</h4>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>ถืออุปกรณ์ในระดับสายตาและค่อยๆเคลื่อนไปตามเส้นทาง</li>
+                    <li>ปฏิบัติตามลูกศรและคำแนะนำที่ปรากฏบนหน้าจอ</li>
+                    <li>ระวังสิ่งกีดขวางขณะเดินตามเส้นทาง AR</li>
+                    <li>ใช้หูฟังเพื่อฟังคำแนะนำเสียง (แนะนำ)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const buildingMap = document.getElementById('buildingMap');
+        const openArBtn = document.getElementById('openArBtn');
+        const closeArBtn = document.getElementById('closeArBtn');
+        const arModal = document.getElementById('arModal');
+        const floorButtons = document.querySelectorAll('.floor-btn');
+        const locationItems = document.querySelectorAll('.location-item');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetViewBtn = document.getElementById('resetViewBtn');
+        
+        // Current map state
+        let currentFloor = 3;
+        let currentScale = 1;
+        let selectedLocation = '4301';
+        
+        // Initialize the building map
+        function initBuildingMap() {
+            // Clear the map
+            buildingMap.innerHTML = '';
+            
+            // Create rooms, hallways, and other map elements based on floor
+            createMapElements();
+            
+            // Add current location marker
+            const currentLocation = document.createElement('div');
+            currentLocation.className = 'current-location';
+            currentLocation.style.left = '30%';
+            currentLocation.style.top = '70%';
+            buildingMap.appendChild(currentLocation);
+            
+            // Add destination marker based on selected location
+            const destination = document.createElement('div');
+            destination.className = 'destination';
+            
+            // Set destination position based on selected room
+            if (selectedLocation === '4301') {
+                destination.style.left = '60%';
+                destination.style.top = '40%';
+            } else if (selectedLocation === '4302') {
+                destination.style.left = '50%';
+                destination.style.top = '30%';
+            } else if (selectedLocation === '4305') {
+                destination.style.left = '70%';
+                destination.style.top = '60%';
+            } else {
+                destination.style.left = '40%';
+                destination.style.top = '50%';
+            }
+            
+            buildingMap.appendChild(destination);
+            
+            // Create path between current location and destination
+            createPath(currentLocation, destination);
+            
+            // Apply current scale
+            buildingMap.style.transform = `scale(${currentScale})`;
         }
+        
+        // Create map elements (rooms, hallways)
+        function createMapElements() {
+            // Hallways
+            const hallway1 = document.createElement('div');
+            hallway1.className = 'hallway';
+            hallway1.style.width = '70%';
+            hallway1.style.height = '15%';
+            hallway1.style.left = '15%';
+            hallway1.style.top = '20%';
+            buildingMap.appendChild(hallway1);
+            
+            const hallway2 = document.createElement('div');
+            hallway2.className = 'hallway';
+            hallway2.style.width = '15%';
+            hallway2.style.height = '50%';
+            hallway2.style.left = '15%';
+            hallway2.style.top = '35%';
+            buildingMap.appendChild(hallway2);
+            
+            const hallway3 = document.createElement('div');
+            hallway3.className = 'hallway';
+            hallway3.style.width = '70%';
+            hallway3.style.height = '15%';
+            hallway3.style.left = '15%';
+            hallway3.style.top = '65%';
+            buildingMap.appendChild(hallway3);
+            
+            // Rooms for floor 3
+            if (currentFloor === 3) {
+                // Room 4301
+                const room4301 = document.createElement('div');
+                room4301.className = 'room';
+                room4301.style.width = '15%';
+                room4301.style.height = '20%';
+                room4301.style.left = '60%';
+                room4301.style.top = '40%';
+                room4301.style.backgroundColor = selectedLocation === '4301' ? '#0d47a1' : '#2196f3';
+                room4301.textContent = '4301';
+                room4301.addEventListener('click', () => selectLocation('4301'));
+                buildingMap.appendChild(room4301);
+                
+                // Room 4302
+                const room4302 = document.createElement('div');
+                room4302.className = 'room';
+                room4302.style.width = '15%';
+                room4302.style.height = '20%';
+                room4302.style.left = '50%';
+                room4302.style.top = '30%';
+                room4302.style.backgroundColor = selectedLocation === '4302' ? '#0d47a1' : '#2196f3';
+                room4302.textContent = '4302';
+                room4302.addEventListener('click', () => selectLocation('4302'));
+                buildingMap.appendChild(room4302);
+                
+                // Room 4305
+                const room4305 = document.createElement('div');
+                room4305.className = 'room';
+                room4305.style.width = '20%';
+                room4305.style.height = '25%';
+                room4305.style.left = '70%';
+                room4305.style.top = '60%';
+                room4305.style.backgroundColor = selectedLocation === '4305' ? '#0d47a1' : '#2196f3';
+                room4305.textContent = '4305';
+                room4305.addEventListener('click', () => selectLocation('4305'));
+                buildingMap.appendChild(room4305);
+                
+                // Restroom
+                const restroom = document.createElement('div');
+                restroom.className = 'room';
+                restroom.style.width = '10%';
+                restroom.style.height = '15%';
+                restroom.style.left = '40%';
+                restroom.style.top = '50%';
+                restroom.style.backgroundColor = '#795548';
+                restroom.textContent = 'WC';
+                restroom.addEventListener('click', () => selectLocation('WC'));
+                buildingMap.appendChild(restroom);
+                
+                // Elevator
+                const elevator = document.createElement('div');
+                elevator.className = 'room';
+                elevator.style.width = '10%';
+                elevator.style.height = '15%';
+                elevator.style.left = '30%';
+                elevator.style.top = '35%';
+                elevator.style.backgroundColor = '#9e9e9e';
+                elevator.textContent = 'ลิฟต์';
+                elevator.addEventListener('click', () => selectLocation('ลิฟต์'));
+                buildingMap.appendChild(elevator);
+            }
+        }
+        
+        // Create path between two points
+        function createPath(startElem, endElem) {
+            const path = document.createElement('div');
+            path.className = 'path';
+            
+            // Get positions
+            const startRect = startElem.getBoundingClientRect();
+            const endRect = endElem.getBoundingClientRect();
+            const mapRect = buildingMap.getBoundingClientRect();
+            
+            // Calculate positions relative to map
+            const startX = startRect.left - mapRect.left + startRect.width/2;
+            const startY = startRect.top - mapRect.top + startRect.height/2;
+            const endX = endRect.left - mapRect.left + endRect.width/2;
+            const endY = endRect.top - mapRect.top + endRect.height/2;
+            
+            // Calculate distance and angle
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const distance = Math.sqrt(dx*dx + dy*dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            // Set path properties
+            path.style.width = `${distance}px`;
+            path.style.left = `${startX}px`;
+            path.style.top = `${startY}px`;
+            path.style.transform = `rotate(${angle}deg)`;
+            path.style.transformOrigin = '0 0';
+            
+            buildingMap.appendChild(path);
+        }
+        
+        // Select a location
+        function selectLocation(locationId) {
+            selectedLocation = locationId;
+            
+            // Update location items
+            locationItems.forEach(item => {
+                const locationName = item.querySelector('.location-name').textContent;
+                if (locationName.includes(locationId)) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Update map
+            initBuildingMap();
+            
+            // Update navigation steps based on location
+            updateNavigationSteps(locationId);
+        }
+        
+        // Update navigation steps
+        function updateNavigationSteps(locationId) {
+            const stepHeaders = document.querySelectorAll('.step-text h4');
+            const stepDescriptions = document.querySelectorAll('.step-text p');
+            
+            if (locationId === '4301') {
+                stepHeaders[0].textContent = 'เดินจากทางเข้า';
+                stepDescriptions[0].textContent = 'เดินตรงไปทางโถงกลางประมาณ 20 เมตร';
+                stepHeaders[1].textContent = 'เลี้ยวขวาที่โถงกลาง';
+                stepDescriptions[1].textContent = 'ผ่านประตูทางเข้าห้อง 4302-4304';
+                stepHeaders[2].textContent = 'ถึงห้อง 4301';
+                stepDescriptions[2].textContent = 'ห้องปฏิบัติการคอมพิวเตอร์ ทางขวามือ';
+            } else if (locationId === '4302') {
+                stepHeaders[0].textContent = 'เดินจากทางเข้า';
+                stepDescriptions[0].textContent = 'เดินตรงไปทางโถงกลางประมาณ 15 เมตร';
+                stepHeaders[1].textContent = 'เลี้ยวซ้ายที่โถงกลาง';
+                stepDescriptions[1].textContent = 'ผ่านลิฟต์กลางทางซ้ายมือ';
+                stepHeaders[2].textContent = 'ถึงห้อง 4302';
+                stepDescriptions[2].textContent = 'ห้องอาจารย์วิศวกรรม ทางซ้ายมือ';
+            } else if (locationId === '4305') {
+                stepHeaders[0].textContent = 'เดินจากทางเข้า';
+                stepDescriptions[0].textContent = 'เดินตรงไปจนสุดโถงทางเดินประมาณ 30 เมตร';
+                stepHeaders[1].textContent = 'เลี้ยวซ้ายที่ทางแยก';
+                stepDescriptions[1].textContent = 'ผ่านห้องน้ำชายทางขวามือ';
+                stepHeaders[2].textContent = 'ถึงห้อง 4305';
+                stepDescriptions[2].textContent = 'ห้องประชุมใหญ่ ปลายทางเดิน';
+            }
+        }
+        
+        // Event Listeners
+        openArBtn.addEventListener('click', () => {
+            arModal.classList.add('active');
+        });
+        
+        closeArBtn.addEventListener('click', () => {
+            arModal.classList.remove('active');
+        });
+        
+        // Close modal when clicking outside
+        arModal.addEventListener('click', (e) => {
+            if (e.target === arModal) {
+                arModal.classList.remove('active');
+            }
+        });
+        
+        // Floor selection
+        floorButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                floorButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                // Update current floor
+                currentFloor = parseInt(button.textContent);
+                // Update map
+                initBuildingMap();
+            });
+        });
+        
+        // Location selection
+        locationItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items
+                locationItems.forEach(loc => loc.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+                
+                // Extract location id from item
+                const locationName = item.querySelector('.location-name').textContent;
+                let locationId = '';
+                if (locationName.includes('4301')) locationId = '4301';
+                else if (locationName.includes('4302')) locationId = '4302';
+                else if (locationName.includes('4305')) locationId = '4305';
+                else if (locationName.includes('ห้องน้ำ')) locationId = 'WC';
+                else if (locationName.includes('ลิฟต์')) locationId = 'ลิฟต์';
+                
+                // Select location
+                if (locationId) selectLocation(locationId);
+            });
+        });
+        
+        // Map controls
+        zoomInBtn.addEventListener('click', () => {
+            if (currentScale < 1.5) {
+                currentScale += 0.1;
+                buildingMap.style.transform = `scale(${currentScale})`;
+            }
+        });
+        
+        zoomOutBtn.addEventListener('click', () => {
+            if (currentScale > 0.7) {
+                currentScale -= 0.1;
+                buildingMap.style.transform = `scale(${currentScale})`;
+            }
+        });
+        
+        resetViewBtn.addEventListener('click', () => {
+            currentScale = 1;
+            buildingMap.style.transform = `scale(${currentScale})`;
+        });
+        
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        
+        function performSearch() {
+            const query = searchInput.value.toLowerCase();
+            if (!query) return;
+            
+            // Check if query matches any location
+            let foundLocation = null;
+            
+            locationItems.forEach(item => {
+                const locationName = item.querySelector('.location-name').textContent.toLowerCase();
+                if (locationName.includes(query)) {
+                    foundLocation = item;
+                }
+            });
+            
+            if (foundLocation) {
+                // Simulate click on found location
+                foundLocation.click();
+                
+                // Highlight search result
+                foundLocation.style.backgroundColor = 'rgba(255, 235, 59, 0.3)';
+                setTimeout(() => {
+                    foundLocation.style.backgroundColor = '';
+                }, 2000);
+            } else {
+                alert('ไม่พบสถานที่ "' + query + '" กรุณาค้นหาใหม่');
+            }
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            initBuildingMap();
+        });
     </script>
 </body>
 </html>
