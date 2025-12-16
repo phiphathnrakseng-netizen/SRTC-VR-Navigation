@@ -46,25 +46,21 @@
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
-        .btn-primary {
-            background-color: var(--accent-blue);
-            color: white;
-        }
+        .btn-primary { background-color: var(--accent-blue); color: white; }
         .btn-primary:hover { background-color: var(--primary-blue); }
 
-        .btn-outline {
-            border: 2px solid white;
-            background: transparent;
-            color: white;
-        }
+        .btn-outline { border: 2px solid white; background: transparent; color: white; }
         .btn-outline:hover { background: white; color: var(--primary-blue); }
 
         .btn-danger { background-color: var(--danger); color: white; }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-secondary { background-color: #666; color: white; }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -72,7 +68,7 @@
             background: #fff;
             outline: none;
         }
-        input:focus, select:focus { border-color: var(--accent-blue); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
 
         /* --- Navbar --- */
         .navbar {
@@ -89,7 +85,7 @@
             border-bottom: 4px solid var(--primary-blue);
         }
 
-        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-area { display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .logo-img { height: 50px; width: auto; }
         .college-name { font-size: 1.2rem; color: var(--primary-blue); line-height: 1.2; }
         .college-name span { display: block; font-size: 0.9rem; color: var(--text-grey); font-weight: 400; }
@@ -99,7 +95,6 @@
             color: var(--primary-blue);
             cursor: pointer;
             padding: 10px;
-            position: relative;
         }
 
         /* Dropdown Menu */
@@ -111,7 +106,7 @@
             width: 250px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border: 1px solid #eee;
-            display: none; /* Hidden by default */
+            display: none;
             z-index: 999;
         }
         .dropdown-menu.active { display: block; }
@@ -128,9 +123,8 @@
         .dropdown-item:hover { background-color: var(--bg-light); color: var(--accent-blue); }
 
         /* --- Pages / Sections --- */
-        .page-section { display: none; animation: fadeIn 0.3s ease; }
+        .page-section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 50px;}
         .page-section.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* --- AR Section --- */
@@ -143,12 +137,6 @@
             min-height: 350px;
             display: flex;
             align-items: center;
-        }
-        .ar-hero::before {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
         }
         .hero-content { position: relative; z-index: 2; max-width: 600px; }
         .hero-title { font-size: 3rem; margin: 10px 0; letter-spacing: 1px; }
@@ -197,50 +185,36 @@
             border-top: 5px solid var(--primary-blue);
         }
 
-        /* --- Admin Dashboard --- */
-        .admin-dashboard { padding: 40px 5%; background: white; min-height: 100vh; }
+        /* --- Admin Dashboard & Subpages --- */
+        .admin-dashboard, .admin-subpage { padding: 40px 5%; background: white; min-height: 100vh; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .dash-card { padding: 30px; background: var(--bg-light); border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; }
-        .dash-card:hover { background: var(--primary-blue); color: white; }
-        .dash-card i { font-size: 3rem; margin-bottom: 15px; }
+        .dash-card:hover { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+        .dash-card i { font-size: 3rem; margin-bottom: 15px; display: block;}
+        
+        /* Tables for Admin */
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .admin-table th, .admin-table td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        .admin-table th { background-color: var(--primary-blue); color: white; }
+        .admin-table tr:nth-child(even) { background-color: #f9f9f9; }
 
-        /* --- Camera Overlay (Full Screen) --- */
+        /* Gallery Grid */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .gallery-item { position: relative; height: 150px; background: #eee; overflow: hidden; border: 1px solid #ddd; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-item .delete-btn {
+            position: absolute; top: 5px; right: 5px; background: rgba(200,0,0,0.8); color: white; border: none; padding: 5px 8px; cursor: pointer;
+        }
+
+        /* --- Camera Overlay --- */
         #camera-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            z-index: 2000;
-            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 2000; display: none;
         }
         #camera-video { width: 100%; height: 100%; object-fit: cover; }
-        .camera-ui {
-            position: absolute;
-            bottom: 30px;
-            left: 0; width: 100%;
-            text-align: center;
-            color: white;
-            z-index: 2001;
-        }
-        .close-camera {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 2002;
-        }
-        .ar-marker {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px; height: 200px;
-            border: 2px dashed rgba(0, 255, 0, 0.7);
-            z-index: 2001;
-        }
+        .camera-ui { position: absolute; bottom: 30px; left: 0; width: 100%; text-align: center; color: white; z-index: 2001; }
+        .close-camera { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5); color: white; border: none; padding: 15px; font-size: 1.5rem; cursor: pointer; z-index: 2002; }
+        .ar-marker { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 2px dashed rgba(0, 255, 0, 0.7); z-index: 2001; }
         .ar-marker::after { content: 'Scanning...'; position: absolute; top: -30px; width: 100%; text-align: center; color: #0f0; }
 
     </style>
@@ -272,9 +246,9 @@
     <div id="page-home" class="page-section active">
         <section class="ar-hero">
             <div class="hero-content">
-                <h3>ระบบนำทางอัจฉริยะ</h3>
-                <h1 class="hero-title">AR NAVIGATION</h1>
-                <p style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</p>
+                <h3 id="home-subtitle">ระบบนำทางอัจฉริยะ</h3>
+                <h1 id="home-title" class="hero-title">AR NAVIGATION</h1>
+                <p id="home-desc" style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</p>
                 <button class="btn btn-outline" style="font-size: 1.2rem; padding: 15px 30px;" onclick="startAR()">
                     <i class="fas fa-camera"></i> เปิดกล้องนำทาง
                 </button>
@@ -288,72 +262,8 @@
                 <p>แผนกเทคโนโลยีสารสนเทศ (กดที่ห้องเพื่อเริ่มนำทาง)</p>
             </div>
 
-            <div class="floor-grid">
-                <div class="floor-card">
-                    <div class="floor-header">ชั้น 4 <i class="fas fa-layer-group"></i></div>
-                    <div onclick="startAR('ห้องพักครู')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-user-tie"></i></div>
-                            <div><h4>ห้องพักครู</h4><p class="text-small">Information Tech</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                    <div onclick="startAR('ห้อง Lecture')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-chalkboard"></i></div>
-                            <div><h4>ห้อง Lecture</h4><p>ห้องบรรยาย</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                    <div onclick="startAR('Lab Computer')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-desktop"></i></div>
-                            <div><h4>Lab 1, 2, 3</h4><p>ปฏิบัติการคอมฯ</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
+            <div class="floor-grid" id="floor-list-container">
                 </div>
-
-                <div class="floor-card">
-                    <div class="floor-header">ชั้น 3 <i class="fas fa-layer-group"></i></div>
-                    <div onclick="startAR('ห้อง 631-635')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-book-reader"></i></div>
-                            <div><h4>ห้อง 631 - 635</h4><p>ห้องเรียนทฤษฎี</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                </div>
-
-                <div class="floor-card">
-                    <div class="floor-header">ชั้น 2 <i class="fas fa-layer-group"></i></div>
-                    <div onclick="startAR('ห้องยางและพอลิเมอร์')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-flask"></i></div>
-                            <div><h4>ห้อง Lab ยาง</h4><p>และพอลิเมอร์</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                    <div onclick="startAR('To Be Number One')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-heart"></i></div>
-                            <div><h4>To Be Number One</h4><p>ห้องชมรม</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                </div>
-
-                <div class="floor-card">
-                    <div class="floor-header">ชั้น 1 <i class="fas fa-layer-group"></i></div>
-                    <div onclick="startAR('ลานต้านภัย')" class="room-item">
-                        <div class="room-info">
-                            <div class="room-icon"><i class="fas fa-users"></i></div>
-                            <div><h4>ลานต้านภัยยาเสพติด</h4><p>ลานกิจกรรม</p></div>
-                        </div>
-                        <div class="ar-action">GO AR</div>
-                    </div>
-                </div>
-            </div>
         </section>
     </div>
 
@@ -399,28 +309,124 @@
             </div>
 
             <div class="dashboard-grid">
-                <div class="dash-card">
+                <div class="dash-card" onclick="openAdminFeature('edit-content')">
                     <i class="fas fa-edit" style="color: var(--accent-blue);"></i>
                     <h3>แก้ไขเนื้อหาหน้าเว็บ</h3>
-                    <p>จัดการข้อความ รูปภาพ และข่าวสาร</p>
+                    <p>จัดการหัวข้อ คำอธิบายหน้าแรก</p>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" onclick="openAdminFeature('manage-ar')">
                     <i class="fas fa-map-marked" style="color: var(--success);"></i>
                     <h3>จัดการจุด AR</h3>
-                    <p>เพิ่ม/ลบ จุดพิกัดนำทาง</p>
+                    <p>เพิ่ม/ลบ ห้องเรียนและพิกัด</p>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" onclick="openAdminFeature('manage-users')">
                     <i class="fas fa-users-cog" style="color: orange;"></i>
                     <h3>จัดการผู้ใช้งาน</h3>
-                    <p>ดูสถิติและสิทธิ์การเข้าถึง</p>
+                    <p>ดูรายชื่อ Admin และสิทธิ์</p>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" onclick="openAdminFeature('gallery')">
                     <i class="fas fa-file-image" style="color: purple;"></i>
                     <h3>คลังรูปภาพ</h3>
-                    <p>อัปโหลดรูปภาพใหม่</p>
+                    <p>อัปโหลด/ลบ รูปภาพในระบบ</p>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="admin-edit-content" class="page-section admin-subpage">
+        <div class="admin-header">
+            <h2><i class="fas fa-edit"></i> แก้ไขเนื้อหาหน้าเว็บ</h2>
+            <button onclick="showPage('page-dashboard')" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> กลับ Dashboard</button>
+        </div>
+        <div style="max-width: 600px;">
+            <label><strong>หัวข้อหลัก (Title):</strong></label>
+            <input type="text" id="edit-title" value="AR NAVIGATION">
+            
+            <label><strong>หัวข้อย่อย (Subtitle):</strong></label>
+            <input type="text" id="edit-subtitle" value="ระบบนำทางอัจฉริยะ">
+            
+            <label><strong>คำอธิบาย (Description):</strong></label>
+            <textarea id="edit-desc" rows="4" style="width: 100%; padding: 10px; border:1px solid #ccc;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</textarea>
+
+            <button onclick="saveContent()" class="btn btn-success" style="margin-top: 15px;">
+                <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลง
+            </button>
+        </div>
+    </div>
+
+    <div id="admin-manage-ar" class="page-section admin-subpage">
+        <div class="admin-header">
+            <h2><i class="fas fa-map-marked"></i> จัดการจุด AR (ห้องเรียน)</h2>
+            <button onclick="showPage('page-dashboard')" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> กลับ Dashboard</button>
+        </div>
+        
+        <div style="background: #f9f9f9; padding: 20px; border: 1px solid #eee; margin-bottom: 20px;">
+            <h4>เพิ่มห้องใหม่</h4>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="new-room-name" placeholder="ชื่อห้อง (เช่น Lab 5)" style="flex: 2; margin:0;">
+                <input type="text" id="new-room-desc" placeholder="รายละเอียด" style="flex: 2; margin:0;">
+                <select id="new-room-floor" style="flex: 1; margin:0;">
+                    <option value="4">ชั้น 4</option>
+                    <option value="3">ชั้น 3</option>
+                    <option value="2">ชั้น 2</option>
+                    <option value="1">ชั้น 1</option>
+                </select>
+                <button onclick="addARPoint()" class="btn btn-primary" style="flex: 1;">เพิ่ม</button>
+            </div>
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ชั้น</th>
+                    <th>ชื่อห้อง</th>
+                    <th>รายละเอียด</th>
+                    <th style="width: 100px;">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody id="ar-points-table">
+                </tbody>
+        </table>
+    </div>
+
+    <div id="admin-manage-users" class="page-section admin-subpage">
+        <div class="admin-header">
+            <h2><i class="fas fa-users-cog"></i> จัดการผู้ใช้งาน (Admin)</h2>
+            <button onclick="showPage('page-dashboard')" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> กลับ Dashboard</button>
+        </div>
+        <p>รายชื่อผู้มีสิทธิ์เข้าถึงระบบจัดการ (ข้อมูลจำลอง)</p>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Username/ID</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>สถานะ</th>
+                    <th>เข้าใช้งานล่าสุด</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>user1</td><td>พิพัฒน์ รักเส้ง</td><td><span style="color:green">Admin</span></td><td>เมื่อสักครู่</td></tr>
+                <tr><td>user2</td><td>กรดนัย จุอ่อน</td><td><span style="color:green">Admin</span></td><td>2 วันที่แล้ว</td></tr>
+                <tr><td>user3</td><td>กฤตภาสวิจิตร</td><td><span style="color:green">Admin</span></td><td>1 สัปดาห์ที่แล้ว</td></tr>
+                <tr><td>user_guest</td><td>ผู้เยี่ยมชม</td><td><span style="color:grey">User</span></td><td>-</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="admin-gallery" class="page-section admin-subpage">
+        <div class="admin-header">
+            <h2><i class="fas fa-file-image"></i> คลังรูปภาพ</h2>
+            <button onclick="showPage('page-dashboard')" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> กลับ Dashboard</button>
+        </div>
+
+        <div style="background: #eef; padding: 20px; border: 1px dashed #99f; text-align: center;">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent-blue);"></i>
+            <p>เลือกรูปภาพเพื่ออัปโหลด (จำลอง)</p>
+            <input type="file" id="image-upload" accept="image/*" onchange="handleImageUpload(event)" style="margin-top: 10px; width: auto;">
+        </div>
+
+        <div class="gallery-grid" id="gallery-container">
+            </div>
     </div>
 
     <div id="camera-overlay">
@@ -434,7 +440,34 @@
     </div>
 
     <script>
-        // --- Navigation Logic ---
+        // --- DATA SIMULATION ---
+        // ข้อมูลเริ่มต้น (Initial Data) - สามารถเพิ่ม/ลบได้ในระบบ Admin
+        let arPointsData = [
+            { id: 1, floor: 4, name: "ห้องพักครู", desc: "Information Tech", icon: "user-tie" },
+            { id: 2, floor: 4, name: "ห้อง Lecture", desc: "ห้องบรรยาย", icon: "chalkboard" },
+            { id: 3, floor: 4, name: "Lab 1, 2, 3", desc: "ปฏิบัติการคอมฯ", icon: "desktop" },
+            { id: 4, floor: 3, name: "ห้อง 631 - 635", desc: "ห้องเรียนทฤษฎี", icon: "book-reader" },
+            { id: 5, floor: 2, name: "ห้อง Lab ยาง", desc: "และพอลิเมอร์", icon: "flask" },
+            { id: 6, floor: 2, name: "To Be Number One", desc: "ห้องชมรม", icon: "heart" },
+            { id: 7, floor: 1, name: "ลานต้านภัยยาเสพติด", desc: "ลานกิจกรรม", icon: "users" },
+        ];
+
+        let galleryImages = [
+            "https://via.placeholder.com/300x200?text=Building+6",
+            "https://via.placeholder.com/300x200?text=Computer+Lab",
+            "https://via.placeholder.com/300x200?text=Activity+Hall"
+        ];
+
+        // --- NAVIGATION LOGIC ---
+        window.onload = function() {
+            // โหลดข้อมูลจาก LocalStorage (ถ้ามี)
+            if(localStorage.getItem('siteContent')) {
+                const content = JSON.parse(localStorage.getItem('siteContent'));
+                updateHomeUI(content.title, content.subtitle, content.desc);
+            }
+            renderFloorList(); // สร้างรายการห้องหน้าแรก
+        };
+
         function toggleMenu() {
             document.getElementById('mainDropdown').classList.toggle('active');
         }
@@ -442,11 +475,13 @@
         function goHome() {
             showPage('page-home');
             document.getElementById('mainDropdown').classList.remove('active');
+            renderFloorList(); // รีเฟรชข้อมูลเผื่อมีการแก้
         }
 
         function showLogin() {
             showPage('page-login');
             document.getElementById('mainDropdown').classList.remove('active');
+            // Clear inputs
             document.getElementById('adminName').value = "";
             document.getElementById('adminPass').value = "";
             document.getElementById('password-hint').style.display = "none";
@@ -455,20 +490,37 @@
         function showPage(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // --- Authentication Logic (Simulated with LocalStorage) ---
-        const users = {
-            'user1': 'พิพัฒน์ รักเส้ง',
-            'user2': 'กรดนัย จุอ่อน',
-            'user3': 'กฤตภาสวิจิตร'
-        };
+        function openAdminFeature(feature) {
+            // Routing for admin buttons
+            if(feature === 'edit-content') {
+                // Pre-fill inputs with current values
+                document.getElementById('edit-title').value = document.getElementById('home-title').innerText;
+                document.getElementById('edit-subtitle').value = document.getElementById('home-subtitle').innerText;
+                document.getElementById('edit-desc').value = document.getElementById('home-desc').innerText;
+                showPage('admin-edit-content');
+            } 
+            else if(feature === 'manage-ar') {
+                renderARTable();
+                showPage('admin-manage-ar');
+            } 
+            else if(feature === 'manage-users') {
+                showPage('admin-manage-users');
+            } 
+            else if(feature === 'gallery') {
+                renderGallery();
+                showPage('admin-gallery');
+            }
+        }
+
+        // --- AUTHENTICATION ---
+        const users = { 'user1': 'พิพัฒน์ รักเส้ง', 'user2': 'กรดนัย จุอ่อน', 'user3': 'กฤตภาสวิจิตร' };
 
         function checkUserStatus() {
             const userId = document.getElementById('adminName').value;
             const hint = document.getElementById('password-hint');
-            
-            // Check if password exists in LocalStorage
             if (!localStorage.getItem('pass_' + userId)) {
                 hint.innerText = "* ยินดีต้อนรับครั้งแรก กรุณาตั้งรหัสผ่านของคุณ";
                 hint.style.display = "block";
@@ -490,16 +542,15 @@
             const storedPass = localStorage.getItem('pass_' + userId);
 
             if (!storedPass) {
-                // First time login - Set Password
+                // First time login
                 localStorage.setItem('pass_' + userId, inputPass);
                 alert('ตั้งรหัสผ่านเรียบร้อยแล้ว! เข้าสู่ระบบสำเร็จ');
                 loginSuccess(userId);
             } else {
-                // Returning login - Check Password
                 if (inputPass === storedPass) {
                     loginSuccess(userId);
                 } else {
-                    alert('รหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่');
+                    alert('รหัสผ่านไม่ถูกต้อง!');
                     document.getElementById('adminPass').value = '';
                 }
             }
@@ -511,56 +562,167 @@
         }
 
         function logout() {
-            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
-                goHome();
+            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) goHome();
+        }
+
+        // --- ADMIN: EDIT CONTENT ---
+        function saveContent() {
+            const title = document.getElementById('edit-title').value;
+            const subtitle = document.getElementById('edit-subtitle').value;
+            const desc = document.getElementById('edit-desc').value;
+
+            // Update UI
+            updateHomeUI(title, subtitle, desc);
+
+            // Save to LocalStorage
+            localStorage.setItem('siteContent', JSON.stringify({ title, subtitle, desc }));
+            alert('บันทึกเนื้อหาเรียบร้อยแล้ว!');
+        }
+
+        function updateHomeUI(title, subtitle, desc) {
+            document.getElementById('home-title').innerText = title;
+            document.getElementById('home-subtitle').innerText = subtitle;
+            document.getElementById('home-desc').innerText = desc;
+        }
+
+        // --- ADMIN: MANAGE AR POINTS ---
+        function renderARTable() {
+            const tbody = document.getElementById('ar-points-table');
+            tbody.innerHTML = '';
+            
+            // Sort by floor (descending)
+            const sortedData = [...arPointsData].sort((a,b) => b.floor - a.floor);
+
+            sortedData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.floor}</td>
+                    <td>${item.name}</td>
+                    <td>${item.desc}</td>
+                    <td><button onclick="deleteARPoint(${item.id})" class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem;">ลบ</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addARPoint() {
+            const name = document.getElementById('new-room-name').value;
+            const desc = document.getElementById('new-room-desc').value;
+            const floor = parseInt(document.getElementById('new-room-floor').value);
+
+            if(!name) { alert('กรุณากรอกชื่อห้อง'); return; }
+
+            const newId = arPointsData.length > 0 ? Math.max(...arPointsData.map(d => d.id)) + 1 : 1;
+            arPointsData.push({ id: newId, floor, name, desc, icon: 'map-marker-alt' });
+            
+            // Reset inputs
+            document.getElementById('new-room-name').value = '';
+            document.getElementById('new-room-desc').value = '';
+            
+            renderARTable();
+        }
+
+        function deleteARPoint(id) {
+            if(confirm('ยืนยันการลบจุด AR นี้?')) {
+                arPointsData = arPointsData.filter(item => item.id !== id);
+                renderARTable();
             }
         }
 
-        // --- AR Camera Logic ---
-        let videoStream;
+        // --- ADMIN: GALLERY ---
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            container.innerHTML = '';
+            galleryImages.forEach((src, index) => {
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.innerHTML = `
+                    <img src="${src}">
+                    <button class="delete-btn" onclick="deleteImage(${index})">&times;</button>
+                `;
+                container.appendChild(div);
+            });
+        }
 
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    galleryImages.push(e.target.result); // Add Data URL to array
+                    renderGallery();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function deleteImage(index) {
+            if(confirm('ลบรูปภาพนี้?')) {
+                galleryImages.splice(index, 1);
+                renderGallery();
+            }
+        }
+
+        // --- HOME: RENDER FLOOR LIST (DYNAMIC) ---
+        function renderFloorList() {
+            const container = document.getElementById('floor-list-container');
+            container.innerHTML = '';
+            
+            // Group by Floor
+            const floors = [4, 3, 2, 1];
+            
+            floors.forEach(f => {
+                const roomsInFloor = arPointsData.filter(r => r.floor === f);
+                if(roomsInFloor.length > 0) {
+                    let html = `<div class="floor-card">
+                        <div class="floor-header">ชั้น ${f} <i class="fas fa-layer-group"></i></div>`;
+                    
+                    roomsInFloor.forEach(room => {
+                        html += `
+                        <div onclick="startAR('${room.name}')" class="room-item">
+                            <div class="room-info">
+                                <div class="room-icon"><i class="fas fa-${room.icon}"></i></div>
+                                <div><h4>${room.name}</h4><p>${room.desc}</p></div>
+                            </div>
+                            <div class="ar-action">GO AR</div>
+                        </div>`;
+                    });
+                    
+                    html += `</div>`;
+                    container.innerHTML += html;
+                }
+            });
+        }
+
+        // --- AR CAMERA LOGIC ---
+        let videoStream;
         async function startAR(destination = "อาคารเรียน 6") {
             const overlay = document.getElementById('camera-overlay');
             const video = document.getElementById('camera-video');
             const destText = document.getElementById('ar-destination');
-
             destText.innerText = destination;
             
             try {
-                // Request Camera Access
-                videoStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "environment" } // Use Back Camera
-                });
-                
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                 video.srcObject = videoStream;
                 overlay.style.display = 'block';
             } catch (err) {
-                console.error("Error accessing camera: ", err);
-                alert("ไม่สามารถเปิดกล้องได้ (กรุณาอนุญาตสิทธิ์การใช้กล้อง หรือใช้งานบน HTTPS/Localhost)");
+                alert("ไม่สามารถเปิดกล้องได้ (กรุณาอนุญาตสิทธิ์ หรือใช้งานบน HTTPS)");
             }
         }
 
         function stopAR() {
             const overlay = document.getElementById('camera-overlay');
             const video = document.getElementById('camera-video');
-
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-            }
+            if (videoStream) videoStream.getTracks().forEach(track => track.stop());
             video.srcObject = null;
             overlay.style.display = 'none';
         }
 
-        // Close dropdown when clicking outside
+        // Click outside to close menu
         window.onclick = function(event) {
             if (!event.target.matches('.menu-trigger') && !event.target.matches('.menu-trigger *')) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('active')) {
-                        openDropdown.classList.remove('active');
-                    }
-                }
+                document.getElementById('mainDropdown').classList.remove('active');
             }
         }
     </script>
