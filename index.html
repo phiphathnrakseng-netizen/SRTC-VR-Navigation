@@ -3,532 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Navigation - วิทยาลัยเทคนิคสุราษฎร์ธานี</title>
+    <title>SRTC AR & Building 6 Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts: Kanit (ไทย) & Roboto (อังกฤษ Material Style) -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <style>
         :root {
-            /* Palette: Material Blue Theme */
-            --primary: #1565C0;      /* Blue 800 */
-            --primary-dark: #0D47A1; /* Blue 900 */
-            --accent: #FFD600;       /* Yellow A700 (ตัดกันชัดเจน) */
-            --surface: #FFFFFF;
-            --background: #E3F2FD;   /* Blue 50 */
-            --text-primary: #212121;
-            --text-secondary: #757575;
-            
-            /* Shadows for Material Depth */
-            --shadow-1: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-            --shadow-2: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
-            --shadow-3: 0 8px 17px 2px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
+            --primary-blue: #002D72; /* น้ำเงินเข้ม สุขุม */
+            --accent-blue: #0056D2; /* น้ำเงินสว่าง สำหรับปุ่ม */
+            --bg-light: #F4F6F8;
+            --text-dark: #1A1A1A;
+            --text-grey: #666666;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            /* ตัดความโค้งมนออกทั้งหมด ตามคำขอ */
+            border-radius: 0 !important; 
         }
 
         body {
-            font-family: 'Kanit', sans-serif;
-            background-color: var(--background);
-            color: var(--text-primary);
-            padding-bottom: 80px; /* Space for FAB */
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
-        /* --- App Bar (Navbar) --- */
-        .app-bar {
-            background-color: var(--primary-dark);
-            color: var(--surface);
-            height: 64px;
+        h1, h2, h3, h4 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: white;
+            height: 80px;
             display: flex;
             align-items: center;
-            padding: 0 24px;
-            box-shadow: var(--shadow-2);
+            justify-content: space-between;
+            padding: 0 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 4px solid var(--primary-blue);
         }
 
         .logo-area {
             display: flex;
             align-items: center;
-            flex-grow: 1;
+            gap: 15px;
         }
 
         .logo-img {
-            height: 40px;
-            margin-right: 16px;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.3));
+            height: 50px;
+            width: auto;
         }
 
-        .app-title {
-            font-size: 1.25rem;
-            font-weight: 500;
+        .college-name {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
             line-height: 1.2;
         }
-        
-        .app-title span {
-            font-size: 0.8rem;
+
+        .college-name span {
             display: block;
-            opacity: 0.8;
-            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-grey);
+            font-weight: 400;
         }
 
-        .nav-actions button {
-            background: none;
-            border: none;
+        /* Hero AR Section */
+        .ar-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #001A45 100%);
             color: white;
-            margin-left: 10px;
-            cursor: pointer;
-            padding: 8px;
-            text-transform: uppercase;
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-        }
-
-        /* --- AR Navigation Simulator --- */
-        #ar-view {
-            display: none; /* ซ่อนไว้ก่อน กดปุ่มค่อยแสดง */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000; /* Fallback */
-            z-index: 2000;
-        }
-
-        .camera-feed-sim {
-            width: 100%;
-            height: 100%;
-            /* จำลองภาพกล้อง */
-            background: url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
-            background-size: cover;
-            position: relative;
-        }
-
-        .ar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 45, 114, 0.3); /* Tint สีน้ำเงินจางๆ ให้ดูไฮเทค */
-            pointer-events: none;
-        }
-
-        .ar-hud {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 20px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            border: 2px solid var(--accent); /* ขอบเหลี่ยม สีทอง */
-            backdrop-filter: blur(5px);
-        }
-
-        .ar-arrow {
-            font-size: 4rem;
-            color: var(--accent);
-            animation: pulse 1.5s infinite;
-        }
-
-        .ar-text {
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
-
-        .ar-distance {
-            font-family: 'Roboto', sans-serif;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .close-ar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: red;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            pointer-events: auto;
-            border: 2px solid white;
-        }
-
-        /* --- Main Content --- */
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            color: var(--primary-dark);
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            border-left: 8px solid var(--accent); /* เส้นขอบซ้ายเหลี่ยม */
-            padding-left: 15px;
+            padding: 60px 5%;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-        }
-
-        /* --- Building Card Styles (Material Cards - Sharp) --- */
-        .building-card {
-            background: var(--surface);
-            box-shadow: var(--shadow-1);
-            margin-bottom: 2px; /* ติดกันเล็กน้อยเหมือนชั้นตึก */
-            transition: 0.3s;
             position: relative;
-            border: 1px solid #e0e0e0;
+            overflow: hidden;
         }
 
-        .building-card:hover {
-            box-shadow: var(--shadow-3);
-            z-index: 10;
-            transform: scale(1.01);
-            border-color: var(--primary);
+        /* Decorative Grid Background */
+        .ar-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .ar-content {
+            flex: 1;
+            min-width: 300px;
+            z-index: 2;
+            padding-right: 40px;
+        }
+
+        .ar-content h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ar-content p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .ar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: white;
+            color: var(--primary-blue);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        .ar-btn:hover {
+            background-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .ar-icon-display {
+            flex: 0 0 300px;
+            text-align: center;
+            font-size: 8rem;
+            color: rgba(255,255,255,0.2);
+            z-index: 1;
+        }
+
+        /* Building Map Section */
+        .map-section {
+            padding: 60px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+            border-left: 5px solid var(--primary-blue);
+            padding-left: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--text-dark);
+        }
+        
+        .section-header p {
+            color: var(--text-grey);
+        }
+
+        /* Floor Grid */
+        .floor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Floor Card - Material Style but Square */
+        .floor-card {
+            background: white;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floor-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
         }
 
         .floor-header {
-            background: var(--primary);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 20px;
+            font-weight: 700;
+            font-size: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .floor-badge {
-            background: var(--accent);
-            color: var(--text-primary);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            font-family: 'Roboto', sans-serif;
-            box-shadow: var(--shadow-1);
+        
+        .floor-header i {
+            opacity: 0.5;
         }
 
-        .floor-title {
-            flex-grow: 1;
-            padding-left: 15px;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .room-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1px; /* ช่องว่างเล็กน้อย */
-            background-color: #eee; /* สีเส้นคั่น */
-            border: 1px solid #eee;
+        .room-list {
+            padding: 20px;
         }
 
         .room-item {
-            background: white;
-            padding: 20px;
             display: flex;
-            flex-direction: column;
             align-items: flex-start;
-            justify-content: center;
-            transition: 0.2s;
-            cursor: default;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .room-item:hover {
-            background: #f5faff;
+        .room-item:last-child {
+            border-bottom: none;
         }
 
         .room-icon {
-            color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 10px;
+            color: var(--accent-blue);
+            margin-right: 15px;
+            margin-top: 4px;
+            width: 20px;
+            text-align: center;
         }
 
-        .room-name {
-            font-weight: 500;
-            color: var(--text-primary);
+        .room-detail h4 {
             font-size: 1rem;
-            line-height: 1.3;
+            margin-bottom: 2px;
+            color: #333;
         }
 
-        .room-type {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 5px;
+        .room-detail p {
+            font-size: 0.85rem;
+            color: #777;
         }
 
-        /* Special highlights */
-        .highlight-room {
-            border-left: 4px solid var(--accent);
-        }
-
-        /* --- Floating Action Button (FAB) for AR --- */
-        .fab-ar {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--primary-dark);
-            color: var(--accent);
-            width: 70px;
-            height: 70px;
-            /* ทำให้เป็นสี่เหลี่ยมตามขอ */
-            border-radius: 0; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: var(--shadow-3);
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid var(--accent);
-            z-index: 900;
-        }
-
-        .fab-ar:hover {
-            background-color: var(--accent);
-            color: var(--primary-dark);
-            transform: translateY(-5px);
-        }
-
-        .fab-ar i {
-            font-size: 32px;
-        }
-        
-        .fab-label {
-            position: absolute;
-            bottom: -25px;
-            background: var(--text-primary);
-            color: white;
-            padding: 2px 8px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-
-        /* Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .app-title { font-size: 1rem; }
-            .room-grid { grid-template-columns: 1fr; }
-            .section-title { font-size: 1.4rem; }
+            .ar-section {
+                text-align: center;
+                justify-content: center;
+            }
+            .ar-content {
+                padding-right: 0;
+            }
+            .ar-icon-display {
+                display: none;
+            }
+            .floor-grid {
+                grid-template-columns: 1fr;
+            }
         }
-
     </style>
 </head>
 <body>
 
-    <!-- AR View Overlay (ซ่อนอยู่ จะแสดงเมื่อกดปุ่ม) -->
-    <div id="ar-view">
-        <div class="camera-feed-sim">
-            <button class="close-ar" onclick="toggleAR()">ปิดโหมด AR <i class="material-icons" style="vertical-align: middle;">close</i></button>
-            
-            <!-- HUD Elements -->
-            <div class="ar-overlay">
-                <!-- เส้น Grid ไฮเทค -->
-                <div style="position: absolute; top: 20%; left: 10%; width: 20px; height: 20px; border-top: 2px solid #00ffff; border-left: 2px solid #00ffff;"></div>
-                <div style="position: absolute; top: 20%; right: 10%; width: 20px; height: 20px; border-top: 2px solid #00ffff; border-right: 2px solid #00ffff;"></div>
-                <div style="position: absolute; bottom: 20%; left: 10%; width: 20px; height: 20px; border-bottom: 2px solid #00ffff; border-left: 2px solid #00ffff;"></div>
-                <div style="position: absolute; bottom: 20%; right: 10%; width: 20px; height: 20px; border-bottom: 2px solid #00ffff; border-right: 2px solid #00ffff;"></div>
-            </div>
-
-            <!-- AR Navigation Info -->
-            <div class="ar-hud">
-                <i class="material-icons ar-arrow">north</i>
-                <div class="ar-text">มุ่งหน้า อาคาร 6 <br> แผนกเทคโนโลยีสารสนเทศ</div>
-                <div class="ar-distance">50 ม.</div>
-            </div>
-            
-            <!-- จำลองจุดลอย (Points of Interest) -->
-            <div style="position: absolute; top: 40%; left: 70%; background: rgba(0,0,0,0.6); padding: 5px; color:white; border: 1px solid var(--accent);">
-                <i class="fas fa-coffee"></i> โรงอาหาร
-            </div>
-        </div>
-    </div>
-
-    <!-- App Bar -->
-    <nav class="app-bar">
+    <nav class="navbar">
         <div class="logo-area">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" class="logo-img">
-            <div class="app-title">
+            <div class="college-name">
                 วิทยาลัยเทคนิคสุราษฎร์ธานี
-                <span>ระบบนำทางและข้อมูลอาคารเรียน</span>
+                <span>Suratthani Technical College</span>
             </div>
         </div>
-        <div class="nav-actions">
-            <button onclick="window.scrollTo(0,0)">หน้าแรก</button>
-            <button onclick="toggleAR()" style="color: var(--accent);"><i class="material-icons" style="vertical-align: middle;">view_in_ar</i> AR NAV</button>
+        <div style="color: var(--primary-blue); font-size: 1.5rem; cursor: pointer;">
+            <i class="fas fa-bars"></i>
         </div>
     </nav>
 
-    <!-- Content Container -->
-    <div class="container">
-        
-        <div class="section-title">
-            <span><i class="material-icons" style="vertical-align: bottom;">apartment</i> ข้อมูลอาคาร 6</span>
-            <span style="font-size: 1rem; color: #777;">แผนกเทคโนโลยีสารสนเทศ</span>
+    <section class="ar-section">
+        <div class="ar-content">
+            <h3>ระบบนำทางอัจฉริยะ</h3>
+            <h1>AR NAVIGATION</h1>
+            <p>ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</p>
+            <button class="ar-btn" onclick="alert('กำลังเปิดกล้องเพื่อใช้งานระบบ AR...')">
+                <i class="fas fa-camera"></i> เปิดกล้องนำทาง
+            </button>
+        </div>
+        <div class="ar-icon-display">
+            <i class="fas fa-map-marked-alt"></i>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <div class="section-header">
+            <h2>แผนผังอาคารเรียน 6</h2>
+            <p>แผนกเทคโนโลยีสารสนเทศ (Information Technology)</p>
         </div>
 
-        <!-- ชั้น 4 -->
-        <div class="building-card">
-            <div class="floor-header">
-                <div class="floor-badge">4</div>
-                <div class="floor-title">โซนวิชาการและปฏิบัติการคอมพิวเตอร์</div>
-            </div>
-            <div class="room-grid">
-                <div class="room-item highlight-room">
-                    <i class="material-icons room-icon">meeting_room</i>
-                    <div class="room-name">ห้องพักครู</div>
-                    <div class="room-type">Staff Room</div>
+        <div class="floor-grid">
+            
+            <div class="floor-card">
+                <div class="floor-header">
+                    ชั้น 4 <i class="fas fa-layer-group"></i>
                 </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">class</i>
-                    <div class="room-name">ห้อง Lecture</div>
-                    <div class="room-type">ทฤษฎี</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">computer</i>
-                    <div class="room-name">Lab 1</div>
-                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">computer</i>
-                    <div class="room-name">Lab 2</div>
-                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">computer</i>
-                    <div class="room-name">Lab 3</div>
-                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
+                <div class="room-list">
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้องพักครู</h4>
+                            <p>แผนกเทคโนโลยีสารสนเทศ</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-chalkboard"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้อง Lecture</h4>
+                            <p>ห้องเรียนบรรยาย</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-desktop"></i></div>
+                        <div class="room-detail">
+                            <h4>Lab 1, Lab 2, Lab 3</h4>
+                            <p>ห้องปฏิบัติการคอมพิวเตอร์</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="floor-card">
+                <div class="floor-header">
+                    ชั้น 3 <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="room-list">
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-book-reader"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้องเรียน 631 - 635</h4>
+                            <p>ห้องเรียนทฤษฎีและปฏิบัติ</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="room-detail">
+                            <h4>รายละเอียดห้อง</h4>
+                            <p>631, 632, 633, 634, 635</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floor-card">
+                <div class="floor-header">
+                    ชั้น 2 <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="room-list">
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-flask"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้องปฏิบัติการเทคโนโลยียาง</h4>
+                            <p>และพอลิเมอร์</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-heart"></i></div>
+                        <div class="room-detail">
+                            <h4>To Be Number One</h4>
+                            <p>ห้องชมรม</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-language"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้องเรียนภาษาอังกฤษ</h4>
+                            <p>& ห้องเรียนวิทยาศาสตร์</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floor-card">
+                <div class="floor-header">
+                    ชั้น 1 <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="room-list">
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-users"></i></div>
+                        <div class="room-detail">
+                            <h4>ลานต้านภัยยาเสพติด</h4>
+                            <p>พื้นที่กิจกรรมอเนกประสงค์</p>
+                        </div>
+                    </div>
+                    <div class="room-item">
+                        <div class="room-icon"><i class="fas fa-tools"></i></div>
+                        <div class="room-detail">
+                            <h4>ห้องเรียนแผนกวิชา</h4>
+                            <p>เทคโนโลยียางและพอลิเมอร์</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
-        <!-- ชั้น 3 -->
-        <div class="building-card">
-            <div class="floor-header">
-                <div class="floor-badge">3</div>
-                <div class="floor-title">ห้องเรียนทฤษฎี</div>
-            </div>
-            <div class="room-grid">
-                <div class="room-item">
-                    <i class="material-icons room-icon">school</i>
-                    <div class="room-name">ห้อง 631</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">school</i>
-                    <div class="room-name">ห้อง 632</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">school</i>
-                    <div class="room-name">ห้อง 633</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">school</i>
-                    <div class="room-name">ห้อง 634</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">school</i>
-                    <div class="room-name">ห้อง 635</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ชั้น 2 -->
-        <div class="building-card">
-            <div class="floor-header">
-                <div class="floor-badge">2</div>
-                <div class="floor-title">ห้องปฏิบัติการพิเศษและภาษา</div>
-            </div>
-            <div class="room-grid">
-                <div class="room-item highlight-room">
-                    <i class="material-icons room-icon">science</i>
-                    <div class="room-name">ห้องปฏิบัติการ<br>เทคโนโลยียาง</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">volunteer_activism</i>
-                    <div class="room-name">ห้องชมรม<br>To Be Number One</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">language</i>
-                    <div class="room-name">ห้องเรียนภาษาอังกฤษ</div>
-                    <div class="room-type">English Room</div>
-                </div>
-                <div class="room-item">
-                    <i class="material-icons room-icon">biotech</i>
-                    <div class="room-name">ห้องเรียนวิทยาศาสตร์</div>
-                    <div class="room-type">Science Room</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ชั้น 1 -->
-        <div class="building-card">
-            <div class="floor-header">
-                <div class="floor-badge">1</div>
-                <div class="floor-title">ลานกิจกรรมและห้องเรียนเฉพาะทาง</div>
-            </div>
-            <div class="room-grid">
-                <div class="room-item highlight-room" style="grid-column: span 2;">
-                    <i class="material-icons room-icon">health_and_safety</i>
-                    <div class="room-name">ลานต้านภัยยาเสพติด</div>
-                    <div class="room-type">พื้นที่กิจกรรม</div>
-                </div>
-                <div class="room-item" style="grid-column: span 2;">
-                    <i class="material-icons room-icon">category</i>
-                    <div class="room-name">ห้องเรียนแผนกวิชา<br>เทคโนโลยียางและพอลิเมอร์</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Floating Action Button for AR -->
-    <div class="fab-ar" onclick="toggleAR()">
-        <i class="material-icons">view_in_ar</i>
-        <div class="fab-label">เปิดโหมดนำทาง AR</div>
-    </div>
-
-    <script>
-        function toggleAR() {
-            const arView = document.getElementById('ar-view');
-            if (arView.style.display === 'block') {
-                arView.style.display = 'none';
-                document.body.style.overflow = 'auto'; // คืนค่า Scroll
-            } else {
-                arView.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // ห้าม Scroll เวลาเปิด AR
-                
-                // Alert จำลองเพื่อบอกผู้ใช้ (เนื่องจากเป็นแค่ UI)
-                setTimeout(() => {
-                    alert('จำลองการเปิดกล้อง: ระบบกำลังค้นหาตำแหน่งของคุณภายในวิทยาลัย...');
-                }, 500);
-            }
-        }
-    </script>
+    </section>
 
 </body>
 </html>
