@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>วิทยาลัยเทคนิคสุราษฎร์ธานี - Surat Thani Technical College</title>
-    <!-- Google Fonts: Kanit -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Smart Navigation - วิทยาลัยเทคนิคสุราษฎร์ธานี</title>
     
+    <!-- Google Fonts: Kanit (ไทย) & Roboto (อังกฤษ Material Style) -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         :root {
-            --primary-blue: #002D72; /* น้ำเงินเข้มทางการ */
-            --secondary-blue: #0056b3; /* น้ำเงินสว่าง */
-            --accent-color: #FFD700; /* สีทองเหลือง ตัดเล็กน้อยเพื่อความเด่น */
-            --text-dark: #333333;
-            --text-light: #777777;
-            --white: #ffffff;
-            --bg-light: #f4f6f9;
+            /* Palette: Material Blue Theme */
+            --primary: #1565C0;      /* Blue 800 */
+            --primary-dark: #0D47A1; /* Blue 900 */
+            --accent: #FFD600;       /* Yellow A700 (ตัดกันชัดเจน) */
+            --surface: #FFFFFF;
+            --background: #E3F2FD;   /* Blue 50 */
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            
+            /* Shadows for Material Depth */
+            --shadow-1: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+            --shadow-2: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+            --shadow-3: 0 8px 17px 2px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
         }
 
         * {
@@ -28,451 +37,498 @@
 
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text-primary);
+            padding-bottom: 80px; /* Space for FAB */
         }
 
-        /* --- Navbar --- */
-        .navbar {
-            background-color: var(--primary-blue);
-            color: var(--white);
-            padding: 1rem 5%;
+        /* --- App Bar (Navbar) --- */
+        .app-bar {
+            background-color: var(--primary-dark);
+            color: var(--surface);
+            height: 64px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow-2);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .logo-container {
+        .logo-area {
             display: flex;
             align-items: center;
-            gap: 15px;
+            flex-grow: 1;
         }
 
         .logo-img {
-            width: 60px;
-            height: auto;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+            height: 40px;
+            margin-right: 16px;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.3));
         }
 
-        .college-name h1 {
-            font-size: 1.2rem;
-            font-weight: 600;
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 500;
             line-height: 1.2;
         }
-        .college-name span {
+        
+        .app-title span {
             font-size: 0.8rem;
-            font-weight: 300;
+            display: block;
             opacity: 0.8;
+            font-family: 'Roboto', sans-serif;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
+        .nav-actions button {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 10px;
+            cursor: pointer;
+            padding: 8px;
+            text-transform: uppercase;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 500;
         }
 
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 400;
-            transition: 0.3s;
+        /* --- AR Navigation Simulator --- */
+        #ar-view {
+            display: none; /* ซ่อนไว้ก่อน กดปุ่มค่อยแสดง */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000; /* Fallback */
+            z-index: 2000;
+        }
+
+        .camera-feed-sim {
+            width: 100%;
+            height: 100%;
+            /* จำลองภาพกล้อง */
+            background: url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
             position: relative;
         }
 
-        .nav-links a::after {
-            content: '';
+        .ar-overlay {
             position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
+            top: 0;
             left: 0;
-            background-color: var(--accent-color);
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover::after {
             width: 100%;
+            height: 100%;
+            background: rgba(0, 45, 114, 0.3); /* Tint สีน้ำเงินจางๆ ให้ดูไฮเทค */
+            pointer-events: none;
         }
 
-        /* --- Hero Section --- */
-        .hero {
-            /* ภาพพื้นหลังจำลองบรรยากาศวิทยาลัย หรือใช้สี Gradient */
-            background: linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
+        .ar-hud {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid var(--accent); /* ขอบเหลี่ยม สีทอง */
+            backdrop-filter: blur(5px);
+        }
+
+        .ar-arrow {
+            font-size: 4rem;
+            color: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .ar-text {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .ar-distance {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .close-ar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto;
+            border: 2px solid white;
+        }
+
+        /* --- Main Content --- */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            border-left: 8px solid var(--accent); /* เส้นขอบซ้ายเหลี่ยม */
+            padding-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* --- Building Card Styles (Material Cards - Sharp) --- */
+        .building-card {
+            background: var(--surface);
+            box-shadow: var(--shadow-1);
+            margin-bottom: 2px; /* ติดกันเล็กน้อยเหมือนชั้นตึก */
+            transition: 0.3s;
+            position: relative;
+            border: 1px solid #e0e0e0;
+        }
+
+        .building-card:hover {
+            box-shadow: var(--shadow-3);
+            z-index: 10;
+            transform: scale(1.01);
+            border-color: var(--primary);
+        }
+
+        .floor-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .floor-badge {
+            background: var(--accent);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            font-family: 'Roboto', sans-serif;
+            box-shadow: var(--shadow-1);
+        }
+
+        .floor-title {
+            flex-grow: 1;
+            padding-left: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1px; /* ช่องว่างเล็กน้อย */
+            background-color: #eee; /* สีเส้นคั่น */
+            border: 1px solid #eee;
+        }
+
+        .room-item {
+            background: white;
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            transition: 0.2s;
+            cursor: default;
+        }
+
+        .room-item:hover {
+            background: #f5faff;
+        }
+
+        .room-icon {
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .room-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .room-type {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Special highlights */
+        .highlight-room {
+            border-left: 4px solid var(--accent);
+        }
+
+        /* --- Floating Action Button (FAB) for AR --- */
+        .fab-ar {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-dark);
+            color: var(--accent);
+            width: 70px;
+            height: 70px;
+            /* ทำให้เป็นสี่เหลี่ยมตามขอ */
+            border-radius: 0; 
+            display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            color: var(--white);
-            padding: 0 20px;
-        }
-
-        .hero h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin-bottom: 2rem;
-            font-weight: 300;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            border: 2px solid var(--white);
-            color: var(--white);
-            background: transparent;
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-3);
             cursor: pointer;
-            /* เน้นเหลี่ยม ไม่โค้ง */
-            border-radius: 2px; 
+            transition: all 0.3s;
+            border: 2px solid var(--accent);
+            z-index: 900;
         }
 
-        .btn-primary {
-            background-color: var(--white);
-            color: var(--primary-blue);
+        .fab-ar:hover {
+            background-color: var(--accent);
+            color: var(--primary-dark);
+            transform: translateY(-5px);
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .fab-ar i {
+            font-size: 32px;
         }
         
-        .btn-primary:hover {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            color: var(--text-dark);
+        .fab-label {
+            position: absolute;
+            bottom: -25px;
+            background: var(--text-primary);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
         }
 
-        /* --- Featured Section --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 20px;
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-header h3 {
-            color: var(--primary-blue);
-            font-size: 2rem;
-            position: relative;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        
-        /* ขีดเส้นใต้ตรงๆ ไม่โค้ง */
-        .section-header h3::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: var(--primary-blue);
-            margin: 10px auto 0;
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 40px 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            border-bottom: 4px solid transparent;
-            /* ทรงเหลี่ยม */
-            border-radius: 2px;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-bottom: 4px solid var(--primary-blue);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-        }
-
-        .card h4 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
-
-        .card p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-
-        /* --- News Section (Grid Layout) --- */
-        .news-section {
-            background-color: var(--white);
-            padding: 80px 20px;
-        }
-        
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .news-item {
-            border: 1px solid #eee;
-            background: #fff;
-        }
-
-        .news-img {
-            width: 100%;
-            height: 200px;
-            background-color: #ddd; /* Placeholder */
-            object-fit: cover;
-        }
-
-        .news-content {
-            padding: 20px;
-        }
-
-        .news-date {
-            font-size: 0.8rem;
-            color: var(--secondary-blue);
-            font-weight: 600;
-        }
-
-        .news-title {
-            font-size: 1.1rem;
-            margin: 10px 0;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .read-more {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: #001f52; /* Darker than primary */
-            color: var(--white);
-            padding: 60px 0 20px;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            padding: 0 20px;
-        }
-
-        .footer-col h4 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 10px;
-        }
-
-        .footer-col ul {
-            list-style: none;
-        }
-
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-col ul li a {
-            color: #ccc;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .footer-col ul li a:hover {
-            color: var(--white);
-            padding-left: 5px;
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        /* Mobile Responsive */
+        /* Responsive */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .hero h2 {
-                font-size: 2rem;
-            }
-            .nav-links {
-                gap: 15px;
-                font-size: 0.9rem;
-            }
+            .app-title { font-size: 1rem; }
+            .room-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.4rem; }
         }
+
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo-container">
-            <!-- โลโก้ตามลิงก์ที่ให้มา -->
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" class="logo-img">
-            <div class="college-name">
-                <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
-                <span>Surat Thani Technical College</span>
+    <!-- AR View Overlay (ซ่อนอยู่ จะแสดงเมื่อกดปุ่ม) -->
+    <div id="ar-view">
+        <div class="camera-feed-sim">
+            <button class="close-ar" onclick="toggleAR()">ปิดโหมด AR <i class="material-icons" style="vertical-align: middle;">close</i></button>
+            
+            <!-- HUD Elements -->
+            <div class="ar-overlay">
+                <!-- เส้น Grid ไฮเทค -->
+                <div style="position: absolute; top: 20%; left: 10%; width: 20px; height: 20px; border-top: 2px solid #00ffff; border-left: 2px solid #00ffff;"></div>
+                <div style="position: absolute; top: 20%; right: 10%; width: 20px; height: 20px; border-top: 2px solid #00ffff; border-right: 2px solid #00ffff;"></div>
+                <div style="position: absolute; bottom: 20%; left: 10%; width: 20px; height: 20px; border-bottom: 2px solid #00ffff; border-left: 2px solid #00ffff;"></div>
+                <div style="position: absolute; bottom: 20%; right: 10%; width: 20px; height: 20px; border-bottom: 2px solid #00ffff; border-right: 2px solid #00ffff;"></div>
+            </div>
+
+            <!-- AR Navigation Info -->
+            <div class="ar-hud">
+                <i class="material-icons ar-arrow">north</i>
+                <div class="ar-text">มุ่งหน้า อาคาร 6 <br> แผนกเทคโนโลยีสารสนเทศ</div>
+                <div class="ar-distance">50 ม.</div>
+            </div>
+            
+            <!-- จำลองจุดลอย (Points of Interest) -->
+            <div style="position: absolute; top: 40%; left: 70%; background: rgba(0,0,0,0.6); padding: 5px; color:white; border: 1px solid var(--accent);">
+                <i class="fas fa-coffee"></i> โรงอาหาร
             </div>
         </div>
-        <div class="nav-links">
-            <a href="#">หน้าแรก</a>
-            <a href="#">หลักสูตร</a>
-            <a href="#">ข่าวประชาสัมพันธ์</a>
-            <a href="#">ติดต่อเรา</a>
+    </div>
+
+    <!-- App Bar -->
+    <nav class="app-bar">
+        <div class="logo-area">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" class="logo-img">
+            <div class="app-title">
+                วิทยาลัยเทคนิคสุราษฎร์ธานี
+                <span>ระบบนำทางและข้อมูลอาคารเรียน</span>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <button onclick="window.scrollTo(0,0)">หน้าแรก</button>
+            <button onclick="toggleAR()" style="color: var(--accent);"><i class="material-icons" style="vertical-align: middle;">view_in_ar</i> AR NAV</button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <h2>มุ่งมั่นสร้างสรรค์ สู่ความเป็นเลิศ</h2>
-        <p>แหล่งเรียนรู้วิชาชีพทันสมัย สร้างคนดี มีฝีมือ สู่มาตรฐานสากล</p>
-        <div style="margin-top: 20px;">
-            <a href="#" class="btn btn-primary">สมัครเรียน</a>
-            <a href="#" class="btn" style="margin-left: 15px;">ดูหลักสูตร</a>
-        </div>
-    </header>
-
-    <!-- Services / Faculty Section -->
-    <section class="container">
-        <div class="section-header">
-            <h3>หลักสูตรที่เปิดสอน</h3>
-            <p>พัฒนาทักษะวิชาชีพเพื่ออนาคตที่มั่นคง</p>
+    <!-- Content Container -->
+    <div class="container">
+        
+        <div class="section-title">
+            <span><i class="material-icons" style="vertical-align: bottom;">apartment</i> ข้อมูลอาคาร 6</span>
+            <span style="font-size: 1rem; color: #777;">แผนกเทคโนโลยีสารสนเทศ</span>
         </div>
 
-        <div class="grid-cards">
-            <!-- Card 1 -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-cogs"></i></div>
-                <h4>ช่างอุตสาหกรรม</h4>
-                <p>เรียนรู้เทคโนโลยีการผลิต เครื่องกล ไฟฟ้า และระบบอัตโนมัติที่ทันสมัย</p>
+        <!-- ชั้น 4 -->
+        <div class="building-card">
+            <div class="floor-header">
+                <div class="floor-badge">4</div>
+                <div class="floor-title">โซนวิชาการและปฏิบัติการคอมพิวเตอร์</div>
             </div>
-            <!-- Card 2 -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                <h4>พาณิชยกรรม</h4>
-                <p>หลักสูตรการบัญชี การตลาด และการจัดการธุรกิจยุคดิจิทัล</p>
-            </div>
-            <!-- Card 3 -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
-                <h4>เทคโนโลยีสารสนเทศ</h4>
-                <p>พัฒนาโปรแกรม เครือข่าย และกราฟิกดีไซน์ ตอบโจทย์โลกอนาคต</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="news-section">
-        <div class="section-header">
-            <h3>ข่าวประชาสัมพันธ์</h3>
-        </div>
-        <div class="news-grid">
-            <!-- News Item 1 -->
-            <div class="news-item">
-                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="News" class="news-img">
-                <div class="news-content">
-                    <div class="news-date">16 ธันวาคม 2566</div>
-                    <div class="news-title">เปิดรับสมัครนักศึกษาใหม่ ประจำปีการศึกษา 2567</div>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fas fa-arrow-right"></i></a>
+            <div class="room-grid">
+                <div class="room-item highlight-room">
+                    <i class="material-icons room-icon">meeting_room</i>
+                    <div class="room-name">ห้องพักครู</div>
+                    <div class="room-type">Staff Room</div>
                 </div>
-            </div>
-            <!-- News Item 2 -->
-            <div class="news-item">
-                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="News" class="news-img">
-                <div class="news-content">
-                    <div class="news-date">10 ธันวาคม 2566</div>
-                    <div class="news-title">กิจกรรมแข่งขันทักษะวิชาชีพระดับภาค</div>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fas fa-arrow-right"></i></a>
+                <div class="room-item">
+                    <i class="material-icons room-icon">class</i>
+                    <div class="room-name">ห้อง Lecture</div>
+                    <div class="room-type">ทฤษฎี</div>
                 </div>
-            </div>
-            <!-- News Item 3 -->
-            <div class="news-item">
-                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="News" class="news-img">
-                <div class="news-content">
-                    <div class="news-date">05 ธันวาคม 2566</div>
-                    <div class="news-title">พิธีไหว้ครูประจำปีการศึกษา 2566</div>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fas fa-arrow-right"></i></a>
+                <div class="room-item">
+                    <i class="material-icons room-icon">computer</i>
+                    <div class="room-name">Lab 1</div>
+                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">computer</i>
+                    <div class="room-name">Lab 2</div>
+                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">computer</i>
+                    <div class="room-name">Lab 3</div>
+                    <div class="room-type">ปฏิบัติการคอมพิวเตอร์</div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <div class="logo-container" style="margin-bottom: 20px;">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" style="width: 50px;">
-                    <div style="font-weight:bold;">วิทยาลัยเทคนิค<br>สุราษฎร์ธานี</div>
+        <!-- ชั้น 3 -->
+        <div class="building-card">
+            <div class="floor-header">
+                <div class="floor-badge">3</div>
+                <div class="floor-title">ห้องเรียนทฤษฎี</div>
+            </div>
+            <div class="room-grid">
+                <div class="room-item">
+                    <i class="material-icons room-icon">school</i>
+                    <div class="room-name">ห้อง 631</div>
                 </div>
-                <p style="font-size: 0.9rem; color: #ccc;">
-                    สร้างคนดี มีความรู้ มุ่งสู่อาชีพ<br>
-                    สถาบันการอาชีวศึกษาภาคใต้ 1
-                </p>
-            </div>
-            <div class="footer-col">
-                <h4>ลิงก์ด่วน</h4>
-                <ul>
-                    <li><a href="#">เกี่ยวกับเรา</a></li>
-                    <li><a href="#">โครงสร้างองค์กร</a></li>
-                    <li><a href="#">ปฏิทินการศึกษา</a></li>
-                    <li><a href="#">ระบบสารสนเทศ</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>ติดต่อเรา</h4>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 ถ.ดอนนก ต.ตลาด อ.เมือง จ.สุราษฎร์ธานี</li>
-                    <li><i class="fas fa-phone"></i> 077-xxx-xxx</li>
-                    <li><i class="fas fa-envelope"></i> admin@surat.ac.th</li>
-                </ul>
+                <div class="room-item">
+                    <i class="material-icons room-icon">school</i>
+                    <div class="room-name">ห้อง 632</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">school</i>
+                    <div class="room-name">ห้อง 633</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">school</i>
+                    <div class="room-name">ห้อง 634</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">school</i>
+                    <div class="room-name">ห้อง 635</div>
+                </div>
             </div>
         </div>
-        <div class="copyright">
-            &copy; 2024 วิทยาลัยเทคนิคสุราษฎร์ธานี. All Rights Reserved. Designed for Educational Purpose.
+
+        <!-- ชั้น 2 -->
+        <div class="building-card">
+            <div class="floor-header">
+                <div class="floor-badge">2</div>
+                <div class="floor-title">ห้องปฏิบัติการพิเศษและภาษา</div>
+            </div>
+            <div class="room-grid">
+                <div class="room-item highlight-room">
+                    <i class="material-icons room-icon">science</i>
+                    <div class="room-name">ห้องปฏิบัติการ<br>เทคโนโลยียาง</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">volunteer_activism</i>
+                    <div class="room-name">ห้องชมรม<br>To Be Number One</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">language</i>
+                    <div class="room-name">ห้องเรียนภาษาอังกฤษ</div>
+                    <div class="room-type">English Room</div>
+                </div>
+                <div class="room-item">
+                    <i class="material-icons room-icon">biotech</i>
+                    <div class="room-name">ห้องเรียนวิทยาศาสตร์</div>
+                    <div class="room-type">Science Room</div>
+                </div>
+            </div>
         </div>
-    </footer>
+
+        <!-- ชั้น 1 -->
+        <div class="building-card">
+            <div class="floor-header">
+                <div class="floor-badge">1</div>
+                <div class="floor-title">ลานกิจกรรมและห้องเรียนเฉพาะทาง</div>
+            </div>
+            <div class="room-grid">
+                <div class="room-item highlight-room" style="grid-column: span 2;">
+                    <i class="material-icons room-icon">health_and_safety</i>
+                    <div class="room-name">ลานต้านภัยยาเสพติด</div>
+                    <div class="room-type">พื้นที่กิจกรรม</div>
+                </div>
+                <div class="room-item" style="grid-column: span 2;">
+                    <i class="material-icons room-icon">category</i>
+                    <div class="room-name">ห้องเรียนแผนกวิชา<br>เทคโนโลยียางและพอลิเมอร์</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Floating Action Button for AR -->
+    <div class="fab-ar" onclick="toggleAR()">
+        <i class="material-icons">view_in_ar</i>
+        <div class="fab-label">เปิดโหมดนำทาง AR</div>
+    </div>
+
+    <script>
+        function toggleAR() {
+            const arView = document.getElementById('ar-view');
+            if (arView.style.display === 'block') {
+                arView.style.display = 'none';
+                document.body.style.overflow = 'auto'; // คืนค่า Scroll
+            } else {
+                arView.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // ห้าม Scroll เวลาเปิด AR
+                
+                // Alert จำลองเพื่อบอกผู้ใช้ (เนื่องจากเป็นแค่ UI)
+                setTimeout(() => {
+                    alert('จำลองการเปิดกล้อง: ระบบกำลังค้นหาตำแหน่งของคุณภายในวิทยาลัย...');
+                }, 500);
+            }
+        }
+    </script>
 
 </body>
 </html>
