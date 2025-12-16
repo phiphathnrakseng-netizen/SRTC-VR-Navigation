@@ -3,42 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRTC AR & Building 6 Map</title>
+    <title>SRTC Smart AR & Admin System</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-blue: #002D72; /* น้ำเงินเข้ม สุขุม */
-            --accent-blue: #0056D2; /* น้ำเงินสว่าง สำหรับปุ่ม */
+            --primary-blue: #002D72;
+            --accent-blue: #0056D2;
             --bg-light: #F4F6F8;
             --text-dark: #1A1A1A;
             --text-grey: #666666;
-            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --danger: #d32f2f;
+            --success: #2e7d32;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* ตัดความโค้งมนออกทั้งหมด ตามคำขอ */
-            border-radius: 0 !important; 
+            border-radius: 0 !important; /* Sharp Edge Design */
+            font-family: 'Sarabun', sans-serif;
         }
 
         body {
-            font-family: 'Sarabun', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-dark);
-            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, h4 {
+        h1, h2, h3, h4, h5 {
             font-family: 'Kanit', sans-serif;
             font-weight: 600;
         }
 
-        /* Navbar */
+        /* --- UI Components --- */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-blue); }
+
+        .btn-outline {
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+        }
+        .btn-outline:hover { background: white; color: var(--primary-blue); }
+
+        .btn-danger { background-color: var(--danger); color: white; }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            background: #fff;
+            outline: none;
+        }
+        input:focus, select:focus { border-color: var(--accent-blue); }
+
+        /* --- Navbar --- */
         .navbar {
             background-color: white;
             height: 80px;
@@ -53,355 +89,480 @@
             border-bottom: 4px solid var(--primary-blue);
         }
 
-        .logo-area {
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 50px; width: auto; }
+        .college-name { font-size: 1.2rem; color: var(--primary-blue); line-height: 1.2; }
+        .college-name span { display: block; font-size: 0.9rem; color: var(--text-grey); font-weight: 400; }
+
+        .menu-trigger {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+            padding: 10px;
+            position: relative;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 80px;
+            right: 5%;
+            background: white;
+            width: 250px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            display: none; /* Hidden by default */
+            z-index: 999;
+        }
+        .dropdown-menu.active { display: block; }
+        .dropdown-item {
+            padding: 15px 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
         }
+        .dropdown-item:hover { background-color: var(--bg-light); color: var(--accent-blue); }
 
-        .logo-img {
-            height: 50px;
-            width: auto;
-        }
+        /* --- Pages / Sections --- */
+        .page-section { display: none; animation: fadeIn 0.3s ease; }
+        .page-section.active { display: block; }
 
-        .college-name {
-            font-size: 1.2rem;
-            color: var(--primary-blue);
-            line-height: 1.2;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .college-name span {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-grey);
-            font-weight: 400;
-        }
-
-        /* Hero AR Section */
-        .ar-section {
+        /* --- AR Section --- */
+        .ar-hero {
             background: linear-gradient(135deg, var(--primary-blue) 0%, #001A45 100%);
             color: white;
             padding: 60px 5%;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
             position: relative;
             overflow: hidden;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
         }
-
-        /* Decorative Grid Background */
-        .ar-section::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+        .ar-hero::before {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
             background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 30px 30px;
         }
+        .hero-content { position: relative; z-index: 2; max-width: 600px; }
+        .hero-title { font-size: 3rem; margin: 10px 0; letter-spacing: 1px; }
 
-        .ar-content {
-            flex: 1;
-            min-width: 300px;
-            z-index: 2;
-            padding-right: 40px;
-        }
-
-        .ar-content h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ar-content p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .ar-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background-color: white;
-            color: var(--primary-blue);
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 2px solid white;
-            cursor: pointer;
-        }
-
-        .ar-btn:hover {
-            background-color: transparent;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .ar-icon-display {
-            flex: 0 0 300px;
-            text-align: center;
-            font-size: 8rem;
-            color: rgba(255,255,255,0.2);
-            z-index: 1;
-        }
-
-        /* Building Map Section */
-        .map-section {
-            padding: 60px 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            margin-bottom: 40px;
-            border-left: 5px solid var(--primary-blue);
-            padding-left: 20px;
-        }
-
-        .section-header h2 {
-            font-size: 2rem;
-            color: var(--text-dark);
-        }
+        /* --- Map Section --- */
+        .map-container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { border-left: 5px solid var(--primary-blue); padding-left: 20px; margin-bottom: 30px; }
         
-        .section-header p {
-            color: var(--text-grey);
-        }
-
-        /* Floor Grid */
         .floor-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
         }
-
-        /* Floor Card - Material Style but Square */
         .floor-card {
             background: white;
-            box-shadow: var(--shadow-card);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             border: 1px solid #e0e0e0;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
-
-        .floor-card:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-5px);
-            border-color: var(--primary-blue);
-        }
-
-        .floor-header {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 15px 20px;
-            font-weight: 700;
-            font-size: 1.5rem;
+        .floor-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent-blue); }
+        .floor-header { background: var(--primary-blue); color: white; padding: 15px; font-size: 1.2rem; display: flex; justify-content: space-between; }
+        
+        .room-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        
-        .floor-header i {
-            opacity: 0.5;
-        }
+        .room-item:hover { background-color: #f9f9fa; }
+        .room-info { display: flex; gap: 15px; }
+        .room-icon { color: var(--accent-blue); width: 25px; text-align: center; margin-top: 3px; }
+        .ar-action { font-size: 0.8rem; color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 5px 10px; text-transform: uppercase; font-weight: bold; }
+        .room-item:hover .ar-action { background: var(--accent-blue); color: white; }
 
-        .room-list {
-            padding: 20px;
-        }
-
-        .room-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .room-item:last-child {
-            border-bottom: none;
-        }
-
-        .room-icon {
-            color: var(--accent-blue);
-            margin-right: 15px;
-            margin-top: 4px;
-            width: 20px;
+        /* --- Login Modal Page --- */
+        .login-container {
+            max-width: 450px;
+            margin: 80px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
+            border-top: 5px solid var(--primary-blue);
         }
 
-        .room-detail h4 {
-            font-size: 1rem;
-            margin-bottom: 2px;
-            color: #333;
-        }
+        /* --- Admin Dashboard --- */
+        .admin-dashboard { padding: 40px 5%; background: white; min-height: 100vh; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .dash-card { padding: 30px; background: var(--bg-light); border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; }
+        .dash-card:hover { background: var(--primary-blue); color: white; }
+        .dash-card i { font-size: 3rem; margin-bottom: 15px; }
 
-        .room-detail p {
-            font-size: 0.85rem;
-            color: #777;
+        /* --- Camera Overlay (Full Screen) --- */
+        #camera-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 2000;
+            display: none;
         }
+        #camera-video { width: 100%; height: 100%; object-fit: cover; }
+        .camera-ui {
+            position: absolute;
+            bottom: 30px;
+            left: 0; width: 100%;
+            text-align: center;
+            color: white;
+            z-index: 2001;
+        }
+        .close-camera {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 2002;
+        }
+        .ar-marker {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            border: 2px dashed rgba(0, 255, 0, 0.7);
+            z-index: 2001;
+        }
+        .ar-marker::after { content: 'Scanning...'; position: absolute; top: -30px; width: 100%; text-align: center; color: #0f0; }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .ar-section {
-                text-align: center;
-                justify-content: center;
-            }
-            .ar-content {
-                padding-right: 0;
-            }
-            .ar-icon-display {
-                display: none;
-            }
-            .floor-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="logo-area">
+        <div class="logo-area" onclick="goHome()">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" class="logo-img">
             <div class="college-name">
                 วิทยาลัยเทคนิคสุราษฎร์ธานี
                 <span>Suratthani Technical College</span>
             </div>
         </div>
-        <div style="color: var(--primary-blue); font-size: 1.5rem; cursor: pointer;">
+        <div class="menu-trigger" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="dropdown-menu" id="mainDropdown">
+            <div class="dropdown-item" onclick="showLogin()">
+                <i class="fas fa-user-cog"></i> เข้าสู่ระบบผู้ดูแล (Admin)
+            </div>
+            <div class="dropdown-item" onclick="location.reload()">
+                <i class="fas fa-sync"></i> รีโหลดหน้าเว็บ
+            </div>
         </div>
     </nav>
 
-    <section class="ar-section">
-        <div class="ar-content">
-            <h3>ระบบนำทางอัจฉริยะ</h3>
-            <h1>AR NAVIGATION</h1>
-            <p>ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</p>
-            <button class="ar-btn" onclick="alert('กำลังเปิดกล้องเพื่อใช้งานระบบ AR...')">
-                <i class="fas fa-camera"></i> เปิดกล้องนำทาง
-            </button>
-        </div>
-        <div class="ar-icon-display">
-            <i class="fas fa-map-marked-alt"></i>
-        </div>
-    </section>
+    <div id="page-home" class="page-section active">
+        <section class="ar-hero">
+            <div class="hero-content">
+                <h3>ระบบนำทางอัจฉริยะ</h3>
+                <h1 class="hero-title">AR NAVIGATION</h1>
+                <p style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่</p>
+                <button class="btn btn-outline" style="font-size: 1.2rem; padding: 15px 30px;" onclick="startAR()">
+                    <i class="fas fa-camera"></i> เปิดกล้องนำทาง
+                </button>
+            </div>
+            <i class="fas fa-map-marked-alt" style="position: absolute; right: 5%; font-size: 12rem; color: rgba(255,255,255,0.1);"></i>
+        </section>
 
-    <section class="map-section">
-        <div class="section-header">
-            <h2>แผนผังอาคารเรียน 6</h2>
-            <p>แผนกเทคโนโลยีสารสนเทศ (Information Technology)</p>
-        </div>
+        <section class="map-container">
+            <div class="section-header">
+                <h2>แผนผังอาคารเรียน 6</h2>
+                <p>แผนกเทคโนโลยีสารสนเทศ (กดที่ห้องเพื่อเริ่มนำทาง)</p>
+            </div>
 
-        <div class="floor-grid">
+            <div class="floor-grid">
+                <div class="floor-card">
+                    <div class="floor-header">ชั้น 4 <i class="fas fa-layer-group"></i></div>
+                    <div onclick="startAR('ห้องพักครู')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-user-tie"></i></div>
+                            <div><h4>ห้องพักครู</h4><p class="text-small">Information Tech</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                    <div onclick="startAR('ห้อง Lecture')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-chalkboard"></i></div>
+                            <div><h4>ห้อง Lecture</h4><p>ห้องบรรยาย</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                    <div onclick="startAR('Lab Computer')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-desktop"></i></div>
+                            <div><h4>Lab 1, 2, 3</h4><p>ปฏิบัติการคอมฯ</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                </div>
+
+                <div class="floor-card">
+                    <div class="floor-header">ชั้น 3 <i class="fas fa-layer-group"></i></div>
+                    <div onclick="startAR('ห้อง 631-635')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-book-reader"></i></div>
+                            <div><h4>ห้อง 631 - 635</h4><p>ห้องเรียนทฤษฎี</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                </div>
+
+                <div class="floor-card">
+                    <div class="floor-header">ชั้น 2 <i class="fas fa-layer-group"></i></div>
+                    <div onclick="startAR('ห้องยางและพอลิเมอร์')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-flask"></i></div>
+                            <div><h4>ห้อง Lab ยาง</h4><p>และพอลิเมอร์</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                    <div onclick="startAR('To Be Number One')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-heart"></i></div>
+                            <div><h4>To Be Number One</h4><p>ห้องชมรม</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                </div>
+
+                <div class="floor-card">
+                    <div class="floor-header">ชั้น 1 <i class="fas fa-layer-group"></i></div>
+                    <div onclick="startAR('ลานต้านภัย')" class="room-item">
+                        <div class="room-info">
+                            <div class="room-icon"><i class="fas fa-users"></i></div>
+                            <div><h4>ลานต้านภัยยาเสพติด</h4><p>ลานกิจกรรม</p></div>
+                        </div>
+                        <div class="ar-action">GO AR</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="page-login" class="page-section">
+        <div class="login-container">
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">ผู้ดูแลระบบ (Admin)</h2>
+            <p style="margin-bottom: 30px; color: #666;">กรุณาระบุตัวตนเพื่อเข้าสู่ระบบจัดการเว็บ</p>
             
-            <div class="floor-card">
-                <div class="floor-header">
-                    ชั้น 4 <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="room-list">
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-user-tie"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้องพักครู</h4>
-                            <p>แผนกเทคโนโลยีสารสนเทศ</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-chalkboard"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้อง Lecture</h4>
-                            <p>ห้องเรียนบรรยาย</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-desktop"></i></div>
-                        <div class="room-detail">
-                            <h4>Lab 1, Lab 2, Lab 3</h4>
-                            <p>ห้องปฏิบัติการคอมพิวเตอร์</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <form onsubmit="handleLogin(event)">
+                <div style="text-align: left; margin-bottom: 5px; font-weight: bold;">เลือกชื่อผู้ดูแล:</div>
+                <select id="adminName" required onchange="checkUserStatus()">
+                    <option value="" disabled selected>-- เลือกรายชื่อ --</option>
+                    <option value="user1">พิพัฒน์ รักเส้ง</option>
+                    <option value="user2">กรดนัย จุอ่อน</option>
+                    <option value="user3">กฤตภาสวิจิตร</option>
+                </select>
 
-            <div class="floor-card">
-                <div class="floor-header">
-                    ชั้น 3 <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="room-list">
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-book-reader"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้องเรียน 631 - 635</h4>
-                            <p>ห้องเรียนทฤษฎีและปฏิบัติ</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-info-circle"></i></div>
-                        <div class="room-detail">
-                            <h4>รายละเอียดห้อง</h4>
-                            <p>631, 632, 633, 634, 635</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <div style="text-align: left; margin-bottom: 5px; font-weight: bold;">รหัสผ่าน:</div>
+                <input type="password" id="adminPass" placeholder="กรอกรหัสผ่าน" required>
+                
+                <p id="password-hint" style="font-size: 0.8rem; color: var(--accent-blue); margin-bottom: 15px; text-align: left; display: none;">
+                    * ตั้งรหัสผ่านใหม่สำหรับบัญชีนี้
+                </p>
 
-            <div class="floor-card">
-                <div class="floor-header">
-                    ชั้น 2 <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="room-list">
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-flask"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้องปฏิบัติการเทคโนโลยียาง</h4>
-                            <p>และพอลิเมอร์</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-heart"></i></div>
-                        <div class="room-detail">
-                            <h4>To Be Number One</h4>
-                            <p>ห้องชมรม</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-language"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้องเรียนภาษาอังกฤษ</h4>
-                            <p>& ห้องเรียนวิทยาศาสตร์</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="floor-card">
-                <div class="floor-header">
-                    ชั้น 1 <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="room-list">
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-users"></i></div>
-                        <div class="room-detail">
-                            <h4>ลานต้านภัยยาเสพติด</h4>
-                            <p>พื้นที่กิจกรรมอเนกประสงค์</p>
-                        </div>
-                    </div>
-                    <div class="room-item">
-                        <div class="room-icon"><i class="fas fa-tools"></i></div>
-                        <div class="room-detail">
-                            <h4>ห้องเรียนแผนกวิชา</h4>
-                            <p>เทคโนโลยียางและพอลิเมอร์</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 15px;">
+                    <i class="fas fa-sign-in-alt"></i> ยืนยันเข้าสู่ระบบ
+                </button>
+                <button type="button" onclick="goHome()" class="btn" style="width: 100%; justify-content: center; margin-top: 10px; background: #eee;">
+                    ยกเลิก / กลับหน้าหลัก
+                </button>
+            </form>
         </div>
-    </section>
+    </div>
 
+    <div id="page-dashboard" class="page-section">
+        <div class="admin-dashboard">
+            <div class="admin-header">
+                <div>
+                    <h2>ระบบจัดการเว็บไซต์</h2>
+                    <p>ยินดีต้อนรับ: <span id="current-admin-name" style="color: var(--primary-blue); font-weight: bold;">...</span></p>
+                </div>
+                <button onclick="logout()" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dash-card">
+                    <i class="fas fa-edit" style="color: var(--accent-blue);"></i>
+                    <h3>แก้ไขเนื้อหาหน้าเว็บ</h3>
+                    <p>จัดการข้อความ รูปภาพ และข่าวสาร</p>
+                </div>
+                <div class="dash-card">
+                    <i class="fas fa-map-marked" style="color: var(--success);"></i>
+                    <h3>จัดการจุด AR</h3>
+                    <p>เพิ่ม/ลบ จุดพิกัดนำทาง</p>
+                </div>
+                <div class="dash-card">
+                    <i class="fas fa-users-cog" style="color: orange;"></i>
+                    <h3>จัดการผู้ใช้งาน</h3>
+                    <p>ดูสถิติและสิทธิ์การเข้าถึง</p>
+                </div>
+                <div class="dash-card">
+                    <i class="fas fa-file-image" style="color: purple;"></i>
+                    <h3>คลังรูปภาพ</h3>
+                    <p>อัปโหลดรูปภาพใหม่</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="camera-overlay">
+        <button class="close-camera" onclick="stopAR()"><i class="fas fa-times"></i> ปิดกล้อง</button>
+        <div class="ar-marker"></div>
+        <video id="camera-video" autoplay playsinline></video>
+        <div class="camera-ui">
+            <h3>กำลังนำทางไปยัง: <span id="ar-destination">...</span></h3>
+            <p>กรุณาส่องกล้องไปรอบๆ เพื่อค้นหาเส้นทาง</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        function toggleMenu() {
+            document.getElementById('mainDropdown').classList.toggle('active');
+        }
+
+        function goHome() {
+            showPage('page-home');
+            document.getElementById('mainDropdown').classList.remove('active');
+        }
+
+        function showLogin() {
+            showPage('page-login');
+            document.getElementById('mainDropdown').classList.remove('active');
+            document.getElementById('adminName').value = "";
+            document.getElementById('adminPass').value = "";
+            document.getElementById('password-hint').style.display = "none";
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // --- Authentication Logic (Simulated with LocalStorage) ---
+        const users = {
+            'user1': 'พิพัฒน์ รักเส้ง',
+            'user2': 'กรดนัย จุอ่อน',
+            'user3': 'กฤตภาสวิจิตร'
+        };
+
+        function checkUserStatus() {
+            const userId = document.getElementById('adminName').value;
+            const hint = document.getElementById('password-hint');
+            
+            // Check if password exists in LocalStorage
+            if (!localStorage.getItem('pass_' + userId)) {
+                hint.innerText = "* ยินดีต้อนรับครั้งแรก กรุณาตั้งรหัสผ่านของคุณ";
+                hint.style.display = "block";
+                hint.style.color = "var(--success)";
+            } else {
+                hint.innerText = "* กรุณากรอกรหัสผ่านเดิมที่คุณตั้งไว้";
+                hint.style.display = "block";
+                hint.style.color = "#666";
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const userId = document.getElementById('adminName').value;
+            const inputPass = document.getElementById('adminPass').value;
+            
+            if (!userId) { alert('กรุณาเลือกชื่อผู้ดูแล'); return; }
+
+            const storedPass = localStorage.getItem('pass_' + userId);
+
+            if (!storedPass) {
+                // First time login - Set Password
+                localStorage.setItem('pass_' + userId, inputPass);
+                alert('ตั้งรหัสผ่านเรียบร้อยแล้ว! เข้าสู่ระบบสำเร็จ');
+                loginSuccess(userId);
+            } else {
+                // Returning login - Check Password
+                if (inputPass === storedPass) {
+                    loginSuccess(userId);
+                } else {
+                    alert('รหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่');
+                    document.getElementById('adminPass').value = '';
+                }
+            }
+        }
+
+        function loginSuccess(userId) {
+            document.getElementById('current-admin-name').innerText = users[userId];
+            showPage('page-dashboard');
+        }
+
+        function logout() {
+            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
+                goHome();
+            }
+        }
+
+        // --- AR Camera Logic ---
+        let videoStream;
+
+        async function startAR(destination = "อาคารเรียน 6") {
+            const overlay = document.getElementById('camera-overlay');
+            const video = document.getElementById('camera-video');
+            const destText = document.getElementById('ar-destination');
+
+            destText.innerText = destination;
+            
+            try {
+                // Request Camera Access
+                videoStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" } // Use Back Camera
+                });
+                
+                video.srcObject = videoStream;
+                overlay.style.display = 'block';
+            } catch (err) {
+                console.error("Error accessing camera: ", err);
+                alert("ไม่สามารถเปิดกล้องได้ (กรุณาอนุญาตสิทธิ์การใช้กล้อง หรือใช้งานบน HTTPS/Localhost)");
+            }
+        }
+
+        function stopAR() {
+            const overlay = document.getElementById('camera-overlay');
+            const video = document.getElementById('camera-video');
+
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+            video.srcObject = null;
+            overlay.style.display = 'none';
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-trigger') && !event.target.matches('.menu-trigger *')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('active')) {
+                        openDropdown.classList.remove('active');
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
