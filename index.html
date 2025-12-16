@@ -61,12 +61,197 @@
             overflow-x: hidden;
         }
 
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: var(--spacing-lg);
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @media (min-width: 768px) {
+            .loading-logo {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-title {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+            font-family: 'Kanit', sans-serif;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .loading-title {
+                font-size: 2.25rem;
+            }
+        }
+
+        .loading-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.5;
+            padding: 0 var(--spacing-md);
+        }
+
+        @media (min-width: 768px) {
+            .loading-subtitle {
+                font-size: 1.125rem;
+            }
+        }
+
+        .loading-progress-container {
+            width: 280px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .loading-progress-container {
+                width: 320px;
+            }
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.6) 50%, 
+                transparent 100%);
+            animation: shimmer 1.2s infinite linear;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: var(--spacing-xl);
+        }
+
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: loadingDot 1s infinite ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .loading-dots {
+                gap: 10px;
+            }
+            
+            .loading-dot {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
         /* Main Content */
         .main-content {
+            display: none;
+        }
+
+        .main-content.show {
             display: block;
         }
 
-        /* Existing styles from original code */
+        /* App Bar */
+        .app-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background-color: var(--surface);
+            z-index: 1000;
+            box-shadow: var(--shadow-1);
+            border-bottom: 1px solid var(--border);
+            display: none;
+        }
+
+        .app-bar.show {
+            display: block;
+        }
+
+        /* Existing styles... */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Kanit', sans-serif;
             font-weight: 500;
@@ -78,19 +263,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-md);
-        }
-
-        /* Header - App Bar */
-        .app-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            background-color: var(--surface);
-            z-index: 1000;
-            box-shadow: var(--shadow-1);
-            border-bottom: 1px solid var(--border);
         }
 
         .app-bar-container {
@@ -886,6 +1058,27 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEY3t1q0stDrNtprzys1d_zH8JzLj9ATZ_sA&s" 
+                 alt="ตราเทคนิคสุราษฎร์ธานี"
+                 onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNjAiIGN5PSI2MCIgcj0iNjAiIGZpbGw9IiMxQTczRTgiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNnB4Ij5TUlRDPC90ZXh0Pjwvc3ZnPg=='">
+        </div>
+        <h1 class="loading-title">วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
+        <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ</p>
+        
+        <div class="loading-progress-container">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
+        
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
     <!-- App Bar -->
     <header class="app-bar" id="appBar">
         <div class="container app-bar-container">
@@ -1475,6 +1668,50 @@
     </div>
 
     <script>
+        // ===== LOADING SYSTEM =====
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingProgressBar = document.getElementById('loadingProgressBar');
+        const mainContent = document.getElementById('mainContent');
+        const appBar = document.getElementById('appBar');
+
+        // Function to simulate loading progress
+        function simulateLoading() {
+            let progress = 0;
+            const totalSteps = 100;
+            
+            const interval = setInterval(() => {
+                progress += 1;
+                loadingProgressBar.style.width = progress + '%';
+                
+                if (progress >= totalSteps) {
+                    clearInterval(interval);
+                    completeLoading();
+                }
+            }, 30); // 30ms per step = 3 seconds total
+        }
+
+        // Complete loading and show main content
+        function completeLoading() {
+            // Fade out loading screen
+            loadingScreen.classList.add('fade-out');
+            
+            // Show main content after fade starts
+            setTimeout(() => {
+                mainContent.classList.add('show');
+                appBar.classList.add('show');
+                
+                // Remove loading screen completely
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 300);
+        }
+
+        // Start loading when page loads
+        window.addEventListener('load', () => {
+            simulateLoading();
+        });
+
         // ===== SECTION NAVIGATION SYSTEM =====
         const sections = {
             home: document.getElementById('homeSection'),
