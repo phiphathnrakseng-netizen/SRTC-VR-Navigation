@@ -3,2507 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ AR และแผนผังอาคาร | แผนกเทคโนโลยีสารสนเทศ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>AR Indoor Navigation UI</title>
+    <!-- Google Fonts: Roboto for Material feel, Kanit for Thai -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #1A73E8;
-            --primary-dark: #0D47A1;
-            --primary-light: #4285F4;
-            --secondary: #34A853;
-            --secondary-dark: #1B5E20;
-            --secondary-light: #81C784;
-            --ar-color: #9C27B0;
-            --ar-dark: #7B1FA2;
-            --ar-light: #E1BEE7;
-            --admin: #FFD700;
-            --admin-dark: #FFC107;
-            --admin-light: #FFF9C4;
-            --surface: #FFFFFF;
-            --background: #F8FAFD;
-            --on-primary: #FFFFFF;
-            --on-secondary: #FFFFFF;
-            --on-surface: #202124;
-            --on-background: #5F6368;
-            --border: #E8EAED;
-            --divider: #DADCE0;
-            --hover: #F1F3F4;
-            --success: #4CAF50;
-            --warning: #FF9800;
-            --danger: #F44336;
-            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-            --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
-            --shadow-3: 0 2px 6px 2px rgba(60,64,67,0.15), 0 1px 2px 0 rgba(60,64,67,0.3);
-            --shadow-4: 0 4px 8px 3px rgba(60,64,67,0.15), 0 1px 3px 0 rgba(60,64,67,0.3);
-            --shadow-5: 0 8px 12px 6px rgba(60,64,67,0.15), 0 4px 4px 0 rgba(60,64,67,0.3);
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 50px;
-            --spacing-xs: 4px;
-            --spacing-sm: 8px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
-            --spacing-xxl: 48px;
+            --primary-color: #2563EB; /* Bright Blue */
+            --accent-color: #F43F5E; /* Rose/Red for markers */
+            --surface-color: rgba(255, 255, 255, 0.95);
+            --glass-color: rgba(255, 255, 255, 0.7);
+            --text-main: #1F2937;
+            --text-sec: #6B7280;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-hard: 0 4px 12px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Noto Sans Thai', 'Kanit', sans-serif;
-            line-height: 1.6;
-            color: var(--on-surface);
-            background-color: var(--background);
-            overflow-x: hidden;
+            font-family: 'Kanit', 'Roboto', sans-serif;
+            background-color: #111;
+            overflow: hidden; /* Prevent scroll on mobile */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
         }
 
-        /* ===== LOADING SCREEN ===== */
-        .loading-screen {
-            position: fixed;
+        /* --- Main Container (Mobile Screen Simulation) --- */
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* Mobile max width */
+            height: 100%;
+            background: #333;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- Simulated AR Camera Background --- */
+        .ar-view {
+            width: 100%;
+            height: 100%;
+            /* Placeholder Image imitating a building hallway */
+            background-image: url('https://images.unsplash.com/photo-1505566938927-2c93d9326e5a?q=80&w=1000&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            position: absolute;
             top: 0;
             left: 0;
+            z-index: 0;
+            transition: var(--transition);
+        }
+        
+        /* Simulated 2D Map (Hidden by default) */
+        .map-view {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loading-screen.fade-out {
+            background-color: #f0f2f5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
             opacity: 0;
-            visibility: hidden;
+            pointer-events: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .map-view.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 2; /* Bring above AR */
         }
 
-        .loading-logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: var(--spacing-lg);
-            animation: float 2s ease-in-out infinite;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-        }
-
-        .loading-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .loading-title {
-            color: white;
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-            text-align: center;
-            font-family: 'Kanit', sans-serif;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .loading-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: var(--spacing-xl);
-            text-align: center;
-            max-width: 500px;
-            line-height: 1.5;
-            padding: 0 var(--spacing-md);
-        }
-
-        .loading-progress-container {
-            width: 280px;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            margin-bottom: var(--spacing-lg);
-            position: relative;
-        }
-
-        .loading-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--ar-color) 0%, var(--primary) 50%, var(--secondary) 100%);
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-progress-bar::after {
-            content: '';
+        /* --- UI Layers --- */
+        .ui-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.6) 50%, 
-                transparent 100%);
-            animation: shimmer 1.2s infinite linear;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through to map/ar */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+        /* --- Top Bar --- */
+        .top-bar {
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 20px;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .search-box {
+            background: var(--surface-color);
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(10px);
         }
 
-        /* ===== MAIN LAYOUT ===== */
-        .app-container {
-            display: none;
-            min-height: 100vh;
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            font-family: 'Kanit';
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+            color: var(--text-main);
         }
 
-        .app-container.show {
-            display: block;
+        .chips-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            /* Hide scrollbar */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .chips-container::-webkit-scrollbar { display: none; }
+
+        .chip {
+            background: var(--glass-color);
+            backdrop-filter: blur(5px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
-        /* App Bar */
-        .app-bar {
-            position: fixed;
+        .chip.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* --- AR Markers (Floating Pins) --- */
+        .ar-markers-container {
+            position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 64px;
-            background-color: var(--surface);
-            z-index: 1000;
-            box-shadow: var(--shadow-1);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 var(--spacing-md);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
 
-        .app-bar-logo {
+        .ar-pin {
+            position: absolute;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: var(--spacing-md);
-            text-decoration: none;
-            color: var(--on-surface);
             cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Positioning example */
+        .pin-1 { top: 40%; left: 30%; }
+        .pin-2 { top: 35%; left: 70%; transform: scale(0.8); opacity: 0.8; }
+
+        .pin-card {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-hard);
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
         }
 
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            background-color: var(--surface);
-            border: 1px solid var(--border);
+        .ar-pin:hover .pin-card, .ar-pin.active .pin-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pin-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .nav-line {
+            /* Simulated AR Path line */
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 300px;
+            background: linear-gradient(to top, var(--primary-color), transparent);
+            transform: translateX(-50%) perspective(500px) rotateX(60deg);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(244, 63, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+
+        /* --- Bottom Sheet & Controls --- */
+        .bottom-ui {
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-end; /* Align FAB to right */
+        }
+
+        .view-toggle-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--text-main);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .view-toggle-btn:active {
+            transform: scale(0.95);
         }
 
-        .logo-icon img {
+        .info-card {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-text h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 0;
-        }
-
-        .logo-text p {
-            font-size: 0.875rem;
-            color: var(--on-background);
-            margin: 0;
-            opacity: 0.9;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-top: 64px;
-            padding: var(--spacing-xl) 0;
-            min-height: calc(100vh - 64px);
-        }
-
-        /* ===== DASHBOARD ===== */
-        .dashboard {
-            padding: var(--spacing-lg);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .dashboard-card {
-            background: var(--surface);
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
             border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow-1);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-3);
-        }
-
-        .dashboard-card.ar {
-            border-top: 4px solid var(--ar-color);
-        }
-
-        .dashboard-card.map {
-            border-top: 4px solid var(--primary);
-        }
-
-        .dashboard-card.admin {
-            border-top: 4px solid var(--admin);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            animation: slideUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .card-header {
             display: flex;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
 
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: var(--spacing-md);
-            font-size: 1.5rem;
-        }
-
-        .card-icon.ar {
-            background-color: var(--ar-light);
-            color: var(--ar-color);
-        }
-
-        .card-icon.map {
-            background-color: rgba(26, 115, 232, 0.1);
-            color: var(--primary);
-        }
-
-        .card-icon.admin {
-            background-color: var(--admin-light);
-            color: #000;
-        }
-
-        .card-title {
+        .location-title {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: var(--spacing-xs);
+            color: var(--text-main);
         }
 
-        .card-description {
-            color: var(--on-background);
-            font-size: 0.875rem;
-            line-height: 1.4;
-        }
-
-        .card-actions {
-            margin-top: var(--spacing-lg);
+        .location-meta {
+            font-size: 0.9rem;
+            color: var(--text-sec);
+            margin-top: 4px;
             display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .btn {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            font-family: 'Noto Sans Thai', sans-serif;
-            font-size: 0.875rem;
+            gap: 4px;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--on-primary);
+        .distance-badge {
+            background: #E0F2FE;
+            color: #0284C7;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .btn-ar {
-            background-color: var(--ar-color);
-            color: var(--on-primary);
-        }
-
-        .btn-ar:hover {
-            background-color: var(--ar-dark);
-        }
-
-        .btn-admin {
-            background-color: var(--admin);
-            color: #000;
-        }
-
-        .btn-admin:hover {
-            background-color: var(--admin-dark);
-        }
-
-        /* ===== AR SCANNER ===== */
-        .ar-scanner-container {
-            display: none;
-            position: fixed;
-            top: 64px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--background);
-            z-index: 900;
-            flex-direction: column;
-        }
-
-        .ar-scanner-container.active {
-            display: flex;
-        }
-
-        .ar-header {
-            background: var(--surface);
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .ar-scanner {
-            flex: 1;
-            background: #000;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .scanner-video {
+        .action-btn {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .scanner-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            height: 250px;
-            border: 2px solid var(--ar-color);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-            pointer-events: none;
-        }
-
-        .scanner-hint {
-            position: absolute;
-            bottom: var(--spacing-xl);
-            left: 0;
-            right: 0;
-            text-align: center;
+            padding: 16px;
+            background: var(--primary-color);
             color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: var(--spacing-md);
-        }
-
-        .ar-controls {
-            position: absolute;
-            bottom: var(--spacing-lg);
-            right: var(--spacing-lg);
-            display: flex;
-            gap: var(--spacing-md);
-            z-index: 10;
-        }
-
-        .ar-info-panel {
-            position: absolute;
-            top: var(--spacing-lg);
-            left: var(--spacing-lg);
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow-3);
-            max-width: 300px;
-            display: none;
-        }
-
-        .ar-info-panel.show {
-            display: block;
-        }
-
-        /* ===== INTERACTIVE MAP ===== */
-        .map-container {
-            display: none;
-            padding: var(--spacing-lg);
-            background: var(--background);
-            min-height: 100vh;
-        }
-
-        .map-container.active {
-            display: block;
-        }
-
-        .map-header {
-            background: var(--surface);
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--spacing-xl);
-            box-shadow: var(--shadow-1);
-        }
-
-        .map-controls {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-
-        .map-floor-selector {
-            display: flex;
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-xs);
-            border: 1px solid var(--border);
-        }
-
-        .floor-btn {
-            padding: var(--spacing-sm) var(--spacing-lg);
-            background: none;
             border: none;
-            cursor: pointer;
-            font-weight: 500;
-            border-radius: var(--radius-sm);
-            transition: all 0.2s;
-        }
-
-        .floor-btn.active {
-            background: var(--primary);
-            color: var(--on-primary);
-        }
-
-        .map-canvas {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-2);
-            min-height: 500px;
-            position: relative;
-        }
-
-        .map-image-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .map-image {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .room-marker {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s;
-            border: 2px solid white;
-            box-shadow: var(--shadow-1);
-        }
-
-        .room-marker:hover {
-            transform: translate(-50%, -50%) scale(1.5);
-            background: var(--ar-color);
-        }
-
-        .room-info {
-            position: absolute;
-            background: var(--surface);
-            padding: var(--spacing-md);
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-3);
-            min-width: 200px;
-            z-index: 100;
-            display: none;
-        }
-
-        .room-info.show {
-            display: block;
-        }
-
-        .navigation-panel {
-            position: fixed;
-            bottom: var(--spacing-xl);
-            right: var(--spacing-xl);
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow-4);
-            max-width: 300px;
-            display: none;
-            z-index: 100;
-        }
-
-        .navigation-panel.show {
-            display: block;
-        }
-
-        /* ===== ADMIN SYSTEM ===== */
-        .admin-container {
-            display: none;
-            padding: var(--spacing-lg);
-            background: var(--background);
-            min-height: 100vh;
-        }
-
-        .admin-container.active {
-            display: block;
-        }
-
-        .admin-header {
-            background: linear-gradient(135deg, var(--admin) 0%, var(--admin-dark) 100%);
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--spacing-xl);
-            box-shadow: var(--shadow-2);
-        }
-
-        .admin-header h1 {
-            color: #000;
-            margin-bottom: var(--spacing-sm);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .admin-nav {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-xl);
-            flex-wrap: wrap;
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 2px solid var(--border);
-        }
-
-        .admin-nav-btn {
-            padding: var(--spacing-md) var(--spacing-lg);
-            background-color: var(--background);
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .admin-nav-btn.active {
-            background-color: var(--admin);
-            border-color: var(--admin-dark);
-            color: #000;
-        }
-
-        .admin-content {
-            background-color: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            box-shadow: var(--shadow-1);
-            border: 1px solid var(--border);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .admin-section {
-            display: none;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-            color: var(--on-surface);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-family: 'Noto Sans Thai', sans-serif;
+            font-family: 'Kanit';
             font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
-        }
-
-        .user-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .user-card {
-            background: var(--background);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            border: 1px solid var(--border);
-        }
-
-        .user-role-badge {
-            display: inline-block;
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
             font-weight: 500;
-            margin-top: var(--spacing-sm);
-        }
-
-        .role-admin {
-            background-color: var(--admin-light);
-            color: #000;
-        }
-
-        .role-teacher {
-            background-color: var(--primary-light);
-            color: var(--on-primary);
-        }
-
-        .role-student {
-            background-color: var(--secondary-light);
-            color: var(--on-secondary);
-        }
-
-        /* ===== MODALS ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1100;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-md);
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--surface);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-5);
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        .modal-header {
-            padding: var(--spacing-xl);
-            border-bottom: 1px solid var(--divider);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--on-primary);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .modal-body {
-            padding: var(--spacing-xl);
-        }
-
-        .modal-footer {
-            padding: var(--spacing-xl);
-            border-top: 1px solid var(--divider);
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--spacing-md);
-        }
-
-        /* ===== FLOATING BUTTONS ===== */
-        .floating-buttons {
-            position: fixed;
-            bottom: var(--spacing-xl);
-            right: var(--spacing-xl);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-            align-items: flex-end;
-        }
-
-        .floating-button {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: var(--on-primary);
-            border: none;
-            box-shadow: var(--shadow-3);
+            margin-top: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: #1d4ed8;
         }
 
-        .floating-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-4);
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .floating-button.admin {
-            background-color: var(--admin);
-            color: #000;
-        }
-
-        .floating-button.ar {
-            background-color: var(--ar-color);
-        }
-
-        .floating-button-label {
-            position: absolute;
-            right: 70px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--on-surface);
-            color: var(--surface);
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--radius-md);
-            font-size: 0.75rem;
-            font-weight: 500;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            box-shadow: var(--shadow-2);
-        }
-
-        .floating-button:hover .floating-button-label {
-            opacity: 1;
-            visibility: visible;
-            right: 65px;
-        }
-
-        /* ===== NOTIFICATIONS ===== */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--success);
-            color: white;
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-3);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            animation: slideIn 0.3s ease-out;
-            max-width: 300px;
-        }
-
-        .notification.error {
-            background-color: var(--danger);
-        }
-
-        .notification.warning {
-            background-color: var(--warning);
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .app-bar {
-                height: 56px;
-                padding: 0 var(--spacing-sm);
-            }
-            
-            .main-content {
-                margin-top: 56px;
-                padding: var(--spacing-md);
-            }
-            
-            .logo-text h1 {
-                font-size: 1rem;
-            }
-            
-            .logo-text p {
-                font-size: 0.75rem;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .floating-buttons {
-                bottom: var(--spacing-md);
-                right: var(--spacing-md);
-            }
-            
-            .floating-button {
-                width: 48px;
-                height: 48px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .loading-title {
-                font-size: 1.5rem;
-            }
-            
-            .loading-progress-container {
-                width: 200px;
-            }
-            
-            .dashboard-card {
-                padding: var(--spacing-lg);
-            }
-            
-            .card-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
-            }
+        /* SVG Map Placeholder Style */
+        .map-svg {
+            width: 80%;
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-logo">
-            <div style="width: 100%; height: 100%; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
-                AR
-            </div>
-        </div>
-        <h1 class="loading-title">ระบบ AR และแผนผังอาคารอัจฉริยะ</h1>
-        <p class="loading-subtitle">แผนกเทคโนโลยีสารสนเทศ วิทยาลัยเทคนิคสุราษฎร์ธานี</p>
+
+    <div class="app-container">
         
-        <div class="loading-progress-container">
-            <div class="loading-progress-bar" id="loadingProgressBar"></div>
-        </div>
-    </div>
-
-    <!-- Main App Container -->
-    <div class="app-container" id="appContainer">
-        <!-- App Bar -->
-        <header class="app-bar">
-            <div class="app-bar-logo" id="dashboardBtn">
-                <div class="logo-icon">
-                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary) 0%, var(--ar-color) 100%); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                        AR
-                    </div>
-                </div>
-                <div class="logo-text">
-                    <h1>ระบบ AR และแผนผังอาคาร</h1>
-                    <p>แผนกเทคโนโลยีสารสนเทศ</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: var(--spacing-md);">
-                <button class="btn btn-primary" id="arScannerBtn">
-                    <i class="fas fa-camera"></i> สแกน AR
-                </button>
-                <button class="btn btn-primary" id="interactiveMapBtn">
-                    <i class="fas fa-map"></i> แผนผัง
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Dashboard -->
-        <main class="main-content" id="mainDashboard">
-            <div class="dashboard">
-                <div class="dashboard-grid">
-                    <!-- AR Scanner Card -->
-                    <div class="dashboard-card ar">
-                        <div class="card-header">
-                            <div class="card-icon ar">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <div>
-                                <h3 class="card-title">ระบบสแกน AR</h3>
-                                <p class="card-description">ใช้กล้องสแกน QR Code หรือ Marker เพื่อดูข้อมูลห้องเรียนและเส้นทาง</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-ar" id="startARScanner">
-                                <i class="fas fa-play"></i> เริ่มสแกน
-                            </button>
-                            <button class="btn" style="background: var(--background); color: var(--on-surface);">
-                                <i class="fas fa-info-circle"></i> คู่มือ
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Map Card -->
-                    <div class="dashboard-card map">
-                        <div class="card-header">
-                            <div class="card-icon map">
-                                <i class="fas fa-map-marked-alt"></i>
-                            </div>
-                            <div>
-                                <h3 class="card-title">แผนผังอาคารอัจฉริยะ</h3>
-                                <p class="card-description">ค้นหาเส้นทาง ห้องเรียน และข้อมูลต่างๆ ในอาคารเรียนด้วยระบบนำทางแบบอินเตอร์แอคทีฟ</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-primary" id="openInteractiveMap">
-                                <i class="fas fa-directions"></i> เปิดแผนผัง
-                            </button>
-                            <button class="btn" style="background: var(--background); color: var(--on-surface);">
-                                <i class="fas fa-search"></i> ค้นหาห้อง
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Admin System Card -->
-                    <div class="dashboard-card admin">
-                        <div class="card-header">
-                            <div class="card-icon admin">
-                                <i class="fas fa-crown"></i>
-                            </div>
-                            <div>
-                                <h3 class="card-title">ระบบผู้ดูแล</h3>
-                                <p class="card-description">จัดการข้อมูลอาคาร ห้องเรียน ผู้ใช้งาน และตั้งค่าระบบ AR</p>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-admin" id="openAdminSystem">
-                                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="dashboard-card" style="margin-top: var(--spacing-xl);">
-                    <h3 style="margin-bottom: var(--spacing-lg);">กิจกรรมล่าสุด</h3>
-                    <div id="recentActivity">
-                        <div style="padding: var(--spacing-md); background: var(--background); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm);">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-md);">
-                                <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 500;">พบห้องเรียน 631</div>
-                                    <div style="font-size: 0.875rem; color: var(--on-background);">ผ่านระบบสแกน AR เมื่อ 5 นาทีที่แล้ว</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="padding: var(--spacing-md); background: var(--background); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm);">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-md);">
-                                <div style="width: 40px; height: 40px; background: var(--ar-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-                                    <i class="fas fa-route"></i>
-                                </div>
-                                <div>
-                                    <div style="font-weight: 500;">เส้นทางไปห้อง Lab 1</div>
-                                    <div style="font-size: 0.875rem; color: var(--on-background);">สร้างเส้นทางสำเร็จ เมื่อ 15 นาทีที่แล้ว</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- AR Scanner -->
-        <div class="ar-scanner-container" id="arScannerContainer">
-            <div class="ar-header">
-                <h3 style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <i class="fas fa-camera" style="color: var(--ar-color);"></i>
-                    สแกน AR
-                </h3>
-                <button class="btn" id="closeARScanner" style="background: var(--background); color: var(--on-surface);">
-                    <i class="fas fa-times"></i> ปิด
-                </button>
-            </div>
-            
-            <div class="ar-scanner">
-                <video class="scanner-video" id="scannerVideo" playsinline></video>
-                <div class="scanner-overlay"></div>
-                <div class="scanner-hint">
-                    <i class="fas fa-info-circle"></i> นำกล้องไปที่ QR Code หรือ Marker เพื่อสแกนข้อมูลห้อง
-                </div>
-                
-                <div class="ar-controls">
-                    <button class="floating-button ar" id="toggleCamera">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                    <button class="floating-button" style="background: var(--danger);" id="toggleFlash">
-                        <i class="fas fa-bolt"></i>
-                    </button>
-                </div>
-                
-                <div class="ar-info-panel" id="arInfoPanel">
-                    <h4 id="arRoomName">ห้องเรียน 631</h4>
-                    <p id="arRoomDescription">ห้องเรียนคอมพิวเตอร์ จำนวน 50 ที่นั่ง</p>
-                    <div style="margin: var(--spacing-md) 0;">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
-                            <i class="fas fa-chalkboard-teacher" style="color: var(--primary);"></i>
-                            <span>ผู้รับผิดชอบ: อ.สัญญา ชูช่วย</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <i class="fas fa-users" style="color: var(--secondary);"></i>
-                            <span>ความจุ: 50 คน</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" style="width: 100%;">
-                        <i class="fas fa-directions"></i> แสดงเส้นทาง
-                    </button>
-                </div>
-            </div>
+        <!-- Layer 1: Simulated AR Camera View -->
+        <div class="ar-view" id="arView">
+            <div class="nav-line"></div> <!-- Simulated path on floor -->
         </div>
 
-        <!-- Interactive Map -->
-        <div class="map-container" id="mapContainer">
-            <div class="map-header">
-                <h2 style="margin-bottom: var(--spacing-md);">แผนผังอาคารอัจฉริยะ</h2>
-                <p>เลือกชั้นและคลิกที่ห้องเพื่อดูข้อมูลและเส้นทาง</p>
-                
-                <div class="map-controls">
-                    <div class="map-floor-selector">
-                        <button class="floor-btn active" data-floor="1">ชั้น 1</button>
-                        <button class="floor-btn" data-floor="2">ชั้น 2</button>
-                        <button class="floor-btn" data-floor="3">ชั้น 3</button>
-                        <button class="floor-btn" data-floor="4">ชั้น 4</button>
-                        <button class="floor-btn" data-floor="5">ชั้น 5</button>
-                    </div>
-                    
-                    <button class="btn" id="searchRoomBtn" style="background: var(--background); color: var(--on-surface);">
-                        <i class="fas fa-search"></i> ค้นหาห้อง
-                    </button>
-                    
-                    <button class="btn btn-primary" id="startNavigationBtn">
-                        <i class="fas fa-directions"></i> เริ่มนำทาง
-                    </button>
-                </div>
-            </div>
-            
-            <div class="map-canvas">
-                <div class="map-image-container">
-                    <!-- Map image will be loaded here -->
-                    <div id="mapFloorDisplay" style="width: 100%; height: 500px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; align-items: center; justify-content: center; color: var(--on-background);">
-                        <div style="text-align: center;">
-                            <i class="fas fa-map" style="font-size: 48px; margin-bottom: var(--spacing-md); opacity: 0.3;"></i>
-                            <p>แผนผังอาคารชั้น 1</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Room markers will be dynamically added here -->
-                </div>
-                
-                <div class="room-info" id="roomInfo">
-                    <h4 style="margin-bottom: var(--spacing-sm);">ห้องเรียน 631</h4>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-md); font-size: 0.875rem;">ห้องเรียนคอมพิวเตอร์ พร้อมอุปกรณ์ครบครัน</p>
-                    
-                    <div style="margin-bottom: var(--spacing-md);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
-                            <i class="fas fa-user" style="color: var(--primary);"></i>
-                            <span style="font-size: 0.875rem;">ผู้สอน: อ.สัญญา ชูช่วย</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
-                            <i class="fas fa-users" style="color: var(--secondary);"></i>
-                            <span style="font-size: 0.875rem;">ความจุ: 50 คน</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <i class="fas fa-wifi" style="color: var(--ar-color);"></i>
-                            <span style="font-size: 0.875rem;">Wi-Fi: SRTC-IT</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: var(--spacing-sm);">
-                        <button class="btn btn-primary" style="flex: 1;">
-                            <i class="fas fa-directions"></i> นำทาง
-                        </button>
-                        <button class="btn" style="background: var(--background); color: var(--on-surface);">
-                            <i class="fas fa-info"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="navigation-panel" id="navigationPanel">
-                <h4 style="margin-bottom: var(--spacing-md);">
-                    <i class="fas fa-route"></i> เส้นทางนำทาง
-                </h4>
-                <div id="navigationSteps">
-                    <div style="padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                1
-                            </div>
-                            <span>เริ่มจากจุดที่คุณยืนอยู่</span>
-                        </div>
-                    </div>
-                    <div style="padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                2
-                            </div>
-                            <span>เดินไปที่บันไดทางทิศเหนือ</span>
-                        </div>
-                    </div>
-                    <div style="padding: var(--spacing-sm) 0;">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                3
-                            </div>
-                            <span>ขึ้นไปชั้น 3 ห้อง 631</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: var(--spacing-md); display: flex; gap: var(--spacing-sm);">
-                    <button class="btn btn-primary" style="flex: 1;">
-                        <i class="fas fa-play"></i> เริ่มนำทาง
-                    </button>
-                    <button class="btn" id="closeNavigation" style="background: var(--background); color: var(--on-surface);">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
+        <!-- Layer 2: 2D Map View (Hidden initially) -->
+        <div class="map-view" id="mapView">
+            <!-- Simple SVG Floorplan Placeholder -->
+            <svg class="map-svg" viewBox="0 0 200 200">
+                <path d="M20,20 L180,20 L180,180 L20,180 Z" fill="none" stroke="#94a3b8" stroke-width="4"/>
+                <path d="M20,80 L180,80" stroke="#94a3b8" stroke-width="2"/>
+                <path d="M100,20 L100,180" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="100" cy="130" r="5" fill="#2563EB"/> <!-- User pos -->
+                <circle cx="60" cy="50" r="5" fill="#F43F5E"/> <!-- Target -->
+                <path d="M100,130 L100,80 L60,80 L60,50" stroke="#2563EB" stroke-width="2" stroke-dasharray="4"/>
+            </svg>
         </div>
 
-        <!-- Admin System -->
-        <div class="admin-container" id="adminContainer">
-            <div class="admin-header">
-                <h1><i class="fas fa-crown"></i> ระบบผู้ดูแลระบบ AR และแผนผังอาคาร</h1>
-                <p>จัดการข้อมูลอาคาร ห้องเรียน ผู้ใช้งาน และตั้งค่าระบบ AR</p>
-                <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                    <button class="btn btn-admin" id="saveAllChanges">
-                        <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลงทั้งหมด
+        <!-- Layer 3: Floating UI Elements -->
+        <div class="ui-layer">
+            
+            <!-- Header Section -->
+            <header class="top-bar">
+                <div class="search-box">
+                    <span class="material-icons-round" style="color:var(--text-sec)">search</span>
+                    <input type="text" placeholder="ค้นหาห้อง, ร้านค้า, หรือแผนก...">
+                    <span class="material-icons-round" style="color:var(--primary-color)">mic</span>
+                </div>
+                
+                <div class="chips-container">
+                    <div class="chip active">ทั้งหมด</div>
+                    <div class="chip">ห้องน้ำ</div>
+                    <div class="chip">ร้านกาแฟ</div>
+                    <div class="chip">บันไดเลื่อน</div>
+                    <div class="chip">ทางออก</div>
+                </div>
+            </header>
+
+            <!-- AR Markers Layer (Only visible in AR mode) -->
+            <div class="ar-markers-container" id="arMarkers">
+                <!-- Example Pin 1 -->
+                <div class="ar-pin pin-1 active" onclick="selectPin('ห้องประชุม A01', '50 ม.')">
+                    <div class="pin-card">ห้องประชุม A01</div>
+                    <div class="pin-dot"></div>
+                </div>
+                
+                <!-- Example Pin 2 -->
+                <div class="ar-pin pin-2" onclick="selectPin('Starbucks', '120 ม.')">
+                    <div class="pin-card">Starbucks</div>
+                    <div class="pin-dot" style="background: #059669; border-color:white;"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <footer class="bottom-ui">
+                <!-- Toggle Button (AR vs Map) -->
+                <button class="view-toggle-btn" onclick="toggleView()" id="toggleBtn">
+                    <span class="material-icons-round">map</span>
+                </button>
+
+                <!-- Information Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="location-title" id="targetName">ห้องประชุม A01</h2>
+                            <div class="location-meta">
+                                <span class="material-icons-round" style="font-size:16px;">layers</span>
+                                ชั้น 2 • โซนการศึกษา
+                            </div>
+                        </div>
+                        <div class="distance-badge" id="targetDist">50 ม.</div>
+                    </div>
+                    <p style="font-size:0.9rem; color:var(--text-sec); line-height:1.5;">
+                        เดินตรงไป 30 เมตร แล้วเลี้ยวซ้าย ห้องจะอยู่ทางขวามือของคุณ
+                    </p>
+                    <button class="action-btn">
+                        <span class="material-icons-round">navigation</span>
+                        เริ่มนำทาง
                     </button>
-                    <button class="btn btn-primary" id="backToDashboard">
-                        <i class="fas fa-home"></i> กลับสู่หน้าหลัก
-                    </button>
                 </div>
-            </div>
-            
-            <div class="admin-nav">
-                <button class="admin-nav-btn active" data-admin-section="users">
-                    <i class="fas fa-users"></i> จัดการผู้ใช้งาน
-                </button>
-                <button class="admin-nav-btn" data-admin-section="rooms">
-                    <i class="fas fa-door-closed"></i> จัดการห้องเรียน
-                </button>
-                <button class="admin-nav-btn" data-admin-section="floors">
-                    <i class="fas fa-layer-group"></i> จัดการแผนผังชั้น
-                </button>
-                <button class="admin-nav-btn" data-admin-section="ar-markers">
-                    <i class="fas fa-qrcode"></i> จัดการ AR Markers
-                </button>
-                <button class="admin-nav-btn" data-admin-section="settings">
-                    <i class="fas fa-cog"></i> ตั้งค่าระบบ
-                </button>
-            </div>
-            
-            <!-- Manage Users Section -->
-            <div class="admin-section active" id="adminUsersSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-users"></i> จัดการผู้ใช้งาน</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">เพิ่ม แก้ไข หรือลบผู้ใช้งานระบบ และตั้งค่าระดับสิทธิ์</p>
-                    
-                    <div style="margin-bottom: var(--spacing-xl);">
-                        <h3 style="margin-bottom: var(--spacing-md);">ผู้ดูแลระบบที่ได้รับอนุญาต</h3>
-                        <div class="user-grid" id="adminUsersGrid">
-                            <!-- Admin users will be loaded here -->
-                        </div>
-                    </div>
-                    
-                    <div class="admin-content" style="background: var(--background);">
-                        <h3><i class="fas fa-user-plus"></i> เพิ่มผู้ใช้งานใหม่</h3>
-                        <form id="addUserForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">ชื่อผู้ใช้งาน</label>
-                                    <input type="text" class="form-control" id="newUsername" placeholder="กรอกชื่อผู้ใช้งาน" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">รหัสผ่าน</label>
-                                    <input type="password" class="form-control" id="newPassword" placeholder="กรอกรหัสผ่าน" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">ชื่อ-นามสกุล</label>
-                                    <input type="text" class="form-control" id="newFullname" placeholder="กรอกชื่อ-นามสกุล" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">ระดับสิทธิ์</label>
-                                    <select class="form-control" id="newUserRole" required>
-                                        <option value="student">นักเรียน</option>
-                                        <option value="teacher">ครู</option>
-                                        <option value="admin">ผู้ดูแลระบบ</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">อีเมล</label>
-                                <input type="email" class="form-control" id="newUserEmail" placeholder="กรอกอีเมล">
-                            </div>
-                            
-                            <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                                <button type="reset" class="btn" style="background: var(--background); color: var(--on-surface);">
-                                    <i class="fas fa-times"></i> ล้างข้อมูล
-                                </button>
-                                <button type="submit" class="btn btn-admin">
-                                    <i class="fas fa-plus"></i> เพิ่มผู้ใช้งาน
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Manage Rooms Section -->
-            <div class="admin-section" id="adminRoomsSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-door-closed"></i> จัดการห้องเรียน</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">เพิ่ม แก้ไข หรือลบข้อมูลห้องเรียนในอาคาร</p>
-                    
-                    <div id="roomsEditGrid">
-                        <!-- Rooms will be loaded here dynamically -->
-                    </div>
-                    
-                    <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border);">
-                        <button class="btn btn-primary" id="addRoomBtn">
-                            <i class="fas fa-plus"></i> เพิ่มห้องเรียนใหม่
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Manage Floors Section -->
-            <div class="admin-section" id="adminFloorsSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-layer-group"></i> จัดการแผนผังชั้น</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">อัพโหลดและจัดการแผนผังแต่ละชั้นของอาคาร</p>
-                    
-                    <div class="form-group">
-                        <label class="form-label">เลือกชั้น</label>
-                        <select class="form-control" id="selectFloorForEdit">
-                            <option value="1">ชั้น 1</option>
-                            <option value="2">ชั้น 2</option>
-                            <option value="3">ชั้น 3</option>
-                            <option value="4">ชั้น 4</option>
-                            <option value="5">ชั้น 5</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">อัพโหลดแผนผังชั้น (ภาพ PNG/JPG)</label>
-                        <input type="file" class="form-control" id="floorMapUpload" accept="image/*">
-                        <small style="color: var(--on-background); display: block; margin-top: var(--spacing-xs);">
-                            ขนาดภาพแนะนำ: 1200x800 pixels
-                        </small>
-                    </div>
-                    
-                    <div id="floorEditor" style="margin-top: var(--spacing-xl);">
-                        <h3>ตำแหน่งห้องบนแผนผัง</h3>
-                        <p style="color: var(--on-background); margin-bottom: var(--spacing-lg);">ลากและวางตำแหน่งห้องบนแผนผัง</p>
-                        
-                        <div style="border: 2px dashed var(--border); border-radius: var(--radius-md); padding: var(--spacing-xl); text-align: center; min-height: 300px; display: flex; align-items: center; justify-content: center; background: var(--background);">
-                            <div>
-                                <i class="fas fa-upload" style="font-size: 48px; color: var(--on-background); opacity: 0.3; margin-bottom: var(--spacing-md);"></i>
-                                <p>อัพโหลดแผนผังเพื่อเริ่มการจัดตำแหน่งห้อง</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Manage AR Markers Section -->
-            <div class="admin-section" id="adminARMarkersSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-qrcode"></i> จัดการ AR Markers</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">สร้างและจัดการ QR Code / AR Markers สำหรับแต่ละห้อง</p>
-                    
-                    <div id="arMarkersList">
-                        <!-- AR Markers will be loaded here -->
-                    </div>
-                    
-                    <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border);">
-                        <button class="btn btn-ar" id="generateMarkerBtn">
-                            <i class="fas fa-qrcode"></i> สร้าง AR Marker ใหม่
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- System Settings Section -->
-            <div class="admin-section" id="adminSettingsSection">
-                <div class="admin-content">
-                    <h2><i class="fas fa-cog"></i> ตั้งค่าระบบ</h2>
-                    <p style="color: var(--on-background); margin-bottom: var(--spacing-xl);">ตั้งค่าการทำงานของระบบ AR และแผนผังอาคาร</p>
-                    
-                    <form id="systemSettingsForm">
-                        <div class="form-group">
-                            <label class="form-label">ชื่ออาคาร</label>
-                            <input type="text" class="form-control" id="buildingName" value="อาคารเรียนเทคโนโลยีสารสนเทศ" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">คำอธิบายอาคาร</label>
-                            <textarea class="form-control" id="buildingDescription" rows="3">อาคาร 5 ชั้น สำหรับแผนกเทคโนโลยีสารสนเทศ</textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">เปิดใช้ระบบ AR Scanner</label>
-                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                    <input type="checkbox" id="enableAR" checked style="width: 20px; height: 20px;">
-                                    <label for="enableAR" style="margin: 0;">เปิดใช้งาน</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">เปิดใช้ระบบนำทาง</label>
-                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                    <input type="checkbox" id="enableNavigation" checked style="width: 20px; height: 20px;">
-                                    <label for="enableNavigation" style="margin: 0;">เปิดใช้งาน</label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">รหัสผ่านผู้ดูแลหลัก</label>
-                            <input type="password" class="form-control" id="masterAdminPassword" placeholder="ตั้งรหัสผ่านใหม่">
-                            <small style="color: var(--on-background); display: block; margin-top: var(--spacing-xs);">
-                                รหัสผ่านปัจจุบัน: "ภาวร"
-                            </small>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                            <button type="button" class="btn btn-admin" id="saveSystemSettings">
-                                <i class="fas fa-save"></i> บันทึกการตั้งค่า
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            </footer>
         </div>
-    </div>
 
-    <!-- Floating Buttons -->
-    <div class="floating-buttons">
-        <button class="floating-button admin" id="adminFloatingBtn">
-            <i class="fas fa-crown"></i>
-            <span class="floating-button-label">ผู้ดูแลระบบ</span>
-        </button>
-        <button class="floating-button ar" id="arFloatingBtn">
-            <i class="fas fa-camera"></i>
-            <span class="floating-button-label">สแกน AR</span>
-        </button>
-    </div>
-
-    <!-- Admin Login Modal -->
-    <div class="modal" id="adminLoginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-lock"></i> เข้าสู่ระบบผู้ดูแล</h3>
-                <p>กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบผู้ดูแล</p>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">เลือกผู้ใช้งาน</label>
-                    <select class="form-control" id="adminUserSelect">
-                        <option value="">-- เลือกผู้ดูแล --</option>
-                        <!-- Admin users will be populated here -->
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="adminPassword" placeholder="กรอกรหัสผ่าน" autocomplete="off">
-                </div>
-                
-                <div id="loginError" style="color: var(--danger); margin-top: var(--spacing-md); display: none;">
-                    <i class="fas fa-exclamation-circle"></i> ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
-                </div>
-                
-                <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: var(--background); border-radius: var(--radius-md);">
-                    <h4 style="margin-bottom: var(--spacing-sm); font-size: 0.875rem;">ผู้ดูแลระบบที่ได้รับอนุญาต</h4>
-                    <ul id="adminUserList" style="list-style: none; font-size: 0.875rem; color: var(--on-background);">
-                        <!-- Will be populated dynamically -->
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" id="cancelLoginBtn" style="background: var(--background); color: var(--on-surface);">
-                    <i class="fas fa-times"></i> ยกเลิก
-                </button>
-                <button class="btn btn-admin" id="loginBtn">
-                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Room Search Modal -->
-    <div class="modal" id="roomSearchModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-search"></i> ค้นหาห้องเรียน</h3>
-                <p>ค้นหาห้องเรียนหรือสถานที่ในอาคาร</p>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <input type="text" class="form-control" id="roomSearchInput" placeholder="พิมพ์ชื่อห้องหรือรหัสห้อง...">
-                </div>
-                
-                <div id="searchResults" style="margin-top: var(--spacing-lg); max-height: 300px; overflow-y: auto;">
-                    <!-- Search results will be displayed here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" id="closeSearchModal">
-                    <i class="fas fa-times"></i> ปิด
-                </button>
-            </div>
-        </div>
     </div>
 
     <script>
-        // ===== INITIALIZATION =====
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingProgressBar = document.getElementById('loadingProgressBar');
-        const appContainer = document.getElementById('appContainer');
+        let isMapView = false;
         
-        // Simulate loading progress
-        function simulateLoading() {
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 2;
-                loadingProgressBar.style.width = progress + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    completeLoading();
-                }
-            }, 30);
-        }
-        
-        function completeLoading() {
-            loadingScreen.classList.add('fade-out');
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                appContainer.classList.add('show');
-                loadInitialData();
-            }, 500);
-        }
-        
-        // Start loading when page loads
-        window.addEventListener('load', simulateLoading);
-        
-        // ===== DATA MANAGEMENT =====
-        let systemData = {
-            users: [
-                {
-                    id: 1,
-                    username: "admin1",
-                    password: "ภาวร",
-                    fullname: "พิพัฒน์ รักส้ง",
-                    role: "admin",
-                    email: "pipat@srtc.ac.th"
-                },
-                {
-                    id: 2,
-                    username: "admin2",
-                    password: "admin123",
-                    fullname: "กรดนัย จุอ่อน",
-                    role: "admin",
-                    email: "krodnai@srtc.ac.th"
-                },
-                {
-                    id: 3,
-                    username: "admin3",
-                    password: "admin123",
-                    fullname: "กฤตภาสวิจิตร",
-                    role: "admin",
-                    email: "kritphas@srtc.ac.th"
-                },
-                {
-                    id: 4,
-                    username: "teacher1",
-                    password: "teacher123",
-                    fullname: "สัญญา ชูช่วย",
-                    role: "teacher",
-                    email: "sanya@srtc.ac.th"
-                }
-            ],
-            rooms: [
-                {
-                    id: "631",
-                    name: "ห้องเรียน 631",
-                    floor: 3,
-                    description: "ห้องเรียนคอมพิวเตอร์ พร้อมอุปกรณ์ครบครัน",
-                    capacity: 50,
-                    instructor: "สัญญา ชูช่วย",
-                    position: { x: 65, y: 45 },
-                    wifi: "SRTC-IT",
-                    equipment: ["คอมพิวเตอร์ 50 เครื่อง", "โปรเจคเตอร์", "กระดานอัจฉริยะ"]
-                },
-                {
-                    id: "632",
-                    name: "ห้องเรียน 632",
-                    floor: 3,
-                    description: "ห้องเรียนปฏิบัติการเครือข่าย",
-                    capacity: 40,
-                    instructor: "พนม บุญญ์ไพร",
-                    position: { x: 75, y: 45 },
-                    wifi: "SRTC-LAB",
-                    equipment: ["เครือข่าย Cisco", "Switch/Router", "อุปกรณ์ทดสอบ"]
-                },
-                {
-                    id: "lab1",
-                    name: "ห้องปฏิบัติการ Lab 1",
-                    floor: 4,
-                    description: "ห้องปฏิบัติการคอมพิวเตอร์และโปรแกรมมิ่ง",
-                    capacity: 35,
-                    instructor: "พนม บุญญ์ไพร",
-                    position: { x: 55, y: 60 },
-                    wifi: "SRTC-LAB1",
-                    equipment: ["คอมพิวเตอร์ 35 เครื่อง", "เครื่องมือพัฒนา", "เซิร์ฟเวอร์ทดสอบ"]
-                }
-            ],
-            floors: [
-                { id: 1, name: "ชั้น 1", image: null, rooms: [] },
-                { id: 2, name: "ชั้น 2", image: null, rooms: [] },
-                { id: 3, name: "ชั้น 3", image: null, rooms: ["631", "632"] },
-                { id: 4, name: "ชั้น 4", image: null, rooms: ["lab1"] },
-                { id: 5, name: "ชั้น 5", image: null, rooms: [] }
-            ],
-            settings: {
-                buildingName: "อาคารเรียนเทคโนโลยีสารสนเทศ",
-                buildingDescription: "อาคาร 5 ชั้น สำหรับแผนกเทคโนโลยีสารสนเทศ",
-                enableAR: true,
-                enableNavigation: true,
-                masterPassword: "ภาวร"
-            },
-            arMarkers: [
-                { id: 1, roomId: "631", type: "qrcode", code: "ROOM-631-IT", generated: true },
-                { id: 2, roomId: "632", type: "qrcode", code: "ROOM-632-IT", generated: true },
-                { id: 3, roomId: "lab1", type: "ar-marker", code: "LAB1-MARKER", generated: true }
-            ]
-        };
-        
-        // Load data from localStorage or use default
-        function loadInitialData() {
-            const savedData = localStorage.getItem('arSystemData');
-            if (savedData) {
-                systemData = JSON.parse(savedData);
-            }
-            
-            // Initialize admin users dropdown
-            populateAdminUsers();
-            
-            // Initialize rooms on map
-            renderRoomsOnMap();
-            
-            // Initialize admin interface
-            loadAdminUsers();
-            loadRoomsForEdit();
-            loadARMarkers();
-        }
-        
-        // Save data to localStorage
-        function saveSystemData() {
-            localStorage.setItem('arSystemData', JSON.stringify(systemData));
-            showNotification('บันทึกข้อมูลสำเร็จ', 'success');
-        }
-        
-        // ===== NAVIGATION SYSTEM =====
-        const mainDashboard = document.getElementById('mainDashboard');
-        const arScannerContainer = document.getElementById('arScannerContainer');
-        const mapContainer = document.getElementById('mapContainer');
-        const adminContainer = document.getElementById('adminContainer');
-        
-        // Navigation buttons
-        document.getElementById('dashboardBtn').addEventListener('click', () => {
-            showDashboard();
-        });
-        
-        document.getElementById('arScannerBtn').addEventListener('click', () => {
-            showARScanner();
-        });
-        
-        document.getElementById('interactiveMapBtn').addEventListener('click', () => {
-            showInteractiveMap();
-        });
-        
-        document.getElementById('arFloatingBtn').addEventListener('click', () => {
-            showARScanner();
-        });
-        
-        // Dashboard navigation buttons
-        document.getElementById('startARScanner').addEventListener('click', () => {
-            showARScanner();
-        });
-        
-        document.getElementById('openInteractiveMap').addEventListener('click', () => {
-            showInteractiveMap();
-        });
-        
-        // Back buttons
-        document.getElementById('closeARScanner').addEventListener('click', () => {
-            showDashboard();
-            stopARScanner();
-        });
-        
-        document.getElementById('backToDashboard').addEventListener('click', () => {
-            showDashboard();
-        });
-        
-        function showDashboard() {
-            mainDashboard.style.display = 'block';
-            arScannerContainer.classList.remove('active');
-            mapContainer.classList.remove('active');
-            adminContainer.classList.remove('active');
-        }
-        
-        function showARScanner() {
-            mainDashboard.style.display = 'none';
-            arScannerContainer.classList.add('active');
-            mapContainer.classList.remove('active');
-            adminContainer.classList.remove('active');
-            startARScanner();
-        }
-        
-        function showInteractiveMap() {
-            mainDashboard.style.display = 'none';
-            arScannerContainer.classList.remove('active');
-            mapContainer.classList.add('active');
-            adminContainer.classList.remove('active');
-        }
-        
-        // ===== AR SCANNER SYSTEM =====
-        let scannerActive = false;
-        let currentStream = null;
-        
-        function startARScanner() {
-            if (!scannerActive) {
-                startCamera();
-                scannerActive = true;
-            }
-        }
-        
-        function stopARScanner() {
-            if (scannerActive && currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-                scannerActive = false;
-                currentStream = null;
-            }
-        }
-        
-        async function startCamera() {
-            try {
-                const video = document.getElementById('scannerVideo');
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
-                
-                currentStream = stream;
-                video.srcObject = stream;
-                
-                // Simulate AR detection
-                simulateARDetection();
-                
-            } catch (error) {
-                console.error('Camera error:', error);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตการเข้าถึงกล้อง');
-                showDashboard();
-            }
-        }
-        
-        function simulateARDetection() {
-            // In a real app, this would use AR.js or similar library
-            setTimeout(() => {
-                const infoPanel = document.getElementById('arInfoPanel');
-                const room = systemData.rooms[0];
-                
-                document.getElementById('arRoomName').textContent = room.name;
-                document.getElementById('arRoomDescription').textContent = room.description;
-                
-                infoPanel.classList.add('show');
-                
-                // Hide after 10 seconds
-                setTimeout(() => {
-                    infoPanel.classList.remove('show');
-                }, 10000);
-                
-            }, 3000);
-        }
-        
-        // AR Controls
-        document.getElementById('toggleCamera').addEventListener('click', () => {
-            stopARScanner();
-            setTimeout(startARScanner, 500);
-        });
-        
-        // ===== INTERACTIVE MAP SYSTEM =====
-        let currentFloor = 1;
-        let selectedRoom = null;
-        
-        // Floor selection
-        document.querySelectorAll('.floor-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.floor-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFloor = parseInt(this.dataset.floor);
-                
-                // Update map display
-                updateFloorDisplay();
-                renderRoomsOnMap();
-            });
-        });
-        
-        function updateFloorDisplay() {
-            const floorDisplay = document.getElementById('mapFloorDisplay');
-            floorDisplay.innerHTML = `
-                <div style="text-align: center; width: 100%;">
-                    <i class="fas fa-map" style="font-size: 48px; margin-bottom: var(--spacing-md); opacity: 0.3;"></i>
-                    <p>แผนผังอาคารชั้น ${currentFloor}</p>
-                    <p style="font-size: 0.875rem; color: var(--on-background); margin-top: var(--spacing-sm);">
-                        คลิกที่จุดเพื่อดูข้อมูลห้อง
-                    </p>
-                </div>
-            `;
-        }
-        
-        function renderRoomsOnMap() {
-            const mapContainer = document.querySelector('.map-image-container');
-            const existingMarkers = document.querySelectorAll('.room-marker');
-            existingMarkers.forEach(marker => marker.remove());
-            
-            // Filter rooms for current floor
-            const floorRooms = systemData.rooms.filter(room => room.floor === currentFloor);
-            
-            floorRooms.forEach(room => {
-                const marker = document.createElement('div');
-                marker.className = 'room-marker';
-                marker.dataset.roomId = room.id;
-                marker.style.left = `${room.position.x}%`;
-                marker.style.top = `${room.position.y}%`;
-                
-                marker.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showRoomInfo(room);
-                });
-                
-                mapContainer.appendChild(marker);
-            });
-        }
-        
-        function showRoomInfo(room) {
-            const roomInfo = document.getElementById('roomInfo');
-            roomInfo.innerHTML = `
-                <h4 style="margin-bottom: var(--spacing-sm);">${room.name}</h4>
-                <p style="color: var(--on-background); margin-bottom: var(--spacing-md); font-size: 0.875rem;">${room.description}</p>
-                
-                <div style="margin-bottom: var(--spacing-md);">
-                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
-                        <i class="fas fa-user" style="color: var(--primary);"></i>
-                        <span style="font-size: 0.875rem;">ผู้สอน: ${room.instructor}</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
-                        <i class="fas fa-users" style="color: var(--secondary);"></i>
-                        <span style="font-size: 0.875rem;">ความจุ: ${room.capacity} คน</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                        <i class="fas fa-wifi" style="color: var(--ar-color);"></i>
-                        <span style="font-size: 0.875rem;">Wi-Fi: ${room.wifi}</span>
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: var(--spacing-sm);">
-                    <button class="btn btn-primary" style="flex: 1;" onclick="startNavigation('${room.id}')">
-                        <i class="fas fa-directions"></i> นำทาง
-                    </button>
-                    <button class="btn" style="background: var(--background); color: var(--on-surface);" onclick="showRoomDetails('${room.id}')">
-                        <i class="fas fa-info"></i>
-                    </button>
-                </div>
-            `;
-            
-            roomInfo.classList.add('show');
-            selectedRoom = room;
-            
-            // Position the info panel near the marker
-            const marker = document.querySelector(`.room-marker[data-room-id="${room.id}"]`);
-            if (marker) {
-                const rect = marker.getBoundingClientRect();
-                roomInfo.style.left = `${rect.left + 20}px`;
-                roomInfo.style.top = `${rect.top + 40}px`;
-            }
-        }
-        
-        // Close room info when clicking elsewhere
-        document.querySelector('.map-canvas').addEventListener('click', function(e) {
-            if (!e.target.closest('.room-marker') && !e.target.closest('.room-info')) {
-                document.getElementById('roomInfo').classList.remove('show');
-            }
-        });
-        
-        // Navigation system
-        function startNavigation(roomId) {
-            const navigationPanel = document.getElementById('navigationPanel');
-            navigationPanel.classList.add('show');
-            
-            // Simulate navigation steps
-            const room = systemData.rooms.find(r => r.id === roomId);
-            if (room) {
-                document.querySelector('#navigationSteps').innerHTML = `
-                    <div style="padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                1
-                            </div>
-                            <span>เริ่มจากจุดที่คุณยืนอยู่</span>
-                        </div>
-                    </div>
-                    <div style="padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                2
-                            </div>
-                            <span>เดินไปที่บันไดทางทิศเหนือ</span>
-                        </div>
-                    </div>
-                    <div style="padding: var(--spacing-sm) 0; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                3
-                            </div>
-                            <span>ขึ้นไปชั้น ${room.floor}</span>
-                        </div>
-                    </div>
-                    <div style="padding: var(--spacing-sm) 0;">
-                        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                            <div style="width: 24px; height: 24px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem;">
-                                4
-                            </div>
-                            <span>เดินตรงไปยัง ${room.name}</span>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        // Close navigation panel
-        document.getElementById('closeNavigation').addEventListener('click', function() {
-            document.getElementById('navigationPanel').classList.remove('show');
-        });
-        
-        // Navigation button in map
-        document.getElementById('startNavigationBtn').addEventListener('click', function() {
-            if (selectedRoom) {
-                startNavigation(selectedRoom.id);
+        function toggleView() {
+            const arView = document.getElementById('arView');
+            const mapView = document.getElementById('mapView');
+            const arMarkers = document.getElementById('arMarkers');
+            const btnIcon = document.querySelector('#toggleBtn span');
+
+            if (isMapView) {
+                // Switch to AR
+                mapView.classList.remove('active');
+                arMarkers.style.opacity = '1';
+                btnIcon.textContent = 'map';
             } else {
-                showNotification('กรุณาเลือกห้องก่อนเริ่มนำทาง', 'warning');
+                // Switch to Map
+                mapView.classList.add('active');
+                arMarkers.style.opacity = '0';
+                btnIcon.textContent = 'view_in_ar';
             }
-        });
-        
-        // Room search
-        document.getElementById('searchRoomBtn').addEventListener('click', function() {
-            showRoomSearchModal();
-        });
-        
-        function showRoomSearchModal() {
-            const modal = document.getElementById('roomSearchModal');
-            const searchInput = document.getElementById('roomSearchInput');
-            const resultsContainer = document.getElementById('searchResults');
-            
-            modal.classList.add('active');
-            searchInput.focus();
-            
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-                const results = systemData.rooms.filter(room => 
-                    room.name.toLowerCase().includes(query) || 
-                    room.id.toLowerCase().includes(query) ||
-                    room.description.toLowerCase().includes(query) ||
-                    room.instructor.toLowerCase().includes(query)
-                );
-                
-                displaySearchResults(results);
-            });
-            
-            // Initial display of all rooms
-            displaySearchResults(systemData.rooms);
+            isMapView = !isMapView;
         }
-        
-        function displaySearchResults(results) {
-            const resultsContainer = document.getElementById('searchResults');
+
+        function selectPin(name, distance) {
+            // Simple interaction to update text
+            document.getElementById('targetName').textContent = name;
+            document.getElementById('targetDist').textContent = distance;
             
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div style="text-align: center; padding: var(--spacing-xl); color: var(--on-background);">
-                        <i class="fas fa-search" style="font-size: 48px; opacity: 0.3; margin-bottom: var(--spacing-md);"></i>
-                        <p>ไม่พบห้องเรียนที่ตรงกับการค้นหา</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            resultsContainer.innerHTML = results.map(room => `
-                <div style="padding: var(--spacing-md); border-bottom: 1px solid var(--border); cursor: pointer;" 
-                     onclick="selectRoomFromSearch('${room.id}')">
-                    <div style="font-weight: 500;">${room.name}</div>
-                    <div style="font-size: 0.875rem; color: var(--on-background); margin-top: var(--spacing-xs);">
-                        ชั้น ${room.floor} • ${room.description}
-                    </div>
-                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-top: var(--spacing-xs);">
-                        <div style="font-size: 0.75rem; padding: 2px 8px; background: var(--primary-light); color: var(--on-primary); border-radius: var(--radius-full);">
-                            ${room.id}
-                        </div>
-                        <div style="font-size: 0.75rem; color: var(--on-background);">
-                            <i class="fas fa-user"></i> ${room.instructor}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            // Visual feedback on pins
+            document.querySelectorAll('.ar-pin').forEach(p => p.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
-        
-        function selectRoomFromSearch(roomId) {
-            const modal = document.getElementById('roomSearchModal');
-            modal.classList.remove('active');
-            
-            const room = systemData.rooms.find(r => r.id === roomId);
-            if (room) {
-                // Switch to correct floor
-                currentFloor = room.floor;
-                document.querySelectorAll('.floor-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    if (parseInt(btn.dataset.floor) === currentFloor) {
-                        btn.classList.add('active');
-                    }
-                });
-                
-                updateFloorDisplay();
-                renderRoomsOnMap();
-                
-                // Show room info
-                setTimeout(() => {
-                    showRoomInfo(room);
-                }, 100);
-            }
-        }
-        
-        // Close search modal
-        document.getElementById('closeSearchModal').addEventListener('click', function() {
-            document.getElementById('roomSearchModal').classList.remove('active');
-        });
-        
-        // ===== ADMIN SYSTEM =====
-        let isAdminLoggedIn = false;
-        const adminLoginModal = document.getElementById('adminLoginModal');
-        
-        // Open admin login
-        document.getElementById('openAdminSystem').addEventListener('click', () => {
-            if (!isAdminLoggedIn) {
-                showAdminLoginModal();
-            } else {
-                showAdminSystem();
-            }
-        });
-        
-        document.getElementById('adminFloatingBtn').addEventListener('click', () => {
-            if (!isAdminLoggedIn) {
-                showAdminLoginModal();
-            } else {
-                showAdminSystem();
-            }
-        });
-        
-        function showAdminLoginModal() {
-            adminLoginModal.classList.add('active');
-            populateAdminUsers();
-        }
-        
-        function showAdminSystem() {
-            mainDashboard.style.display = 'none';
-            arScannerContainer.classList.remove('active');
-            mapContainer.classList.remove('active');
-            adminContainer.classList.add('active');
-            
-            // Load admin data
-            loadSystemSettings();
-        }
-        
-        function populateAdminUsers() {
-            const adminUsers = systemData.users.filter(user => user.role === 'admin');
-            const selectElement = document.getElementById('adminUserSelect');
-            const listElement = document.getElementById('adminUserList');
-            
-            selectElement.innerHTML = '<option value="">-- เลือกผู้ดูแล --</option>';
-            listElement.innerHTML = '';
-            
-            adminUsers.forEach(user => {
-                // Add to dropdown
-                const option = document.createElement('option');
-                option.value = user.username;
-                option.textContent = `${user.fullname} (${user.username})`;
-                selectElement.appendChild(option);
-                
-                // Add to list
-                const li = document.createElement('li');
-                li.innerHTML = `<i class="fas fa-user-circle"></i> ${user.fullname} - ${user.username}`;
-                listElement.appendChild(li);
-            });
-        }
-        
-        // Login functionality
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const username = document.getElementById('adminUserSelect').value;
-            const password = document.getElementById('adminPassword').value;
-            const errorElement = document.getElementById('loginError');
-            
-            const user = systemData.users.find(u => 
-                u.username === username && u.password === password && u.role === 'admin'
-            );
-            
-            if (user) {
-                isAdminLoggedIn = true;
-                adminLoginModal.classList.remove('active');
-                document.getElementById('adminPassword').value = '';
-                errorElement.style.display = 'none';
-                
-                showNotification(`ยินดีต้อนรับ ${user.fullname}`, 'success');
-                showAdminSystem();
-            } else {
-                errorElement.style.display = 'block';
-                document.getElementById('adminPassword').focus();
-            }
-        });
-        
-        document.getElementById('cancelLoginBtn').addEventListener('click', () => {
-            adminLoginModal.classList.remove('active');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('loginError').style.display = 'none';
-        });
-        
-        // Admin navigation
-        document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const sectionId = this.dataset.adminSection;
-                
-                // Update active button
-                document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Show selected section
-                document.querySelectorAll('.admin-section').forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === `admin${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}Section`) {
-                        section.classList.add('active');
-                    }
-                });
-            });
-        });
-        
-        // Load admin users for editing
-        function loadAdminUsers() {
-            const grid = document.getElementById('adminUsersGrid');
-            const adminUsers = systemData.users.filter(user => user.role === 'admin');
-            
-            grid.innerHTML = adminUsers.map(user => `
-                <div class="user-card">
-                    <h4 style="margin-bottom: var(--spacing-sm);">${user.fullname}</h4>
-                    <div style="color: var(--on-background); font-size: 0.875rem; margin-bottom: var(--spacing-sm);">
-                        <div><strong>ชื่อผู้ใช้:</strong> ${user.username}</div>
-                        <div><strong>อีเมล:</strong> ${user.email}</div>
-                    </div>
-                    <div class="user-role-badge role-admin">
-                        <i class="fas fa-crown"></i> ผู้ดูแลระบบ
-                    </div>
-                    <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
-                        <button class="btn btn-admin" style="flex: 1;" onclick="editUser(${user.id})">
-                            <i class="fas fa-edit"></i> แก้ไข
-                        </button>
-                        <button class="btn" style="background: var(--background); color: var(--on-surface);" onclick="resetUserPassword(${user.id})">
-                            <i class="fas fa-key"></i> รีเซ็ตรหัสผ่าน
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // Load rooms for editing
-        function loadRoomsForEdit() {
-            const container = document.getElementById('roomsEditGrid');
-            
-            container.innerHTML = systemData.rooms.map(room => `
-                <div class="user-card" style="margin-bottom: var(--spacing-lg);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-md);">
-                        <div>
-                            <h4 style="margin-bottom: var(--spacing-xs);">${room.name}</h4>
-                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                <span style="font-size: 0.875rem; color: var(--on-background);">
-                                    <i class="fas fa-layer-group"></i> ชั้น ${room.floor}
-                                </span>
-                                <span style="font-size: 0.875rem; color: var(--on-background);">
-                                    <i class="fas fa-users"></i> ${room.capacity} คน
-                                </span>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: var(--spacing-sm);">
-                            <button class="btn btn-primary" onclick="editRoom('${room.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn" style="background: var(--background); color: var(--on-surface);" onclick="deleteRoom('${room.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div style="color: var(--on-background); font-size: 0.875rem; margin-bottom: var(--spacing-md);">
-                        <div><strong>ผู้สอน:</strong> ${room.instructor}</div>
-                        <div><strong>รายละเอียด:</strong> ${room.description}</div>
-                        <div><strong>อุปกรณ์:</strong> ${room.equipment.join(', ')}</div>
-                        <div><strong>Wi-Fi:</strong> ${room.wifi}</div>
-                    </div>
-                    
-                    <div style="font-size: 0.75rem; color: var(--on-background);">
-                        <i class="fas fa-map-marker-alt"></i> ตำแหน่ง: X=${room.position.x}%, Y=${room.position.y}%
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // Add new room
-        document.getElementById('addRoomBtn').addEventListener('click', function() {
-            const newRoom = {
-                id: `room${systemData.rooms.length + 1}`,
-                name: "ห้องใหม่",
-                floor: 1,
-                description: "รายละเอียดห้องใหม่",
-                capacity: 30,
-                instructor: "ผู้สอนใหม่",
-                position: { x: 50, y: 50 },
-                wifi: "SRTC-NEW",
-                equipment: ["อุปกรณ์พื้นฐาน"]
-            };
-            
-            systemData.rooms.push(newRoom);
-            loadRoomsForEdit();
-            saveSystemData();
-        });
-        
-        // Load AR markers
-        function loadARMarkers() {
-            const container = document.getElementById('arMarkersList');
-            
-            container.innerHTML = systemData.arMarkers.map(marker => {
-                const room = systemData.rooms.find(r => r.id === marker.roomId);
-                const roomName = room ? room.name : 'ไม่พบข้อมูลห้อง';
-                
-                return `
-                    <div class="user-card" style="margin-bottom: var(--spacing-lg);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-md);">
-                            <div>
-                                <h4 style="margin-bottom: var(--spacing-xs);">${marker.code}</h4>
-                                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                    <span style="font-size: 0.875rem; color: var(--on-background);">
-                                        <i class="fas fa-door-closed"></i> ${roomName}
-                                    </span>
-                                    <span style="font-size: 0.875rem; color: var(--on-background);">
-                                        <i class="fas fa-${marker.type === 'qrcode' ? 'qrcode' : 'cube'}"></i> ${marker.type === 'qrcode' ? 'QR Code' : 'AR Marker'}
-                                    </span>
-                                </div>
-                            </div>
-                            <div style="display: flex; gap: var(--spacing-sm);">
-                                <button class="btn btn-ar" onclick="downloadMarker(${marker.id})">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button class="btn" style="background: var(--background); color: var(--on-surface);" onclick="deleteMarker(${marker.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div style="background: var(--background); padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center; margin-bottom: var(--spacing-md);">
-                            <div style="width: 120px; height: 120px; background: white; border: 1px solid var(--border); margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                                QR
-                            </div>
-                            <div style="font-size: 0.75rem; color: var(--on-background); margin-top: var(--spacing-sm);">
-                                สแกนเพื่อดูข้อมูลห้อง
-                            </div>
-                        </div>
-                        
-                        <div style="font-size: 0.75rem; color: var(--on-background);">
-                            <i class="fas fa-info-circle"></i> รหัส: ${marker.code}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // Generate new marker
-        document.getElementById('generateMarkerBtn').addEventListener('click', function() {
-            const newMarker = {
-                id: systemData.arMarkers.length + 1,
-                roomId: systemData.rooms[0]?.id || "room1",
-                type: "qrcode",
-                code: `AR-MARKER-${Date.now().toString().slice(-6)}`,
-                generated: true
-            };
-            
-            systemData.arMarkers.push(newMarker);
-            loadARMarkers();
-            saveSystemData();
-        });
-        
-        // Load system settings
-        function loadSystemSettings() {
-            const settings = systemData.settings;
-            document.getElementById('buildingName').value = settings.buildingName;
-            document.getElementById('buildingDescription').value = settings.buildingDescription;
-            document.getElementById('enableAR').checked = settings.enableAR;
-            document.getElementById('enableNavigation').checked = settings.enableNavigation;
-            document.getElementById('masterAdminPassword').placeholder = `รหัสผ่านปัจจุบัน: "${settings.masterPassword}"`;
-        }
-        
-        // Save system settings
-        document.getElementById('saveSystemSettings').addEventListener('click', function() {
-            const masterPassword = document.getElementById('masterAdminPassword').value;
-            
-            systemData.settings = {
-                buildingName: document.getElementById('buildingName').value,
-                buildingDescription: document.getElementById('buildingDescription').value,
-                enableAR: document.getElementById('enableAR').checked,
-                enableNavigation: document.getElementById('enableNavigation').checked,
-                masterPassword: masterPassword || systemData.settings.masterPassword
-            };
-            
-            // Update master password for all admin users
-            if (masterPassword) {
-                systemData.users.forEach(user => {
-                    if (user.role === 'admin') {
-                        user.password = masterPassword;
-                    }
-                });
-            }
-            
-            saveSystemData();
-            loadAdminUsers(); // Reload to show updated passwords
-        });
-        
-        // Add new user
-        document.getElementById('addUserForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const newUser = {
-                id: systemData.users.length + 1,
-                username: document.getElementById('newUsername').value,
-                password: document.getElementById('newPassword').value,
-                fullname: document.getElementById('newFullname').value,
-                role: document.getElementById('newUserRole').value,
-                email: document.getElementById('newUserEmail').value
-            };
-            
-            systemData.users.push(newUser);
-            loadAdminUsers();
-            populateAdminUsers();
-            
-            this.reset();
-            saveSystemData();
-            
-            showNotification('เพิ่มผู้ใช้งานสำเร็จ', 'success');
-        });
-        
-        // Save all changes
-        document.getElementById('saveAllChanges').addEventListener('click', function() {
-            saveSystemData();
-        });
-        
-        // Utility functions (stubs for now)
-        function editUser(userId) {
-            alert(`แก้ไขผู้ใช้งาน ID: ${userId}\n(ฟีเจอร์นี้กำลังพัฒนา)`);
-        }
-        
-        function resetUserPassword(userId) {
-            const user = systemData.users.find(u => u.id === userId);
-            if (user) {
-                user.password = systemData.settings.masterPassword || "admin123";
-                saveSystemData();
-                showNotification(`รีเซ็ตรหัสผ่านสำหรับ ${user.fullname} สำเร็จ`, 'success');
-            }
-        }
-        
-        function editRoom(roomId) {
-            alert(`แก้ไขห้อง ${roomId}\n(ฟีเจอร์นี้กำลังพัฒนา)`);
-        }
-        
-        function deleteRoom(roomId) {
-            if (confirm('ยืนยันการลบห้องนี้?')) {
-                systemData.rooms = systemData.rooms.filter(r => r.id !== roomId);
-                loadRoomsForEdit();
-                saveSystemData();
-            }
-        }
-        
-        function downloadMarker(markerId) {
-            alert(`ดาวน์โหลด AR Marker ID: ${markerId}\n(ฟีเจอร์นี้กำลังพัฒนา)`);
-        }
-        
-        function deleteMarker(markerId) {
-            if (confirm('ยืนยันการลบ Marker นี้?')) {
-                systemData.arMarkers = systemData.arMarkers.filter(m => m.id !== markerId);
-                loadARMarkers();
-                saveSystemData();
-            }
-        }
-        
-        function showRoomDetails(roomId) {
-            alert(`แสดงรายละเอียดห้อง ${roomId}\n(ฟีเจอร์นี้กำลังพัฒนา)`);
-        }
-        
-        // Notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease-out';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-        
-        // Close modals on backdrop click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-        
-        // Close modals with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-            }
-        });
-        
-        // Initialize
-        updateFloorDisplay();
-        
-        // Add CSS for shake animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                20%, 40%, 60%, 80% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
