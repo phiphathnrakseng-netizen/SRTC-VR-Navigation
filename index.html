@@ -561,9 +561,6 @@
         </div>
         
         <div class="dropdown-menu" id="mainDropdown">
-            <div class="dropdown-item" onclick="showARHistory()">
-                <i class="fas fa-history"></i> ประวัติการนำทาง
-            </div>
             <div class="dropdown-item" onclick="location.reload()">
                 <i class="fas fa-sync"></i> รีโหลดหน้าเว็บ
             </div>
@@ -1569,11 +1566,6 @@
             document.getElementById('home-title').innerText = title;
             document.getElementById('home-subtitle').innerText = subtitle;
             document.getElementById('home-desc').innerText = desc;
-        }
-
-        function showARHistory() {
-            showToast('แสดงประวัติการนำทาง', 'info');
-            // ในระบบจริงจะแสดงหน้าประวัติการนำทาง
         }
 
         // ====== ระบบแจ้งเตือน ======
