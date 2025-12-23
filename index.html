@@ -1,1031 +1,228 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SRTC Smart AR & Admin System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-    
-    <style>
-        /* ====== CORE VARIABLES & RESET ====== */
-        :root {
-            --primary-blue: #002D72;
-            --accent-blue: #0056D2;
-            --bg-light: #F4F6F8;
-            --text-dark: #1A1A1A;
-            --text-light: #F4F6F8;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            
-            /* AR HUD Specific Colors */
-            --ar-hud-color: #00ff88;
-            --ar-hud-bg: rgba(0, 20, 10, 0.6);
-            --ar-danger: #ff3333;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Sarabun', sans-serif;
-            margin: 0;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            height: 100vh;
-            overflow: hidden; /* Prevent scroll on main body */
-        }
-
-        h1, h2, h3, h4, h5 { font-family: 'Kanit', sans-serif; margin: 0; }
-        
-        /* ====== LOGIN PAGE ====== */
-        #login-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-
-        .login-logo {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-light);
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: var(--primary-blue);
-        }
-
-        .form-group { margin-bottom: 1.5rem; text-align: left; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5eb;
-            border-radius: 10px;
-            font-family: inherit;
-            transition: all 0.3s;
-        }
-        .form-control:focus {
-            border-color: var(--accent-blue);
-            outline: none;
-        }
-
-        .btn {
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Kanit', sans-serif;
-            font-weight: 500;
-            transition: all 0.2s;
-            width: 100%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary { background: var(--primary-blue); color: white; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-danger { background: var(--danger); color: white; }
-        
-        /* ====== MAIN LAYOUT ====== */
-        #app-container { display: none; height: 100%; }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: white;
-            height: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            z-index: 100;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar.active { transform: translateX(0); }
-        
-        .sidebar-header {
-            padding: 2rem;
-            background: var(--primary-blue);
-            color: white;
-        }
-        
-        .menu-items { padding: 1rem; flex: 1; overflow-y: auto; }
-        .menu-item {
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-dark);
-            transition: all 0.2s;
-            margin-bottom: 5px;
-        }
-        .menu-item:hover, .menu-item.active {
-            background: var(--bg-light);
-            color: var(--primary-blue);
-        }
-        .menu-item i { width: 20px; text-align: center; }
-
-        /* Topbar */
-        .topbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 90;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .menu-trigger { font-size: 1.2rem; cursor: pointer; color: var(--primary-blue); }
-
-        /* Content Area */
-        .main-content {
-            padding-top: 80px;
-            padding-left: 20px;
-            padding-right: 20px;
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        /* ====== DASHBOARD & SEARCH ====== */
-        .welcome-card {
-            background: linear-gradient(120deg, var(--primary-blue), var(--accent-blue));
-            color: white;
-            padding: 2rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .search-container { position: relative; max-width: 600px; margin: 20px auto 0; }
-        .search-input {
-            width: 100%;
-            padding: 15px 50px 15px 25px;
-            border-radius: 30px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-size: 1rem;
-        }
-        .search-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--accent-blue);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 2rem;
-        }
-        .action-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .action-card:active { transform: scale(0.95); }
-        .action-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--accent-blue);
-        }
-
-        /* ====== ADMIN DASHBOARD ====== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: var(--card-shadow);
-        }
-        .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--primary-blue); }
-        .data-table {
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            border-collapse: collapse;
-        }
-        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .data-table th { background: #f8f9fa; font-weight: 600; }
-
-        /* =========================================
-           ====== NEW AR NAVIGATION SYSTEM (HUD) ======
-           ========================================= */
-        #ar-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 2000;
-            display: none;
-            overflow: hidden;
-            font-family: 'Kanit', sans-serif;
-        }
-
-        /* Viewport & Video */
-        #ar-viewport {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-        #ar-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.85; /* Dim video slightly for HUD contrast */
-        }
-        #ar-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* HUD Overlay Elements */
-        .hud-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
-            background-size: 80px 80px;
-            perspective: 500px;
-            transform: perspective(500px) rotateX(20deg);
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.3;
-        }
-
-        .hud-scanner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(0, 255, 136, 0.6);
-            box-shadow: 0 0 15px var(--ar-hud-color);
-            animation: scanDown 3s linear infinite;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        @keyframes scanDown {
-            0% { top: 0%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        /* Compass / Radar (Top Right) */
-        .ar-radar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            background: rgba(0, 20, 10, 0.7);
-            border: 2px solid var(--ar-hud-color);
-            border-radius: 50%;
-            z-index: 20;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
-        }
-        .radar-sweep {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--ar-hud-color));
-            transform-origin: left center;
-            animation: radarSpin 2s infinite linear;
-        }
-        .radar-dot {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: var(--ar-danger);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 5px var(--ar-danger);
-        }
-        @keyframes radarSpin { to { transform: rotate(360deg); } }
-
-        /* Main Navigation Arrow (Center) */
-        .nav-arrow-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .nav-arrow {
-            width: 0;
-            height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-bottom: 70px solid rgba(0, 255, 136, 0.9);
-            filter: drop-shadow(0 0 10px var(--ar-hud-color));
-            transform-origin: center bottom;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .nav-distance {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: var(--ar-hud-color);
-            padding: 4px 12px;
-            border: 1px solid var(--ar-hud-color);
-            border-radius: 4px;
-            font-family: 'Kanit', monospace;
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-shadow: 0 0 5px var(--ar-hud-color);
-        }
-
-        /* Bottom UI Panel */
-        .ar-nav-ui {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            padding: 20px;
-            z-index: 30;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .step-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-left: 4px solid var(--ar-hud-color);
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            animation: slideInUp 0.5s ease;
-        }
-        .step-card h4 { color: var(--ar-hud-color); font-size: 1.1rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .step-card p { font-size: 0.95rem; margin: 0; color: #eee; }
-
-        @keyframes slideInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Loading Overlay */
-        .ar-loading {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 2001;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--ar-hud-color);
-        }
-        .spinner {
-            width: 50px; height: 50px;
-            border: 3px solid transparent;
-            border-top-color: var(--ar-hud-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* Utils */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3000;
-        }
-        .toast {
-            background: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            margin-bottom: 10px;
-            display: none;
-            border-left: 4px solid var(--primary-blue);
-            font-size: 0.9rem;
-            animation: fadeInDown 0.3s;
-        }
-        @keyframes fadeInDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* Hide elements by default */
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-
-    </style>
-</head>
-<body>
-
-    <div class="toast-container" id="toastContainer">
-        <div class="toast" id="mainToast">
-            <span id="toastMessage">แจ้งเตือน</span>
-        </div>
-    </div>
-
-    <div id="login-page">
-        <div class="login-card">
-            <div class="login-logo">
-                <i class="fas fa-university"></i>
-            </div>
-            <h2>SRTC Smart System</h2>
-            <p style="color: #666; margin-bottom: 2rem;">ระบบบริหารจัดการและนำทาง AR</p>
-            
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>รหัสผู้ใช้งาน</label>
-                    <input type="text" class="form-control" id="username" placeholder="กรอกรหัสผู้ใช้งาน" required>
-                </div>
-                <div class="form-group">
-                    <label>รหัสผ่าน</label>
-                    <input type="password" class="form-control" id="password" placeholder="กรอกรหัสผ่าน" required>
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    เข้าสู่ระบบ <i class="fas fa-arrow-right"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div id="app-container">
-        
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h3><i class="fas fa-cube"></i> SRTC Admin</h3>
-                <p style="font-size: 0.8rem; opacity: 0.8;">Administrator</p>
-            </div>
-            <div class="menu-items">
-                <div class="menu-item active" onclick="switchPage('dashboard')">
-                    <i class="fas fa-home"></i> หน้าหลัก
-                </div>
-                <div class="menu-item" onclick="switchPage('admin-building')">
-                    <i class="fas fa-building"></i> จัดการอาคาร
-                </div>
-                <div class="menu-item" onclick="switchPage('admin-users')">
-                    <i class="fas fa-users"></i> จัดการผู้ใช้
-                </div>
-                <div class="menu-item" onclick="handleLogout()" style="color: var(--danger); margin-top: auto;">
-                    <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-                </div>
-            </div>
-        </div>
-
-        <div class="topbar">
-            <div class="menu-trigger" onclick="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-            </div>
-            <div style="font-weight: 600; color: var(--primary-blue);">SRTC Navigation</div>
-            <div style="width: 24px;"></div> </div>
-
-        <div class="main-content">
-            
-            <div id="page-dashboard" class="page-section active">
-                <div class="welcome-card">
-                    <h2>ยินดีต้อนรับ, <span id="user-display-name">Admin</span></h2>
-                    <p>ค้นหาห้องเรียนและนำทางด้วยระบบ AR อัจฉริยะ</p>
-                    
-                    <div class="search-container">
-                        <input type="text" class="search-input" id="main-search" placeholder="ค้นหาห้องเรียน, อาคาร, หรือสถานที่...">
-                        <button class="search-btn" onclick="handleSearch()">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <h3>เมนูลัด</h3>
-                <div class="quick-actions">
-                    <div class="action-card" onclick="quickStartAR()">
-                        <div class="action-icon"><i class="fas fa-vr-cardboard"></i></div>
-                        <div>AR นำทาง</div>
-                    </div>
-                    <div class="action-card" onclick="switchPage('admin-building')">
-                        <div class="action-icon"><i class="fas fa-map-marked-alt"></i></div>
-                        <div>แผนที่อาคาร</div>
-                    </div>
-                    <div class="action-card" onclick="showToast('กำลังปรับปรุงระบบสแกน', 'warning')">
-                        <div class="action-icon"><i class="fas fa-qrcode"></i></div>
-                        <div>สแกน QR</div>
-                    </div>
-                </div>
-
-                <h3>สถานที่แนะนำ</h3>
-                <div style="background: white; border-radius: 15px; padding: 15px; box-shadow: var(--card-shadow);">
-                    <div style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;">
-                        <div style="min-width: 120px; text-align: center;">
-                            <div style="width: 100%; height: 80px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-coffee fa-2x" style="color: #aaa;"></i>
-                            </div>
-                            <span style="font-size: 0.9rem;">โรงอาหาร</span>
-                        </div>
-                        <div style="min-width: 120px; text-align: center;">
-                            <div style="width: 100%; height: 80px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-book fa-2x" style="color: #aaa;"></i>
-                            </div>
-                            <span style="font-size: 0.9rem;">ห้องสมุด</span>
-                        </div>
-                        <div style="min-width: 120px; text-align: center;">
-                            <div style="width: 100%; height: 80px; background: #eee; border-radius: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-laptop-code fa-2x" style="color: #aaa;"></i>
-                            </div>
-                            <span style="font-size: 0.9rem;">ตึก IT</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="page-admin-building" class="page-section">
-                <h2>จัดการข้อมูลอาคาร</h2>
-                <div class="stats-grid" style="margin-top: 20px;">
-                    <div class="stat-card">
-                        <div>จำนวนอาคาร</div>
-                        <div class="stat-value">12</div>
-                    </div>
-                    <div class="stat-card">
-                        <div>ห้องเรียนทั้งหมด</div>
-                        <div class="stat-value">148</div>
-                    </div>
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ชื่ออาคาร</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>อาคารอำนวยการ</td>
-                            <td><span style="color: var(--success)">ปกติ</span></td>
-                            <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">แก้ไข</button></td>
-                        </tr>
-                        <tr>
-                            <td>อาคารเรียนรวม 1</td>
-                            <td><span style="color: var(--success)">ปกติ</span></td>
-                            <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">แก้ไข</button></td>
-                        </tr>
-                        <tr>
-                            <td>อาคารวิทยบริการ</td>
-                            <td><span style="color: var(--warning)">ปิดปรับปรุง</span></td>
-                            <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.8rem;">แก้ไข</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="page-admin-users" class="page-section">
-                <h2>จัดการผู้ใช้งาน</h2>
-                <p>รายการผู้ดูแลระบบและเจ้าหน้าที่</p>
-                <div class="stat-card" style="margin-top: 20px;">
-                    <p style="text-align: center; color: #888;">ยังไม่มีข้อมูลผู้ใช้เพิ่มเติม</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="ar-page">
-        <div class="ar-loading" id="ar-loading">
-            <div class="spinner"></div>
-            <h3>กำลังเชื่อมต่อดาวเทียม...</h3>
-            <p id="ar-loading-text">กำลังปรับเทียบเซนเซอร์</p>
-        </div>
-
-        <div class="hud-grid"></div>
-        <div class="hud-scanner"></div>
-        
-        <div class="ar-radar">
-            <div class="radar-sweep"></div>
-            <div class="radar-dot" style="top: 40%; left: 60%;"></div> </div>
-
-        <div class="nav-arrow-container">
-            <div class="nav-arrow" id="main-nav-arrow"></div>
-            <div class="nav-distance" id="hud-distance">0 m</div>
-        </div>
-        
-        <div id="ar-viewport">
-            <video id="ar-video" autoplay playsinline muted></video>
-            <canvas id="ar-canvas"></canvas>
-        </div>
-        
-        <div class="ar-nav-ui">
-            <div class="step-card">
-                <h4 id="nav-step-title"><i class="fas fa-satellite-dish"></i> ค้นหาสัญญาณ</h4>
-                <p id="nav-step-desc">กรุณาถือโทรศัพท์ในแนวตั้งแล้วเดินไปข้างหน้า</p>
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-                <button onclick="stopAR()" class="btn btn-danger" style="flex: 1; border-radius: 30px; background: rgba(220, 53, 69, 0.8); backdrop-filter: blur(5px);">
-                    <i class="fas fa-times"></i> จบการนำทาง
-                </button>
-                <button onclick="calibrateCompass()" class="btn" style="flex: 1; border-radius: 30px; background: rgba(0, 86, 210, 0.8); color: white; backdrop-filter: blur(5px);">
-                    <i class="fas fa-compass"></i> รีเซ็ตทิศ
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ====== MOCK DATA ======
-        const arPointsData = [
-            { id: 1, name: "ห้องวิชาการ", building: "A", steps: ["เดินตรงไป 20 เมตร", "เลี้ยวขวาที่สามแยก", "ตรงไปห้องที่ 2 ซ้ายมือ"] },
-            { id: 2, name: "ห้องทะเบียน", building: "A", steps: ["เดินตรงไปสุดทางเดิน", "เลี้ยวซ้าย", "ห้องขวามือห้องแรก"] },
-            { id: 3, name: "โรงอาหาร", building: "B", steps: ["ลงบันไดไปชั้น 1", "เดินตรงไปตามทางเชื่อม", "ถึงโรงอาหาร"] }
-        ];
-
-        // ====== SYSTEM STATE ======
-        let appState = {
-            isLoggedIn: false,
-            currentUser: null,
-            currentPage: 'dashboard'
-        };
-
-        // ====== LOGIN SYSTEM ======
-        function handleLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-
-            if (u && p) {
-                appState.isLoggedIn = true;
-                appState.currentUser = u;
-                document.getElementById('user-display-name').textContent = u;
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-                showToast(`ยินดีต้อนรับคุณ ${u}`, 'success');
-            } else {
-                showToast('กรุณากรอกข้อมูลให้ครบ', 'error');
-            }
-        }
-
-        function handleLogout() {
-            appState.isLoggedIn = false;
-            document.getElementById('app-container').style.display = 'none';
-            document.getElementById('login-page').style.display = 'flex';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-        }
-
-        // ====== NAVIGATION & UI ======
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const trigger = document.querySelector('.menu-trigger');
-            if (window.innerWidth <= 768 && 
-                sidebar.classList.contains('active') && 
-                !sidebar.contains(event.target) && 
-                !trigger.contains(event.target)) {
-                sidebar.classList.remove('active');
-            }
-        });
-
-        function switchPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-
-            // Show target page
-            const target = document.getElementById(`page-${pageId}`);
-            if (target) target.classList.add('active');
-
-            // Highlight menu
-            // (Simplified mapping)
-            appState.currentPage = pageId;
-            if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('active');
-        }
-
-        function handleSearch() {
-            const val = document.getElementById('main-search').value;
-            if (val) {
-                showToast(`กำลังค้นหา: ${val}`, 'info');
-                // Simulate finding
-                setTimeout(() => {
-                    if (confirm(`พบ "ห้องวิชาการ" ใกล้เคียงคำค้นหา ต้องการเริ่มนำทางเลยหรือไม่?`)) {
-                        startAR("ห้องวิชาการ");
-                    }
-                }, 1000);
-            }
-        }
-
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('mainToast');
-            const msg = document.getElementById('toastMessage');
-            
-            let color = 'var(--primary-blue)';
-            if (type === 'success') color = 'var(--success)';
-            if (type === 'error') color = 'var(--danger)';
-            if (type === 'warning') color = 'var(--warning)';
-
-            toast.style.borderLeftColor = color;
-            msg.textContent = message;
-            toast.style.display = 'block';
-            
-            setTimeout(() => { toast.style.display = 'none'; }, 3000);
-        }
-
-        // ============================================
-        // ====== ADVANCED AR NAVIGATION SYSTEM ======
-        // ============================================
+// ====== ระบบนำทาง AR (ปรับปรุงใหม่) ======
         let arSession = {
             active: false,
-            targetHeading: 0, // ทิศทางเป้าหมาย (0-360)
-            currentHeading: 0, // ทิศที่มือถือหันอยู่
+            targetHeading: 0, // ทิศทางเป้าหมาย (องศา)
+            currentHeading: 0, // ทิศทางที่หันอยู่
             distance: 100, // ระยะทางสมมติ (เมตร)
             stepIndex: 0,
             pathSteps: [],
-            lastStepTime: 0,
-            lastAcc: { x:0, y:0, z:0 }
+            lastStepTime: 0
         };
 
         function quickStartAR() {
-            // Random destination for demo
-            const rand = arPointsData[Math.floor(Math.random() * arPointsData.length)];
-            startAR(rand.name);
+            const randomIndex = Math.floor(Math.random() * arPointsData.length);
+            startAR(arPointsData[randomIndex].name);
         }
 
         async function startAR(destinationName) {
-            const dest = arPointsData.find(r => r.name === destinationName) || arPointsData[0];
-            
-            // 1. Setup Data
+            // Reset State
             arSession.active = true;
-            arSession.distance = 50 + Math.floor(Math.random() * 50); // Random distance
-            arSession.pathSteps = dest.steps;
+            arSession.distance = Math.floor(Math.random() * 50) + 30; // สุ่มระยะทางเริ่มต้น 30-80 เมตร
             arSession.stepIndex = 0;
             
-            // 2. Show UI
-            document.getElementById('ar-page').style.display = 'block';
-            document.getElementById('ar-loading').style.display = 'flex';
+            // หาข้อมูลห้อง
+            const destination = arPointsData.find(r => r.name === destinationName);
+            arSession.pathSteps = destination ? destination.steps : ["เดินตรงไปตามทางเดิน", "เลี้ยวขวาที่หัวมุม", "ตรงไปอีก 10 เมตร", "ถึงจุดหมาย"];
             
+            // UI Setup
+            showARPage();
+            document.getElementById('ar-loading').style.display = 'flex';
+            updateProgressBar(0);
+
             try {
-                // 3. Init Camera
+                // 1. Camera Access
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: { facingMode: 'environment' }
                 });
                 document.getElementById('ar-video').srcObject = stream;
+                updateProgressBar(50);
 
-                // 4. Request Sensors (iOS 13+ requires explicit permission)
-                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // 2. Sensor Access (DeviceOrientation)
+                if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    // สำหรับ iOS 13+
                     const permission = await DeviceOrientationEvent.requestPermission();
                     if (permission === 'granted') {
                         window.addEventListener('deviceorientation', handleOrientation);
-                        window.addEventListener('devicemotion', handleMotion);
-                    } else {
-                        alert("ต้องการสิทธิ์การเข้าถึงเข็มทิศเพื่อนำทาง");
                     }
                 } else {
-                    // Android / Old iOS
+                    // สำหรับ Android / Non-iOS
                     window.addEventListener('deviceorientation', handleOrientation);
-                    window.addEventListener('devicemotion', handleMotion);
                 }
+                
+                // 3. Motion for Steps (Accelerometer)
+                window.addEventListener('devicemotion', handleMotion);
 
-                // 5. Start Loop
+                // Start Loop
+                updateProgressBar(100);
                 setTimeout(() => {
                     document.getElementById('ar-loading').style.display = 'none';
                     updateNavStepUI();
-                    requestAnimationFrame(arLoop);
-                }, 1500);
+                    startARLoop();
+                    
+                    // เพิ่มจุดใน Radar (Mockup)
+                    addRadarDot();
+                }, 1000);
 
             } catch (err) {
                 console.error(err);
-                alert("ไม่สามารถเปิดกล้องได้: " + err.message);
+                alert("ไม่สามารถเข้าถึงกล้องหรือเซนเซอร์ได้");
                 stopAR();
             }
         }
 
-        function stopAR() {
-            arSession.active = false;
-            // Stop Camera
-            const video = document.getElementById('ar-video');
-            if (video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-                video.srcObject = null;
-            }
-            // Remove Listeners
-            window.removeEventListener('deviceorientation', handleOrientation);
-            window.removeEventListener('devicemotion', handleMotion);
-            
-            document.getElementById('ar-page').style.display = 'none';
+        function showARPage() {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('ar-page').style.display = 'block';
         }
 
-        // --- Sensors Logic ---
-
-        function handleOrientation(e) {
+        function handleOrientation(event) {
             if (!arSession.active) return;
-            // Get compass heading (0-360)
-            let heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+            
+            // รับค่าทิศทาง (Compass Heading)
+            // alpha: 0-360 องศา (ทิศเหนือคือ 0 หรือขึ้นอยู่กับอุปกรณ์)
+            // webkitCompassHeading: สำหรับ iOS
+            let heading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
             arSession.currentHeading = heading;
         }
 
-        function handleMotion(e) {
+        let lastAcc = { x: 0, y: 0, z: 0 };
+        function handleMotion(event) {
             if (!arSession.active) return;
             
-            // Simple Pedometer
-            const acc = e.accelerationIncludingGravity;
+            // ตรวจจับการเดิน (Step Counter แบบง่าย)
+            const acc = event.accelerationIncludingGravity;
             if(!acc) return;
 
-            const delta = Math.abs(acc.x - arSession.lastAcc.x) + 
-                          Math.abs(acc.y - arSession.lastAcc.y) + 
-                          Math.abs(acc.z - arSession.lastAcc.z);
+            const delta = Math.abs(acc.x - lastAcc.x) + Math.abs(acc.y - lastAcc.y) + Math.abs(acc.z - lastAcc.z);
             
-            // Threshold for walking step
-            if (delta > 15) { 
+            // ถ้ามีการขยับแรงพอ (เดิน)
+            if (delta > 15) {
                 const now = Date.now();
-                if (now - arSession.lastStepTime > 600) { // Limit to 1 step per 600ms
-                    arSession.distance = Math.max(0, arSession.distance - 1);
+                if (now - arSession.lastStepTime > 600) { // นับก้าวทุกๆ 0.6 วิ
+                    arSession.distance = Math.max(0, arSession.distance - 1); // ลดระยะทาง
                     arSession.lastStepTime = now;
+                    updateDistanceUI();
                     
-                    // Trigger step change logic
-                    checkStepProgress();
+                    // เปลี่ยนขั้นตอนเมื่อเดินไประยะหนึ่ง
+                    if (arSession.distance % 15 === 0 && arSession.distance > 0) {
+                        nextStep();
+                    }
+                    
+                    if (arSession.distance === 0) {
+                        finishNavigation();
+                    }
                 }
             }
-            arSession.lastAcc = acc;
+            lastAcc = acc;
         }
 
-        // --- Main Animation Loop ---
+        function startARLoop() {
+            function loop() {
+                if (!arSession.active) return;
 
-        function arLoop() {
-            if (!arSession.active) return;
+                // คำนวณมุมลูกศร
+                // สมมติว่าเป้าหมายอยู่ทางทิศเหนือ (0 องศา) เสมอ เพื่อความง่ายในการ demo
+                // แต่ถ้าห้องเปลี่ยน เราอาจจะเปลี่ยน targetHeading ได้
+                // Delta คือความต่างระหว่างทิศที่หัน (Heading) กับทิศเป้าหมาย
+                
+                // สุ่ม Target เล็กน้อยเพื่อให้ดูเหมือน GPS ทำงาน
+                const noise = Math.sin(Date.now() / 1000) * 5; 
+                const bearing = (arSession.targetHeading - arSession.currentHeading + noise);
+                
+                const arrow = document.getElementById('main-nav-arrow');
+                // หมุนลูกศร: ถ้าเราหันขวา (90) ลูกศรควรชี้ซ้าย (-90) เพื่อบอกว่าเป้าหมายอยู่ทางซ้าย
+                arrow.style.transform = `rotate(${bearing}deg)`;
 
-            // 1. Calculate Bearing (Direction to point arrow)
-            // Mocking target: Suppose target is always North (0) for demo, 
-            // but we add an offset based on the current instruction (e.g. Turn Right -> Target is +90)
-            
-            let relativeTarget = 0; 
-            const currentStep = arSession.pathSteps[arSession.stepIndex] || "";
-            if(currentStep.includes("ขวา")) relativeTarget = 90;
-            if(currentStep.includes("ซ้าย")) relativeTarget = -90;
+                // เปลี่ยนสีลูกศรตามความแม่นยำ
+                if (Math.abs(bearing) < 20) {
+                    arrow.style.borderBottomColor = "#00FF88"; // ตรงทาง (เขียว)
+                } else {
+                    arrow.style.borderBottomColor = "#0056D2"; // ต้องหมุนหา (น้ำเงิน)
+                }
 
-            // The arrow rotation needs to counter the phone's rotation plus point to target
-            // If phone faces 0, target 90 -> Arrow points 90
-            // If phone faces 90, target 90 -> Arrow points 0 (Straight)
-            let bearing = (relativeTarget - arSession.currentHeading); 
-            
-            // Add slight smooth noise for realism
-            bearing += Math.sin(Date.now() / 500) * 2;
-
-            // 2. Update UI
-            const arrow = document.getElementById('main-nav-arrow');
-            
-            // Fix rotation logic for CSS
-            // Arrow points UP by default. 
-            // If bearing is 0 (Target is ahead), rotate(0deg).
-            // But bearing logic above: If I face 0, Target 90 -> bearing = 90. I need to turn right. Arrow should point right.
-            // Actually, if I need to turn right, the arrow should point right on screen.
-            // bearing = Target(world) - Current(world). 
-            // E.g. Target East(90), Current North(0) -> 90. Rotate 90deg (Right). Correct.
-            
-            arrow.style.transform = `rotate(${bearing}deg)`;
-            
-            // Color change based on alignment
-            if (Math.abs(bearing % 360) < 20) {
-                arrow.style.borderBottomColor = "#00FF88"; // Green (On track)
-            } else {
-                arrow.style.borderBottomColor = "#0056D2"; // Blue (Turn needed)
+                drawCanvasHUD();
+                requestAnimationFrame(loop);
             }
-
-            document.getElementById('hud-distance').innerText = `${arSession.distance} m`;
-
-            // Draw HUD Lines (Canvas)
-            drawHUDCanvas();
-
-            requestAnimationFrame(arLoop);
+            loop();
         }
 
-        function drawHUDCanvas() {
+        function drawCanvasHUD() {
             const canvas = document.getElementById('ar-canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+
+            // วาดเส้น Grid พื้นแบบ Perspective
+            ctx.strokeStyle = "rgba(0, 255, 136, 0.1)";
+            ctx.lineWidth = 1;
             
+            const time = Date.now() / 500;
             const w = canvas.width;
             const h = canvas.height;
-
-            ctx.clearRect(0, 0, w, h);
+            const cy = h / 2;
             
-            // Draw Horizon Line
-            // Tilt based on device beta (pitch) could go here for more realism
-            ctx.strokeStyle = "rgba(0, 255, 136, 0.2)";
-            ctx.lineWidth = 1;
+            // วาดเส้นขอบฟ้าจำลอง
             ctx.beginPath();
-            ctx.moveTo(0, h/2);
-            ctx.lineTo(w, h/2);
+            ctx.moveTo(0, cy);
+            ctx.lineTo(w, cy);
             ctx.stroke();
         }
 
-        function checkStepProgress() {
-            // Logic to move to next instruction
-            // Mock: every 15 meters, next step
-            if (arSession.distance > 0 && arSession.distance % 15 === 0) {
-                if (arSession.stepIndex < arSession.pathSteps.length - 1) {
-                    arSession.stepIndex++;
-                    updateNavStepUI();
-                    showToast("เข้าสู่ขั้นตอนถัดไป", "success");
-                }
-            }
+        function updateDistanceUI() {
+            document.getElementById('hud-distance').innerText = `${arSession.distance} m`;
             
-            if (arSession.distance === 0) {
-                document.getElementById('nav-step-title').innerHTML = `<i class="fas fa-flag-checkered"></i> ถึงจุดหมาย`;
-                document.getElementById('nav-step-desc').innerText = "คุณถึงจุดหมายแล้ว";
-                document.getElementById('main-nav-arrow').style.display = 'none';
+            // อัพเดต Radar Dot ให้ขยับเข้าใกล้ศูนย์กลาง
+            const dot = document.querySelector('.radar-dot');
+            if (dot) {
+                // map distance 100m -> 50px (radius)
+                const r = (arSession.distance / 100) * 40; 
+                dot.style.top = `${50 - r}%`; // Mockup การขยับ
+                dot.style.left = `${50 + r}%`;
             }
         }
 
         function updateNavStepUI() {
-            const step = arSession.pathSteps[arSession.stepIndex];
-            document.getElementById('nav-step-title').innerHTML = `<i class="fas fa-walking"></i> ขั้นตอนที่ ${arSession.stepIndex + 1}`;
-            document.getElementById('nav-step-desc').innerText = step;
+            const steps = arSession.pathSteps;
+            const index = arSession.stepIndex;
+            
+            if (index < steps.length) {
+                document.getElementById('nav-step-title').innerHTML = `<i class="fas fa-walking"></i> ขั้นตอนที่ ${index + 1}/${steps.length}`;
+                document.getElementById('nav-step-desc').innerText = steps[index];
+                
+                // เปลี่ยนทิศทาง Target (จำลอง) ตามขั้นตอน
+                if (steps[index].includes("ซ้าย")) arSession.targetHeading = -90;
+                else if (steps[index].includes("ขวา")) arSession.targetHeading = 90;
+                else arSession.targetHeading = 0; // ตรงไป
+                
+            }
+        }
+
+        function nextStep() {
+            if (arSession.stepIndex < arSession.pathSteps.length - 1) {
+                arSession.stepIndex++;
+                updateNavStepUI();
+                showToast("เข้าสู่ขั้นตอนถัดไป...", "info");
+            }
+        }
+
+        function finishNavigation() {
+            showToast("ถึงจุดหมายแล้ว!", "success");
+            document.getElementById('nav-step-title').innerHTML = `<i class="fas fa-flag-checkered"></i> ถึงจุดหมาย`;
+            document.getElementById('nav-step-desc').innerText = "คุณอยู่ที่หน้าห้องแล้ว";
+            document.getElementById('main-nav-arrow').style.display = 'none';
         }
 
         function calibrateCompass() {
-            // Reset "North" to current facing for demo purposes
-            showToast("ปรับเทียบทิศทางเรียบร้อย", "success");
+            arSession.targetHeading = arSession.currentHeading; // Reset ให้ชี้ไปทางข้างหน้า
+            showToast("ปรับทิศทางสำเร็จ", "success");
         }
 
-    </script>
-</body>
-</html>
+        function addRadarDot() {
+            const container = document.getElementById('radar-dots-container');
+            container.innerHTML = '<div class="radar-dot" style="top: 30%; left: 70%;"></div>';
+        }
+
+        function stopAR() {
+            arSession.active = false;
+            const video = document.getElementById('ar-video');
+            if (video.srcObject) {
