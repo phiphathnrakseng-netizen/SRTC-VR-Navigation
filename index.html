@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SRTC Smart AR Navigation System</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     
     <style>
+        /* --- UI/UX เดิม 100% ห้ามแก้ไข --- */
         :root {
             --primary-blue: #002D72;
             --accent-blue: #0056D2;
@@ -26,323 +26,81 @@
             --map-3d: #8A2BE2;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            border-radius: 0 !important;
-            font-family: 'Sarabun', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0 !important; font-family: 'Sarabun', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+        h1, h2, h3, h4, h5 { font-family: 'Kanit', sans-serif; font-weight: 600; }
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, h5 {
-            font-family: 'Kanit', sans-serif;
-            font-weight: 600;
-        }
-
-        /* --- UI Components --- */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
+        /* Components */
+        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-primary { background-color: var(--accent-blue); color: white; }
         .btn-primary:hover { background-color: var(--primary-blue); }
-
         .btn-outline { border: 2px solid white; background: transparent; color: white; }
-        .btn-outline:hover { background: white; color: var(--primary-blue); }
-
         .btn-danger { background-color: var(--danger); color: white; }
         .btn-success { background-color: var(--success); color: white; }
         .btn-secondary { background-color: #666; color: white; }
         .btn-warning { background-color: var(--warning); color: white; }
         .btn-map3d { background-color: var(--map-3d); color: white; }
-        .btn-map3d:hover { background-color: #6A1B9A; }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            background: #fff;
-            outline: none;
-        }
-        input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
-
-        /* --- Navbar --- */
-        .navbar {
-            background-color: white;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 4px solid var(--primary-blue);
-        }
-
+        
+        /* Navbar */
+        .navbar { background-color: white; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-bottom: 4px solid var(--primary-blue); }
         .logo-area { display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .logo-img { height: 50px; width: auto; }
         .college-name { font-size: 1.2rem; color: var(--primary-blue); line-height: 1.2; }
         .college-name span { display: block; font-size: 0.9rem; color: var(--text-grey); font-weight: 400; }
-
-        .menu-trigger {
-            font-size: 1.5rem;
-            color: var(--primary-blue);
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        /* Dropdown Menu */
-        .dropdown-menu {
-            position: absolute;
-            top: 80px;
-            right: 5%;
-            background: white;
-            width: 250px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
-            display: none;
-            z-index: 999;
-        }
+        .menu-trigger { font-size: 1.5rem; color: var(--primary-blue); cursor: pointer; padding: 10px; }
+        
+        /* Dropdown */
+        .dropdown-menu { position: absolute; top: 80px; right: 5%; background: white; width: 250px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; display: none; z-index: 999; }
         .dropdown-menu.active { display: block; }
-        .dropdown-item {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-dark);
-            text-decoration: none;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .dropdown-item:hover { background-color: var(--bg-light); color: var(--accent-blue); }
+        .dropdown-item { padding: 15px 20px; display: flex; align-items: center; gap: 10px; color: var(--text-dark); text-decoration: none; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
 
-        /* --- Pages / Sections --- */
+        /* Sections */
         .page-section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 50px;}
         .page-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- AR Section --- */
-        .ar-hero {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #001A45 100%);
-            color: white;
-            padding: 60px 5%;
-            position: relative;
-            overflow: hidden;
-            min-height: 350px;
-            display: flex;
-            align-items: center;
-        }
+        /* Hero & Map */
+        .ar-hero { background: linear-gradient(135deg, var(--primary-blue) 0%, #001A45 100%); color: white; padding: 60px 5%; position: relative; overflow: hidden; min-height: 350px; display: flex; align-items: center; }
         .hero-content { position: relative; z-index: 2; max-width: 600px; }
         .hero-title { font-size: 3rem; margin: 10px 0; letter-spacing: 1px; }
-
-        /* --- Map Section --- */
         .map-container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
         .section-header { border-left: 5px solid var(--primary-blue); padding-left: 20px; margin-bottom: 30px; }
-        
-        .floor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
-        .floor-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.3s;
-        }
-        .floor-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent-blue); }
+        .floor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .floor-card { background: white; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.3s; }
         .floor-header { background: var(--primary-blue); color: white; padding: 15px; font-size: 1.2rem; display: flex; justify-content: space-between; }
-        
-        .room-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .room-item:hover { background-color: #f9f9fa; }
+        .room-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
         .room-info { display: flex; gap: 15px; }
         .room-icon { color: var(--accent-blue); width: 25px; text-align: center; margin-top: 3px; }
         .ar-action { font-size: 0.8rem; color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 5px 10px; text-transform: uppercase; font-weight: bold; }
-        .room-item:hover .ar-action { background: var(--accent-blue); color: white; }
 
-        /* --- AR Camera Page --- */
-        #ar-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 2000;
-            display: none;
-        }
-        
-        #ar-viewport {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: 1; /* Make sure it is behind the UI */
-        }
-        
-        /* Fix A-Frame canvas position for MindAR */
-        #ar-viewport canvas.a-canvas {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover;
-        }
-        
-        /* AR Navigation UI - Overlay on top of AR */
-        .ar-nav-ui {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            color: white;
-            padding: 25px 20px;
-            z-index: 2002;
-            pointer-events: auto; /* Enable clicks */
-        }
-        
-        .ar-nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .ar-navigation-steps {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 2px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        
-        .ar-step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .ar-step:last-child { border-bottom: none; }
-        .ar-step.active { color: var(--ar-color); font-weight: bold; }
-        .ar-step.completed { color: #aaa; text-decoration: line-through; }
-        
-        /* AR Detection Area (Overlay) */
-        .ar-detection-area {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            height: 250px;
-            border: 3px dashed var(--ar-color);
-            background: rgba(0,255,136,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2001;
-            pointer-events: none;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-        
-        .ar-detection-text {
-            color: var(--ar-color);
-            text-align: center;
-            font-weight: bold;
-        }
+        /* 3D Map */
+        .map-3d-container { padding: 40px 5%; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; min-height: 500px; }
+        .map-3d-canvas { width: 100%; height: 400px; background: #0f3460; border-radius: 5px; margin-bottom: 20px; position: relative; overflow: hidden; }
 
-        .ar-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-blue);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 2003;
-        }
+        /* AR Page (Modified for MindAR integration) */
+        #ar-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 2000; display: none; }
         
-        .ar-loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
+        /* A-Frame container must be behind UI */
+        #ar-scene-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+        .ar-nav-ui { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: white; padding: 25px 20px; z-index: 2002; pointer-events: none; }
+        .ar-nav-ui button, .ar-nav-ui .btn { pointer-events: auto; } /* Enable clicks on buttons */
+
+        .ar-nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .ar-navigation-steps { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 2px; margin-top: 15px; font-size: 0.9rem; max-height: 150px; overflow-y: auto; pointer-events: auto; }
+        .ar-step { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* AR Overlay Elements */
+        .ar-scanning-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 2001; pointer-events: none; }
+        .scan-frame { width: 250px; height: 250px; border: 3px dashed var(--ar-color); background: rgba(0,255,136,0.1); margin: 0 auto 15px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+        .scan-text { color: var(--ar-color); font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.8); background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; }
 
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: var(--primary-blue);
-            color: white;
-            padding: 15px 20px;
-            border-left: 5px solid var(--ar-color);
-            z-index: 3000;
-            display: none;
-            max-width: 300px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* 3D Map (Style Preservation) */
-        .map-3d-container {
-            padding: 40px 5%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            min-height: 500px;
-        }
-        .map-3d-canvas {
-            width: 100%;
-            height: 400px;
-            background: #0f3460;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
+        /* Notification */
+        .toast { position: fixed; top: 100px; right: 20px; background: var(--primary-blue); color: white; padding: 15px 20px; border-left: 5px solid var(--ar-color); z-index: 3000; display: none; max-width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         
         @media (max-width: 768px) {
             .hero-title { font-size: 2rem; }
             .navbar { padding: 0 3%; height: 70px; }
-            .ar-nav-ui { padding: 15px 10px; }
         }
     </style>
 </head>
@@ -359,7 +117,6 @@
         <div class="menu-trigger" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
-        
         <div class="dropdown-menu" id="mainDropdown">
             <div class="dropdown-item" onclick="location.reload()">
                 <i class="fas fa-sync"></i> รีโหลดหน้าเว็บ
@@ -372,7 +129,7 @@
             <div class="hero-content">
                 <h3 id="home-subtitle">ระบบนำทางอัจฉริยะด้วย AR</h3>
                 <h1 id="home-title" class="hero-title">SRTC AR NAVIGATION</h1>
-                <p id="home-desc" style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่ด้วยเทคโนโลยี Augmented Reality (MindAR)</p>
+                <p id="home-desc" style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่ด้วยเทคโนโลยี Augmented Reality</p>
                 <button class="btn btn-map3d" style="font-size: 1.2rem; padding: 15px 30px;" onclick="show3DMap()">
                     <i class="fas fa-globe-asia"></i> แสดงแผนที่ 3 มิติ
                 </button>
@@ -383,9 +140,8 @@
         <section class="map-container">
             <div class="section-header">
                 <h2>แผนผังอาคารเรียน 6 (แผนกเทคโนโลยีสารสนเทศ)</h2>
-                <p>กดที่ปุ่มนำทางของห้องเพื่อเริ่มระบบ MindAR ทันที</p>
+                <p>กดที่ปุ่ม "เริ่ม AR" ของห้องที่ต้องการ เพื่อเปิดกล้องนำทาง</p>
             </div>
-
             <div class="floor-grid" id="floor-list-container">
                 </div>
         </section>
@@ -397,36 +153,29 @@
                 <h2><i class="fas fa-globe-asia"></i> แผนที่ 3 มิติ อาคารเรียน 6</h2>
                 <p>สำรวจอาคารเรียนในรูปแบบ 3 มิติก่อนเริ่มนำทาง</p>
             </div>
-            
             <div class="map-3d-canvas" id="map-3d-canvas">
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
                     <i class="fas fa-cube" style="font-size: 4rem; margin-bottom: 20px;"></i>
                     <h3>แผนที่ 3 มิติ</h3>
-                    <p>ระบบจำลองแผนที่</p>
+                    <p>แสดงโครงสร้างอาคาร (จำลอง)</p>
                 </div>
             </div>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="goHome()"> <i class="fas fa-arrow-left"></i> กลับหน้าหลัก </button>
+            <div class="map-controls" style="text-align:center; margin-top:20px;">
+                <button class="btn btn-secondary" onclick="goHome()"><i class="fas fa-arrow-left"></i> กลับหน้าหลัก</button>
             </div>
         </div>
     </div>
 
     <div id="ar-page">
-        <div class="ar-loading" id="ar-loading">
-            <div class="ar-loading-spinner"></div>
-            <h3>กำลังเปิดกล้อง...</h3>
-            <p>กรุณารอสักครู่ ระบบ MindAR กำลังทำงาน</p>
-        </div>
-
-        <div class="ar-detection-area" id="ar-detection-area">
-            <div class="ar-detection-text">
-                <i class="fas fa-search"></i><br>
-                ส่องกล้องไปที่ป้ายห้อง<br>
-                <small>Image Tracking Active</small>
+        <div class="ar-scanning-overlay" id="scan-overlay">
+            <div class="scan-frame"></div>
+            <div class="scan-text">
+                <i class="fas fa-camera"></i> ส่องไปที่ป้ายหน้าห้อง/บันได<br>
+                <small>กำลังค้นหาตำแหน่ง...</small>
             </div>
         </div>
 
-        <div id="ar-viewport">
+        <div id="ar-scene-container">
             <a-scene 
                 mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; uiLoading: no; uiScanning: no;" 
                 embedded 
@@ -435,52 +184,39 @@
                 vr-mode-ui="enabled: false" 
                 device-orientation-permission-ui="enabled: false">
                 
-                <a-assets>
-                    <img id="card-bg" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.2/examples/image-tracking/assets/card-example/card.png" />
-                </a-assets>
-
                 <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-                <a-entity mindar-image-target="targetIndex: 0" class="mindar-target" data-target-index="0">
-                    <a-plane color="#0056D2" opacity="0.7" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-                    <a-text value="Target 0 Detected" color="white" align="center" width="2" position="0 0 0.1"></a-text>
+                <a-entity mindar-image-target="targetIndex: 0" id="target-floor-3">
+                    <a-plane color="#002D72" height="0.5" width="1.5" position="0 0.5 0" opacity="0.9"></a-plane>
+                    <a-text value="Floor 3: IT Department\nGo Straight -> Room 631" color="white" align="center" width="3" position="0 0.5 0.1"></a-text>
+                    <a-cone color="#00FF88" radius-bottom="0.1" radius-top="0" height="0.3" position="0 0 0" rotation="0 0 0" animation="property: position; to: 0 0.2 0; dir: alternate; dur: 1000; loop: true"></a-cone>
                 </a-entity>
 
-                <a-entity mindar-image-target="targetIndex: 1" class="mindar-target" data-target-index="1">
-                    <a-plane color="#2e7d32" opacity="0.7" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-                    <a-text value="Target 1 Detected" color="white" align="center" width="2" position="0 0 0.1"></a-text>
+                <a-entity mindar-image-target="targetIndex: 1" id="target-floor-4">
+                    <a-plane color="#e67e22" height="0.5" width="1.5" position="0 0.5 0" opacity="0.9"></a-plane>
+                    <a-text value="Floor 4: Lab Rooms\n<- Turn Left for Lab 1" color="white" align="center" width="3" position="0 0.5 0.1"></a-text>
+                    <a-cone color="#FFFF00" radius-bottom="0.1" radius-top="0" height="0.3" position="0 0 0" rotation="0 0 0" animation="property: position; to: 0 0.2 0; dir: alternate; dur: 1000; loop: true"></a-cone>
                 </a-entity>
-                
-                <a-entity mindar-image-target="targetIndex: 2" class="mindar-target" data-target-index="2">
-                    <a-plane color="#f57c00" opacity="0.7" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-                </a-entity>
-
-                </a-scene>
+            </a-scene>
         </div>
-
+        
         <div class="ar-nav-ui">
             <div class="ar-nav-header">
                 <div>
                     <h3 style="color: var(--ar-color); margin-bottom: 5px;">
-                        <i class="fas fa-map-signs"></i> <span id="ar-current-target">AR Navigation</span>
+                        <i class="fas fa-location-arrow"></i> <span id="ar-target-name">กำลังนำทาง...</span>
                     </h3>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">กำลังค้นหาเป้าหมาย...</p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;" id="ar-status-text">ระบบพร้อมใช้งาน</p>
                 </div>
                 <div>
                     <button onclick="stopAR()" class="btn btn-danger">
-                        <i class="fas fa-times"></i> ปิดกล้อง
+                        <i class="fas fa-times"></i> ปิด
                     </button>
                 </div>
             </div>
             
             <div class="ar-navigation-steps" id="ar-steps-container">
-                <div class="ar-step active">
-                    <i class="fas fa-camera"></i> กรุณาส่องกล้องไปที่ป้ายหน้าห้อง หรือจุดมาร์กเกอร์
                 </div>
-                <div class="ar-step">
-                    <i class="fas fa-info"></i> ระบบจะแสดงข้อมูลห้องทันทีเมื่อตรวจพบ
-                </div>
-            </div>
         </div>
     </div>
 
@@ -489,178 +225,170 @@
     </div>
 
     <script>
-        // ====== ข้อมูลห้องเรียน (Data) ======
-        const arPointsData = [
-            { id: 1, floor: 4, name: "Lab 1", desc: "ห้องปฏิบัติการคอมพิวเตอร์ 1", type: "lab" },
-            { id: 2, floor: 4, name: "Lab 2", desc: "ห้องปฏิบัติการคอมพิวเตอร์ 2", type: "lab" },
-            { id: 3, floor: 4, name: "Lecture Room", desc: "ห้องบรรยายรวม", type: "lecture" },
-            { id: 4, floor: 3, name: "Teacher Room", desc: "ห้องพักครู", type: "office" },
-            { id: 5, floor: 3, name: "Room 631", desc: "ห้องเรียนทฤษฎี", type: "class" },
-            { id: 6, floor: 3, name: "Room 632", desc: "ห้องเรียนทฤษฎี", type: "class" }
+        // --- ข้อมูลห้อง ---
+        const roomsData = [
+            { id: 1, floor: 4, name: "Lab 1", desc: "ห้องปฏิบัติการคอมพิวเตอร์ 1", steps: ["ขึ้นบันไดไปชั้น 4", "เลี้ยวซ้าย", "เดินตรงไป 10 เมตร"] },
+            { id: 2, floor: 4, name: "Lecture Room", desc: "ห้องบรรยายรวม", steps: ["ขึ้นบันไดไปชั้น 4", "เลี้ยวขวา", "ห้องอยู่สุดทางเดิน"] },
+            { id: 3, floor: 3, name: "Teacher Room", desc: "ห้องพักครู", steps: ["อยู่ที่ชั้น 3", "ติดกับบันไดทางขึ้น"] },
+            { id: 4, floor: 3, name: "Room 631", desc: "ห้องเรียนทฤษฎี", steps: ["อยู่ที่ชั้น 3", "เดินตรงไปตามระเบียง", "ห้องแรกขวามือ"] }
         ];
 
-        // ====== Initialization ======
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- เริ่มต้นระบบ ---
+        window.onload = function() {
             renderRoomList();
             setupMindAREvents();
-        });
-
-        // ====== UI Rendering Logic ======
-        function renderRoomList() {
-            const container = document.getElementById('floor-list-container');
-            const floors = [...new Set(arPointsData.map(d => d.floor))].sort((a, b) => b - a); // Sort floors desc
-
-            floors.forEach(floor => {
-                // Create Floor Card
-                const card = document.createElement('div');
-                card.className = 'floor-card';
-                
-                let headerHTML = `<div class="floor-header"><span>ชั้น ${floor}</span><i class="fas fa-layer-group"></i></div>`;
-                let listHTML = '';
-
-                const rooms = arPointsData.filter(d => d.floor === floor);
-                rooms.forEach(room => {
-                    let iconClass = 'fas fa-door-open';
-                    if (room.type === 'lab') iconClass = 'fas fa-desktop';
-                    if (room.type === 'office') iconClass = 'fas fa-user-tie';
-                    if (room.type === 'lecture') iconClass = 'fas fa-chalkboard-teacher';
-
-                    listHTML += `
-                        <div class="room-item" onclick="startAR('${room.name}')">
-                            <div class="room-info">
-                                <div class="room-icon"><i class="${iconClass}"></i></div>
-                                <div>
-                                    <div style="font-weight: 600;">${room.name}</div>
-                                    <div style="font-size: 0.8rem; color: #666;">${room.desc}</div>
-                                </div>
-                            </div>
-                            <div class="ar-action">
-                                <i class="fas fa-camera"></i> นำทาง
-                            </div>
-                        </div>
-                    `;
-                });
-
-                card.innerHTML = headerHTML + `<div>${listHTML}</div>`;
-                container.appendChild(card);
-            });
-        }
-
-        // ====== Core AR Logic (MindAR) ======
-        
-        // ฟังก์ชันเริ่มระบบ AR (Triggered by button click)
-        function startAR(roomName) {
-            // 1. UI Updates
-            document.getElementById('page-home').classList.remove('active');
-            document.getElementById('page-3d-map').classList.remove('active');
-            document.getElementById('ar-page').style.display = 'block';
-            
-            // Set current target text
-            document.getElementById('ar-current-target').innerText = `กำลังค้นหา: ${roomName}`;
-            
-            // Show Loading
-            document.getElementById('ar-loading').style.display = 'flex';
-
-            // 2. Start MindAR System
-            const sceneEl = document.querySelector('a-scene');
-            if (sceneEl.systems['mindar-image-system']) {
-                sceneEl.systems['mindar-image-system'].start(); // Start Camera
-            } else {
-                // Wait for A-Frame to load system if not ready
-                sceneEl.addEventListener('loaded', () => {
-                    sceneEl.systems['mindar-image-system'].start();
-                });
-            }
-
-            // Hide loading screen after a short delay (simulating init)
-            setTimeout(() => {
-                document.getElementById('ar-loading').style.display = 'none';
-            }, 1500);
-        }
-
-        // ฟังก์ชันหยุดระบบ AR
-        function stopAR() {
-            // 1. Stop MindAR System
-            const sceneEl = document.querySelector('a-scene');
-            if (sceneEl.systems['mindar-image-system']) {
-                sceneEl.systems['mindar-image-system'].stop(); // Stop Camera to save battery
-            }
-
-            // 2. UI Updates
-            document.getElementById('ar-page').style.display = 'none';
-            document.getElementById('page-home').classList.add('active');
-        }
-
-        // ตั้งค่า Event Listeners สำหรับ MindAR Targets
-        function setupMindAREvents() {
-            const targets = document.querySelectorAll('.mindar-target');
-            const detectionArea = document.getElementById('ar-detection-area');
-            const detectionText = detectionArea.querySelector('.ar-detection-text');
-
-            targets.forEach(target => {
-                // เมื่อเจอป้าย (Target Found)
-                target.addEventListener("targetFound", event => {
-                    console.log("Target Found:", target.dataset.targetIndex);
-                    
-                    // Visual Feedback
-                    detectionArea.style.borderColor = 'var(--success)';
-                    detectionArea.style.backgroundColor = 'rgba(46, 125, 50, 0.2)';
-                    detectionText.innerHTML = `<i class="fas fa-check-circle"></i><br>พบตำแหน่งห้องแล้ว!`;
-                    
-                    showToast(`ตรวจพบตำแหน่งห้อง (Index ${target.dataset.targetIndex})`, 'success');
-                });
-
-                // เมื่อป้ายหลุดจากกล้อง (Target Lost)
-                target.addEventListener("targetLost", event => {
-                    console.log("Target Lost");
-                    
-                    // Reset Feedback
-                    detectionArea.style.borderColor = 'var(--ar-color)';
-                    detectionArea.style.backgroundColor = 'rgba(0, 255, 136, 0.1)';
-                    detectionText.innerHTML = `<i class="fas fa-search"></i><br>ส่องกล้องไปที่ป้ายห้อง<br><small>Scanning...</small>`;
-                });
-            });
-        }
-
-        // ====== Helper Functions ======
-        function goHome() {
-            stopAR(); // Ensure AR is stopped
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('page-home').classList.add('active');
-        }
-
-        function show3DMap() {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('page-3d-map').classList.add('active');
-        }
+        };
 
         function toggleMenu() {
             document.getElementById('mainDropdown').classList.toggle('active');
         }
 
-        function showToast(message, type = 'info') {
+        function goHome() {
+            stopAR();
+            showPage('page-home');
+        }
+
+        function show3DMap() {
+            showPage('page-3d-map');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('mainDropdown').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        // --- สร้างรายการห้อง ---
+        function renderRoomList() {
+            const container = document.getElementById('floor-list-container');
+            container.innerHTML = '';
+            
+            [4, 3].forEach(floor => {
+                const rooms = roomsData.filter(r => r.floor === floor);
+                if(rooms.length > 0) {
+                    let html = `<div class="floor-card">
+                        <div class="floor-header">ชั้น ${floor} <i class="fas fa-layer-group"></i></div>`;
+                    
+                    rooms.forEach(room => {
+                        html += `
+                        <div onclick="startAR('${room.name}')" class="room-item">
+                            <div class="room-info">
+                                <div class="room-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div><h4>${room.name}</h4><p>${room.desc}</p></div>
+                            </div>
+                            <div class="ar-action">เริ่ม AR</div>
+                        </div>`;
+                    });
+                    html += `</div>`;
+                    container.innerHTML += html;
+                }
+            });
+        }
+
+        // --- ระบบ MindAR ---
+        let currentDestination = "";
+
+        function startAR(destinationName) {
+            currentDestination = destinationName;
+            
+            // 1. Update UI
+            document.getElementById('ar-target-name').innerText = destinationName;
+            document.getElementById('page-home').classList.remove('active');
+            document.getElementById('page-3d-map').classList.remove('active');
+            document.getElementById('ar-page').style.display = 'block';
+            
+            // Update Steps
+            const room = roomsData.find(r => r.name === destinationName);
+            const stepsContainer = document.getElementById('ar-steps-container');
+            stepsContainer.innerHTML = '';
+            if(room) {
+                room.steps.forEach((step, idx) => {
+                    stepsContainer.innerHTML += `<div class="ar-step"><i class="fas fa-shoe-prints"></i> ${step}</div>`;
+                });
+            }
+
+            // 2. Start MindAR Engine
+            const sceneEl = document.querySelector('a-scene');
+            const arSystem = sceneEl.systems['mindar-image-system'];
+            
+            if (arSystem) {
+                arSystem.start(); // เปิดกล้อง
+            } else {
+                // กรณีโหลดครั้งแรก
+                sceneEl.addEventListener('loaded', () => {
+                    sceneEl.systems['mindar-image-system'].start();
+                });
+            }
+            
+            showToast(`เริ่มนำทางไปยัง ${destinationName}`, 'info');
+        }
+
+        function stopAR() {
+            const sceneEl = document.querySelector('a-scene');
+            const arSystem = sceneEl.systems['mindar-image-system'];
+            if (arSystem) {
+                arSystem.stop(); // ปิดกล้องเพื่อประหยัดแบต
+            }
+            document.getElementById('ar-page').style.display = 'none';
+        }
+
+        // --- Event เมื่อเจอ/ไม่เจอป้าย ---
+        function setupMindAREvents() {
+            const scanOverlay = document.getElementById('scan-overlay');
+            const statusText = document.getElementById('ar-status-text');
+
+            // ฟังก์ชันเมื่อเจอป้าย (Target Found)
+            const onTargetFound = (event) => {
+                const index = event.target.getAttribute('mindar-image-target').targetIndex;
+                console.log("Found Target Index:", index);
+                
+                // ซ่อนกรอบสแกน
+                scanOverlay.style.display = 'none';
+                
+                let locationName = index === 0 ? "ชั้น 3" : "ชั้น 4";
+                statusText.innerText = `ตรวจพบตำแหน่ง: ${locationName}`;
+                statusText.style.color = "#00FF88";
+                
+                showToast(`คุณอยู่ที่ ${locationName}`, 'success');
+            };
+
+            // ฟังก์ชันเมื่อป้ายหลุด (Target Lost)
+            const onTargetLost = (event) => {
+                console.log("Lost Target");
+                // แสดงกรอบสแกนใหม่
+                scanOverlay.style.display = 'block';
+                statusText.innerText = "กำลังค้นหาตำแหน่ง...";
+                statusText.style.color = "white";
+            };
+
+            // ผูก Event กับ Entity
+            const target3 = document.getElementById('target-floor-3');
+            const target4 = document.getElementById('target-floor-4');
+
+            target3.addEventListener("targetFound", onTargetFound);
+            target3.addEventListener("targetLost", onTargetLost);
+            target4.addEventListener("targetFound", onTargetFound);
+            target4.addEventListener("targetLost", onTargetLost);
+        }
+
+        // --- Toast Notification ---
+        function showToast(message, type) {
             const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
+            const msgDiv = document.getElementById('toast-message');
+            msgDiv.innerText = message;
             
-            let borderColor = 'var(--accent-blue)';
-            if (type === 'success') borderColor = 'var(--success)';
-            if (type === 'error') borderColor = 'var(--danger)';
+            let color = 'var(--accent-blue)';
+            if(type === 'success') color = 'var(--success)';
+            if(type === 'error') color = 'var(--danger)';
             
-            toast.style.borderLeftColor = borderColor;
-            toastMessage.textContent = message;
+            toast.style.borderLeftColor = color;
             toast.style.display = 'block';
             
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 3000);
         }
-
-        // Close dropdown when clicking outside
-        window.onclick = function(event) {
-            if (!event.target.matches('.menu-trigger') && !event.target.matches('.menu-trigger *')) {
-                document.getElementById('mainDropdown').classList.remove('active');
-            }
-        };
     </script>
 </body>
 </html>
