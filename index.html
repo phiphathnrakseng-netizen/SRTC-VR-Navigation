@@ -3,181 +3,1941 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SRTC VR Navigation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>SRTC Smart AR Navigation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0/dist/aframe.min.js"></script>
+    <script src="https://unpkg.com/ar.js@3.4.0/aframe/build/aframe-ar.js"></script>
     
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
     <style>
-        /* สไตล์เดิมของคุณ */
         :root {
-            --primary: #c0392b;
-            --secondary: #e67e22;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
+            --primary-blue: #002D72;
+            --accent-blue: #0056D2;
+            --bg-light: #F4F6F8;
+            --text-dark: #1A1A1A;
+            --text-grey: #666666;
+            --danger: #d32f2f;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --ar-color: #00FF88;
+            --ar-secondary: #FF6B00;
+            --map-3d: #8A2BE2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border-radius: 0 !important;
+            font-family: 'Sarabun', sans-serif;
         }
 
         body {
-            font-family: 'Kanit', sans-serif;
-            margin: 0;
-            background-color: var(--dark);
-            color: white;
-            overflow: hidden;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
         }
 
-        /* ส่วน UI เดิม */
-        .ui-overlay {
+        h1, h2, h3, h4, h5 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+        }
+
+        /* --- UI Components --- */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--accent-blue); color: white; }
+        .btn-primary:hover { background-color: var(--primary-blue); }
+
+        .btn-outline { border: 2px solid white; background: transparent; color: white; }
+        .btn-outline:hover { background: white; color: var(--primary-blue); }
+
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-secondary { background-color: #666; color: white; }
+        .btn-warning { background-color: var(--warning); color: white; }
+        .btn-map3d { background-color: var(--map-3d); color: white; }
+        .btn-map3d:hover { background-color: #6A1B9A; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            background: #fff;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: white;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 4px solid var(--primary-blue);
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-img { height: 50px; width: auto; }
+        .college-name { font-size: 1.2rem; color: var(--primary-blue); line-height: 1.2; }
+        .college-name span { display: block; font-size: 0.9rem; color: var(--text-grey); font-weight: 400; }
+
+        .menu-trigger {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 80px;
+            right: 5%;
+            background: white;
+            width: 250px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            display: none;
+            z-index: 999;
+        }
+        .dropdown-menu.active { display: block; }
+        .dropdown-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-dark);
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .dropdown-item:hover { background-color: var(--bg-light); color: var(--accent-blue); }
+
+        /* --- Pages / Sections --- */
+        .page-section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 50px;}
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- AR Section --- */
+        .ar-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #001A45 100%);
+            color: white;
+            padding: 60px 5%;
+            position: relative;
+            overflow: hidden;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 600px; }
+        .hero-title { font-size: 3rem; margin: 10px 0; letter-spacing: 1px; }
+
+        /* --- Map Section --- */
+        .map-container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { border-left: 5px solid var(--primary-blue); padding-left: 20px; margin-bottom: 30px; }
+        
+        .floor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .floor-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .floor-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent-blue); }
+        .floor-header { background: var(--primary-blue); color: white; padding: 15px; font-size: 1.2rem; display: flex; justify-content: space-between; }
+        
+        .room-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .room-item:hover { background-color: #f9f9fa; }
+        .room-info { display: flex; gap: 15px; }
+        .room-icon { color: var(--accent-blue); width: 25px; text-align: center; margin-top: 3px; }
+        .ar-action { font-size: 0.8rem; color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 5px 10px; text-transform: uppercase; font-weight: bold; }
+        .room-item:hover .ar-action { background: var(--accent-blue); color: white; }
+
+        /* --- AR Camera Page --- */
+        #ar-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 2000;
+            display: none;
+        }
+        
+        #ar-viewport {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        /* AR Navigation UI */
+        .ar-nav-ui {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 25px 20px;
+            z-index: 2002;
+        }
+        
+        .ar-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .ar-navigation-steps {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 2px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .ar-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .ar-step:last-child {
+            border-bottom: none;
+        }
+        
+        .ar-step.active {
+            color: var(--ar-color);
+            font-weight: bold;
+        }
+        
+        .ar-step.completed {
+            color: #aaa;
+            text-decoration: line-through;
+        }
+        
+        /* AR Object Styles */
+        .ar-object {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--ar-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
+            animation: pulse 2s infinite;
+            z-index: 2001;
+            transition: transform 0.3s;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,136,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0,255,136,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,255,136,0); }
+        }
+        
+        .ar-object:hover {
+            transform: scale(1.2);
+        }
+        
+        /* AR Instructions Overlay */
+        .ar-instructions {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            z-index: 2001;
+        }
+        
+        /* AR Detection Area */
+        .ar-detection-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border: 3px dashed var(--ar-color);
+            background: rgba(0,255,136,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+        }
+        
+        .ar-detection-text {
+            color: var(--ar-color);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Navigation Path */
+        .ar-path {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--ar-color), transparent);
+            z-index: 1999;
+            animation: pathFlow 2s linear infinite;
+        }
+        
+        @keyframes pathFlow {
+            0% { background-position: -100px 0; }
+            100% { background-position: 100px 0; }
+        }
+
+        /* Loading Screen for AR */
+        .ar-loading {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10; /* ให้อยู่เหนือกล้อง AR */
-            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8));
+            background: var(--primary-blue);
             display: flex;
             flex-direction: column;
-            transition: opacity 0.5s;
-        }
-
-        .header {
-            padding: 20px;
-            text-align: center;
-            background: var(--primary);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .main-menu {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px;
-            align-content: center;
-        }
-
-        .menu-item {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--secondary);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .menu-item:hover {
-            background: var(--secondary);
-            transform: translateY(-5px);
-        }
-
-        .menu-item i {
-            font-size: 40px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        /* ปุ่มปิด AR */
-        #close-ar {
-            display: none;
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            background: var(--primary);
+            align-items: center;
+            justify-content: center;
             color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-family: 'Kanit';
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 2003;
         }
+        
+        .ar-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 80%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--ar-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Compass */
+        .ar-compass {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 2002;
+            border: 2px solid var(--ar-color);
+        }
+
+        /* Distance Indicator */
+        .distance-indicator {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 2px;
+            font-size: 0.9rem;
+            z-index: 2002;
+        }
+
+        /* AR Destination Marker */
+        .destination-marker {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: var(--ar-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            z-index: 2001;
+            animation: destinationPulse 1.5s infinite;
+            box-shadow: 0 0 30px rgba(255,107,0,0.7);
+        }
+        
+        @keyframes destinationPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* AR Object Info Panel */
+        .ar-info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-left: 4px solid var(--ar-color);
+            max-width: 300px;
+            z-index: 2002;
+            display: none;
+        }
+
+        /* AR Arrow Navigation - เหมือนในภาพ Google Maps */
+        .ar-arrow {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            z-index: 2001;
+            display: none;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
+        }
+        
+        .ar-arrow-inner {
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-blue);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            animation: arrowFloat 2s ease-in-out infinite;
+        }
+        
+        @keyframes arrowFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .ar-arrow-text {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-size: 1.2rem;
+        }
+
+        /* Arrival Notification - เมื่อถึงจุดหมาย */
+        .arrival-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 2003;
+            display: none;
+            border: 3px solid var(--ar-color);
+            box-shadow: 0 0 30px rgba(0,255,136,0.5);
+            max-width: 80%;
+            animation: arrivalPulse 2s infinite;
+        }
+        
+        @keyframes arrivalPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,136,0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0,255,136,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,255,136,0); }
+        }
+        
+        .arrival-icon {
+            font-size: 4rem;
+            color: var(--ar-color);
+            margin-bottom: 20px;
+            animation: successSpin 1s ease-out;
+        }
+        
+        @keyframes successSpin {
+            0% { transform: rotate(0) scale(0); }
+            70% { transform: rotate(360deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* 3D Map Section */
+        .map-3d-container {
+            padding: 40px 5%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 500px;
+        }
+        
+        .map-3d-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .map-3d-canvas {
+            width: 100%;
+            height: 400px;
+            background: #0f3460;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .map-legend {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        /* --- Mobile Responsive --- */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .navbar { padding: 0 3%; height: 70px; }
+            .ar-nav-ui { padding: 15px 10px; }
+            .ar-instructions { font-size: 0.9rem; padding: 10px; }
+            .ar-detection-area { width: 200px; height: 200px; }
+            .destination-marker { width: 60px; height: 60px; font-size: 1.5rem; }
+            .ar-arrow { width: 80px; height: 80px; }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px 20px;
+            border-left: 5px solid var(--ar-color);
+            z-index: 3000;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* System Status Indicator */
+        .system-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            border-radius: 2px;
+            z-index: 1000;
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-online { background: var(--ar-color); }
+        .status-offline { background: var(--danger); }
     </style>
 </head>
 <body>
 
-    <div id="ui-container" class="ui-overlay">
-        <div class="header">
-            <h1>วิทยาลัยเทคนิคสุราษฎร์ธานี</h1>
-            <p>ระบบนำทางเสมือนจริง (AR Navigation)</p>
+    <nav class="navbar">
+        <div class="logo-area" onclick="goHome()">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlux4lEQv32t2eZrG7RYiLbC1vAdlGIHCksA&s" alt="Logo" class="logo-img">
+            <div class="college-name">
+                วิทยาลัยเทคนิคสุราษฎร์ธานี
+                <span>Suratthani Technical College</span>
+            </div>
         </div>
+        <div class="menu-trigger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="dropdown-menu" id="mainDropdown">
+            <div class="dropdown-item" onclick="location.reload()">
+                <i class="fas fa-sync"></i> รีโหลดหน้าเว็บ
+            </div>
+        </div>
+    </nav>
 
-        <div class="main-menu">
-            <div class="menu-item" onclick="startAR('ห้องพักครู')">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <span>ห้องพักครู</span>
+    <div id="page-home" class="page-section active">
+        <section class="ar-hero">
+            <div class="hero-content">
+                <h3 id="home-subtitle">ระบบนำทางอัจฉริยะด้วย AR</h3>
+                <h1 id="home-title" class="hero-title">SRTC AR NAVIGATION</h1>
+                <p id="home-desc" style="margin-bottom: 30px; opacity: 0.9;">ค้นหาอาคารเรียนและห้องต่างๆ ได้ง่ายๆ ผ่านกล้องของคุณ สัมผัสประสบการณ์นำทางรูปแบบใหม่ด้วยเทคโนโลยี Augmented Reality</p>
+                <button class="btn btn-map3d" style="font-size: 1.2rem; padding: 15px 30px;" onclick="show3DMap()">
+                    <i class="fas fa-globe-asia"></i> แสดงแผนที่ 3 มิติ
+                </button>
             </div>
-            <div class="menu-item" onclick="startAR('ห้องทะเบียน')">
-                <i class="fas fa-file-alt"></i>
-                <span>ห้องทะเบียน</span>
+            <i class="fas fa-map-marked-alt" style="position: absolute; right: 5%; font-size: 12rem; color: rgba(255,255,255,0.1);"></i>
+        </section>
+
+        <section class="map-container">
+            <div class="section-header">
+                <h2>แผนผังอาคารเรียน 6 (แผนกเทคโนโลยีสารสนเทศ)</h2>
+                <p>กดที่ห้องเพื่อเริ่มนำทางด้วย AR</p>
             </div>
-            <div class="menu-item" onclick="startAR('ห้องผู้อำนวยการ')">
-                <i class="fas fa-user-tie"></i>
-                <span>ห้องผู้อำนวยการ</span>
+
+            <div class="floor-grid" id="floor-list-container">
+                <!-- ข้อมูลห้องจะถูกโหลดโดย JavaScript -->
             </div>
-            <div class="menu-item">
-                <i class="fas fa-info-circle"></i>
-                <span>เกี่ยวกับเรา</span>
+        </section>
+    </div>
+
+    <!-- 3D Map Page -->
+    <div id="page-3d-map" class="page-section">
+        <div class="map-3d-container">
+            <div class="map-3d-header">
+                <h2><i class="fas fa-globe-asia"></i> แผนที่ 3 มิติ อาคารเรียน 6</h2>
+                <p>สำรวจอาคารเรียนในรูปแบบ 3 มิติก่อนเริ่มนำทาง</p>
+            </div>
+            
+            <div class="map-3d-canvas" id="map-3d-canvas">
+                <!-- แผนที่ 3 มิติจะถูกวาดโดย JavaScript -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+                    <i class="fas fa-cube" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h3>แผนที่ 3 มิติ</h3>
+                    <p>กำลังโหลดโมเดลอาคาร...</p>
+                </div>
+            </div>
+            
+            <div class="map-controls">
+                <button class="btn btn-primary" onclick="rotateMap('left')">
+                    <i class="fas fa-undo"></i> หมุนซ้าย
+                </button>
+                <button class="btn btn-primary" onclick="rotateMap('right')">
+                    <i class="fas fa-redo"></i> หมุนขวา
+                </button>
+                <button class="btn btn-success" onclick="zoomMap('in')">
+                    <i class="fas fa-search-plus"></i> ขยาย
+                </button>
+                <button class="btn btn-warning" onclick="zoomMap('out')">
+                    <i class="fas fa-search-minus"></i> ย่อ
+                </button>
+                <button class="btn btn-map3d" onclick="startARFromMap()">
+                    <i class="fas fa-camera"></i> เริ่มนำทาง AR
+                </button>
+            </div>
+            
+            <div class="map-legend">
+                <h4><i class="fas fa-key"></i> สัญลักษณ์ในแผนที่</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #0056D2;"></div>
+                    <span>ห้องเรียนทฤษฎี</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #00FF88;"></div>
+                    <span>ห้องปฏิบัติการคอมพิวเตอร์</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF6B00;"></div>
+                    <span>ห้องพักครู</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #8A2BE2;"></div>
+                    <span>ห้องบรรยาย (Lecture)</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <button id="close-ar" onclick="stopAR()">กลับหน้าเมนู</button>
-
-    <a-scene 
-        mindar-image="imageTargetSrc: ./targets.mind; autoStart: false;" 
-        embedded
-        color-space="sRGB" 
-        renderer="colorManagement: true, physicallyCorrectLights" 
-        vr-mode-ui="enabled: false" 
-        device-orientation-permission-ui="enabled: false">
+    <!-- AR Navigation Page -->
+    <div id="ar-page">
+        <div class="ar-loading" id="ar-loading">
+            <div class="ar-loading-spinner"></div>
+            <h3>กำลังเตรียมระบบนำทาง AR...</h3>
+            <p id="ar-loading-text">กำลังเริ่มต้นระบบคอมพิวเตอร์วิทัศน์</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="ar-progress"></div>
+            </div>
+        </div>
         
-        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <div class="ar-instructions" id="ar-instructions">
+            <i class="fas fa-info-circle"></i> กรุณาหมุนอุปกรณ์เพื่อสแกนสภาพแวดล้อมรอบตัว
+        </div>
+        
+        <div class="ar-compass" id="ar-compass">
+            <i class="fas fa-compass"></i>
+        </div>
+        
+        <div class="distance-indicator" id="distance-indicator">
+            <i class="fas fa-ruler-combined"></i> <span id="distance-text">กำลังคำนวณระยะทาง...</span>
+        </div>
+        
+        <!-- AR Arrow Navigation - เหมือนในภาพ CNN -->
+        <div class="ar-arrow" id="ar-arrow">
+            <div class="ar-arrow-inner">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="ar-arrow-text" id="ar-arrow-text">ตรงไป</div>
+        </div>
+        
+        <div class="ar-detection-area" id="ar-detection-area">
+            <div class="ar-detection-text">
+                <i class="fas fa-search"></i><br>
+                พื้นที่ตรวจจับ AR<br>
+                <small>เล็งไปยังวัตถุที่ต้องการ</small>
+            </div>
+        </div>
+        
+        <!-- Arrival Notification -->
+        <div class="arrival-notification" id="arrival-notification">
+            <div class="arrival-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="arrival-title">ถึงแล้ว!</h2>
+            <h3 id="arrival-destination">Lab 1</h3>
+            <p id="arrival-message">คุณได้มาถึงห้องปฏิบัติการคอมพิวเตอร์ Lab 1</p>
+            <button onclick="stopAR()" class="btn btn-success" style="margin-top: 20px; padding: 10px 20px;">
+                <i class="fas fa-check"></i> เสร็จสิ้น
+            </button>
+        </div>
+        
+        <div class="ar-info-panel" id="ar-info-panel">
+            <h4 id="ar-info-title"></h4>
+            <p id="ar-info-desc"></p>
+            <button onclick="closeInfoPanel()" class="btn btn-secondary" style="padding: 5px 10px; margin-top: 10px; font-size: 0.8rem;">ปิด</button>
+        </div>
+        
+        <div id="ar-viewport">
+            <video id="ar-video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+            <canvas id="ar-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+        </div>
+        
+        <div class="ar-nav-ui">
+            <div class="ar-nav-header">
+                <div>
+                    <h3 style="color: var(--ar-color); margin-bottom: 5px;">
+                        <i class="fas fa-map-signs"></i> <span id="ar-current-target">อาคารเรียน 6</span>
+                    </h3>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">กำลังนำทางในแบบ AR</p>
+                </div>
+                <div>
+                    <button onclick="captureARScreen()" class="btn btn-secondary" style="margin-right: 10px;">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <button onclick="stopAR()" class="btn btn-danger">
+                        <i class="fas fa-times"></i> ปิด
+                    </button>
+                </div>
+            </div>
+            
+            <div class="ar-navigation-steps" id="ar-steps-container">
+                <!-- ขั้นตอนการนำทางจะถูกเพิ่มโดย JavaScript -->
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button onclick="changeARDestination()" class="btn btn-warning" style="flex: 1;">
+                    <i class="fas fa-exchange-alt"></i> เปลี่ยนปลายทาง
+                </button>
+                <button onclick="toggleARMode()" class="btn btn-secondary" style="flex: 1;" id="ar-mode-toggle">
+                    <i class="fas fa-cube"></i> โหมดวัตถุ 3D
+                </button>
+                <button onclick="toggleARDebug()" class="btn" style="flex: 1; background: #444;" id="ar-debug-toggle">
+                    <i class="fas fa-bug"></i> โหมดดีบัก
+                </button>
+            </div>
+        </div>
+    </div>
 
-        <a-entity mindar-image-target="targetIndex: 0">
-            <a-plane color="#e67e22" height="0.4" width="1.5" position="0 0.5 0" opacity="0.9"></a-plane>
-            <a-text id="ar-text" value="กำลังไป: ห้องพักครู\nเดินตรงไป 10 เมตร" color="white" align="center" width="2.5" position="0 0.5 0.1"></a-text>
-            <a-cone color="red" radius-bottom="0.1" radius-top="0" height="0.3" position="0 0.1 0" rotation="90 0 0"></a-cone>
-        </a-entity>
-    </a-scene>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div id="toast-message"></div>
+    </div>
+
+    <!-- System Status Indicator -->
+    <div class="system-status" id="system-status">
+        <span class="status-dot status-online"></span>
+        <span>ระบบ AR: <span id="ar-system-status">พร้อมใช้งาน</span></span>
+    </div>
 
     <script>
-        const ui = document.getElementById('ui-container');
-        const closeBtn = document.getElementById('close-ar');
-        const sceneEl = document.querySelector('a-scene');
-        const arText = document.getElementById('ar-text');
+        // ====== ระบบข้อมูลและสถานะ ======
+        // ข้อมูลห้องเรียนและจุด AR (เน้น Lab 1)
+        let arPointsData = [
+            { 
+                id: 1, 
+                floor: 4, 
+                name: "Lab 1", 
+                desc: "ห้องปฏิบัติการคอมพิวเตอร์ Lab 1", 
+                icon: "desktop", 
+                steps: [
+                    "เดินตรงไปยังบันไดทางขึ้น",
+                    "ขึ้นบันไดไปชั้น 4",
+                    "เลี้ยวซ้ายเมื่อถึงชั้น 4",
+                    "เดินไปตามทางเดินหลัก",
+                    "ผ่านห้องบรรยายทางขวา",
+                    "Lab 1 อยู่ทางซ้ายมือ"
+                ],
+                coordinates: { x: 0.7, y: 0.3 }, 
+                color: "#00FF88",
+                arrivalMessage: "คุณได้มาถึงห้องปฏิบัติการคอมพิวเตอร์ Lab 1",
+                arrowInstructions: [
+                    { direction: "forward", text: "ตรงไป", distance: "20 เมตร" },
+                    { direction: "stairs", text: "ขึ้นบันได", distance: "ชั้น 4" },
+                    { direction: "left", text: "เลี้ยวซ้าย", distance: "10 เมตร" },
+                    { direction: "forward", text: "ตรงไป", distance: "15 เมตร" },
+                    { direction: "left", text: "เลี้ยวซ้าย", distance: "5 เมตร" }
+                ]
+            },
+            { 
+                id: 2, 
+                floor: 4, 
+                name: "ห้อง Lecture", 
+                desc: "ห้องบรรยาย", 
+                icon: "chalkboard",
+                steps: ["ขึ้นบันไดไปชั้น 4", "เดินตรงจากบันได", "ผ่านห้องพักครู", "ห้องอยู่ทางขวา"],
+                coordinates: { x: 0.5, y: 0.6 }, 
+                color: "#8A2BE2" 
+            },
+            { 
+                id: 3, 
+                floor: 4, 
+                name: "ห้องพักครู", 
+                desc: "Information Tech", 
+                icon: "user-tie", 
+                steps: ["เดินไปยังบันไดทางขึ้น", "ขึ้นไปชั้น 4", "เลี้ยวซ้ายจากบันได", "เดินไปทางสุดห้อง"],
+                coordinates: { x: 0.3, y: 0.4 }, 
+                color: "#FF6B00" 
+            },
+            { 
+                id: 4, 
+                floor: 3, 
+                name: "ห้อง 631 - 635", 
+                desc: "ห้องเรียนทฤษฎี", 
+                icon: "book-reader",
+                steps: ["ขึ้นบันไดไปชั้น 3", "ออกจากบันไดเลี้ยวขวา", "เดินตามทางเดินหลัก", "ห้องเรียนอยู่ทั้งสองฝั่ง"],
+                coordinates: { x: 0.4, y: 0.5 }, 
+                color: "#0056D2" 
+            }
+        ];
 
-        function startAR(roomName) {
-            // 1. ซ่อน UI เมนู
-            ui.style.opacity = '0';
-            setTimeout(() => { ui.style.display = 'none'; }, 500);
+        // สถานะระบบ AR
+        let arState = {
+            isActive: false,
+            currentDestination: null,
+            videoStream: null,
+            arObjects: [],
+            userPosition: { x: 0, y: 0 },
+            destinationPosition: { x: 10, y: 10 },
+            compassHeading: 0,
+            is3DMode: false,
+            model: null,
+            debugMode: false,
+            navigationStartTime: null,
+            currentStep: 0,
+            arrowActive: false,
+            arrivalTriggered: false,
+            currentArrowInstruction: 0,
+            navigationPath: []
+        };
+
+        // สถิติการใช้งาน
+        let systemStats = {
+            arUsersToday: 0,
+            totalNavigations: 0,
+            successfulNavigations: 0,
+            averageTime: 0,
+            lastUpdated: new Date().toISOString()
+        };
+
+        // ====== ระบบเริ่มต้น ======
+        window.onload = function() {
+            // โหลดข้อมูลจาก LocalStorage
+            loadSystemData();
             
-            // 2. แสดงปุ่มปิด
-            closeBtn.style.display = 'block';
+            // อัพเดต UI เริ่มต้น
+            if(localStorage.getItem('siteContent')) {
+                const content = JSON.parse(localStorage.getItem('siteContent'));
+                updateHomeUI(content.title, content.subtitle, content.desc);
+            }
             
-            // 3. เปลี่ยนข้อความใน AR ตามที่กด
-            arText.setAttribute('value', `กำลังไป: ${roomName}\nเดินตรงไปตามลูกศร`);
+            // เรนเดอร์ข้อมูล
+            renderFloorList();
+            updateSystemStats();
             
-            // 4. เริ่มระบบ AR
-            const {systems} = sceneEl;
-            systems['mindar-image-system'].start(); 
+            // เริ่มต้นระบบตรวจจับ
+            initializeMotionDetection();
+            
+            // เริ่มต้นระบบอัพเดตสถานะ
+            startSystemUpdateLoop();
+            
+            // แสดงสถานะระบบ
+            updateSystemStatus();
+            
+            // เพิ่มการตรวจจับเมื่อมาถึงจุดหมาย
+            initializeArrivalDetection();
+        };
+
+        // ====== ฟังก์ชันการจัดการหน้าเว็บ ======
+        function toggleMenu() {
+            document.getElementById('mainDropdown').classList.toggle('active');
+        }
+
+        function goHome() {
+            showPage('page-home');
+            document.getElementById('mainDropdown').classList.remove('active');
+            renderFloorList();
+        }
+
+        function show3DMap() {
+            showPage('page-3d-map');
+            document.getElementById('mainDropdown').classList.remove('active');
+            // สร้างแผนที่ 3 มิติ
+            create3DMap();
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            
+            // อัพเดตเมนู
+            document.getElementById('mainDropdown').classList.remove('active');
+        }
+
+        // ====== ระบบแสดงรายการห้อง ======
+        function renderFloorList() {
+            const container = document.getElementById('floor-list-container');
+            container.innerHTML = '';
+            
+            // แสดงเฉพาะชั้น 4 และ 3 (เอาชั้น 2 และ 1 ออก)
+            const floors = [4, 3];
+            
+            floors.forEach(f => {
+                const roomsInFloor = arPointsData.filter(r => r.floor === f);
+                if(roomsInFloor.length > 0) {
+                    let html = `<div class="floor-card">
+                        <div class="floor-header">ชั้น ${f} <i class="fas fa-layer-group"></i></div>`;
+                    
+                    roomsInFloor.forEach(room => {
+                        html += `
+                        <div onclick="startAR('${room.name}')" class="room-item">
+                            <div class="room-info">
+                                <div class="room-icon"><i class="fas fa-${room.icon}"></i></div>
+                                <div><h4>${room.name}</h4><p>${room.desc}</p></div>
+                            </div>
+                            <div class="ar-action">เริ่ม AR</div>
+                        </div>`;
+                    });
+                    
+                    html += `</div>`;
+                    container.innerHTML += html;
+                }
+            });
+        }
+
+        // ====== ระบบแผนที่ 3 มิติ ======
+        function create3DMap() {
+            const canvas = document.getElementById('map-3d-canvas');
+            canvas.innerHTML = '';
+            
+            // สร้างโครงสร้างอาคารแบบง่าย
+            const buildingStructure = document.createElement('div');
+            buildingStructure.style.width = '100%';
+            buildingStructure.style.height = '100%';
+            buildingStructure.style.position = 'relative';
+            buildingStructure.style.background = 'linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%)';
+            
+            // เพิ่มชั้นอาคาร
+            for (let floor = 4; floor >= 3; floor--) {
+                const floorDiv = document.createElement('div');
+                floorDiv.className = 'floor-3d';
+                floorDiv.style.position = 'absolute';
+                floorDiv.style.left = '50%';
+                floorDiv.style.transform = 'translateX(-50%)';
+                floorDiv.style.width = '200px';
+                floorDiv.style.height = '100px';
+                floorDiv.style.backgroundColor = floor === 4 ? '#2c3e50' : '#34495e';
+                floorDiv.style.border = '2px solid #7f8c8d';
+                floorDiv.style.borderRadius = '5px';
+                floorDiv.style.bottom = `${(4 - floor) * 120 + 50}px`;
+                floorDiv.style.textAlign = 'center';
+                floorDiv.style.color = 'white';
+                floorDiv.style.paddingTop = '10px';
+                floorDiv.innerHTML = `<strong>ชั้น ${floor}</strong>`;
+                
+                // เพิ่มห้องในแต่ละชั้น
+                const roomsInFloor = arPointsData.filter(r => r.floor === floor);
+                roomsInFloor.forEach((room, index) => {
+                    const roomDiv = document.createElement('div');
+                    roomDiv.className = 'room-3d';
+                    roomDiv.style.position = 'absolute';
+                    roomDiv.style.width = '40px';
+                    roomDiv.style.height = '30px';
+                    roomDiv.style.backgroundColor = room.color;
+                    roomDiv.style.borderRadius = '3px';
+                    roomDiv.style.cursor = 'pointer';
+                    roomDiv.style.left = `${50 + index * 50}px`;
+                    roomDiv.style.top = '30px';
+                    roomDiv.style.textAlign = 'center';
+                    roomDiv.style.fontSize = '0.7rem';
+                    roomDiv.style.paddingTop = '5px';
+                    roomDiv.style.color = 'white';
+                    roomDiv.innerHTML = room.name.split(' ')[0];
+                    roomDiv.title = `${room.name} - ${room.desc}`;
+                    roomDiv.onclick = () => {
+                        showToast(`เลือกห้อง: ${room.name}`, 'info');
+                        startAR(room.name);
+                    };
+                    
+                    floorDiv.appendChild(roomDiv);
+                });
+                
+                buildingStructure.appendChild(floorDiv);
+            }
+            
+            // เพิ่มบันได
+            const stairsDiv = document.createElement('div');
+            stairsDiv.style.position = 'absolute';
+            stairsDiv.style.left = '20%';
+            stairsDiv.style.bottom = '50px';
+            stairsDiv.style.width = '30px';
+            stairsDiv.style.height = '300px';
+            stairsDiv.style.backgroundColor = '#95a5a6';
+            stairsDiv.style.borderRadius = '3px';
+            buildingStructure.appendChild(stairsDiv);
+            
+            // เพิ่มข้อความอธิบาย
+            const infoDiv = document.createElement('div');
+            infoDiv.style.position = 'absolute';
+            infoDiv.style.top = '20px';
+            infoDiv.style.left = '20px';
+            infoDiv.style.color = 'white';
+            infoDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            infoDiv.style.padding = '10px';
+            infoDiv.style.borderRadius = '5px';
+            infoDiv.innerHTML = '<strong>อาคารเรียน 6</strong><br>แผนกเทคโนโลยีสารสนเทศ';
+            buildingStructure.appendChild(infoDiv);
+            
+            canvas.appendChild(buildingStructure);
+        }
+
+        function rotateMap(direction) {
+            const canvas = document.getElementById('map-3d-canvas');
+            const building = canvas.querySelector('.floor-3d');
+            
+            if (building) {
+                let currentRotation = parseInt(building.style.transform?.match(/rotate\(([-\d]+)deg\)/)?.[1]) || 0;
+                currentRotation += direction === 'left' ? -15 : 15;
+                
+                document.querySelectorAll('.floor-3d, .room-3d').forEach(el => {
+                    el.style.transform = `rotateY(${currentRotation}deg)`;
+                });
+                
+                showToast(`หมุนแผนที่ ${direction === 'left' ? 'ซ้าย' : 'ขว'}`, 'info');
+            }
+        }
+
+        function zoomMap(action) {
+            const canvas = document.getElementById('map-3d-canvas');
+            const building = canvas.querySelector('.floor-3d');
+            
+            if (building) {
+                let currentScale = parseFloat(building.style.transform?.match(/scale\(([\d.]+)\)/)?.[1]) || 1;
+                currentScale += action === 'in' ? 0.1 : -0.1;
+                currentScale = Math.max(0.5, Math.min(2, currentScale));
+                
+                document.querySelectorAll('.floor-3d').forEach(el => {
+                    el.style.transform = `scale(${currentScale})`;
+                });
+                
+                showToast(`${action === 'in' ? 'ขยาย' : 'ย่อ'} แผนที่`, 'info');
+            }
+        }
+
+        function startARFromMap() {
+            const selectedRoom = prompt('กรุณาระบุห้องที่ต้องการนำทาง (หรือกด Cancel เพื่อเริ่มนำทางทั่วไป):');
+            if (selectedRoom) {
+                startAR(selectedRoom);
+            } else {
+                startAR('อาคารเรียน 6');
+            }
+        }
+
+        // ====== ระบบนำทาง AR ======
+        async function startAR(destinationName = "Lab 1") {
+            // บันทึกสถิติ
+            systemStats.arUsersToday++;
+            systemStats.totalNavigations++;
+            saveSystemData();
+            
+            // ตั้งค่าปลายทางการนำทาง
+            arState.currentDestination = destinationName;
+            arState.navigationStartTime = new Date();
+            arState.currentStep = 0;
+            arState.arrivalTriggered = false;
+            arState.currentArrowInstruction = 0;
+            
+            document.getElementById('ar-current-target').textContent = destinationName;
+            
+            // แสดงหน้า AR
+            showARPage();
+            
+            // แสดงหน้าจอโหลด
+            document.getElementById('ar-loading').style.display = 'flex';
+            document.getElementById('ar-loading-text').textContent = 'กำลังขออนุญาตใช้งานกล้อง...';
+            updateProgressBar(10);
+            
+            try {
+                // ขออนุญาตใช้งานกล้อง
+                arState.videoStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                
+                updateProgressBar(30);
+                document.getElementById('ar-loading-text').textContent = 'กำลังเริ่มระบบคอมพิวเตอร์วิทัศน์...';
+                
+                // ตั้งค่า video element
+                const video = document.getElementById('ar-video');
+                video.srcObject = arState.videoStream;
+                
+                // รอให้ video พร้อมใช้งาน
+                video.onloadedmetadata = async () => {
+                    await video.play();
+                    
+                    updateProgressBar(60);
+                    document.getElementById('ar-loading-text').textContent = 'กำลังเตรียมการนำทาง...';
+                    
+                    // เริ่มต้นระบบ AR
+                    await initializeARSystem(destinationName);
+                    
+                    updateProgressBar(90);
+                    
+                    // ซ่อนหน้าจอโหลด
+                    setTimeout(() => {
+                        document.getElementById('ar-loading').style.display = 'none';
+                        arState.isActive = true;
+                        
+                        // อัพเดตขั้นตอนการนำทาง
+                        updateARNavigationSteps(destinationName);
+                        
+                        // เริ่มการตรวจจับและการอัพเดต
+                        startARUpdateLoop();
+                        
+                        // แสดงคำแนะนำ
+                        showARInstructions();
+                        
+                        // เริ่มต้นการนำทางด้วยลูกศร AR
+                        startArrowNavigation(destinationName);
+                        
+                        updateProgressBar(100);
+                    }, 1000);
+                };
+                
+            } catch (error) {
+                console.error('เกิดข้อผิดพลาดในการเปิดกล้อง:', error);
+                document.getElementById('ar-loading-text').textContent = 'ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาต';
+                
+                setTimeout(() => {
+                    showToast('ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตการใช้งานกล้อง', 'error');
+                    stopAR();
+                }, 2000);
+            }
+        }
+
+        function updateProgressBar(percentage) {
+            document.getElementById('ar-progress').style.width = percentage + '%';
+        }
+
+        function showARPage() {
+            // ซ่อนหน้าอื่นๆ และแสดงหน้า AR
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('ar-page').style.display = 'block';
+            
+            // อัพเดตขั้นตอนการนำทาง
+            updateARNavigationSteps(arState.currentDestination);
+        }
+
+        async function initializeARSystem(destinationName) {
+            // ตั้งค่า Canvas สำหรับการวาด
+            const video = document.getElementById('ar-video');
+            const canvas = document.getElementById('ar-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // โหลดโมเดล AI สำหรับการตรวจจับ (จำลอง)
+            document.getElementById('ar-loading-text').textContent = 'กำลังโหลดโมเดล AI...';
+            
+            try {
+                // จำลองการโหลดโมเดล
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // สร้างวัตถุ AR จำลองในฉาก
+                createARObjects(destinationName);
+                
+                // เริ่มต้นระบบคอมพาส
+                initializeCompass();
+                
+                // สร้างปลายทาง
+                createDestinationMarker(destinationName);
+                
+                // ตั้งค่าเส้นทางการนำทาง
+                setupNavigationPath(destinationName);
+                
+            } catch (error) {
+                console.error('Error initializing AR:', error);
+                showToast('เกิดข้อผิดพลาดในการเริ่มต้นระบบ AR', 'error');
+            }
+        }
+
+        // ====== ระบบลูกศรนำทาง AR (เหมือนในภาพ CNN) ======
+        function startArrowNavigation(destinationName) {
+            const destination = arPointsData.find(room => room.name === destinationName);
+            if (!destination) return;
+            
+            arState.arrowActive = true;
+            document.getElementById('ar-arrow').style.display = 'block';
+            
+            // ตั้งค่าลูกศรเริ่มต้น
+            updateArrowNavigation(0);
+            
+            showToast('เริ่มระบบนำทางด้วยลูกศร AR', 'info');
+        }
+
+        function updateArrowNavigation(stepIndex) {
+            const arrow = document.getElementById('ar-arrow');
+            const arrowText = document.getElementById('ar-arrow-text');
+            const destination = arPointsData.find(room => room.name === arState.currentDestination);
+            
+            if (!destination || !destination.arrowInstructions) return;
+            
+            const instruction = destination.arrowInstructions[stepIndex % destination.arrowInstructions.length];
+            
+            // อัพเดตตำแหน่งลูกศร (เคลื่อนที่แบบสุ่มเพื่อจำลองการนำทาง)
+            const xPos = 30 + Math.random() * 40;
+            const yPos = 40 + Math.random() * 30;
+            
+            arrow.style.left = `${xPos}%`;
+            arrow.style.top = `${yPos}%`;
+            
+            // อัพเดตทิศทางลูกศร
+            let arrowIcon = 'fa-arrow-up';
+            let rotation = 0;
+            
+            switch(instruction.direction) {
+                case 'forward':
+                    arrowIcon = 'fa-arrow-up';
+                    rotation = 0;
+                    break;
+                case 'left':
+                    arrowIcon = 'fa-arrow-left';
+                    rotation = -90;
+                    break;
+                case 'right':
+                    arrowIcon = 'fa-arrow-right';
+                    rotation = 90;
+                    break;
+                case 'stairs':
+                    arrowIcon = 'fa-stairs';
+                    rotation = 0;
+                    break;
+                case 'back':
+                    arrowIcon = 'fa-arrow-down';
+                    rotation = 180;
+                    break;
+            }
+            
+            arrow.querySelector('.ar-arrow-inner i').className = `fas ${arrowIcon}`;
+            arrow.querySelector('.ar-arrow-inner').style.transform = `rotate(${rotation}deg)`;
+            
+            // อัพเดตข้อความ
+            arrowText.textContent = `${instruction.text} ${instruction.distance}`;
+            
+            // อัพเดตขั้นตอนปัจจุบัน
+            arState.currentArrowInstruction = stepIndex;
+            
+            // แสดงข้อมูลในขั้นตอนการนำทาง
+            updateStepInNavigation(stepIndex);
+        }
+
+        function updateStepInNavigation(stepIndex) {
+            const steps = document.querySelectorAll('.ar-step');
+            steps.forEach((step, idx) => {
+                step.classList.remove('active', 'completed');
+                
+                if (idx <= stepIndex + 1) {
+                    step.classList.add('completed');
+                }
+                
+                if (idx === stepIndex + 1) {
+                    step.classList.add('active');
+                }
+            });
+            
+            arState.currentStep = stepIndex;
+        }
+
+        function setupNavigationPath(destinationName) {
+            const destination = arPointsData.find(room => room.name === destinationName);
+            if (!destination) return;
+            
+            // สร้างเส้นทางการเดิน
+            arState.navigationPath = [];
+            
+            // เพิ่มจุดในเส้นทาง
+            for (let i = 0; i < 5; i++) {
+                arState.navigationPath.push({
+                    x: Math.random() * 70 + 15,
+                    y: Math.random() * 60 + 20,
+                    step: i,
+                    completed: false
+                });
+            }
+        }
+
+        // ====== ระบบตรวจจับเมื่อมาถึงจุดหมาย ======
+        function initializeArrivalDetection() {
+            // จำลองการตรวจจับเมื่อมาถึงจุดหมาย
+            // ในระบบจริงจะใช้ GPS หรือการตรวจจับด้วยภาพ
+        }
+
+        function checkArrival() {
+            if (arState.arrivalTriggered || !arState.isActive) return;
+            
+            // จำลองการตรวจสอบเมื่อมาถึงจุดหมาย
+            // หลังจากผ่านไป 30 วินาทีหรือทำตามขั้นตอนทั้งหมด
+            const timeElapsed = new Date() - arState.navigationStartTime;
+            
+            if ((timeElapsed > 30000 && arState.currentStep >= 4) || 
+                (arState.currentArrowInstruction >= 4 && !arState.arrivalTriggered)) {
+                
+                showArrivalNotification();
+                arState.arrivalTriggered = true;
+            }
+        }
+
+        function showArrivalNotification() {
+            const destination = arPointsData.find(room => room.name === arState.currentDestination);
+            
+            document.getElementById('arrival-title').textContent = 'ถึงแล้ว!';
+            document.getElementById('arrival-destination').textContent = arState.currentDestination;
+            document.getElementById('arrival-message').textContent = 
+                destination ? destination.arrivalMessage : `คุณได้มาถึง ${arState.currentDestination}`;
+            
+            document.getElementById('arrival-notification').style.display = 'block';
+            
+            // บันทึกสถิติการนำทางสำเร็จ
+            systemStats.successfulNavigations++;
+            saveSystemData();
+            
+            // แสดงเสียงหรือการแจ้งเตือน
+            playArrivalSound();
+            
+            showToast(`ถึงแล้ว ${arState.currentDestination}!`, 'success');
+        }
+
+        function playArrivalSound() {
+            // สร้างเสียงแจ้งเตือนเมื่อถึงจุดหมาย
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 523.25; // โด
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 1);
+            } catch (e) {
+                console.log('ไม่สามารถเล่นเสียงได้:', e);
+            }
+        }
+
+        function createARObjects(destinationName) {
+            // ล้างวัตถุเก่า
+            clearARObjects();
+            
+            // ค้นหาข้อมูลห้อง
+            const destination = arPointsData.find(room => room.name === destinationName);
+            const steps = destination ? destination.steps : ["เดินตรงไป", "เลี้ยวซ้าย", "เดินต่อไปอีก 20 เมตร"];
+            
+            // สร้างวัตถุ AR ตามขั้นตอนการนำทาง
+            const canvas = document.getElementById('ar-canvas');
+            const objectCount = Math.min(steps.length, 3);
+            
+            for (let i = 0; i < objectCount; i++) {
+                const arObject = {
+                    id: i,
+                    x: Math.random() * 0.6 + 0.2,
+                    y: Math.random() * 0.4 + 0.3,
+                    step: steps[i],
+                    element: null
+                };
+                
+                // สร้าง element สำหรับวัตถุ AR
+                const objElement = document.createElement('div');
+                objElement.className = 'ar-object';
+                objElement.id = `ar-object-${i}`;
+                objElement.style.left = `${arObject.x * 100}%`;
+                objElement.style.top = `${arObject.y * 100}%`;
+                objElement.innerHTML = `<i class="fas fa-${getIconForStep(i)}"></i>`;
+                objElement.onclick = () => showStepInfo(i, arObject.step);
+                
+                // เพิ่มคำอธิบายเมื่อ hover
+                objElement.title = arObject.step;
+                
+                document.getElementById('ar-viewport').appendChild(objElement);
+                arObject.element = objElement;
+                
+                arState.arObjects.push(arObject);
+            }
+            
+            // สร้างเส้นทางการเดิน
+            createARPath();
+        }
+
+        function createDestinationMarker(destinationName) {
+            // ล้างเครื่องหมายปลายทางเก่า
+            document.querySelectorAll('.destination-marker').forEach(el => el.remove());
+            
+            // สร้างเครื่องหมายปลายทาง
+            const marker = document.createElement('div');
+            marker.className = 'destination-marker';
+            marker.id = 'destination-marker';
+            marker.style.left = '80%';
+            marker.style.top = '20%';
+            marker.innerHTML = '<i class="fas fa-flag-checkered"></i>';
+            marker.title = destinationName;
+            marker.onclick = () => {
+                showArrivalNotification();
+            };
+            
+            document.getElementById('ar-viewport').appendChild(marker);
+        }
+
+        function getIconForStep(stepIndex) {
+            const icons = ['sign', 'arrow-right', 'arrow-up', 'flag-checkered', 'stairs', 'door-open'];
+            return icons[stepIndex % icons.length];
+        }
+
+        function createARPath() {
+            // ลบเส้นทางเก่า
+            document.querySelectorAll('.ar-path').forEach(el => el.remove());
+            
+            if (arState.arObjects.length < 2) return;
+            
+            // สร้างเส้นทางเชื่อมระหว่างวัตถุ AR
+            for (let i = 0; i < arState.arObjects.length - 1; i++) {
+                const obj1 = arState.arObjects[i];
+                const obj2 = arState.arObjects[i + 1];
+                
+                const path = document.createElement('div');
+                path.className = 'ar-path';
+                
+                // คำนวณตำแหน่งเส้นทาง
+                const x1 = obj1.x * 100;
+                const y1 = obj1.y * 100;
+                const x2 = obj2.x * 100;
+                const y2 = obj2.y * 100;
+                
+                // คำนวณความยาวและมุม
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                path.style.width = `${length}%`;
+                path.style.left = `${x1}%`;
+                path.style.top = `${y1}%`;
+                path.style.transform = `rotate(${angle}deg)`;
+                path.style.transformOrigin = '0 0';
+                
+                document.getElementById('ar-viewport').appendChild(path);
+            }
+        }
+
+        function clearARObjects() {
+            arState.arObjects.forEach(obj => {
+                if (obj.element && obj.element.parentNode) {
+                    obj.element.parentNode.removeChild(obj.element);
+                }
+            });
+            arState.arObjects = [];
+            
+            document.querySelectorAll('.ar-path').forEach(el => el.remove());
+            document.querySelectorAll('.destination-marker').forEach(el => el.remove());
+        }
+
+        function updateARNavigationSteps(destinationName) {
+            const container = document.getElementById('ar-steps-container');
+            container.innerHTML = '';
+            
+            // ขั้นตอนเริ่มต้น
+            const startStep = document.createElement('div');
+            startStep.className = 'ar-step active';
+            startStep.innerHTML = `<i class="fas fa-play-circle"></i><span>เริ่มต้นจากจุดปัจจุบัน</span>`;
+            container.appendChild(startStep);
+            
+            // ขั้นตอนการนำทาง
+            const destination = arPointsData.find(room => room.name === destinationName);
+            const steps = destination ? destination.steps : ["เดินตรงไป 20 เมตร", "เลี้ยวขวา", "เดินต่อไปอีก 10 เมตร"];
+            
+            steps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'ar-step';
+                stepElement.innerHTML = `<i class="fas fa-${getIconForStep(index)}"></i><span>${step}</span>`;
+                container.appendChild(stepElement);
+            });
+            
+            // ขั้นตอนสุดท้าย
+            const endStep = document.createElement('div');
+            endStep.className = 'ar-step';
+            endStep.innerHTML = `<i class="fas fa-flag-checkered"></i><span>ถึง ${destinationName}</span>`;
+            container.appendChild(endStep);
+        }
+
+        function showStepInfo(stepIndex, stepDescription) {
+            // อัพเดตแผงข้อมูล
+            document.getElementById('ar-info-title').textContent = `ขั้นตอนที่ ${stepIndex + 1}`;
+            document.getElementById('ar-info-desc').textContent = stepDescription;
+            document.getElementById('ar-info-panel').style.display = 'block';
+            
+            // อัพเดตสถานะขั้นตอน
+            updateStepInNavigation(stepIndex);
+            
+            showToast(`กำลังทำตามขั้นตอนที่ ${stepIndex + 1}: ${stepDescription}`, 'info');
+        }
+
+        function closeInfoPanel() {
+            document.getElementById('ar-info-panel').style.display = 'none';
+        }
+
+        function showARInstructions() {
+            const instructions = [
+                "เล็งกล้องไปยังพื้นที่รอบตัวคุณ",
+                "ปฏิบัติตามขั้นตอนการนำทางบนหน้าจอ",
+                "เดินตามลูกศร AR ที่แสดงบนหน้าจอ",
+                "แตะที่ไอคอนบนหน้าจอเพื่อดูรายละเอียด"
+            ];
+            
+            let index = 0;
+            const instructionElement = document.getElementById('ar-instructions');
+            
+            function showNextInstruction() {
+                if (index < instructions.length) {
+                    instructionElement.innerHTML = `<i class="fas fa-info-circle"></i> ${instructions[index]}`;
+                    index++;
+                    setTimeout(showNextInstruction, 3000);
+                }
+            }
+            
+            showNextInstruction();
+        }
+
+        function initializeMotionDetection() {
+            // ตรวจจับการหมุนของอุปกรณ์สำหรับคอมพาส
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', handleDeviceOrientation);
+            }
+            
+            // ตรวจจับการเคลื่อนไหวสำหรับการคำนวณระยะทาง
+            if (window.DeviceMotionEvent) {
+                window.addEventListener('devicemotion', handleDeviceMotion);
+            }
+        }
+
+        function handleDeviceOrientation(event) {
+            // อัพเดตคอมพาส
+            if (event.alpha !== null) {
+                arState.compassHeading = event.alpha;
+                
+                const compass = document.getElementById('ar-compass');
+                if (compass) {
+                    compass.style.transform = `rotate(${arState.compassHeading}deg)`;
+                }
+            }
+        }
+
+        function handleDeviceMotion(event) {
+            // คำนวณการเคลื่อนไหว
+            if (event.accelerationIncludingGravity) {
+                const accel = event.accelerationIncludingGravity;
+                
+                // คำนวณการเคลื่อนไหว
+                const movement = Math.sqrt(
+                    Math.pow(accel.x || 0, 2) + 
+                    Math.pow(accel.y || 0, 2) + 
+                    Math.pow(accel.z || 0, 2)
+                );
+                
+                // อัพเดตระยะทาง
+                if (arState.isActive && movement > 15) {
+                    updateDistanceIndicator();
+                    
+                    // อัพเดตขั้นตอนการนำทางตามการเคลื่อนไหว
+                    if (arState.arrowActive && !arState.arrivalTriggered) {
+                        advanceArrowStep();
+                    }
+                }
+            }
+        }
+
+        function advanceArrowStep() {
+            // อัพเดตขั้นตอนลูกศรตามการเคลื่อนไหว
+            const destination = arPointsData.find(room => room.name === arState.currentDestination);
+            if (!destination || !destination.arrowInstructions) return;
+            
+            if (arState.currentArrowInstruction < destination.arrowInstructions.length - 1) {
+                arState.currentArrowInstruction++;
+                updateArrowNavigation(arState.currentArrowInstruction);
+            } else {
+                // ตรวจสอบเมื่อมาถึงจุดหมาย
+                checkArrival();
+            }
+        }
+
+        function updateDistanceIndicator() {
+            // คำนวณระยะทางที่เหลือ (จำลอง)
+            const distances = ["5 เมตร", "10 เมตร", "15 เมตร", "20 เมตร", "50 เมตร"];
+            const randomDistance = distances[Math.floor(Math.random() * distances.length)];
+            
+            document.getElementById('distance-text').textContent = `เหลือ ${randomDistance}`;
+        }
+
+        function startARUpdateLoop() {
+            // อัพเดตตำแหน่งวัตถุ AR ตามการเคลื่อนไหว
+            function updateLoop() {
+                if (!arState.isActive) return;
+                
+                // อัพเดตคอมพาส
+                updateCompass();
+                
+                // อัพเดตวัตถุ AR
+                arState.arObjects.forEach((obj, index) => {
+                    if (obj.element) {
+                        // เพิ่มการเคลื่อนไหว
+                        const offsetX = Math.sin(Date.now() / 1000 + index) * 2;
+                        const offsetY = Math.cos(Date.now() / 1000 + index) * 2;
+                        
+                        obj.element.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                    }
+                });
+                
+                // ตรวจสอบเมื่อมาถึงจุดหมาย
+                checkArrival();
+                
+                // ตรวจสอบโหมดดีบัก
+                if (arState.debugMode) {
+                    updateDebugInfo();
+                }
+                
+                requestAnimationFrame(updateLoop);
+            }
+            
+            updateLoop();
+        }
+
+        function updateCompass() {
+            // อัพเดตคอมพาส
+            const compass = document.getElementById('ar-compass');
+            if (compass && !arState.debugMode) {
+                const rotation = (Date.now() / 100) % 360;
+                compass.style.transform = `rotate(${rotation}deg)`;
+            }
+        }
+
+        function initializeCompass() {
+            updateCompass();
+            document.getElementById('ar-compass').style.display = 'flex';
+            document.getElementById('distance-indicator').style.display = 'block';
         }
 
         function stopAR() {
-            // 1. ปิดระบบ AR กล้องจะหยุดทำงาน
-            const {systems} = sceneEl;
-            systems['mindar-image-system'].stop();
+            // หยุดการทำงานของ AR
+            arState.isActive = false;
+            arState.arrowActive = false;
             
-            // 2. แสดง UI เมนูคืนมา
-            ui.style.display = 'flex';
-            setTimeout(() => { ui.style.opacity = '1'; }, 10);
+            // ปิดสตรีมวิดีโอ
+            if (arState.videoStream) {
+                arState.videoStream.getTracks().forEach(track => track.stop());
+                arState.videoStream = null;
+            }
             
-            // 3. ซ่อนปุ่มปิด
-            closeBtn.style.display = 'none';
+            // ล้างวัตถุ AR
+            clearARObjects();
+            
+            // ซ่อนลูกศร AR
+            document.getElementById('ar-arrow').style.display = 'none';
+            document.getElementById('arrival-notification').style.display = 'none';
+            
+            // ซ่อนหน้า AR และกลับไปที่หน้าแรก
+            document.getElementById('ar-page').style.display = 'none';
+            goHome();
         }
+
+        function changeARDestination() {
+            // แสดงตัวเลือกเปลี่ยนปลายทาง
+            const roomNames = arPointsData.map(room => room.name);
+            const roomList = roomNames.map((name, index) => `${index + 1}. ${name}`).join('\n');
+            
+            const selectedRoom = prompt('กรุณาเลือกปลายทางใหม่:\n' + roomList, arState.currentDestination);
+            
+            if (selectedRoom && roomNames.includes(selectedRoom)) {
+                stopAR();
+                setTimeout(() => startAR(selectedRoom), 500);
+            } else if (selectedRoom) {
+                showToast('ไม่พบห้อง "' + selectedRoom + '" ในระบบ', 'warning');
+            }
+        }
+
+        function toggleARMode() {
+            arState.is3DMode = !arState.is3DMode;
+            const toggleBtn = document.getElementById('ar-mode-toggle');
+            
+            if (arState.is3DMode) {
+                toggleBtn.innerHTML = '<i class="fas fa-video"></i> โหมดกล้อง';
+                showToast('โหมด 3D ถูกเปิดใช้งาน', 'info');
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-cube"></i> โหมดวัตถุ 3D';
+                showToast('โหมด 3D ถูกปิดใช้งาน', 'info');
+            }
+        }
+
+        function toggleARDebug() {
+            arState.debugMode = !arState.debugMode;
+            const debugBtn = document.getElementById('ar-debug-toggle');
+            
+            if (arState.debugMode) {
+                debugBtn.innerHTML = '<i class="fas fa-eye"></i> ปิดดีบัก';
+                debugBtn.style.background = 'var(--ar-color)';
+                showToast('โหมดดีบักเปิดใช้งาน', 'info');
+            } else {
+                debugBtn.innerHTML = '<i class="fas fa-bug"></i> โหมดดีบัก';
+                debugBtn.style.background = '#444';
+                showToast('โหมดดีบักปิดใช้งาน', 'info');
+            }
+        }
+
+        function updateDebugInfo() {
+            // แสดงข้อมูลดีบัก
+            const infoPanel = document.getElementById('ar-info-panel');
+            infoPanel.style.display = 'block';
+            infoPanel.innerHTML = `
+                <h4>ข้อมูลดีบัก</h4>
+                <p>จุดหมาย: ${arState.currentDestination}</p>
+                <p>ขั้นตอนปัจจุบัน: ${arState.currentStep + 1}</p>
+                <p>จำนวนวัตถุ: ${arState.arObjects.length}</p>
+                <p>คอมพาส: ${Math.round(arState.compassHeading)}°</p>
+                <p>โหมด 3D: ${arState.is3DMode ? 'เปิด' : 'ปิด'}</p>
+                <p>ลูกศร AR: ${arState.arrowActive ? 'เปิด' : 'ปิด'}</p>
+                <p>ถึงจุดหมาย: ${arState.arrivalTriggered ? 'แล้ว' : 'ยังไม่ถึง'}</p>
+                <button onclick="closeInfoPanel()" class="btn btn-secondary" style="padding: 5px 10px; margin-top: 10px; font-size: 0.8rem;">ปิด</button>
+            `;
+        }
+
+        function captureARScreen() {
+            // จับภาพหน้าจอ AR
+            const canvas = document.getElementById('ar-canvas');
+            const video = document.getElementById('ar-video');
+            
+            // สร้าง canvas ใหม่สำหรับการจับภาพ
+            const captureCanvas = document.createElement('canvas');
+            captureCanvas.width = canvas.width;
+            captureCanvas.height = canvas.height;
+            const ctx = captureCanvas.getContext('2d');
+            
+            // วาดวิดีโอและวัตถุ AR
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // สร้างลิงค์ดาวน์โหลด
+            const link = document.createElement('a');
+            link.download = `ar-capture-${Date.now()}.png`;
+            link.href = captureCanvas.toDataURL('image/png');
+            link.click();
+            
+            showToast('บันทึกรูปภาพสำเร็จ', 'success');
+        }
+
+        // ====== ระบบจัดการข้อมูล ======
+        function saveSystemData() {
+            localStorage.setItem('systemStats', JSON.stringify(systemStats));
+            localStorage.setItem('arPointsData', JSON.stringify(arPointsData));
+        }
+
+        function loadSystemData() {
+            const savedStats = localStorage.getItem('systemStats');
+            if (savedStats) systemStats = JSON.parse(savedStats);
+            
+            const savedARPoints = localStorage.getItem('arPointsData');
+            if (savedARPoints) arPointsData = JSON.parse(savedARPoints);
+        }
+
+        function updateSystemStats() {
+            // อัพเดตสถิติระบบ
+        }
+
+        // ====== ระบบสถานะ ======
+        function startSystemUpdateLoop() {
+            setInterval(() => {
+                updateSystemStatus();
+            }, 5000);
+        }
+
+        function updateSystemStatus() {
+            const statusElement = document.getElementById('ar-system-status');
+            const statusDot = document.querySelector('.status-dot');
+            
+            if (navigator.onLine) {
+                statusElement.textContent = 'พร้อมใช้งาน';
+                statusElement.style.color = 'green';
+                statusDot.className = 'status-dot status-online';
+            } else {
+                statusElement.textContent = 'ออฟไลน์';
+                statusElement.style.color = 'var(--danger)';
+                statusDot.className = 'status-dot status-offline';
+            }
+        }
+
+        function updateHomeUI(title, subtitle, desc) {
+            document.getElementById('home-title').innerText = title;
+            document.getElementById('home-subtitle').innerText = subtitle;
+            document.getElementById('home-desc').innerText = desc;
+        }
+
+        // ====== ระบบแจ้งเตือน ======
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            // กำหนดสีตามประเภท
+            let borderColor = 'var(--accent-blue)';
+            if (type === 'success') borderColor = 'var(--success)';
+            if (type === 'error') borderColor = 'var(--danger)';
+            if (type === 'warning') borderColor = 'var(--warning)';
+            
+            toast.style.borderLeftColor = borderColor;
+            toastMessage.textContent = message;
+            
+            // แสดง toast
+            toast.style.display = 'block';
+            
+            // ซ่อน toast หลังจาก 3 วินาที
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // ====== ฟังก์ชัน Utility ======
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-trigger') && !event.target.matches('.menu-trigger *')) {
+                document.getElementById('mainDropdown').classList.remove('active');
+            }
+        };
+
+        // ป้องกันการเลื่อนเมื่ออยู่ในโหมด AR
+        document.addEventListener('touchmove', function(e) {
+            if (arState.isActive) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // จัดการเมื่อหน้าต่างปิด
+        window.addEventListener('beforeunload', function() {
+            if (arState.isActive && arState.videoStream) {
+                arState.videoStream.getTracks().forEach(track => track.stop());
+            }
+        });
     </script>
 </body>
 </html>
+
+
+
